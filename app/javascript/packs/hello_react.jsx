@@ -23,4 +23,4 @@ document.addEventListener('DOMContentLoaded', () => {
     <Hello name="React" />,
     document.body.appendChild(document.createElement('div')),
   )
-})
+}) 
