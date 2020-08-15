@@ -1,3 +1,11 @@
-const { environment } = require('@rails/webpacker')
+const { environment } = require('@rails/webpacker');
+const typescript = require('./loaders/typescript');
+const webpack = require('webpack');
+const dotenv = require('dotenv');
+
+const result = dotenv.config();
+
+environment.plugins.perpend('Environment', new webpack.EnvironmentPlugin(JSON.parse(JSON.stringify(process.env))));
+environment.loaders.prepend('typescript', typescript);
 
 module.exports = environment
