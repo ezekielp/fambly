@@ -1,9 +1,13 @@
 import React from 'react'
 import { render } from 'react-dom'
+import { BrowserRouter as Router } from 'react-router-dom';
+import { AppContainer } from '../client/AppContainer';
 
 const RootApp = () => {
   return (
-    <div>it's fambly!</div>
+    <Router>
+      <AppContainer />
+    </Router>
   )
 };
 
