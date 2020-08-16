@@ -1,13 +1,17 @@
 import React from 'react'
 import { render } from 'react-dom'
+import { ApolloProvider } from '@apollo/react-hooks';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { AppContainer } from '../client/AppContainer';
+import { client } from './client';
 
 const RootApp = () => {
   return (
-    <Router>
-      <AppContainer />
-    </Router>
+    <ApolloProvider client={client()} >
+      <Router>
+        <AppContainer />
+      </Router>
+    </ApolloProvider>
   )
 };
 
