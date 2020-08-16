@@ -48,5 +48,9 @@
     "@graphql-codegen/typescript-react-apollo": "^2.0.6",
     "fork-ts-checker-webpack-plugin": "^5.0.14",
     "webpack-dev-server": "^3.11.0"
-  }
+  },
+	"scripts": {
+		"codegen": "bundle exec rake graphql:dump_schema && graphql-codegen --config codegen.yml"
+  },
+	"repository": "https://github.com/ezekielp/fambly"
 }
