@@ -1,0 +1,5 @@
+app/javascript/client/graphqlTypes.tsx
+babel.config.js
+*.png
+*.jpg
+*.svg
