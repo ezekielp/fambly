@@ -1,24 +1,7 @@
-# README
+# Fambly
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+An app for storing and organizing information about friends, family, and other contacts. 
 
-Things you may want to cover:
+## Testing
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Ruby: `bin/spec`
