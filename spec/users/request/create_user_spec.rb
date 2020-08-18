@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'register mutation', type: :request do
+RSpec.describe 'create mutation', type: :request do
     after do
         travel_back
     end
@@ -11,10 +11,10 @@ RSpec.describe 'register mutation', type: :request do
     let(:valid_email) { 'joebob@example.com' }
     let(:invalid_email) { 'dhd3892239dcom' }
 
-    it 'registers a new user if the validations pass' do
+    it 'creates a new user if the validations pass' do
         query_string = "
-            mutation RegisterUser($input: RegisterUserInput!) {
-                registerUser(input: $input) {
+            mutation CreateUser($input: CreateUserInput!) {
+                createUser(input: $input) {
                     user {
                         id
                         email
@@ -25,10 +25,8 @@ RSpec.describe 'register mutation', type: :request do
 
         variables = {
             input: {
-                data: {
-                    email: valid_email,
-                    password: valid_password
-                }
+                email: valid_email,
+                password: valid_password
             }
         }
 
