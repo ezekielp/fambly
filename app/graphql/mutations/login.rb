@@ -9,7 +9,7 @@ module Mutations
     class Login < BaseMutation
         argument :input, Types::LoginInputType, required: true
 
-        field :user, Types::UserType, null: false
+        field :user, Types::UserType, null: true
 
         def resolve(input:)
             user = User.find_by_credentials(
@@ -19,7 +19,6 @@ module Mutations
 
             # debugger
             if user
-                # context[:login_user](user)
                 login_user(user)
             end
 

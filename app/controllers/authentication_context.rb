@@ -25,7 +25,7 @@ class AuthenticationContext
     end
 
     def session_token_expired?
-        session[:expires_at] < Time.current ? true : false
+        session[:expires_at] && session[:expires_at] < Time.current ? true : false
     end
 
     def set_session_expiration

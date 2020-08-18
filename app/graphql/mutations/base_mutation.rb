@@ -12,6 +12,14 @@ module Mutations
     def authentication_context
       context[:authentication_context]
     end
-    
+
+    def resolve(*)
+      yield
+    rescue StandardError => e
+      {
+        errors: e.messages.map { |path, messages| { path: path, message: messages.join('. ') } }
+      }
+    end
+
   end
 end
