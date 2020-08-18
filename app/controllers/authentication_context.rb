@@ -2,7 +2,6 @@ class AuthenticationContext
     attr_accessor :session
 
     def initialize(http_context)
-        # @http_context = http_context
         @session = http_context.session
     end
 
