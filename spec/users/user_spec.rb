@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe User, :type => :model do
+RSpec.describe User, type: :model do
     let(:valid_password) { 'hew82hr23ref2KJAhfq!' }
     let(:invalid_password) { '1234567' }
     let(:valid_email) { 'joebob@example.com' }
