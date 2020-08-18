@@ -9,8 +9,9 @@ class GraphqlController < ApplicationController
     query = params[:query]
     operation_name = params[:operationName]
     context = {
-      # Query context goes here, for example:
-      # current_user: current_user,
+      # login_user: login_user,
+      # current_user: current_user
+      authentication_context: authentication_context
     }
     result = FamblySchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result

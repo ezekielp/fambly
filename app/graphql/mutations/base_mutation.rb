@@ -1,9 +1,17 @@
 module Mutations
   class BaseMutation < GraphQL::Schema::Mutation
     null false
-    # argument_class Types::BaseArgument
-    # field_class Types::BaseField
-    # input_object_class Types::BaseInputObject
-    # object_class Types::BaseObject
+
+    delegate :logged_in?,
+             :current_user,
+             :login_user,
+             :session_token_expired?,
+             :set_session_expiration,
+             to: :authentication_context
+
+    def authentication_context
+      context[:authentication_context]
+    end
+    
   end
 end
