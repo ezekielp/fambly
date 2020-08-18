@@ -1,8 +1,25 @@
 module Mutations
-  class BaseMutation < GraphQL::Schema::RelayClassicMutation
-    argument_class Types::BaseArgument
-    field_class Types::BaseField
-    input_object_class Types::BaseInputObject
-    object_class Types::BaseObject
+  class BaseMutation < GraphQL::Schema::Mutation
+    null false
+
+    delegate :logged_in?,
+             :current_user,
+             :login_user,
+             :session_token_expired?,
+             :set_session_expiration,
+             to: :authentication_context
+
+    def authentication_context
+      context[:authentication_context]
+    end
+
+    def resolve(*)
+      yield
+    rescue StandardError => e
+      {
+        errors: e.messages.map { |path, messages| { path: path, message: messages.join('. ') } }
+      }
+    end
+
   end
 end
