@@ -13,18 +13,15 @@ gql`
 
 interface AuthContextState {
   userId?: string | null;
-  refetch: () => Promise<any>;
 }
 
-export const AuthContext = createContext<AuthContextState>({
-  refetch: () => Promise.resolve(),
-});
+export const AuthContext = createContext<AuthContextState>({});
 
 export const AuthContextProvider: FC = (props) => {
   const [userId, setUserId] = useState<string | null>(null);
   const [dataFetched, setDataFetched] = useState<boolean>(false);
 
-  const { data, refetch, loading } = useGetUserQuery();
+  const { data, loading } = useGetUserQuery();
 
   useEffect(() => {
     const user = data?.user;
@@ -40,7 +37,7 @@ export const AuthContextProvider: FC = (props) => {
   if (!dataFetched) return null;
 
   return (
-    <AuthContext.Provider value={{ userId, refetch }}>
+    <AuthContext.Provider value={{ userId }}>
       {props.children}
     </AuthContext.Provider>
   );
