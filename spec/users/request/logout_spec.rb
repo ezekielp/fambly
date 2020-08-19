@@ -23,6 +23,14 @@ RSpec.describe 'logout mutation', type: :request do
         expect(controller.current_user).to be_nil
     end
 
-    it 'does nothing if no user is logged in'
+    it 'does nothing if no user is logged in' do
+        post(
+            endpoint,
+            params: { query: query_string }
+        )
+
+        expect(JSON.parse(response.body).dig('data', 'logout')).to be false
+        expect(controller.current_user).to be_nil
+    end
 
 end
