@@ -23,6 +23,14 @@ class AuthenticationContext
         set_session_expiration
     end
 
+    def logout
+        current_user.reset_session_token!
+        session[:session_token] = nil
+        @current_user = nil
+    end
+
+    private
+
     def session_token_expired?
         session[:expires_at] && session[:expires_at] < Time.current ? true : false
     end

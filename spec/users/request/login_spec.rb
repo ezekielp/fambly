@@ -26,17 +26,6 @@ RSpec.describe 'login mutation', type: :request do
     before(:each) { User.create(email: valid_email, password: valid_password) }
 
     it 'logs in a user if the credentials are valid' do
-        # query_string = "
-        #     mutation Login($input: LoginInput!) {
-        #         login(input: $input) {
-        #             user {
-        #                 id
-        #                 email
-        #             }
-        #         }
-        #     }
-        # "
-
         variables = {
             input: {
                 email: valid_email,
@@ -55,17 +44,6 @@ RSpec.describe 'login mutation', type: :request do
     end
 
     it 'returns nil if the credentials are incorrect' do
-        # query_string = "
-        #     mutation Login($input: LoginInput!) {
-        #         login(input: $input) {
-        #             user {
-        #                 id
-        #                 email
-        #             }
-        #         }
-        #     }
-        # "
-
         variables = {
             input: {
                 email: valid_email,

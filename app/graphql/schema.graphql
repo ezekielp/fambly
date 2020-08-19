@@ -25,6 +25,7 @@ type LoginPayload {
 type Mutation {
   createUser(input: CreateUserInput!): CreateUserPayload!
   login(input: LoginInput!): LoginPayload!
+  logout: Boolean!
 }
 
 type Query {

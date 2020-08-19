@@ -5,6 +5,7 @@ module Mutations
     delegate :logged_in?,
              :current_user,
              :login_user,
+             :logout,
              :session_token_expired?,
              :set_session_expiration,
              to: :authentication_context
