@@ -2,6 +2,8 @@ module Mutations
   class BaseMutation < GraphQL::Schema::Mutation
     null false
 
+    field :errors, [Types::ErrorType], null: true
+
     delegate :logged_in?,
              :current_user,
              :login_user,
