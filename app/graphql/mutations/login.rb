@@ -17,7 +17,6 @@ module Mutations
                 input.password
             )
 
-            # debugger
             if user
                 login_user(user)
             end
