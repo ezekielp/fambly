@@ -1,4 +1,5 @@
 import React, { FC, useContext } from "react";
+import { useLoginMutation } from "../graphqlTypes";
 import gql from "graphql-tag";
 
 gql`
@@ -15,5 +16,14 @@ gql`
 export interface LoginContainerProps {}
 
 export const LoginContainer: FC<LoginContainerProps> = () => {
-  return <div>Login Container!</div>;
+  const [loginMutation] = useLoginMutation();
+
+  const handleSubmit = (data: LoginFormData) => {};
+
+  return (
+    <>
+      <h1>Login</h1>
+      <LoginForm initialValues={{}} onSubmit={handleSubmit} />
+    </>
+  );
 };

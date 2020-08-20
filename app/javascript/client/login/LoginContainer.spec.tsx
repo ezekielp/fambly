@@ -36,4 +36,9 @@ describe("<LoginContainer />", () => {
     await mountComponent();
     expect(component.find(LoginContainer).exists()).toBe(true);
   });
+
+  it("renders a <LoginForm />", async () => {
+    await mountComponent();
+    expect(component.find(LoginForm).exists()).toBe(true);
+  });
 });
