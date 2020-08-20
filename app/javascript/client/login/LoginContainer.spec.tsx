@@ -26,7 +26,14 @@ describe("<LoginContainer />", () => {
             </AuthContext.Provider>
           </MockedProvider>
         );
+        await wait(0);
+        component.update();
       });
     };
+  });
+
+  it("exists", async () => {
+    await mountComponent();
+    expect(component.find(LoginContainer).exists()).toBe(true);
   });
 });

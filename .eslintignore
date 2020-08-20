@@ -1,5 +1,6 @@
 app/javascript/client/graphqlTypes.tsx
 babel.config.js
+setupTests.js
 *.png
 *.jpg
 *.svg
