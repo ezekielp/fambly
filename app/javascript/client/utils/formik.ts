@@ -1,14 +1,19 @@
 import { Error } from 'client/graphqlTypes';
 import { FormikErrors, FormikHelpers } from 'formik';
+import { ExecutionResult } from 'graphql';
 
 type Result = {
   [key: string]: string;
 };
 
-export const handleFormErrors = <FormData>(
+export type OnSubmit<FormDataType, MutationType> = (
+  data: FormDataType,
+) => Promise<ExecutionResult<MutationType>>;
+
+export const handleFormErrors = <FormDataType>(
   errors: Error[],
-  setErrors: FormikHelpers<FormData>['setErrors'],
-  setStatus: FormikHelpers<FormData>['setStatus'],
+  setErrors: FormikHelpers<FormDataType>['setErrors'],
+  setStatus: FormikHelpers<FormDataType>['setStatus'],
 ): void => {
   const formErrors = errors
     .filter((error) => error.path !== '')
@@ -18,6 +23,6 @@ export const handleFormErrors = <FormData>(
     }, {});
   const globalError = errors.find((error) => error.path === '');
 
-  setErrors(formErrors as FormikErrors<FormData>);
+  setErrors(formErrors as FormikErrors<FormDataType>);
   globalError && setStatus(globalError.message);
 };
