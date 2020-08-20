@@ -9,6 +9,10 @@ gql`
         id
         email
       }
+      errors {
+        path
+        message
+      }
     }
   }
 `;

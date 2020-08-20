@@ -19,6 +19,8 @@ module Mutations
 
             if user
                 login_user(user)
+            else
+                return { errors: [{ 'path': '', 'message': 'Invalid email or password' }] }
             end
 
             { user: current_user }
