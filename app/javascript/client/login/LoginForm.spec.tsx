@@ -5,7 +5,7 @@ import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { loginMutation, loginResult } from 'client/test/mutations/login';
 import { AuthContext } from 'client/contexts/AuthContext';
 import { Form } from 'formik';
-import { LoginForm, LoginFormData, LoginFormProps } from './LoginForm';
+import { LoginForm, LoginFormProps } from './LoginForm';
 import { act } from 'react-dom/test-utils';
 import wait from 'waait';
 
@@ -16,7 +16,6 @@ describe('<LoginForm />', () => {
   ) => Promise<void>;
   let component: ReactWrapper<LoginFormProps>;
   let handleSubmit: jest.Mock;
-  // let props: LoginFormProps;
 
   beforeEach(() => {
     handleSubmit = jest.fn(() =>
@@ -26,10 +25,6 @@ describe('<LoginForm />', () => {
         },
       }),
     );
-    // props = {
-    //   onSubmit,
-    // initialValues: { email: '', password: '' },
-    // };
     const initialValues = { email: '', password: '' };
 
     mountComponent = async (
@@ -122,12 +117,14 @@ describe('<LoginForm />', () => {
   });
 
   describe('submitting the form', () => {
-    it.skip('renders server-side errors if they are returned', async () => {
+    it('renders server-side errors if they are returned', async () => {
       const errors = [{ path: '', message: 'Big scary global error!' }];
       const handleSubmit = jest.fn(() =>
         Promise.resolve({
           data: {
-            errors,
+            login: {
+              errors,
+            },
           },
         }),
       );
@@ -139,17 +136,15 @@ describe('<LoginForm />', () => {
 
       await mountComponent([loginMutation(mock)], handleSubmit);
       component.find('input[name="email"]').simulate('change', {
-        target: { name: 'email', value: 'correct-email' },
+        target: { name: 'email', value: 'test@example.com' },
       });
       await act(async () => await wait(0));
-      await mountComponent([loginMutation(mock)], handleSubmit);
       component.find('input[name="password"]').simulate('change', {
-        target: { name: 'password', value: 'correct-password' },
+        target: { name: 'password', value: 'incorrect-password' },
       });
       await act(async () => await wait(0));
       await component.find(Form).simulate('submit');
       await act(async () => await wait(0));
-      console.log(component.debug());
       expect(component.text().includes('Big scary global error!')).toBe(true);
     });
   });
