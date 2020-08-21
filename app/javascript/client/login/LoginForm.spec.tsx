@@ -1,7 +1,7 @@
 import React from 'react';
 import { ReactWrapper, mount } from 'enzyme';
 import { MemoryRouter, Route } from 'react-router-dom';
-import { MockedProvider, MockedResponse } from '@apollo/react-testing';
+import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { loginMutation, loginResult } from 'client/test/mutations/login';
 import { AuthContext } from 'client/contexts/AuthContext';
 import { Form } from 'formik';

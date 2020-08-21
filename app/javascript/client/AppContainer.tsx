@@ -1,14 +1,21 @@
-import React, { FC, useContext } from "react";
-import { Redirect, Route, Switch } from "react-router";
-import { AuthContext } from "client/contexts/AuthContext";
+import React, { FC, useContext } from 'react';
+import { Redirect, Route, Switch, withRouter } from 'react-router';
+import { AuthContext } from 'client/contexts/AuthContext';
+import { LoginContainer } from './login/LoginContainer';
 
-export const AppContainer: FC<{}> = () => {
+const InternalAppContainer: FC<{}> = () => {
   const { userId } = useContext(AuthContext);
   const loggedIn = !!userId;
 
   return (
     <>
       <Switch>
+        <Route path="/login">
+          <LoginContainer />
+        </Route>
+        <Route path="/random">
+          <div>Hello!</div>
+        </Route>
         <Route path="*">
           <Redirect to="/" />
         </Route>
@@ -16,3 +23,5 @@ export const AppContainer: FC<{}> = () => {
     </>
   );
 };
+
+export const AppContainer = withRouter(InternalAppContainer);
