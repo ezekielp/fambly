@@ -1,15 +1,16 @@
-import { LoginMutation, LoginDocument, LoginInput } from "client/graphqlTypes";
-import { MockedResponse } from "@apollo/react-testing";
+import { LoginMutation, LoginDocument, LoginInput } from 'client/graphqlTypes';
+import { MockedResponse } from '@apollo/react-testing';
 
 export const loginInput: LoginInput = {
-  email: "slothrop@gr.com",
-  password: "Schwarzgerat",
+  email: 'slothrop@gr.com',
+  password: 'Schwarzgerat',
 };
 
-export const loginResult: LoginMutation["login"] = {
+export const loginResult: LoginMutation['login'] = {
+  errors: null,
   user: {
-    id: "some-id",
-    email: "slothrop@gr.com",
+    id: 'some-id',
+    email: 'slothrop@gr.com',
   },
 };
 

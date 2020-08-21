@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
+import { FormikTextInput } from '../form/inputs';
+import { GlobalError } from '../common/GlobalError';
 import { OnSubmit, handleFormErrors } from 'client/utils/formik';
 import { LoginMutation } from 'client/graphqlTypes';
 import * as yup from 'yup';
@@ -17,6 +19,7 @@ export interface LoginFormProps {
 const ValidationSchema = yup.object().shape({
   email: yup
     .string()
+    .email()
     .required(
       'Please enter the email address associated with your Fambly account',
     ),
@@ -30,7 +33,15 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, initialValues }) => {
   const handleSubmit = async (
     data: LoginFormData,
     formikHelpers: FormikHelpers<LoginFormData>,
-  ) => {};
+  ) => {
+    const response = await onSubmit(data);
+    const { setErrors, setStatus } = formikHelpers;
+
+    const errors = response.data?.login.errors;
+    if (errors) {
+      handleFormErrors<LoginFormData>(errors, setErrors, setStatus);
+    }
+  };
 
   return (
     <Formik
@@ -38,7 +49,28 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, initialValues }) => {
       onSubmit={handleSubmit}
       validationSchema={ValidationSchema}
     >
-      {({ isSubmitting, status }) => <Form></Form>}
+      {({ isSubmitting, status }) => (
+        <Form>
+          <Field
+            name="email"
+            label="Email address"
+            component={FormikTextInput}
+            type="email"
+          />
+          <Field
+            name="password"
+            label="Password"
+            type="password"
+            component={FormikTextInput}
+          />
+
+          {status && <GlobalError>{status}</GlobalError>}
+
+          <button type="submit" disabled={isSubmitting}>
+            Log In
+          </button>
+        </Form>
+      )}
     </Formik>
   );
 };
