@@ -5,7 +5,10 @@ const dotenv = require('dotenv');
 
 const result = dotenv.config();
 
-environment.plugins.perpend('Environment', new webpack.EnvironmentPlugin(JSON.parse(JSON.stringify(process.env))));
+environment.plugins.prepend(
+  'Environment',
+  new webpack.EnvironmentPlugin(JSON.parse(JSON.stringify(process.env))),
+);
 environment.loaders.prepend('typescript', typescript);
 
-module.exports = environment
+module.exports = environment;

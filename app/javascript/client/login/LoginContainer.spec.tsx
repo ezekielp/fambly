@@ -1,5 +1,5 @@
 import { Route, MemoryRouter } from 'react-router-dom';
-import { MockedProvider, MockedResponse } from '@apollo/react-testing';
+import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { ReactWrapper, mount } from 'enzyme';
 import { loginMutation } from 'client/test/mutations/login';
 import { AuthContext } from 'client/contexts/AuthContext';

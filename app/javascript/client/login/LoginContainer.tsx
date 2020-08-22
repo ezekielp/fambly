@@ -1,7 +1,7 @@
 import React, { FC, useContext } from 'react';
 import { useLoginMutation } from '../graphqlTypes';
 import { LoginForm, LoginFormData } from './LoginForm';
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 
 gql`
   mutation Login($input: LoginInput!) {
