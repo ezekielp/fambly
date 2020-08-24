@@ -95,10 +95,10 @@ describe('<SignupForm />', () => {
       );
     });
 
-    it.only('requires the user to confirm their password', async () => {
+    it('requires the user to confirm their password', async () => {
       await mountComponent();
       form = formUtils<SignupFormData>(component.find(Form));
-      await form.fill({ password: 'J39rjeod1' });
+      await form.fill({ password: 'J39rjeod1', confirmedPassword: '12345' });
       await form.submit();
 
       expect(component.text().includes('Passwords must match')).toBe(true);

@@ -1,6 +1,8 @@
-import React, { FC, useContext } from 'react';
-import { useLoginMutation } from '../graphqlTypes';
+import React, { FC, useContext, useEffect } from 'react';
+import { AuthContext } from 'client/contexts/AuthContext';
+import { useLoginMutation } from 'client/graphqlTypes';
 import { LoginForm, LoginFormData } from './LoginForm';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { gql } from '@apollo/client';
 
 gql`
@@ -18,13 +20,24 @@ gql`
   }
 `;
 
-export interface LoginContainerProps {}
+const InternalLoginContainer: FC<RouteComponentProps> = ({ history }) => {
+  // const { userId } = useContext(AuthContext);
 
-export const LoginContainer: FC<LoginContainerProps> = () => {
+  // useEffect(() => {
+  //   if (userId) history.push('/home');
+  // }, [userId]);
+
+  // if (userId) history.push('/home');
+
   const [loginMutation] = useLoginMutation();
 
   const handleSubmit = (data: LoginFormData) =>
-    loginMutation({ variables: { input: data } });
+    loginMutation({ variables: { input: data } }).then((result) => {
+      const userId = result.data?.login.user?.id;
+      // if (userId) setUserId(userId);
+      if (userId) window.location.href = '/home';
+      return result;
+    });
 
   return (
     <>
@@ -36,3 +49,5 @@ export const LoginContainer: FC<LoginContainerProps> = () => {
     </>
   );
 };
+
+export const LoginContainer = withRouter(InternalLoginContainer);
