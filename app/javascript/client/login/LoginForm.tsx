@@ -3,6 +3,7 @@ import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikTextInput } from '../form/inputs';
 import { GlobalError } from '../common/GlobalError';
 import { OnSubmit, handleFormErrors } from 'client/utils/formik';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { LoginMutation } from 'client/graphqlTypes';
 import * as yup from 'yup';
 
@@ -25,11 +26,13 @@ const ValidationSchema = yup.object().shape({
     ),
   password: yup
     .string()
-    .required()
-    .label('Please enter the password associated with your Fambly account'),
+    .required('Please enter the password associated with your Fambly account'),
 });
 
-export const LoginForm: FC<LoginFormProps> = ({ onSubmit, initialValues }) => {
+const InternalLoginForm: FC<LoginFormProps & RouteComponentProps> = ({
+  onSubmit,
+  initialValues,
+}) => {
   const handleSubmit = async (
     data: LoginFormData,
     formikHelpers: FormikHelpers<LoginFormData>,
@@ -74,3 +77,5 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, initialValues }) => {
     </Formik>
   );
 };
+
+export const LoginForm = withRouter(InternalLoginForm);

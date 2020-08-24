@@ -1,7 +1,26 @@
 import React, { FC, useContext } from 'react';
-import { Redirect, Route, Switch, withRouter } from 'react-router';
+import { Redirect, Route, Switch, withRouter, RouteProps } from 'react-router';
 import { AuthContext } from 'client/contexts/AuthContext';
+import { SignupContainer } from './login/SignupContainer';
 import { LoginContainer } from './login/LoginContainer';
+import { HomeContainer } from './home/HomeContainer';
+
+interface ProtectedRouteProps extends RouteProps {
+  accessAllowed: boolean;
+  redirect?: string;
+}
+
+const ProtectedRoute: FC<ProtectedRouteProps> = ({
+  accessAllowed,
+  redirect = '/login',
+  ...rest
+}) => {
+  if (accessAllowed) {
+    return <Route {...rest} />;
+  }
+
+  return <Redirect to={redirect} />;
+};
 
 const InternalAppContainer: FC<{}> = () => {
   const { userId } = useContext(AuthContext);
@@ -10,12 +29,17 @@ const InternalAppContainer: FC<{}> = () => {
   return (
     <>
       <Switch>
+        <Route path="/signup">
+          <SignupContainer />
+        </Route>
         <Route path="/login">
           <LoginContainer />
         </Route>
-        <Route path="/random">
-          <div>Hello!</div>
-        </Route>
+        <ProtectedRoute
+          path="/home"
+          accessAllowed={loggedIn}
+          component={HomeContainer}
+        />
         <Route path="*">
           <Redirect to="/" />
         </Route>

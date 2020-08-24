@@ -1,6 +1,6 @@
-import React, { FC, createContext, useEffect, useState } from "react";
-import { useGetUserQuery } from "../graphqlTypes";
-import gql from "graphql-tag";
+import React, { FC, createContext, useEffect, useState } from 'react';
+import { useGetUserQuery } from '../graphqlTypes';
+import gql from 'graphql-tag';
 
 gql`
   query GetUser {

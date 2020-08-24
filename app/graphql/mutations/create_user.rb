@@ -17,7 +17,9 @@ module Mutations
                 password: input.password
             )
 
-            { user: user }
+            login_user(user)
+
+            { user: current_user }
         end
     end
 end
