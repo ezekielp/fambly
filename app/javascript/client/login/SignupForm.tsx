@@ -1,19 +1,24 @@
 import React, { FC } from 'react';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikTextInput } from '../form/inputs';
-import { GlobalError } from '../common/GlobalError';
 import { OnSubmit, handleFormErrors } from 'client/utils/formik';
-import { LoginMutation } from 'client/graphqlTypes';
+import { CreateUserMutation } from 'client/graphqlTypes';
 import * as yup from 'yup';
 
-export interface LoginFormData {
+export interface SignupFormData {
+  email: string;
+  password: string;
+  confirmedPassword: string;
+}
+
+export interface CreateUserData {
   email: string;
   password: string;
 }
 
-export interface LoginFormProps {
-  onSubmit: OnSubmit<LoginFormData, LoginMutation>;
-  initialValues: LoginFormData;
+export interface SignupFormProps {
+  onSubmit: OnSubmit<CreateUserData, CreateUserMutation>;
+  initialValues: SignupFormData;
 }
 
 const ValidationSchema = yup.object().shape({
@@ -23,22 +28,30 @@ const ValidationSchema = yup.object().shape({
     .required(
       'Please enter the email address associated with your Fambly account',
     ),
-  password: yup
+  password: yup.string().required().min(8).label('Password'),
+  confirmedPassword: yup
     .string()
-    .required('Please enter the password associated with your Fambly account'),
+    .oneOf([yup.ref('password'), undefined], 'Passwords must match'),
 });
 
-export const LoginForm: FC<LoginFormProps> = ({ onSubmit, initialValues }) => {
+export const SignupForm: FC<SignupFormProps> = ({
+  onSubmit,
+  initialValues,
+}) => {
   const handleSubmit = async (
-    data: LoginFormData,
-    formikHelpers: FormikHelpers<LoginFormData>,
+    data: SignupFormData,
+    formikHelpers: FormikHelpers<SignupFormData>,
   ) => {
-    const response = await onSubmit(data);
+    const { email, password } = data;
+    const response = await onSubmit({
+      email,
+      password,
+    });
     const { setErrors, setStatus } = formikHelpers;
 
-    const errors = response.data?.login.errors;
+    const errors = response.data?.createUser.errors;
     if (errors) {
-      handleFormErrors<LoginFormData>(errors, setErrors, setStatus);
+      handleFormErrors<SignupFormData>(errors, setErrors, setStatus);
     }
   };
 
@@ -48,7 +61,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, initialValues }) => {
       onSubmit={handleSubmit}
       validationSchema={ValidationSchema}
     >
-      {({ isSubmitting, status }) => (
+      {({ isSubmitting }) => (
         <Form>
           <Field
             name="email"
@@ -62,11 +75,14 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, initialValues }) => {
             type="password"
             component={FormikTextInput}
           />
-
-          {status && <GlobalError>{status}</GlobalError>}
-
+          <Field
+            name="confirmedPassword"
+            label="Confirm password"
+            type="password"
+            component={FormikTextInput}
+          />
           <button type="submit" disabled={isSubmitting}>
-            Log In
+            Sign Up
           </button>
         </Form>
       )}

@@ -28,7 +28,7 @@ export const LoginContainer: FC<LoginContainerProps> = () => {
 
   return (
     <>
-      <h1>Login</h1>
+      <h1>Log In</h1>
       <LoginForm
         initialValues={{ email: '', password: '' }}
         onSubmit={handleSubmit}

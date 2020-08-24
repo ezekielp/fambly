@@ -1,5 +1,6 @@
 import React, { FC, useContext } from 'react';
-// import {  } from '../graphqlTypes';
+import { useCreateUserMutation } from '../graphqlTypes';
+import { SignupForm, CreateUserData } from './SignupForm';
 import { gql } from '@apollo/client';
 
 gql`
@@ -20,5 +21,18 @@ gql`
 export interface SignupContainerProps {}
 
 export const SignupContainer: FC<SignupContainerProps> = () => {
-  return <></>;
+  const [createUserMutation] = useCreateUserMutation();
+
+  const handleSubmit = (data: CreateUserData) =>
+    createUserMutation({ variables: { input: data } });
+
+  return (
+    <>
+      <h1>Sign Up</h1>
+      <SignupForm
+        initialValues={{ email: '', password: '', confirmedPassword: '' }}
+        onSubmit={handleSubmit}
+      />
+    </>
+  );
 };
