@@ -5,7 +5,8 @@ import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { loginMutation, loginResult } from 'client/test/mutations/login';
 import { AuthContext } from 'client/contexts/AuthContext';
 import { Form } from 'formik';
-import { LoginForm, LoginFormProps } from './LoginForm';
+import { LoginForm, LoginFormProps, LoginFormData } from './LoginForm';
+import { formUtils, FormUtils } from '../test/utils/formik';
 import { act } from 'react-dom/test-utils';
 import wait from 'waait';
 
@@ -15,6 +16,7 @@ describe('<LoginForm />', () => {
     onSubmit?: jest.Mock,
   ) => Promise<void>;
   let component: ReactWrapper<LoginFormProps>;
+  let form: FormUtils;
   let handleSubmit: jest.Mock;
 
   beforeEach(() => {
@@ -37,7 +39,6 @@ describe('<LoginForm />', () => {
             <AuthContext.Provider value={{}}>
               <MemoryRouter initialEntries={[{ pathname: '/login' }]}>
                 <Route path="/login">
-                  {/* <LoginForm {...props} /> */}
                   <LoginForm
                     onSubmit={onSubmit}
                     initialValues={initialValues}
@@ -61,8 +62,9 @@ describe('<LoginForm />', () => {
   describe('form validations', () => {
     it('requires email', async () => {
       await mountComponent();
-      await component.find(Form).simulate('submit');
-      await act(async () => await wait(0));
+      form = formUtils<LoginFormData>(component.find(Form));
+      await form.submit();
+
       expect(
         component
           .text()
@@ -72,12 +74,8 @@ describe('<LoginForm />', () => {
       ).toBe(true);
       expect(handleSubmit).not.toHaveBeenCalled();
 
-      component.find('input[name="email"]').simulate('change', {
-        target: { name: 'email', value: 'slothrop@gr.com' },
-      });
-      await act(async () => await wait(0));
-      await component.find(Form).simulate('submit');
-      await act(async () => await wait(0));
+      await form.fill({ email: 'slothrop@gr.com' });
+      await form.submit();
       expect(
         component
           .text()
@@ -89,8 +87,9 @@ describe('<LoginForm />', () => {
 
     it('requires password', async () => {
       await mountComponent();
-      await component.find(Form).simulate('submit');
-      await act(async () => await wait(0));
+      form = formUtils<LoginFormData>(component.find(Form));
+      await form.submit();
+
       expect(
         component
           .text()
@@ -100,12 +99,8 @@ describe('<LoginForm />', () => {
       ).toBe(true);
       expect(handleSubmit).not.toHaveBeenCalled();
 
-      component.find('input[name="password"]').simulate('change', {
-        target: { name: 'password', value: 'correct-password' },
-      });
-      await act(async () => await wait(0));
-      await component.find(Form).simulate('submit');
-      await act(async () => await wait(0));
+      await form.fill({ password: 'J39rjeod1' });
+      await form.submit();
       expect(
         component
           .text()
@@ -135,16 +130,13 @@ describe('<LoginForm />', () => {
       };
 
       await mountComponent([loginMutation(mock)], handleSubmit);
-      component.find('input[name="email"]').simulate('change', {
-        target: { name: 'email', value: 'test@example.com' },
+      form = formUtils<LoginFormData>(component.find(Form));
+
+      await form.fill({
+        email: 'slothrop@gr.com',
+        password: 'incorrect-password',
       });
-      await act(async () => await wait(0));
-      component.find('input[name="password"]').simulate('change', {
-        target: { name: 'password', value: 'incorrect-password' },
-      });
-      await act(async () => await wait(0));
-      await component.find(Form).simulate('submit');
-      await act(async () => await wait(0));
+      await form.submit();
       expect(component.text().includes('Big scary global error!')).toBe(true);
     });
   });

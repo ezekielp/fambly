@@ -22,16 +22,12 @@ export interface SignupFormProps {
 }
 
 const ValidationSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email()
-    .required(
-      'Please enter the email address associated with your Fambly account',
-    ),
+  email: yup.string().email().required().label('Email'),
   password: yup.string().required().min(8).label('Password'),
   confirmedPassword: yup
     .string()
-    .oneOf([yup.ref('password'), undefined], 'Passwords must match'),
+    .required()
+    .oneOf([yup.ref('password')], 'Passwords must match'),
 });
 
 export const SignupForm: FC<SignupFormProps> = ({
