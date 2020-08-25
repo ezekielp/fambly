@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'create mutation', type: :request do
+RSpec.describe 'create_user mutation', type: :request do
     let(:endpoint) { '/graphql' }
     let(:valid_password) { 'hew82hr23ref2KJAhfq!' }
     let(:invalid_password) { '1234567' }
@@ -29,7 +29,6 @@ RSpec.describe 'create mutation', type: :request do
                 password: valid_password
             }
         }
-        
     end
 
     it 'creates a new user if the validations pass' do
