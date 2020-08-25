@@ -160,10 +160,6 @@ describe('<LoginForm />', () => {
         password: 'Schwarzgerat',
       });
       await form.submit();
-      // await act(async () => {
-      //   await wait(0);
-      // });
-
       expect(handleSubmit).toHaveBeenCalled();
     });
   });
