@@ -9,7 +9,7 @@ module Mutations
     class CreateUser < BaseMutation
         argument :input, Types::CreateUserInputType, required: true
 
-        field :user, Types::UserType, null: false
+        field :user, Types::UserType, null: true
 
         def resolve(input:)
             user = User.create!(

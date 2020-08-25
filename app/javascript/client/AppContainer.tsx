@@ -22,7 +22,9 @@ const ProtectedRoute: FC<ProtectedRouteProps> = ({
   return <Redirect to={redirect} />;
 };
 
-const InternalAppContainer: FC<{}> = () => {
+interface AppContainerProps {}
+
+const InternalAppContainer: FC<AppContainerProps> = () => {
   const { userId } = useContext(AuthContext);
   const loggedIn = !!userId;
 

@@ -5,6 +5,7 @@ import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { loginMutation, loginResult } from 'client/test/mutations/login';
 import { AuthContext } from 'client/contexts/AuthContext';
 import { Form } from 'formik';
+import { History } from 'history';
 import { LoginForm, LoginFormProps, LoginFormData } from './LoginForm';
 import { formUtils, FormUtils } from '../test/utils/formik';
 import { act } from 'react-dom/test-utils';
@@ -18,6 +19,7 @@ describe('<LoginForm />', () => {
   let component: ReactWrapper<LoginFormProps>;
   let form: FormUtils;
   let handleSubmit: jest.Mock;
+  let history: History;
 
   beforeEach(() => {
     handleSubmit = jest.fn(() =>
@@ -38,12 +40,18 @@ describe('<LoginForm />', () => {
           <MockedProvider mocks={mocks} addTypename={false}>
             <AuthContext.Provider value={{}}>
               <MemoryRouter initialEntries={[{ pathname: '/login' }]}>
-                <Route path="/login">
-                  <LoginForm
-                    onSubmit={onSubmit}
-                    initialValues={initialValues}
-                  />
-                </Route>
+                <Route
+                  path="/login"
+                  render={(routerProps) => {
+                    history = routerProps.history;
+                    return (
+                      <LoginForm
+                        onSubmit={onSubmit}
+                        initialValues={initialValues}
+                      />
+                    );
+                  }}
+                ></Route>
               </MemoryRouter>
             </AuthContext.Provider>
           </MockedProvider>,
@@ -138,6 +146,25 @@ describe('<LoginForm />', () => {
       });
       await form.submit();
       expect(component.text().includes('Big scary global error!')).toBe(true);
+    });
+
+    it('submits the form if there are no errors', async () => {
+      const login = loginMutation();
+      handleSubmit = jest.fn(() => Promise.resolve(login));
+
+      await mountComponent([login], handleSubmit);
+      form = formUtils<LoginFormData>(component.find(Form));
+
+      await form.fill({
+        email: 'slothrop@gr.com',
+        password: 'Schwarzgerat',
+      });
+      await form.submit();
+      // await act(async () => {
+      //   await wait(0);
+      // });
+
+      expect(handleSubmit).toHaveBeenCalled();
     });
   });
 });

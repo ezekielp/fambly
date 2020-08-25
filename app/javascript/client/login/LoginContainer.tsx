@@ -1,8 +1,8 @@
-import React, { FC, useContext, useEffect } from 'react';
+import React, { FC, useContext } from 'react';
 import { AuthContext } from 'client/contexts/AuthContext';
 import { useLoginMutation } from 'client/graphqlTypes';
 import { LoginForm, LoginFormData } from './LoginForm';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { gql } from '@apollo/client';
 
 gql`
@@ -20,21 +20,17 @@ gql`
   }
 `;
 
-const InternalLoginContainer: FC<RouteComponentProps> = ({ history }) => {
-  // const { userId } = useContext(AuthContext);
+interface LoginContainerProps {}
 
-  // useEffect(() => {
-  //   if (userId) history.push('/home');
-  // }, [userId]);
-
-  // if (userId) history.push('/home');
+const InternalLoginContainer: FC<LoginContainerProps> = () => {
+  const { userId } = useContext(AuthContext);
+  if (userId) window.location.href = '/home';
 
   const [loginMutation] = useLoginMutation();
 
   const handleSubmit = (data: LoginFormData) =>
     loginMutation({ variables: { input: data } }).then((result) => {
       const userId = result.data?.login.user?.id;
-      // if (userId) setUserId(userId);
       if (userId) window.location.href = '/home';
       return result;
     });

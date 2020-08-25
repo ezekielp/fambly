@@ -25,4 +25,9 @@ export const loginMutation = ({
     },
   },
   result: { data: { login: result } },
+  newData: jest.fn(() => ({
+    data: {
+      login: result,
+    },
+  })),
 });

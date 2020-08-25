@@ -20,7 +20,7 @@ export type CreateUserInput = {
 export type CreateUserPayload = {
   __typename?: 'CreateUserPayload';
   errors?: Maybe<Array<Error>>;
-  user: User;
+  user?: Maybe<User>;
 };
 
 export type Error = {
@@ -116,10 +116,10 @@ export type CreateUserMutation = (
   { __typename?: 'Mutation' }
   & { createUser: (
     { __typename?: 'CreateUserPayload' }
-    & { user: (
+    & { user?: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'email'>
-    ), errors?: Maybe<Array<(
+    )>, errors?: Maybe<Array<(
       { __typename?: 'Error' }
       & Pick<Error, 'path' | 'message'>
     )>> }
