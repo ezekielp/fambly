@@ -28,11 +28,12 @@ export const SignupContainer: FC<SignupContainerProps> = () => {
   const [createUserMutation] = useCreateUserMutation();
 
   const handleSubmit = (data: CreateUserData) =>
-    createUserMutation({ variables: { input: data } }).then((result) => {
-      const userId = result.data?.createUser.user?.id;
-      if (userId) window.location.href = '/home';
-      return result;
-    });
+    createUserMutation({ variables: { input: data } });
+  // .then((result) => {
+  //   const userId = result.data?.createUser.user?.id;
+  //   if (userId) window.location.href = '/home';
+  //   return result;
+  // });
 
   return (
     <>
