@@ -20,7 +20,7 @@ module Mutations
       yield
     rescue StandardError => e
       {
-        errors: e.messages.map { |path, messages| { path: path, message: messages.join('. ') } }
+        errors: e
       }
     end
 

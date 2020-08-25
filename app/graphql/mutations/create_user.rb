@@ -9,17 +9,20 @@ module Mutations
     class CreateUser < BaseMutation
         argument :input, Types::CreateUserInputType, required: true
 
-        field :user, Types::UserType, null: false
+        field :user, Types::UserType, null: true
 
         def resolve(input:)
-            user = User.create!(
+            user = User.new(
                 email: input.email,
                 password: input.password
             )
 
-            login_user(user)
+            if user.save
+                login_user(user)
+                return { user: current_user }
+            end
 
-            { user: current_user }
+            { errors: [{ path: 'email', message: 'This email address is already associated with a Fambly account!' }] }
         end
     end
 end

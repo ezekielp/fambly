@@ -26,7 +26,7 @@ describe('<SignupForm />', () => {
     handleSubmit = jest.fn(() =>
       Promise.resolve({
         data: {
-          login: createUserResult,
+          createUser: createUserResult,
         },
       }),
     );
@@ -88,7 +88,10 @@ describe('<SignupForm />', () => {
       );
       expect(handleSubmit).not.toHaveBeenCalled();
 
-      await form.fill({ password: 'J39rjeod1' });
+      await form.fill({
+        password: 'J39rjeod1',
+        confirmedPassword: 'J39rjeod1',
+      });
       await form.submit();
       expect(component.text().includes('Password is a required field')).toBe(
         false,
@@ -107,6 +110,61 @@ describe('<SignupForm />', () => {
       await form.fill({ confirmedPassword: 'J39rjeod1' });
       await form.submit();
       expect(component.text().includes('Passwords must match')).toBe(false);
+    });
+  });
+
+  describe('submitting the form', () => {
+    it('renders server-side errors if they are returned', async () => {
+      const errors = [
+        { path: 'email', message: 'This email address is already registered!' },
+      ];
+      const handleSubmit = jest.fn(() =>
+        Promise.resolve({
+          data: {
+            createUser: {
+              errors,
+            },
+          },
+        }),
+      );
+      const mock = {
+        result: {
+          errors,
+        },
+      };
+
+      await mountComponent([createUserMutation(mock)], handleSubmit);
+      form = formUtils<SignupFormData>(component.find(Form));
+
+      await form.fill({
+        email: 'slothrop@gr.com',
+        password: 'correct-password',
+        confirmedPassword: 'correct-password',
+      });
+      await form.submit();
+      expect(
+        component.text().includes('This email address is already registered!'),
+      ).toBe(true);
+    });
+
+    it('submits the form if there are no errors', async () => {
+      const createUser = createUserMutation();
+      handleSubmit = jest.fn(() => Promise.resolve(createUser));
+
+      await mountComponent([createUser], handleSubmit);
+      form = formUtils<SignupFormData>(component.find(Form));
+
+      await form.fill({
+        email: 'slothrop@gr.com',
+        password: 'Schwarzgerat',
+        confirmedPassword: 'Schwarzgerat',
+      });
+      await form.submit();
+      await act(async () => {
+        await wait(2000);
+      });
+
+      expect(handleSubmit).toHaveBeenCalled();
     });
   });
 });

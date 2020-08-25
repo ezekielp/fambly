@@ -48,6 +48,8 @@ export const SignupForm: FC<SignupFormProps> = ({
     const errors = response.data?.createUser.errors;
     if (errors) {
       handleFormErrors<SignupFormData>(errors, setErrors, setStatus);
+    } else {
+      window.location.href = '/home';
     }
   };
 
