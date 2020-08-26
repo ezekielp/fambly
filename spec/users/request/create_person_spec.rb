@@ -4,7 +4,7 @@ RSpec.describe 'create_person mutation', type: :request do
   let(:endpoint) { '/graphql' }
   let(:user) { create(:user) }
   let(:password) { 'Schwarzgerat' }
-  let(:query_string) do 
+  let(:query_string) do
     "
         mutation CreatePerson($input: CreatePersonInput!) {
             createPerson(input: $input) {
@@ -34,7 +34,6 @@ RSpec.describe 'create_person mutation', type: :request do
     }
   end
 
-  # use the 'login_user' helper method with the user you create to do the right procedure for using 'current_user.id'
   it 'creates a new person associated with the current_user' do
     login_user(email: user[:email], password: password)
 

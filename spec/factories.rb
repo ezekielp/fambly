@@ -4,5 +4,10 @@ FactoryBot.define do
         password { 'Schwarzgerat' }
     end
 
+    factory :person do
+        user
+        first_name { 'Pirate' }
+        last_name { 'Prentice' }
+    end
 
 end

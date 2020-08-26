@@ -7,5 +7,6 @@ module Types
 
     # Person + person fields
     field :create_person, mutation: Mutations::CreatePerson
+    field :create_note, mutation: Mutations::CreateNote
   end
 end
