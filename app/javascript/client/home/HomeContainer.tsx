@@ -1,8 +1,8 @@
-import React, { FC, useContext, useEffect } from 'react';
+import React, { FC, useContext } from 'react';
 import { AuthContext } from 'client/contexts/AuthContext';
 import { useLogoutMutation } from 'client/graphqlTypes';
 import { gql } from '@apollo/client';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 gql`
   mutation Logout {
@@ -12,16 +12,9 @@ gql`
 
 interface HomeContainerProps {}
 
-const InternalHomeContainer: FC<HomeContainerProps & RouteComponentProps> = ({
-  history,
-}) => {
-  // const { userId } = useContext(AuthContext);
-
-  // useEffect(() => {
-  //   if (!userId) history.push('/login');
-  // }, [userId]);
-
-  // if (!userId) history.push('/login');
+const InternalHomeContainer: FC<HomeContainerProps> = () => {
+  const { userId } = useContext(AuthContext);
+  if (!userId) window.location.href = '/login';
 
   const [logoutMutation] = useLogoutMutation();
 
