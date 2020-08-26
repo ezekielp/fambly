@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
-import { FormikTextInput } from '../form/inputs';
+import { FormikTextInput } from 'client/form/inputs';
 import { OnSubmit, handleFormErrors } from 'client/utils/formik';
 import { CreateUserMutation } from 'client/graphqlTypes';
 import * as yup from 'yup';
