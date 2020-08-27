@@ -76,6 +76,7 @@ type Person {
 }
 
 type Query {
+  personById(personId: String!): Person
   user: User
 }
 

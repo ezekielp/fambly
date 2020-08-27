@@ -6,7 +6,7 @@ import {
 } from 'client/graphqlTypes';
 import { AddPersonForm } from 'client/form/AddPersonForm';
 import { gql } from '@apollo/client';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 gql`
   mutation Logout {
@@ -49,13 +49,21 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
   const { userId } = useContext(AuthContext);
   if (!userId) window.location.href = '/login';
 
+  const [newPersonFieldVisible, toggleNewPersonFieldVisible] = useState(false);
   const [logoutMutation] = useLogoutMutation();
   const { data: userData } = useGetUserForHomeContainerQuery();
 
   // To do (eventually): Use a loading spinner for loading state
-  // if (!userData) return null;
+  if (!userData) return null;
 
-  const [newPersonFieldVisible, toggleNewPersonFieldVisible] = useState(false);
+  const profileLinks = userData.user?.people?.map((person) => (
+    <div key={person.id}>
+      <Link to={`/profiles/${person.id}`}>
+        {person.firstName}
+        {person.lastName && ` ${person.lastName}`}
+      </Link>
+    </div>
+  ));
 
   const handleLogout = async () => {
     await logoutMutation();
@@ -70,6 +78,7 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
         Add a new person profile
       </button>
       {newPersonFieldVisible && <AddPersonForm />}
+      {profileLinks}
     </>
   );
 };

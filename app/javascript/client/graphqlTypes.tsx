@@ -110,7 +110,13 @@ export type Person = {
 
 export type Query = {
   __typename?: 'Query';
+  personById?: Maybe<Person>;
   user?: Maybe<User>;
+};
+
+
+export type QueryPersonByIdArgs = {
+  personId: Scalars['String'];
 };
 
 export type User = {
@@ -209,6 +215,23 @@ export type CreateUserMutation = (
       & Pick<Error, 'path' | 'message'>
     )>> }
   ) }
+);
+
+export type GetPersonForPersonContainerQueryVariables = Exact<{
+  personId: Scalars['String'];
+}>;
+
+
+export type GetPersonForPersonContainerQuery = (
+  { __typename?: 'Query' }
+  & { personById?: Maybe<(
+    { __typename?: 'Person' }
+    & Pick<Person, 'id' | 'firstName' | 'lastName'>
+    & { notes?: Maybe<Array<(
+      { __typename?: 'Note' }
+      & Pick<Note, 'id' | 'content'>
+    )>> }
+  )> }
 );
 
 
@@ -429,3 +452,42 @@ export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
 export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
 export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
+export const GetPersonForPersonContainerDocument = gql`
+    query GetPersonForPersonContainer($personId: String!) {
+  personById(personId: $personId) {
+    id
+    firstName
+    lastName
+    notes {
+      id
+      content
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetPersonForPersonContainerQuery__
+ *
+ * To run a query within a React component, call `useGetPersonForPersonContainerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPersonForPersonContainerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPersonForPersonContainerQuery({
+ *   variables: {
+ *      personId: // value for 'personId'
+ *   },
+ * });
+ */
+export function useGetPersonForPersonContainerQuery(baseOptions?: Apollo.QueryHookOptions<GetPersonForPersonContainerQuery, GetPersonForPersonContainerQueryVariables>) {
+        return Apollo.useQuery<GetPersonForPersonContainerQuery, GetPersonForPersonContainerQueryVariables>(GetPersonForPersonContainerDocument, baseOptions);
+      }
+export function useGetPersonForPersonContainerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPersonForPersonContainerQuery, GetPersonForPersonContainerQueryVariables>) {
+          return Apollo.useLazyQuery<GetPersonForPersonContainerQuery, GetPersonForPersonContainerQueryVariables>(GetPersonForPersonContainerDocument, baseOptions);
+        }
+export type GetPersonForPersonContainerQueryHookResult = ReturnType<typeof useGetPersonForPersonContainerQuery>;
+export type GetPersonForPersonContainerLazyQueryHookResult = ReturnType<typeof useGetPersonForPersonContainerLazyQuery>;
+export type GetPersonForPersonContainerQueryResult = Apollo.QueryResult<GetPersonForPersonContainerQuery, GetPersonForPersonContainerQueryVariables>;
