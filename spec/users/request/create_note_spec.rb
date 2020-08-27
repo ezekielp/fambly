@@ -39,5 +39,4 @@ RSpec.describe 'create_note mutation', type: :request do
     expect(note['content']).to eq(note_content)
     expect(person.notes.first.content).to eq(note_content)
   end
-
 end
