@@ -245,15 +245,30 @@ export type GetPersonForPersonContainerQuery = (
   { __typename?: 'Query' }
   & { personById?: Maybe<(
     { __typename?: 'Person' }
-    & Pick<Person, 'id' | 'firstName' | 'lastName'>
-    & { notes?: Maybe<Array<(
-      { __typename?: 'Note' }
-      & Pick<Note, 'id' | 'content'>
-    )>> }
+    & PersonInfoFragment
   )> }
 );
 
+export type PersonInfoFragment = (
+  { __typename?: 'Person' }
+  & Pick<Person, 'id' | 'firstName' | 'lastName'>
+  & { notes?: Maybe<Array<(
+    { __typename?: 'Note' }
+    & Pick<Note, 'id' | 'content'>
+  )>> }
+);
 
+export const PersonInfoFragmentDoc = gql`
+    fragment PersonInfo on Person {
+  id
+  firstName
+  lastName
+  notes {
+    id
+    content
+  }
+}
+    `;
 export const GetUserDocument = gql`
     query GetUser {
   user {
@@ -513,16 +528,10 @@ export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMut
 export const GetPersonForPersonContainerDocument = gql`
     query GetPersonForPersonContainer($personId: String!) {
   personById(personId: $personId) {
-    id
-    firstName
-    lastName
-    notes {
-      id
-      content
-    }
+    ...PersonInfo
   }
 }
-    `;
+    ${PersonInfoFragmentDoc}`;
 
 /**
  * __useGetPersonForPersonContainerQuery__

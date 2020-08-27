@@ -24,7 +24,8 @@ module Types
     def person_by_id(args)
       return nil unless args
 
-      Person.find(args[:person_id])
+      person = Person.find(args[:person_id])
+      person
     end
 
   end

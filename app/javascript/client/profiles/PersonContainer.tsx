@@ -1,19 +1,31 @@
 import React, { FC, useState, useEffect } from 'react';
-import { useGetPersonForPersonContainerQuery } from 'client/graphqlTypes';
+import {
+  useGetPersonForPersonContainerQuery,
+  PersonInfoFragmentDoc,
+} from 'client/graphqlTypes';
 import { AddNoteForm } from 'client/form/AddNoteForm';
+import { PersonFieldsInput } from './PersonFieldsInput';
 import { useParams } from 'react-router-dom';
 import { gql } from '@apollo/client';
 
 gql`
   query GetPersonForPersonContainer($personId: String!) {
     personById(personId: $personId) {
+      ...PersonInfo
+    }
+  }
+
+  ${PersonInfoFragmentDoc}
+`;
+
+gql`
+  fragment PersonInfo on Person {
+    id
+    firstName
+    lastName
+    notes {
       id
-      firstName
-      lastName
-      notes {
-        id
-        content
-      }
+      content
     }
   }
 `;
@@ -49,13 +61,11 @@ export const PersonContainer: FC = () => {
       <h1>
         {firstName} {lastName && ` ${lastName}`}
       </h1>
-      <select
-        value={fieldToAdd}
+      <PersonFieldsInput
+        personData={personData.personById}
+        fieldToAdd={fieldToAdd}
         onChange={(e) => setFieldToAdd(e.target.value)}
-      >
-        <option value=""></option>
-        <option value="note">Note</option>
-      </select>
+      />
       {fieldToAdd === 'note' && (
         <AddNoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
       )}
