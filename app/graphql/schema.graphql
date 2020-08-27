@@ -37,6 +37,10 @@ type CreateUserPayload {
   user: User
 }
 
+input DeleteNoteInput {
+  noteId: ID!
+}
+
 type Error {
   message: String!
   path: String!
@@ -59,6 +63,7 @@ type Mutation {
   createNote(input: CreateNoteInput!): CreateNotePayload!
   createPerson(input: CreatePersonInput!): CreatePersonPayload!
   createUser(input: CreateUserInput!): CreateUserPayload!
+  deleteNote(input: DeleteNoteInput!): Boolean!
   login(input: LoginInput!): LoginPayload!
   logout: Boolean!
   updateNote(input: UpdateNoteInput!): UpdateNotePayload!

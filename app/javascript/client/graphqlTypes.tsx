@@ -47,6 +47,10 @@ export type CreateUserPayload = {
   user?: Maybe<User>;
 };
 
+export type DeleteNoteInput = {
+  noteId: Scalars['ID'];
+};
+
 export type Error = {
   __typename?: 'Error';
   message: Scalars['String'];
@@ -70,6 +74,7 @@ export type Mutation = {
   createNote: CreateNotePayload;
   createPerson: CreatePersonPayload;
   createUser: CreateUserPayload;
+  deleteNote: Scalars['Boolean'];
   login: LoginPayload;
   logout: Scalars['Boolean'];
   updateNote: UpdateNotePayload;
@@ -88,6 +93,11 @@ export type MutationCreatePersonArgs = {
 
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
+};
+
+
+export type MutationDeleteNoteArgs = {
+  input: DeleteNoteInput;
 };
 
 
