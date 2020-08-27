@@ -4,6 +4,7 @@ import { AuthContext } from 'client/contexts/AuthContext';
 import { SignupContainer } from './login/SignupContainer';
 import { LoginContainer } from './login/LoginContainer';
 import { HomeContainer } from './home/HomeContainer';
+import { PersonContainer } from './profiles/PersonContainer';
 
 interface ProtectedRouteProps extends RouteProps {
   accessAllowed: boolean;
@@ -41,6 +42,11 @@ const InternalAppContainer: FC<AppContainerProps> = () => {
           path="/home"
           accessAllowed={loggedIn}
           component={HomeContainer}
+        />
+        <ProtectedRoute
+          path="/profiles/:personId"
+          accessAllowed={loggedIn}
+          component={PersonContainer}
         />
         <Route path="*">
           <Redirect to="/" />
