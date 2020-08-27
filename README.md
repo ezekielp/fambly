@@ -23,3 +23,5 @@ Frontend (JavaScript — Jest + Enzyme): `yarn test`
 * Add the field to the `PersonFieldsInput` component
 * Create a form to allow the user to add the new field(s) to a person profile 
 * Add display components for the field and add the container component to the `PersonContainer` file
+* Make sure the display component(s) have edit and delete functionality
+* Write tests for all new components and add to existing test files as necessary
