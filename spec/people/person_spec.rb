@@ -1,8 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Person, type: :model do
-  let(:valid_month) { 'May' }
-  let(:invalid_month) { 'Mayy' }
+  after(:each) { travel_back }
+
+  let(:date) { Date.new(2020, 8, 28) }
+  let(:valid_month) { 5 }
+  let(:invalid_month) { 50 }
   let(:valid_day) { 8 }
   let(:invalid_day) { 88 }
   let(:valid_year) { 1937 }
@@ -35,6 +38,50 @@ RSpec.describe Person, type: :model do
         person.birth_day = invalid_day
         expect(person.save).to be false
       end
+    end
+  end
+
+  describe 'approximate_age_from_birth_year' do
+    it 'returns an array with the two possible ages of someone given their birth year' do
+      travel_to date
+
+      person.update(birth_year: 2008)
+      expect(person.approximate_age_from_birth_year).to eq(12)
+    end
+  end
+
+  describe 'age_from_full_birthdate' do
+    it "returns a person's age given their full birthdate" do
+      travel_to date
+
+      expect(person_with_valid_birthdate.age_from_full_birthdate).to eq(83)
+    end
+  end
+
+  describe 'months_old_from_full_birthdate' do
+    it "returns a person's age in months given their full birthdate" do
+      travel_to date
+
+      person.update(birth_year: 2018, birth_month: 10, birth_day: 7)
+      expect(person.months_old_from_full_birthdate).to eq(22)
+    end
+  end
+
+  describe 'possible_ages_from_age' do
+    it 'returns an approximate age of someone based on their age on a specific date' do
+      travel_to date
+
+      person.update(age: 30, date_age_added: Date.new(2015, 6, 12))
+      expect(person.approximate_current_age_from_age).to eq(35)
+    end
+  end
+
+  describe 'approximate_months_old_from_months_old' do
+    it 'returns the approximate number of months old a person is based on their months_old on a specific date' do
+      travel_to date
+
+      person.update(months_old: 13, date_age_added: Date.new(2019, 11, 11))
+      expect(person.approximate_months_old_from_months_old).to eq(22)
     end
   end
 end

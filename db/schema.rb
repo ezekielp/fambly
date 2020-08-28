@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_28_162037) do
+ActiveRecord::Schema.define(version: 2020_08_28_200434) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -33,9 +33,9 @@ ActiveRecord::Schema.define(version: 2020_08_28_162037) do
     t.integer "months_old"
     t.integer "age"
     t.integer "birth_year"
-    t.string "birth_month"
     t.integer "birth_day"
     t.date "date_age_added"
+    t.integer "birth_month"
     t.index ["user_id"], name: "index_people_on_user_id"
   end
 
