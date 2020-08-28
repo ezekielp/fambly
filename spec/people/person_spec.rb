@@ -41,14 +41,12 @@ RSpec.describe Person, type: :model do
     end
   end
 
-  describe 'possible_ages_from_birth_year' do
+  describe 'approximate_age_from_birth_year' do
     it 'returns an array with the two possible ages of someone given their birth year' do
       travel_to date
 
       person.update(birth_year: 2008)
-      # approximate_age = Time.zone.now.year - 2018
-      # expect(person.possible_ages_from_birth_year).to eq([approximate_age - 1, approximate_age])
-      expect(person.possible_ages_from_birth_year).to eq([11, 12])
+      expect(person.approximate_age_from_birth_year).to eq(12)
     end
   end
 
@@ -63,8 +61,18 @@ RSpec.describe Person, type: :model do
   describe 'possible_ages_from_age' do
     it 'returns an approximate age of someone based on their age on a specific date' do
       travel_to date
+
       person.update(age: 30, date_age_added: Date.new(2015, 6, 12))
       expect(person.approximate_current_age_from_age).to eq(35)
+    end
+  end
+
+  describe 'approximate_months_old_from_months_old' do
+    it 'returns the approximate number of months old a person is based on their months_old on a specific date' do
+      travel_to date
+
+      person.update(months_old: 13, date_age_added: Date.new(2019, 11, 11))
+      expect(person.approximate_months_old_from_months_old).to eq(22)
     end
   end
 end
