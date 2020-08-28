@@ -60,4 +60,11 @@ RSpec.describe Person, type: :model do
     end
   end
 
+  describe 'possible_ages_from_age' do
+    it 'returns an approximate age of someone based on their age on a specific date' do
+      travel_to date
+      person.update(age: 30, date_age_added: Date.new(2015, 6, 12))
+      expect(person.approximate_current_age_from_age).to eq(35)
+    end
+  end
 end

@@ -41,19 +41,30 @@ class Person < ApplicationRecord
   def age_from_full_birthdate
     return nil unless birth_year && birth_month && birth_day
 
-    now = Time.now.utc.to_date
-    approximate_age = now.year - birth_year
-    extra_year = now.month > birth_month || (now.month == birth_month && now.day >= birth_day) ? 0 : 1
-
-    approximate_age + extra_year
+    now.year - birth_year + extra_year_for_ages(birth_month, birth_day)
   end
 
   def possible_ages_from_birth_year
     return nil unless birth_year
 
     approximate_age = Time.zone.now.year - birth_year
-
     [approximate_age - 1, approximate_age]
+  end
+
+  def approximate_current_age_from_age
+    return nil unless age && date_age_added
+
+    age + now.year - date_age_added.year
+  end
+
+  private
+
+  def now
+    Time.now.utc.to_date
+  end
+
+  def extra_year_for_ages(month, year)
+    now.month > month || (now.month == month && now.day >= day) ? 0 : 1
   end
 
 end
