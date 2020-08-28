@@ -1,5 +1,12 @@
 import React, { FC, useContext } from 'react';
-import { Redirect, Route, Switch, withRouter, RouteProps } from 'react-router';
+import {
+  Link,
+  Redirect,
+  Route,
+  Switch,
+  withRouter,
+  RouteProps,
+} from 'react-router-dom';
 import { AuthContext } from 'client/contexts/AuthContext';
 import { SignupContainer } from './login/SignupContainer';
 import { LoginContainer } from './login/LoginContainer';
@@ -31,6 +38,7 @@ const InternalAppContainer: FC<AppContainerProps> = () => {
 
   return (
     <>
+      <Link to="/home">fambly</Link>
       <Switch>
         <Route path="/signup">
           <SignupContainer />
