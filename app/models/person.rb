@@ -2,17 +2,18 @@
 #
 # Table name: people
 #
-#  id          :uuid             not null, primary key
-#  age         :integer
-#  birth_day   :integer
-#  birth_month :string
-#  birth_year  :integer
-#  first_name  :string           not null
-#  last_name   :string
-#  months_old  :integer
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  user_id     :uuid
+#  id             :uuid             not null, primary key
+#  age            :integer
+#  birth_day      :integer
+#  birth_month    :string
+#  birth_year     :integer
+#  date_age_added :date
+#  first_name     :string           not null
+#  last_name      :string
+#  months_old     :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  user_id        :uuid
 #
 # Indexes
 #
@@ -33,6 +34,7 @@ class Person < ApplicationRecord
   def birth_year_must_be_in_past
     if birth_year.present? && birth_year > Date.today.year
       errors.add(:birth_year, "can't be in the future!")
+      self.birth_year = nil
     end
   end
 end

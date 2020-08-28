@@ -26,11 +26,7 @@ module Mutations
         return { errors: [{ path: '', message: 'Please provide age in either years or months, not both' }] }
       end
 
-      if age
-        person.update(age: age)
-      elsif months_old
-        person.update(months_old: months_old)
-      end
+      person.update(age: age, months_old: months_old, date_age_added: Date.today)
 
       { person: person }
     end

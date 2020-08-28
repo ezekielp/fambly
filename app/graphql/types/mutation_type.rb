@@ -11,5 +11,6 @@ module Types
     field :update_note, mutation: Mutations::UpdateNote
     field :delete_note, mutation: Mutations::DeleteNote
     field :create_age, mutation: Mutations::CreateAge
+    field :create_birthdate, mutation: Mutations::CreateBirthdate
   end
 end
