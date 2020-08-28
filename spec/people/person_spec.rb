@@ -1,8 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Person, type: :model do
-  let(:valid_month) { 'May' }
-  let(:invalid_month) { 'Mayy' }
+  after(:each) { travel_back }
+
+  let(:date) { Date.new(2020, 8, 28) }
+  let(:valid_month) { 5 }
+  let(:invalid_month) { 50 }
   let(:valid_day) { 8 }
   let(:invalid_day) { 88 }
   let(:valid_year) { 1937 }
@@ -37,4 +40,24 @@ RSpec.describe Person, type: :model do
       end
     end
   end
+
+  describe 'possible_ages_from_birth_year' do
+    it 'returns an array with the two possible ages of someone given their birth year' do
+      travel_to date
+
+      person.update(birth_year: 2008)
+      # approximate_age = Time.zone.now.year - 2018
+      # expect(person.possible_ages_from_birth_year).to eq([approximate_age - 1, approximate_age])
+      expect(person.possible_ages_from_birth_year).to eq([11, 12])
+    end
+  end
+
+  describe 'age_from_full_birthdate' do
+    it "returns a person's age given their full birthdate" do
+      travel_to date
+
+      expect(person_with_valid_birthdate.age_from_full_birthdate).to eq(83)
+    end
+  end
+
 end
