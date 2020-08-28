@@ -27,18 +27,12 @@ const ValidationSchema = yup.object().shape({
     .number()
     .integer()
     .positive()
-    .max(
-      1000000,
-      "Wow, that's old! Please use scientific notation or something enter such a large age",
-    ),
+    .max(1000000, "Wow, that's old! Please enter a lower age"),
   monthsOld: yup
     .number()
     .integer()
     .positive()
-    .max(
-      1000000,
-      "Wow, that's old! Please use scientific notation or something enter such a large age",
-    ),
+    .max(1000000, "Wow, that's old! Please enter a lower age"),
 });
 
 interface AddAgeFormData {
