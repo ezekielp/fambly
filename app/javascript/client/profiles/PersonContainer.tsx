@@ -3,7 +3,7 @@ import {
   useGetPersonForPersonContainerQuery,
   PersonInfoFragmentDoc,
 } from 'client/graphqlTypes';
-import { AddNoteForm } from 'client/form/AddNoteForm';
+import { AddNoteForm } from 'client/profiles/notes/AddNoteForm';
 import { PersonFieldsInput } from './PersonFieldsInput';
 import { useParams } from 'react-router-dom';
 import { gql } from '@apollo/client';

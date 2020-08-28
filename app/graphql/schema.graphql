@@ -107,6 +107,9 @@ type Note {
 
 type Person {
   age: Int
+  birthDay: Int
+  birthMonth: String
+  birthYear: Int
   firstName: String!
   id: ID!
   lastName: String

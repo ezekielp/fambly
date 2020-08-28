@@ -4,7 +4,7 @@ import {
   useLogoutMutation,
   useGetUserForHomeContainerQuery,
 } from 'client/graphqlTypes';
-import { AddPersonForm } from 'client/form/AddPersonForm';
+import { AddPersonForm } from 'client/profiles/AddPersonForm';
 import { gql } from '@apollo/client';
 import { withRouter, Link } from 'react-router-dom';
 
