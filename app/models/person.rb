@@ -44,6 +44,14 @@ class Person < ApplicationRecord
     now.year - birth_year + extra_year_for_ages(birth_month, birth_day)
   end
 
+  def months_old_from_full_birthdate
+    return nil unless birth_year && birth_month && birth_day
+
+    months = (now.month - birth_month) + (12 * (now.year - birth_year))
+    extra_month = now.day >= birth_day ? 0 : 1
+    months + extra_month
+  end
+
   def approximate_age_from_birth_year
     return nil unless birth_year
     Time.zone.now.year - birth_year

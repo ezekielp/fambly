@@ -158,13 +158,13 @@ export type Note = {
 export type Person = {
   __typename?: 'Person';
   age?: Maybe<Scalars['Int']>;
+  ageInMonths?: Maybe<Scalars['Int']>;
   birthDay?: Maybe<Scalars['Int']>;
   birthMonth?: Maybe<Scalars['String']>;
   birthYear?: Maybe<Scalars['Int']>;
   firstName: Scalars['String'];
   id: Scalars['ID'];
   lastName?: Maybe<Scalars['String']>;
-  monthsOld?: Maybe<Scalars['Int']>;
   notes?: Maybe<Array<Note>>;
 };
 
@@ -304,7 +304,7 @@ export type GetPersonForPersonContainerQuery = (
 
 export type PersonInfoFragment = (
   { __typename?: 'Person' }
-  & Pick<Person, 'id' | 'firstName' | 'lastName'>
+  & Pick<Person, 'id' | 'firstName' | 'lastName' | 'age'>
   & { notes?: Maybe<Array<(
     { __typename?: 'Note' }
     & Pick<Note, 'id' | 'content'>
@@ -322,7 +322,7 @@ export type CreateAgeMutation = (
     { __typename?: 'CreateAgePayload' }
     & { person?: Maybe<(
       { __typename?: 'Person' }
-      & Pick<Person, 'id' | 'age'>
+      & Pick<Person, 'id' | 'age' | 'ageInMonths'>
     )>, errors?: Maybe<Array<(
       { __typename?: 'Error' }
       & Pick<Error, 'path' | 'message'>
@@ -354,6 +354,7 @@ export const PersonInfoFragmentDoc = gql`
   id
   firstName
   lastName
+  age
   notes {
     id
     content
@@ -616,6 +617,7 @@ export const CreateAgeDocument = gql`
     person {
       id
       age
+      ageInMonths
     }
     errors {
       path

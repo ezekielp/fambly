@@ -23,6 +23,7 @@ gql`
     id
     firstName
     lastName
+    age
     notes {
       id
       content

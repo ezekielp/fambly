@@ -12,6 +12,7 @@ gql`
       person {
         id
         age
+        ageInMonths
       }
       errors {
         path

@@ -58,6 +58,15 @@ RSpec.describe Person, type: :model do
     end
   end
 
+  describe 'months_old_from_full_birthdate' do
+    it "returns a person's age in months given their full birthdate" do
+      travel_to date
+
+      person.update(birth_year: 2018, birth_month: 10, birth_day: 7)
+      expect(person.months_old_from_full_birthdate).to eq(22)
+    end
+  end
+
   describe 'possible_ages_from_age' do
     it 'returns an approximate age of someone based on their age on a specific date' do
       travel_to date
