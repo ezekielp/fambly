@@ -8,6 +8,12 @@ FactoryBot.define do
         user
         first_name { 'Pirate' }
         last_name { 'Prentice' }
+
+        trait :with_full_birthdate do
+            birth_year { 1937 }
+            birth_month { 'May' }
+            birth_day { 8 }
+        end
     end
 
     factory :note do
