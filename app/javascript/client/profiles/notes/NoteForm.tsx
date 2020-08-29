@@ -105,7 +105,7 @@ export const NoteForm: FC<NoteFormProps> = ({
         <Form>
           <Field name="content" label="Note" component={FormikTextArea} />
           <button type="submit" disabled={isSubmitting}>
-            Create note
+            Done
           </button>
         </Form>
       )}

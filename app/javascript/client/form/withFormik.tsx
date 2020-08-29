@@ -24,7 +24,7 @@ export const StyledErrorMessage = styled(ErrorMessage)`
 `;
 
 // export const withFormik = <AdditionalFieldPropsType extends object>(
-export const withFormik = <AdditionalFieldPropsType extends Record<string, unknown>(
+export const withFormik = <AdditionalFieldPropsType extends object>(
   WrappedComponent: ComponentType<AdditionalFieldPropsType>,
 ) => (props: FieldProps & AdditionalFieldPropsType & WithFormikProps) => {
   const { label, field, form, onChange, innerRef, ...rest } = props;

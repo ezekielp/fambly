@@ -33,15 +33,27 @@ export const NoteItem: FC<NoteProps> = ({ note }) => {
   const { id, content } = note;
   const [deleteNoteMutation] = useDeleteNoteMutation();
   const [editFlag, setEditFlag] = useState(false);
+  const [deletedFlag, setDeletedFlag] = useState(false);
 
-  const deleteNote = async () => await deleteNoteMutation();
+  const deleteNote = async () => {
+    await deleteNoteMutation({
+      variables: {
+        input: {
+          noteId: id,
+        },
+      },
+    });
+    setDeletedFlag(true);
+  };
 
-  const noteItemContent = (
+  const noteItemContent = !deletedFlag ? (
     <>
       <div>{content}</div>
       <button onClick={() => setEditFlag(true)}>Edit</button>
       <button onClick={() => deleteNote()}>Delete</button>
     </>
+  ) : (
+    <></>
   );
 
   const initialValues = {
