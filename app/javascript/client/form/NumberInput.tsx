@@ -2,8 +2,8 @@ import React, { forwardRef, ChangeEvent, useState } from 'react';
 import { TextInput } from 'client/form/TextInput';
 
 export interface NumberInputProps {
-  value: number | null;
-  onChange: (val: number | null) => void;
+  value?: number | null;
+  onChange?: (val: number | null) => void;
 }
 
 export const NumberInput = forwardRef(
@@ -14,7 +14,8 @@ export const NumberInput = forwardRef(
       const newValue = e.target.value;
       const valToUpdate = newValue ? parseInt(newValue) : null;
 
-      onChange(valToUpdate);
+      // onChange(valToUpdate);
+      onChange && onChange(valToUpdate);
       setInputValue(newValue);
     };
 

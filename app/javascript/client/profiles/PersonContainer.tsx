@@ -3,7 +3,8 @@ import {
   useGetPersonForPersonContainerQuery,
   PersonInfoFragmentDoc,
 } from 'client/graphqlTypes';
-import { AddNoteForm } from 'client/profiles/notes/AddNoteForm';
+import { NoteForm } from 'client/profiles/notes/NoteForm';
+import { NotesContainer } from './notes/NotesContainer';
 import { PersonFieldsInput } from './PersonFieldsInput';
 import { useParams } from 'react-router-dom';
 import { gql } from '@apollo/client';
@@ -52,11 +53,6 @@ export const PersonContainer: FC = () => {
   if (!personData.personById) return null;
   const { firstName, lastName, notes } = personData.personById;
 
-  // To do: Create a separate display component, of course, for these and every such thing as this, that you just pass the data to as a prop
-  const displayedNotes = notes?.map((note) => (
-    <div key={note.id}>{note.content}</div>
-  ));
-
   return (
     <>
       <h1>
@@ -68,9 +64,9 @@ export const PersonContainer: FC = () => {
         onChange={(e) => setFieldToAdd(e.target.value)}
       />
       {fieldToAdd === 'note' && (
-        <AddNoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        <NoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
       )}
-      {notes && displayedNotes}
+      {notes && <NotesContainer notes={notes} />}
     </>
   );
 };
