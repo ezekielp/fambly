@@ -3,7 +3,7 @@ import {
   useGetPersonForPersonContainerQuery,
   PersonInfoFragmentDoc,
 } from 'client/graphqlTypes';
-import { AddNoteForm } from 'client/profiles/notes/AddNoteForm';
+import { NoteForm } from 'client/profiles/notes/NoteForm';
 import { PersonFieldsInput } from './PersonFieldsInput';
 import { useParams } from 'react-router-dom';
 import { gql } from '@apollo/client';
@@ -68,7 +68,7 @@ export const PersonContainer: FC = () => {
         onChange={(e) => setFieldToAdd(e.target.value)}
       />
       {fieldToAdd === 'note' && (
-        <AddNoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        <NoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
       )}
       {notes && displayedNotes}
     </>

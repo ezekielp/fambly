@@ -11,17 +11,11 @@ module Types
     field :notes, [Types::NoteType], null: true
 
     def age
-      person = object.person
-      # person = Person.find_by(id: object.id)
-      
-      person.age_from_full_birthdate || person.approximate_age_from_birth_year || person.approximate_current_age_from_age
+      object.age_from_full_birthdate || object.approximate_age_from_birth_year || object.approximate_current_age_from_age
     end
 
     def age_in_months
-      person = object.person
-      # person = Person.find_by(id: object.id)
-
-      person.months_old_from_full_birthdate || person.approximate_months_old_from_months_old
+      object.months_old_from_full_birthdate || object.approximate_months_old_from_months_old
     end
   end
 end

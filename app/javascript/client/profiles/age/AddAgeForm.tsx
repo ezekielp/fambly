@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import { useCreateAgeMutation } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
-import { FormikNumberInput } from 'client/form/inputs';
+// import { FormikNumberInput } from 'client/form/inputs';
+import { FormikTextInput } from 'client/form/inputs';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
@@ -88,12 +89,18 @@ export const AddAgeForm: FC<AddAgeFormProps> = ({
     >
       {({ isSubmitting }) => (
         <Form>
-          <Field name="age" label="Age" component={FormikNumberInput} />
+          <Field name="age" label="Age" component={FormikTextInput} />
+          {/* <Field name="age" label="Age" component={FormikNumberInput} /> */}
           <Field
             name="monthsOld"
             label="Months old"
-            component={FormikNumberInput}
+            component={FormikTextInput}
           />
+          {/* <Field
+            name="monthsOld"
+            label="Months old"
+            component={FormikNumberInput}
+          /> */}
           <button type="submit" disabled={isSubmitting}>
             Add
           </button>
