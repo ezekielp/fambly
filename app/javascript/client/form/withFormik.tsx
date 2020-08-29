@@ -23,7 +23,6 @@ export const StyledErrorMessage = styled(ErrorMessage)`
   margin-top: 15px;
 `;
 
-// export const withFormik = <AdditionalFieldPropsType extends object>(
 export const withFormik = <AdditionalFieldPropsType extends object>(
   WrappedComponent: ComponentType<AdditionalFieldPropsType>,
 ) => (props: FieldProps & AdditionalFieldPropsType & WithFormikProps) => {
