@@ -57,7 +57,7 @@ const InternalAppContainer: FC<AppContainerProps> = () => {
           component={PersonContainer}
         />
         <Route path="*">
-          <Redirect to="/" />
+          <Redirect to="/home" />
         </Route>
       </Switch>
     </>

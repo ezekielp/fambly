@@ -3,6 +3,7 @@ import {
   useGetPersonForPersonContainerQuery,
   PersonInfoFragmentDoc,
 } from 'client/graphqlTypes';
+import { AgeForm } from 'client/profiles/age/AgeForm';
 import { NoteForm } from 'client/profiles/notes/NoteForm';
 import { NotesContainer } from './notes/NotesContainer';
 import { PersonFieldsInput } from './PersonFieldsInput';
@@ -65,6 +66,9 @@ export const PersonContainer: FC = () => {
       />
       {fieldToAdd === 'note' && (
         <NoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
+      )}
+      {fieldToAdd === 'age' && (
+        <AgeForm setFieldToAdd={setFieldToAdd} personId={personId} />
       )}
       {notes && <NotesContainer notes={notes} />}
     </>

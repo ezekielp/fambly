@@ -27,31 +27,33 @@ const ValidationSchema = yup.object().shape({
     .number()
     .integer()
     .positive()
-    .max(1000000, "Wow, that's old! Please enter a lower age"),
+    .max(1000000, "Wow, that's old! Please enter a lower age")
+    .nullable(),
   monthsOld: yup
     .number()
     .integer()
     .positive()
-    .max(1000000, "Wow, that's old! Please enter a lower age"),
+    .max(1000000, "Wow, that's old! Please enter a lower age")
+    .nullable(),
 });
 
-interface AddAgeFormData {
+interface AgeFormData {
   age?: number | null;
   monthsOld?: number | null;
 }
 
-interface AddAgeFormProps {
+interface AgeFormProps {
   setFieldToAdd: (field: string) => void;
   personId: string;
-  initialValues?: AddAgeFormData;
+  initialValues?: AgeFormData;
 }
 
-const blankInitialValues: AddAgeFormData = {
+const blankInitialValues: AgeFormData = {
   age: null,
   monthsOld: null,
 };
 
-export const AddAgeForm: FC<AddAgeFormProps> = ({
+export const AgeForm: FC<AgeFormProps> = ({
   setFieldToAdd,
   personId,
   initialValues = blankInitialValues,
@@ -59,8 +61,8 @@ export const AddAgeForm: FC<AddAgeFormProps> = ({
   const [createAgeMutation] = useCreateAgeMutation();
 
   const handleSubmit = async (
-    data: AddAgeFormData,
-    formikHelpers: FormikHelpers<AddAgeFormData>,
+    data: AgeFormData,
+    formikHelpers: FormikHelpers<AgeFormData>,
   ) => {
     const response = await createAgeMutation({
       variables: {
@@ -74,7 +76,7 @@ export const AddAgeForm: FC<AddAgeFormProps> = ({
 
     const errors = response.data?.createAge.errors;
     if (errors) {
-      handleFormErrors<AddAgeFormData>(errors, setErrors, setStatus);
+      handleFormErrors<AgeFormData>(errors, setErrors, setStatus);
     } else {
       setFieldToAdd('');
     }
@@ -95,7 +97,7 @@ export const AddAgeForm: FC<AddAgeFormProps> = ({
             component={FormikNumberInput}
           />
           <button type="submit" disabled={isSubmitting}>
-            Add
+            Save
           </button>
         </Form>
       )}
