@@ -1,15 +1,15 @@
 module Types
-  class CreateBirthdateInputType < Types::BaseInputObject
+  class CreateOrUpdateBirthdateInputType < Types::BaseInputObject
     argument :birth_year, Int, required: false
-    argument :birth_month, String, required: false
+    argument :birth_month, Int, required: false
     argument :birth_day, Int, required: false
     argument :person_id, ID, required: true
   end
 end
 
 module Mutations
-  class CreateBirthdate < BaseMutation
-    argument :input, Types::CreateBirthdateInputType, required: true
+  class CreateOrUpdateBirthdate < BaseMutation
+    argument :input, Types::CreateOrUpdateBirthdateInputType, required: true
 
     field :person, Types::PersonType, null: true
 

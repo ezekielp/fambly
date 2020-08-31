@@ -1,16 +1,16 @@
 require 'rails_helper'
 
-RSpec.describe 'create_birthdate mutation', type: :request do
+RSpec.describe 'create_or_update_birthdate mutation', type: :request do
   let(:endpoint) { '/graphql' }
   let(:person) { create(:person) }
   let(:birth_year) { 1937 }
-  let(:birth_month) { 'May' }
+  let(:birth_month) { 5 }
   let(:birth_day) { 8 }
   let(:invalid_birth_year) { 2937 }
   let(:query_string) do
     "
-        mutation CreateBirthdate($input: CreateBirthdateInput!) {
-            createBirthdate(input: $input) {
+        mutation CreateOrUpdateBirthdate($input: CreateOrUpdateBirthdateInput!) {
+            createOrUpdateBirthdate(input: $input) {
                 person {
                     id
                     birthYear
@@ -44,7 +44,8 @@ RSpec.describe 'create_birthdate mutation', type: :request do
 
     person.reload
 
-    returned_person = JSON.parse(response.body).dig('data', 'createBirthdate', 'person')
+    returned_person = JSON.parse(response.body).dig('data', 'createOrUpdateBirthdate', 'person')
+    debugger
     expect(returned_person['birthYear']).to eq(birth_year)
     expect(returned_person['birthMonth']).to eq(birth_month)
     expect(returned_person['birthDay']).to eq(birth_day)
@@ -69,9 +70,38 @@ RSpec.describe 'create_birthdate mutation', type: :request do
 
     person.reload
 
-    mutation_response = JSON.parse(response.body).dig('data', 'createBirthdate')
+    mutation_response = JSON.parse(response.body).dig('data', 'createOrUpdateBirthdate')
     expect(mutation_response['errors']).not_to be_nil
     expect(mutation_response['person']).to be_nil
   end
 
+  it "updates the birthdate of a person whose birthdate already exists" do
+    person.update(birth_year: 1945, birth_month: 9, birth_day: 24)
+    # person.reload
+
+    variables = 
+      {
+        input: {
+            personId: person.id,
+            birthYear: birth_year,
+            birthMonth: birth_month,
+            birthDay: birth_day
+        }
+      }
+
+      post(
+        endpoint,
+        params: { query: query_string, variables: variables.to_json }
+      )
+  
+      person.reload
+      
+      returned_person = JSON.parse(response.body).dig('data', 'createOrUpdateBirthdate', 'person')
+      expect(returned_person['birthYear']).to eq(birth_year)
+      expect(returned_person['birthMonth']).to eq(birth_month)
+      expect(returned_person['birthDay']).to eq(birth_day)
+      expect(person.birth_year).to eq(birth_year)
+      expect(person.birth_month).to eq(birth_month)
+      expect(person.birth_day).to eq(birth_day)
+  end
 end
