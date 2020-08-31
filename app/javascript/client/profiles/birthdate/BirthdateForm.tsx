@@ -41,8 +41,17 @@ const ValidationSchema = yup.object().shape({
     .positive()
     .max(today.getFullYear())
     .nullable(),
-  birthMonth: yup.number().integer().positive().max(12).nullable(),
-  birthDay: yup.number().integer().positive().max(31).nullable(),
+  birthMonth: yup
+    .string()
+    .nullable()
+    .when('birthDay', {
+      is: (val) => val !== '' && val !== undefined && val !== null,
+      then: yup
+        .string()
+        .required('Month is required if you specify a day')
+        .nullable(),
+    }),
+  birthDay: yup.string().nullable(),
 });
 
 interface BirthdateFormData {
