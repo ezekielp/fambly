@@ -9,6 +9,14 @@ FactoryBot.define do
         first_name { 'Pirate' }
         last_name { 'Prentice' }
 
+        trait :with_age do
+            age { 27 }
+        end
+
+        trait :with_months_old do
+            months_old { 17 }
+        end
+
         trait :with_full_birthdate do
             birth_year { 1937 }
             birth_month { 'May' }
