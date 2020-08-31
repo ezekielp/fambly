@@ -7,6 +7,8 @@ import { AgeForm } from './age/AgeForm';
 import { AgeContainer } from './age/AgeContainer';
 import { NoteForm } from './notes/NoteForm';
 import { NotesContainer } from './notes/NotesContainer';
+import { BirthdateForm } from './birthdate/BirthdateForm';
+import { BirthdateContainer } from './birthdate/BirthdateContainer';
 import { PersonFieldsInput } from './PersonFieldsInput';
 import { useParams } from 'react-router-dom';
 import { gql } from '@apollo/client';
@@ -28,6 +30,9 @@ gql`
     lastName
     age
     monthsOld
+    birthYear
+    birthMonth
+    birthDay
     notes {
       id
       content
@@ -54,8 +59,18 @@ export const PersonContainer: FC = () => {
 
   if (!personData) return null;
   if (!personData.personById) return null;
-  const { firstName, lastName, age, monthsOld, notes } = personData.personById;
+  const {
+    firstName,
+    lastName,
+    age,
+    monthsOld,
+    birthYear,
+    birthMonth,
+    birthDay,
+    notes,
+  } = personData.personById;
   const ageFlag = age || monthsOld;
+  const birthdateFlag = birthYear || birthMonth;
 
   return (
     <>
@@ -73,8 +88,19 @@ export const PersonContainer: FC = () => {
       {fieldToAdd === 'age' && (
         <AgeForm setFieldToAdd={setFieldToAdd} personId={personId} />
       )}
+      {fieldToAdd === 'birthdate' && (
+        <BirthdateForm setFieldToAdd={setFieldToAdd} personId={personId} />
+      )}
       {ageFlag && (
         <AgeContainer age={age} monthsOld={monthsOld} personId={personId} />
+      )}
+      {birthdateFlag && (
+        <BirthdateContainer
+          birthYear={birthYear}
+          birthMonth={birthMonth}
+          birthDay={birthDay}
+          personId={personId}
+        />
       )}
       {notes && <NotesContainer notes={notes} />}
     </>

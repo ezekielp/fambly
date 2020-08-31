@@ -41,7 +41,7 @@ class Person < ApplicationRecord
   def age_from_full_birthdate
     return nil unless birth_year && birth_month && birth_day
 
-    now.year - birth_year + extra_year_for_ages(birth_month, birth_day)
+    now.year - birth_year - 1 + extra_year_for_ages(birth_month, birth_day)
   end
 
   def months_old_from_full_birthdate
@@ -74,7 +74,10 @@ class Person < ApplicationRecord
   end
 
   def extra_year_for_ages(month, year)
-    now.month > month || (now.month == month && now.day >= day) ? 0 : 1
+    if now.month > month || (now.month == month && now.day >= day)
+      return 1
+    end
+    0
   end
 
 end
