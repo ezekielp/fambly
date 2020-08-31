@@ -108,13 +108,13 @@ type Note {
 
 type Person {
   age: Int
-  ageInMonths: Int
   birthDay: Int
   birthMonth: String
   birthYear: Int
   firstName: String!
   id: ID!
   lastName: String
+  monthsOld: Int
   notes: [Note!]
 }
 
@@ -124,7 +124,8 @@ type Query {
 }
 
 input UpdateAgeInput {
-  age: Int!
+  age: Int
+  monthsOld: Int
   personId: ID!
 }
 

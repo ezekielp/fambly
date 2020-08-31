@@ -1,5 +1,8 @@
 import React, { FC } from 'react';
-import { useCreateAgeMutation } from 'client/graphqlTypes';
+import {
+  useCreateAgeMutation,
+  useUpdateAgeMutation,
+} from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikNumberInput } from 'client/form/inputs';
 import * as yup from 'yup';
@@ -12,7 +15,7 @@ gql`
       person {
         id
         age
-        ageInMonths
+        monthsOld
       }
       errors {
         path
@@ -43,9 +46,10 @@ interface AgeFormData {
 }
 
 interface AgeFormProps {
-  setFieldToAdd: (field: string) => void;
+  setFieldToAdd?: (field: string) => void;
   personId: string;
   initialValues?: AgeFormData;
+  setEditFlag?: (bool: boolean) => void;
 }
 
 const blankInitialValues: AgeFormData = {
@@ -57,28 +61,47 @@ export const AgeForm: FC<AgeFormProps> = ({
   setFieldToAdd,
   personId,
   initialValues = blankInitialValues,
+  setEditFlag,
 }) => {
   const [createAgeMutation] = useCreateAgeMutation();
+  const [updateAgeMutation] = useUpdateAgeMutation();
 
   const handleSubmit = async (
     data: AgeFormData,
     formikHelpers: FormikHelpers<AgeFormData>,
   ) => {
-    const response = await createAgeMutation({
-      variables: {
-        input: {
-          personId,
-          ...data,
-        },
-      },
-    });
     const { setErrors, setStatus } = formikHelpers;
 
-    const errors = response.data?.createAge.errors;
-    if (errors) {
-      handleFormErrors<AgeFormData>(errors, setErrors, setStatus);
-    } else {
-      setFieldToAdd('');
+    if (setFieldToAdd) {
+      const createResponse = await createAgeMutation({
+        variables: {
+          input: {
+            personId,
+            ...data,
+          },
+        },
+      });
+      const createErrors = createResponse.data?.createAge.errors;
+      if (createErrors) {
+        handleFormErrors<AgeFormData>(createErrors, setErrors, setStatus);
+      } else {
+        setFieldToAdd('');
+      }
+    } else if (setEditFlag) {
+      const updateResponse = await updateAgeMutation({
+        variables: {
+          input: {
+            personId,
+            ...data,
+          },
+        },
+      });
+      const updateErrors = updateResponse.data?.updateAge.errors;
+      if (updateErrors) {
+        handleFormErrors<AgeFormData>(updateErrors, setErrors, setStatus);
+      } else {
+        setEditFlag(false);
+      }
     }
   };
 
