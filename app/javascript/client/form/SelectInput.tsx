@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 
-interface Option {
+export interface Option {
   label: string;
   value: string;
 }
@@ -15,7 +15,6 @@ const StyledSelect = styled.select``;
 
 export const SelectInput: FC<SelectInputProps> = ({ options, ...rest }) => (
   <StyledSelect {...rest}>
-    <option></option>
     {options.map((option) => (
       <option key={option.value} value={option.value}>
         {option.label}

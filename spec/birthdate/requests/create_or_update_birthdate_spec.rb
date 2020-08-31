@@ -45,7 +45,6 @@ RSpec.describe 'create_or_update_birthdate mutation', type: :request do
     person.reload
 
     returned_person = JSON.parse(response.body).dig('data', 'createOrUpdateBirthdate', 'person')
-    debugger
     expect(returned_person['birthYear']).to eq(birth_year)
     expect(returned_person['birthMonth']).to eq(birth_month)
     expect(returned_person['birthDay']).to eq(birth_day)
@@ -77,7 +76,6 @@ RSpec.describe 'create_or_update_birthdate mutation', type: :request do
 
   it "updates the birthdate of a person whose birthdate already exists" do
     person.update(birth_year: 1945, birth_month: 9, birth_day: 24)
-    # person.reload
 
     variables = 
       {

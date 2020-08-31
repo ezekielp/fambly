@@ -38,7 +38,7 @@ export type CreateNotePayload = {
 
 export type CreateOrUpdateBirthdateInput = {
   birthDay?: Maybe<Scalars['Int']>;
-  birthMonth?: Maybe<Scalars['String']>;
+  birthMonth?: Maybe<Scalars['Int']>;
   birthYear?: Maybe<Scalars['Int']>;
   personId: Scalars['ID'];
 };
@@ -165,7 +165,7 @@ export type Person = {
   __typename?: 'Person';
   age?: Maybe<Scalars['Int']>;
   birthDay?: Maybe<Scalars['Int']>;
-  birthMonth?: Maybe<Scalars['String']>;
+  birthMonth?: Maybe<Scalars['Int']>;
   birthYear?: Maybe<Scalars['Int']>;
   firstName: Scalars['String'];
   id: Scalars['ID'];
@@ -323,7 +323,7 @@ export type GetPersonForPersonContainerQuery = (
 
 export type PersonInfoFragment = (
   { __typename?: 'Person' }
-  & Pick<Person, 'id' | 'firstName' | 'lastName' | 'age' | 'monthsOld'>
+  & Pick<Person, 'id' | 'firstName' | 'lastName' | 'age' | 'monthsOld' | 'birthYear' | 'birthMonth' | 'birthDay'>
   & { notes?: Maybe<Array<(
     { __typename?: 'Note' }
     & Pick<Note, 'id' | 'content'>
@@ -442,6 +442,9 @@ export const PersonInfoFragmentDoc = gql`
   lastName
   age
   monthsOld
+  birthYear
+  birthMonth
+  birthDay
   notes {
     id
     content

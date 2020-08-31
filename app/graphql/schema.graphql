@@ -27,7 +27,7 @@ type CreateNotePayload {
 
 input CreateOrUpdateBirthdateInput {
   birthDay: Int
-  birthMonth: String
+  birthMonth: Int
   birthYear: Int
   personId: ID!
 }
@@ -109,7 +109,7 @@ type Note {
 type Person {
   age: Int
   birthDay: Int
-  birthMonth: String
+  birthMonth: Int
   birthYear: Int
   firstName: String!
   id: ID!

@@ -6,7 +6,7 @@ module Types
     field :age, Int, null: true
     field :months_old, Int, null: true
     field :birth_year, Int, null: true
-    field :birth_month, String, null: true
+    field :birth_month, Int, null: true
     field :birth_day, Int, null: true
     field :notes, [Types::NoteType], null: true
 

@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
-// import {  } from 'client/graphqlTypes';
+import { useCreateOrUpdateBirthdateMutation } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikNumberInput, FormikSelectInput } from 'client/form/inputs';
 import {
+  MONTH_OPTIONS,
+  determineDaysOptions,
   FEBRUARY_DAYS_OPTIONS,
   THIRTY_DAYS_OPTIONS,
   THIRTY_ONE_DAYS_OPTIONS,
-  MONTH_OPTIONS,
-  determineDaysOptions,
 } from './utils';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
@@ -47,8 +47,8 @@ const ValidationSchema = yup.object().shape({
 
 interface BirthdateFormData {
   birthYear?: number | null;
-  birthMonth?: number | null;
-  birthDay?: number | null;
+  birthMonth?: string;
+  birthDay?: string;
 }
 
 interface BirthdateFormProps {
@@ -60,8 +60,8 @@ interface BirthdateFormProps {
 
 const blankInitialValues = {
   birthYear: null,
-  birthMonth: null,
-  birthDay: null,
+  birthMonth: '',
+  birthDay: '',
 };
 
 export const BirthdateForm: FC<BirthdateFormProps> = ({
@@ -70,12 +70,45 @@ export const BirthdateForm: FC<BirthdateFormProps> = ({
   initialValues = blankInitialValues,
   setEditFlag,
 }) => {
-  // const [createBirthdateMutation] = useCreateBirthdateMutation();
+  const [createOrEditBirthdateMutation] = useCreateOrUpdateBirthdateMutation();
 
   const handleSubmit = async (
     data: BirthdateFormData,
     formikHelpers: FormikHelpers<BirthdateFormData>,
-  ) => {};
+  ) => {
+    const { birthYear, birthMonth, birthDay } = data;
+    const { setErrors, setStatus } = formikHelpers;
+    const variables: Record<string, unknown> = {
+      variables: {
+        input: {
+          birthYear,
+          birthMonth: birthMonth ? parseInt(birthMonth) : null,
+          birthDay: birthDay ? parseInt(birthDay) : null,
+          personId,
+        },
+      },
+    };
+
+    if (setFieldToAdd) {
+      const createResponse = await createOrEditBirthdateMutation(variables);
+      const createErrors = createResponse.data?.createOrUpdateBirthdate.errors;
+
+      if (createErrors) {
+        handleFormErrors<BirthdateFormData>(createErrors, setErrors, setStatus);
+      } else {
+        setFieldToAdd('');
+      }
+    } else if (setEditFlag) {
+      const createResponse = await createOrEditBirthdateMutation(variables);
+      const createErrors = createResponse.data?.createOrUpdateBirthdate.errors;
+
+      if (createErrors) {
+        handleFormErrors<BirthdateFormData>(createErrors, setErrors, setStatus);
+      } else {
+        setEditFlag(false);
+      }
+    }
+  };
 
   return (
     <Formik
