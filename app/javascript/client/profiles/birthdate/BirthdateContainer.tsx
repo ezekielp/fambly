@@ -13,6 +13,8 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
   const { birthYear, birthMonth, birthDay, personId } = props;
   const [editFlag, setEditFlag] = useState(false);
 
+  const editButton = <button onClick={() => setEditFlag(true)}>Edit</button>;
+
   const birthdateContainerContent = (
     year: number | null | undefined,
     month: string,
@@ -60,7 +62,12 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
     />
   );
 
-  return editFlag
-    ? editBirthdateForm
-    : birthdateContainerContent(birthYear, month, day);
+  return editFlag ? (
+    editBirthdateForm
+  ) : (
+    <>
+      {birthdateContainerContent(birthYear, month, day)}
+      {editButton}
+    </>
+  );
 };
