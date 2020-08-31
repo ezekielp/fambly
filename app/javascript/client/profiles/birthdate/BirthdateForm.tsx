@@ -98,22 +98,15 @@ export const BirthdateForm: FC<BirthdateFormProps> = ({
       },
     };
 
-    if (setFieldToAdd) {
-      const createResponse = await createOrEditBirthdateMutation(variables);
-      const createErrors = createResponse.data?.createOrUpdateBirthdate.errors;
+    const response = await createOrEditBirthdateMutation(variables);
+    const errors = response.data?.createOrUpdateBirthdate.errors;
 
-      if (createErrors) {
-        handleFormErrors<BirthdateFormData>(createErrors, setErrors, setStatus);
-      } else {
+    if (errors) {
+      handleFormErrors<BirthdateFormData>(errors, setErrors, setStatus);
+    } else {
+      if (setFieldToAdd) {
         setFieldToAdd('');
-      }
-    } else if (setEditFlag) {
-      const createResponse = await createOrEditBirthdateMutation(variables);
-      const createErrors = createResponse.data?.createOrUpdateBirthdate.errors;
-
-      if (createErrors) {
-        handleFormErrors<BirthdateFormData>(createErrors, setErrors, setStatus);
-      } else {
+      } else if (setEditFlag) {
         setEditFlag(false);
       }
     }
