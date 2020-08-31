@@ -3,7 +3,9 @@ import {
   useGetPersonForPersonContainerQuery,
   PersonInfoFragmentDoc,
 } from 'client/graphqlTypes';
-import { NoteForm } from 'client/profiles/notes/NoteForm';
+import { AgeForm } from './age/AgeForm';
+import { AgeContainer } from './age/AgeContainer';
+import { NoteForm } from './notes/NoteForm';
 import { NotesContainer } from './notes/NotesContainer';
 import { PersonFieldsInput } from './PersonFieldsInput';
 import { useParams } from 'react-router-dom';
@@ -25,6 +27,7 @@ gql`
     firstName
     lastName
     age
+    monthsOld
     notes {
       id
       content
@@ -51,7 +54,8 @@ export const PersonContainer: FC = () => {
 
   if (!personData) return null;
   if (!personData.personById) return null;
-  const { firstName, lastName, notes } = personData.personById;
+  const { firstName, lastName, age, monthsOld, notes } = personData.personById;
+  const ageFlag = age || monthsOld;
 
   return (
     <>
@@ -65,6 +69,12 @@ export const PersonContainer: FC = () => {
       />
       {fieldToAdd === 'note' && (
         <NoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
+      )}
+      {fieldToAdd === 'age' && (
+        <AgeForm setFieldToAdd={setFieldToAdd} personId={personId} />
+      )}
+      {ageFlag && (
+        <AgeContainer age={age} monthsOld={monthsOld} personId={personId} />
       )}
       {notes && <NotesContainer notes={notes} />}
     </>
