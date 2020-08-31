@@ -73,7 +73,6 @@ export const PersonContainer: FC = () => {
       {fieldToAdd === 'age' && (
         <AgeForm setFieldToAdd={setFieldToAdd} personId={personId} />
       )}
-      {}
       {ageFlag && (
         <AgeContainer age={age} monthsOld={monthsOld} personId={personId} />
       )}
