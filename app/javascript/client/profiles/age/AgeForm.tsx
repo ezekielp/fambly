@@ -25,7 +25,7 @@ gql`
   }
 `;
 
-const ValidationSchema = yup.object().shape({
+export const AgeFormValidationSchema = yup.object().shape({
   age: yup
     .number()
     .integer()
@@ -109,7 +109,7 @@ export const AgeForm: FC<AgeFormProps> = ({
     <Formik
       initialValues={initialValues}
       onSubmit={handleSubmit}
-      validationSchema={ValidationSchema}
+      validationSchema={AgeFormValidationSchema}
     >
       {({ isSubmitting }) => (
         <Form>
