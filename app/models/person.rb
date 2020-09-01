@@ -30,6 +30,9 @@ class Person < ApplicationRecord
 
   belongs_to :user
   has_many :notes
+  has_many :parent_children
+  has_many :parents, through: :parent_children
+  has_many :children, through: :parent_children
 
   def birth_year_must_be_in_past
     if birth_year.present? && birth_year > Time.zone.now.year

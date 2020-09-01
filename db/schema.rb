@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_28_200434) do
+ActiveRecord::Schema.define(version: 2020_09_01_144449) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -22,6 +22,17 @@ ActiveRecord::Schema.define(version: 2020_08_28_200434) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["person_id"], name: "index_notes_on_person_id"
+  end
+
+  create_table "parent_children", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "parent_id"
+    t.uuid "child_id"
+    t.string "parent_type"
+    t.text "note"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["child_id"], name: "index_parent_children_on_child_id"
+    t.index ["parent_id"], name: "index_parent_children_on_parent_id"
   end
 
   create_table "people", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -50,5 +61,7 @@ ActiveRecord::Schema.define(version: 2020_08_28_200434) do
   end
 
   add_foreign_key "notes", "people"
+  add_foreign_key "parent_children", "people", column: "child_id"
+  add_foreign_key "parent_children", "people", column: "parent_id"
   add_foreign_key "people", "users"
 end
