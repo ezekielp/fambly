@@ -84,4 +84,18 @@ RSpec.describe Person, type: :model do
       expect(person.approximate_months_old_from_months_old).to eq(22)
     end
   end
+
+  describe 'parent-child associations' do
+    it 'correctly associates a person who is a parent to their children via the parent_child joins table' do
+      parent = Person.create(user_id: user.id, first_name: 'Miksa', last_name: 'Neumann')
+      child = Person.create(user_id: user.id,first_name: 'Janos Lajos', last_name: 'Neumann')
+      ParentChild.create(parent_id: parent.id, child_id: child.id)
+
+      parent.reload
+      child.reload
+
+      expect(parent.children.first.first_name).to eq('Janos Lajos')
+      expect(child.parents.first.first_name).to eq('Miksa')
+    end
+  end
 end
