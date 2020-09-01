@@ -135,11 +135,13 @@ type Person {
   birthDay: Int
   birthMonth: Int
   birthYear: Int
+  children: [Person!]
   firstName: String!
   id: ID!
   lastName: String
   monthsOld: Int
   notes: [Note!]
+  parents: [Person!]
 }
 
 type Query {

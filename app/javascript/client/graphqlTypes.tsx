@@ -196,11 +196,13 @@ export type Person = {
   birthDay?: Maybe<Scalars['Int']>;
   birthMonth?: Maybe<Scalars['Int']>;
   birthYear?: Maybe<Scalars['Int']>;
+  children?: Maybe<Array<Person>>;
   firstName: Scalars['String'];
   id: Scalars['ID'];
   lastName?: Maybe<Scalars['String']>;
   monthsOld?: Maybe<Scalars['Int']>;
   notes?: Maybe<Array<Note>>;
+  parents?: Maybe<Array<Person>>;
 };
 
 export type Query = {
@@ -462,6 +464,32 @@ export type DeleteNoteMutationVariables = Exact<{
 export type DeleteNoteMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'deleteNote'>
+);
+
+export type CreateParentChildRelationshipMutationVariables = Exact<{
+  input: CreateParentChildRelationshipInput;
+}>;
+
+
+export type CreateParentChildRelationshipMutation = (
+  { __typename?: 'Mutation' }
+  & { createParentChildRelationship: (
+    { __typename?: 'CreateParentChildRelationshipPayload' }
+    & { parentChildRelationship?: Maybe<(
+      { __typename?: 'ParentChild' }
+      & Pick<ParentChild, 'id' | 'parentType' | 'note'>
+      & { parent: (
+        { __typename?: 'Person' }
+        & Pick<Person, 'id' | 'firstName' | 'lastName'>
+      ), child: (
+        { __typename?: 'Person' }
+        & Pick<Person, 'id' | 'firstName' | 'lastName'>
+      ) }
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'Error' }
+      & Pick<Error, 'path' | 'message'>
+    )>> }
+  ) }
 );
 
 export const PersonInfoFragmentDoc = gql`
@@ -961,3 +989,53 @@ export function useDeleteNoteMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeleteNoteMutationHookResult = ReturnType<typeof useDeleteNoteMutation>;
 export type DeleteNoteMutationResult = Apollo.MutationResult<DeleteNoteMutation>;
 export type DeleteNoteMutationOptions = Apollo.BaseMutationOptions<DeleteNoteMutation, DeleteNoteMutationVariables>;
+export const CreateParentChildRelationshipDocument = gql`
+    mutation CreateParentChildRelationship($input: CreateParentChildRelationshipInput!) {
+  createParentChildRelationship(input: $input) {
+    parentChildRelationship {
+      id
+      parent {
+        id
+        firstName
+        lastName
+      }
+      child {
+        id
+        firstName
+        lastName
+      }
+      parentType
+      note
+    }
+    errors {
+      path
+      message
+    }
+  }
+}
+    `;
+export type CreateParentChildRelationshipMutationFn = Apollo.MutationFunction<CreateParentChildRelationshipMutation, CreateParentChildRelationshipMutationVariables>;
+
+/**
+ * __useCreateParentChildRelationshipMutation__
+ *
+ * To run a mutation, you first call `useCreateParentChildRelationshipMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateParentChildRelationshipMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createParentChildRelationshipMutation, { data, loading, error }] = useCreateParentChildRelationshipMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateParentChildRelationshipMutation(baseOptions?: Apollo.MutationHookOptions<CreateParentChildRelationshipMutation, CreateParentChildRelationshipMutationVariables>) {
+        return Apollo.useMutation<CreateParentChildRelationshipMutation, CreateParentChildRelationshipMutationVariables>(CreateParentChildRelationshipDocument, baseOptions);
+      }
+export type CreateParentChildRelationshipMutationHookResult = ReturnType<typeof useCreateParentChildRelationshipMutation>;
+export type CreateParentChildRelationshipMutationResult = Apollo.MutationResult<CreateParentChildRelationshipMutation>;
+export type CreateParentChildRelationshipMutationOptions = Apollo.BaseMutationOptions<CreateParentChildRelationshipMutation, CreateParentChildRelationshipMutationVariables>;

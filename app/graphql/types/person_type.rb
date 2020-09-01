@@ -9,6 +9,8 @@ module Types
     field :birth_month, Int, null: true
     field :birth_day, Int, null: true
     field :notes, [Types::NoteType], null: true
+    field :parents, [Types::PersonType], null: true
+    field :children, [Types::PersonType], null: true
 
     def age
       object.age_from_full_birthdate || object.approximate_age_from_birth_year || object.approximate_current_age_from_age
