@@ -114,7 +114,7 @@ const blankInitialValues = {
   newOrCurrentContact: 'new_person',
   fullContact: false,
   parentType: '',
-  note: null,
+  note: '',
 };
 
 export const ParentChildForm: FC<ParentChildFormProps> = ({
@@ -255,7 +255,6 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
               label=""
               component={FormikRadioGroup}
               options={NEW_OR_CURRENT_CONTACT_OPTIONS}
-              checked="new_person"
             />
             {values.newOrCurrentContact === 'new_person' && (
               <>

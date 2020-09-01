@@ -99,6 +99,13 @@ export const PersonContainer: FC = () => {
           personFirstName={firstName}
         />
       )}
+      {fieldToAdd === 'child' && (
+        <ParentChildForm
+          setFieldToAdd={setFieldToAdd}
+          parentId={personId}
+          personFirstName={firstName}
+        />
+      )}
       {ageFlag && (
         <AgeContainer age={age} monthsOld={monthsOld} personId={personId} />
       )}
