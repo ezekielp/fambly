@@ -1,6 +1,15 @@
 import React, { FC } from 'react';
-import { useCreateParentChildRelationshipMutation } from 'client/graphqlTypes';
+import {
+  useCreateParentChildRelationshipMutation,
+  useGetUserForHomeContainerQuery,
+} from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
+import {
+  FormikRadioGroup,
+  FormikSelectInput,
+  FormikTextArea,
+} from 'client/form/inputs';
+import { PARENT_TYPE_OPTIONS, buildParentOrChildOptions } from './utils';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
@@ -61,6 +70,7 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
   const [
     createParentChildRelationshipMutation,
   ] = useCreateParentChildRelationshipMutation();
+  const { data: userData } = useGetUserForHomeContainerQuery();
 
   const handleSubmit = async (
     data: ParentChildFormData,
@@ -101,6 +111,17 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
       {({ isSubmitting }) => {
         return (
           <Form>
+            <Field
+              name="parentType"
+              label="Type of parent (optional)"
+              component={FormikSelectInput}
+              options={PARENT_TYPE_OPTIONS}
+            />
+            <Field
+              name="note"
+              label="Note (optional)"
+              component={FormikTextArea}
+            />
             <button type="submit" disabled={isSubmitting}>
               Save
             </button>
