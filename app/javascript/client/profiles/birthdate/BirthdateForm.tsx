@@ -130,18 +130,18 @@ export const BirthdateForm: FC<BirthdateFormProps> = ({
           <Form>
             <Field
               name="birthYear"
-              label="Year"
+              label="Year (optional)"
               component={FormikNumberInput}
             />
             <Field
               name="birthMonth"
-              label="Month"
+              label="Month (optional)"
               component={FormikSelectInput}
               options={MONTH_OPTIONS}
             />
             <Field
               name="birthDay"
-              label="Day"
+              label="Day (optional)"
               component={FormikSelectInput}
               options={daysOptions}
             />

@@ -26,11 +26,13 @@ export const PersonFieldsInput: FC<PersonFieldsInputProps> = ({
       <select value={fieldToAdd} onChange={onChange}>
         <option value=""></option>
         {!age && !monthsOld && <option value="age">Age</option>}
-        {!lastName && <option value="lastName">Last name</option>}
         {!birthYear && !birthMonth && !birthDay && (
           <option value="birthdate">Birthdate</option>
         )}
+        <option value="child">Child</option>
+        {!lastName && <option value="lastName">Last name</option>}
         <option value="note">Note</option>
+        <option value="parent">Parent</option>
       </select>
     </>
   );

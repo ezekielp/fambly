@@ -9,6 +9,7 @@ import { NoteForm } from './notes/NoteForm';
 import { NotesContainer } from './notes/NotesContainer';
 import { BirthdateForm } from './birthdate/BirthdateForm';
 import { BirthdateContainer } from './birthdate/BirthdateContainer';
+import { ParentChildForm } from './parent_child/ParentChildForm';
 import { PersonFieldsInput } from './PersonFieldsInput';
 import { useParams } from 'react-router-dom';
 import { gql } from '@apollo/client';
@@ -82,14 +83,28 @@ export const PersonContainer: FC = () => {
         fieldToAdd={fieldToAdd}
         onChange={(e) => setFieldToAdd(e.target.value)}
       />
-      {fieldToAdd === 'note' && (
-        <NoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
-      )}
       {fieldToAdd === 'age' && (
         <AgeForm setFieldToAdd={setFieldToAdd} personId={personId} />
       )}
       {fieldToAdd === 'birthdate' && (
         <BirthdateForm setFieldToAdd={setFieldToAdd} personId={personId} />
+      )}
+      {fieldToAdd === 'note' && (
+        <NoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
+      )}
+      {fieldToAdd === 'parent' && (
+        <ParentChildForm
+          setFieldToAdd={setFieldToAdd}
+          childId={personId}
+          personFirstName={firstName}
+        />
+      )}
+      {fieldToAdd === 'child' && (
+        <ParentChildForm
+          setFieldToAdd={setFieldToAdd}
+          parentId={personId}
+          personFirstName={firstName}
+        />
       )}
       {ageFlag && (
         <AgeContainer age={age} monthsOld={monthsOld} personId={personId} />
