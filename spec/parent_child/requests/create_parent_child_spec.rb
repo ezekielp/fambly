@@ -5,7 +5,6 @@ RSpec.describe 'create_parent_child mutation', type: :request do
   let(:user) { create(:user) }
   let(:parent) { Person.create(user_id: user.id, first_name: 'Miksa', last_name: 'Neumann') }
   let(:child) { Person.create(user_id: user.id,first_name: 'Janos Lajos', last_name: 'Neumann') }
-  let(:parent_child) { ParentChild.create(parent_id: parent.id, child_id: child.id) }
   let(:parent_type) { 'biological' }
   let(:query_string) do
     "
@@ -44,7 +43,7 @@ RSpec.describe 'create_parent_child mutation', type: :request do
     }
   end
 
-  it 'creates a parent-child relationship between two entries in the people table' do
+  it 'creates a parent_child relationship between two entries in the people table' do
     post(
       endpoint,
       params: { query: query_string, variables: variables }

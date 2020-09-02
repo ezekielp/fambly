@@ -14,5 +14,6 @@ module Types
     field :update_age, mutation: Mutations::UpdateAge
     field :create_or_update_birthdate, mutation: Mutations::CreateOrUpdateBirthdate
     field :create_parent_child_relationship, mutation: Mutations::CreateParentChildRelationship
+    field :update_parent_child_relationship, mutation: Mutations::UpdateParentChildRelationship
   end
 end
