@@ -86,6 +86,10 @@ input DeleteNoteInput {
   noteId: ID!
 }
 
+input DeleteParentChildRelationshipInput {
+  parentChildId: ID!
+}
+
 type Error {
   message: String!
   path: String!
@@ -112,6 +116,7 @@ type Mutation {
   createPerson(input: CreatePersonInput!): CreatePersonPayload!
   createUser(input: CreateUserInput!): CreateUserPayload!
   deleteNote(input: DeleteNoteInput!): Boolean!
+  deleteParentChildRelationship(input: DeleteParentChildRelationshipInput!): Boolean!
   login(input: LoginInput!): LoginPayload!
   logout: Boolean!
   updateAge(input: UpdateAgeInput!): UpdateAgePayload!

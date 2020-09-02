@@ -93,6 +93,10 @@ export type DeleteNoteInput = {
   noteId: Scalars['ID'];
 };
 
+export type DeleteParentChildRelationshipInput = {
+  parentChildId: Scalars['ID'];
+};
+
 export type Error = {
   __typename?: 'Error';
   message: Scalars['String'];
@@ -120,6 +124,7 @@ export type Mutation = {
   createPerson: CreatePersonPayload;
   createUser: CreateUserPayload;
   deleteNote: Scalars['Boolean'];
+  deleteParentChildRelationship: Scalars['Boolean'];
   login: LoginPayload;
   logout: Scalars['Boolean'];
   updateAge: UpdateAgePayload;
@@ -160,6 +165,11 @@ export type MutationCreateUserArgs = {
 
 export type MutationDeleteNoteArgs = {
   input: DeleteNoteInput;
+};
+
+
+export type MutationDeleteParentChildRelationshipArgs = {
+  input: DeleteParentChildRelationshipInput;
 };
 
 
@@ -379,7 +389,18 @@ export type PersonInfoFragment = (
   & { notes?: Maybe<Array<(
     { __typename?: 'Note' }
     & Pick<Note, 'id' | 'content'>
+  )>>, parents?: Maybe<Array<(
+    { __typename?: 'Person' }
+    & SubContactInfoFragment
+  )>>, children?: Maybe<Array<(
+    { __typename?: 'Person' }
+    & SubContactInfoFragment
   )>> }
+);
+
+export type SubContactInfoFragment = (
+  { __typename?: 'Person' }
+  & Pick<Person, 'id' | 'firstName' | 'lastName' | 'age' | 'monthsOld'>
 );
 
 export type UpdateAgeMutationVariables = Exact<{
@@ -513,6 +534,15 @@ export type CreateParentChildRelationshipMutation = (
   ) }
 );
 
+export const SubContactInfoFragmentDoc = gql`
+    fragment SubContactInfo on Person {
+  id
+  firstName
+  lastName
+  age
+  monthsOld
+}
+    `;
 export const PersonInfoFragmentDoc = gql`
     fragment PersonInfo on Person {
   id
@@ -527,8 +557,14 @@ export const PersonInfoFragmentDoc = gql`
     id
     content
   }
+  parents {
+    ...SubContactInfo
+  }
+  children {
+    ...SubContactInfo
+  }
 }
-    `;
+    ${SubContactInfoFragmentDoc}`;
 export const GetUserDocument = gql`
     query GetUser {
   user {

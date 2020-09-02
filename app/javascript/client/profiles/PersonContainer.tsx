@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import {
   useGetPersonForPersonContainerQuery,
   PersonInfoFragmentDoc,
+  SubContactInfoFragmentDoc,
 } from 'client/graphqlTypes';
 import { AgeForm } from './age/AgeForm';
 import { AgeContainer } from './age/AgeContainer';
@@ -38,6 +39,24 @@ gql`
       id
       content
     }
+    parents {
+      ...SubContactInfo
+    }
+    children {
+      ...SubContactInfo
+    }
+  }
+
+  ${SubContactInfoFragmentDoc}
+`;
+
+gql`
+  fragment SubContactInfo on Person {
+    id
+    firstName
+    lastName
+    age
+    monthsOld
   }
 `;
 
