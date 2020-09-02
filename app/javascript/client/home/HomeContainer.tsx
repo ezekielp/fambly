@@ -22,6 +22,7 @@ gql`
         id
         firstName
         lastName
+        showOnDashboard
       }
     }
   }

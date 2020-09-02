@@ -16,10 +16,6 @@ module Mutations
     def resolve(input:)
       parent_child = ParentChild.new(
         **input
-        # parent_id: input.parent_id,
-        # child_id: input.child_id,
-        # parent_type: input.parent_type,
-        # note: input.note
       )
 
       if parent_child.save
