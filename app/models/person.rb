@@ -2,18 +2,19 @@
 #
 # Table name: people
 #
-#  id             :uuid             not null, primary key
-#  age            :integer
-#  birth_day      :integer
-#  birth_month    :integer
-#  birth_year     :integer
-#  date_age_added :date
-#  first_name     :string           not null
-#  last_name      :string
-#  months_old     :integer
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#  user_id        :uuid
+#  id                :uuid             not null, primary key
+#  age               :integer
+#  birth_day         :integer
+#  birth_month       :integer
+#  birth_year        :integer
+#  date_age_added    :date
+#  first_name        :string           not null
+#  last_name         :string
+#  months_old        :integer
+#  show_on_dashboard :boolean          default(TRUE)
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  user_id           :uuid
 #
 # Indexes
 #

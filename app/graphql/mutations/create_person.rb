@@ -2,6 +2,7 @@ module Types
   class CreatePersonInputType < Types::BaseInputObject
     argument :first_name, String, required: true
     argument :last_name, String, required: false
+    argument :show_on_dashboard, Boolean, required: false
   end
 end
 
@@ -13,13 +14,9 @@ module Mutations
 
     def resolve(input:)
       person = Person.new(
-        first_name: input.first_name,
-        user_id: current_user.id
+        user_id: current_user.id,
+        **input
       )
-
-      if input.last_name
-        person.last_name = input.last_name
-      end
 
       if person.save
         return { person: person }

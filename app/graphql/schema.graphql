@@ -58,6 +58,7 @@ type CreateParentChildRelationshipPayload {
 input CreatePersonInput {
   firstName: String!
   lastName: String
+  showOnDashboard: Boolean
 }
 
 """
@@ -142,6 +143,7 @@ type Person {
   monthsOld: Int
   notes: [Note!]
   parents: [Person!]
+  showOnDashboard: Boolean!
 }
 
 type Query {

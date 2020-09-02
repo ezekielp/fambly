@@ -3,6 +3,7 @@ module Types
     field :id, ID, null: false
     field :first_name, String, null: false
     field :last_name, String, null: true
+    field :show_on_dashboard, Boolean, null: false
     field :age, Int, null: true
     field :months_old, Int, null: true
     field :birth_year, Int, null: true

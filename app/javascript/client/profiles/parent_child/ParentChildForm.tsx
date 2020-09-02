@@ -75,7 +75,7 @@ const ParentChildFormValidationSchema = yup.object().shape({
     .max(1000000, "Wow, that's old! Please enter a lower age")
     .nullable(),
   newOrCurrentContact: yup.string().required(),
-  fullContact: yup.boolean().required(),
+  showOnDashboard: yup.boolean().required(),
   formParentId: yup.string(),
   formChildId: yup.string(),
   parentType: yup.string(),
@@ -90,7 +90,7 @@ interface ParentChildFormData {
   age: number | null;
   monthsOld: number | null;
   newOrCurrentContact: string;
-  fullContact?: boolean;
+  showOnDashboard?: boolean;
   parentType?: string;
   note?: string | null | undefined;
 }
@@ -112,7 +112,7 @@ const blankInitialValues = {
   age: null,
   monthsOld: null,
   newOrCurrentContact: 'new_person',
-  fullContact: false,
+  showOnDashboard: false,
   parentType: '',
   note: '',
 };
@@ -149,7 +149,7 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
       age,
       monthsOld,
       newOrCurrentContact,
-      fullContact,
+      showOnDashboard,
       formParentId,
       formChildId,
       parentType,
@@ -165,6 +165,7 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
           input: {
             firstName,
             lastName: lastName ? lastName : null,
+            showOnDashboard,
           },
         },
       });
@@ -259,7 +260,7 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
             {values.newOrCurrentContact === 'new_person' && (
               <>
                 <Field
-                  name="fullContact"
+                  name="showOnDashboard"
                   label={`Add this person to your dashboard of contacts? (Even if you don't add them to your dashboard, you will always be able to access and add to their profile from ${personFirstName}'s page.`}
                   component={FormikCheckbox}
                 />
