@@ -9,7 +9,7 @@ const ParentItemsContainer = styled.div``;
 
 interface ParentsContainerProps {
   parents: SubContactInfoFragment[];
-  childLastName?: string;
+  childLastName?: string | null | undefined;
   childId: string;
 }
 
@@ -24,7 +24,7 @@ export const ParentsContainer: FC<ParentsContainerProps> = ({
         key={parent.id}
         parent={parent}
         childId={childId}
-        childLastName={childLastName}
+        childLastName={childLastName ? childLastName : ''}
       />
     );
   });

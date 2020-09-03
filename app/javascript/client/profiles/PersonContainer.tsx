@@ -11,6 +11,8 @@ import { NotesContainer } from './notes/NotesContainer';
 import { BirthdateForm } from './birthdate/BirthdateForm';
 import { BirthdateContainer } from './birthdate/BirthdateContainer';
 import { ParentChildForm } from './parent_child/ParentChildForm';
+import { ParentsContainer } from './parent_child/ParentsContainer';
+import { ChildrenContainer } from './parent_child/ChildrenContainer';
 import { PersonFieldsInput } from './PersonFieldsInput';
 import { useParams } from 'react-router-dom';
 import { gql } from '@apollo/client';
@@ -88,6 +90,8 @@ export const PersonContainer: FC = () => {
     birthMonth,
     birthDay,
     notes,
+    parents,
+    children,
   } = personData.personById;
   const ageFlag = age || monthsOld;
   const birthdateFlag = birthYear || birthMonth;
@@ -134,6 +138,20 @@ export const PersonContainer: FC = () => {
           birthMonth={birthMonth}
           birthDay={birthDay}
           personId={personId}
+        />
+      )}
+      {parents && parents.length > 0 && (
+        <ParentsContainer
+          parents={parents}
+          childId={personId}
+          childLastName={lastName}
+        />
+      )}
+      {children && children.length > 0 && (
+        <ChildrenContainer
+          actualChildren={children}
+          parentId={personId}
+          parentLastName={lastName}
         />
       )}
       {notes && <NotesContainer notes={notes} />}

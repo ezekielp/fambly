@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 import { SubContactInfoFragment } from 'client/graphqlTypes';
+import { Link } from 'react-router-dom';
 
 interface ChildItemProps {
   child: SubContactInfoFragment;
   parentId: string;
-  parentLastName?: string;
+  parentLastName?: string | null | undefined;
 }
 
 export const ChildItem: FC<ChildItemProps> = ({
@@ -12,7 +13,7 @@ export const ChildItem: FC<ChildItemProps> = ({
   parentId,
   parentLastName,
 }) => {
-  const { firstName, lastName, age, monthsOld } = child;
+  const { id, firstName, lastName, age, monthsOld } = child;
 
   const getLastNameContent = (
     childLastName: string | null | undefined,
@@ -42,8 +43,10 @@ export const ChildItem: FC<ChildItemProps> = ({
 
   return (
     <div>
-      {firstName}
-      {getLastNameContent(lastName, parentLastName)}
+      <Link to={`/profiles/${id}`}>
+        {firstName}
+        {getLastNameContent(lastName, parentLastName)}
+      </Link>
       {getAgeContent(age, monthsOld)}
     </div>
   );

@@ -8,23 +8,23 @@ const ChildrenHeader = styled.div``;
 const ChildItemsContainer = styled.div``;
 
 interface ChildrenContainerProps {
-  children: SubContactInfoFragment[];
-  parentLastName?: string;
+  actualChildren: SubContactInfoFragment[];
+  parentLastName?: string | null | undefined;
   parentId: string;
 }
 
 export const ChildrenContainer: FC<ChildrenContainerProps> = ({
-  children,
+  actualChildren,
   parentLastName,
   parentId,
 }) => {
-  const childItems = children.map((child) => {
+  const childItems = actualChildren.map((child) => {
     return (
       <ChildItem
         key={child.id}
         child={child}
         parentId={parentId}
-        parentLastName={parentLastName}
+        parentLastName={parentLastName ? parentLastName : ''}
       />
     );
   });
