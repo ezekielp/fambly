@@ -18,6 +18,7 @@ export const formUtils = <FormType extends { [key: string]: any }>(
       Component.simulate('submit');
       await act(async () => await wait(0));
     },
+    findInputByName: (name: string) => Component.find(`input[name="${name}"]`),
   };
 };
 

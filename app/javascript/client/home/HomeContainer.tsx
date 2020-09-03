@@ -52,7 +52,10 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
 
   const [newPersonFieldVisible, toggleNewPersonFieldVisible] = useState(false);
   const [logoutMutation] = useLogoutMutation();
-  const { data: userData } = useGetUserForHomeContainerQuery();
+  const {
+    data: userData,
+    refetch: refetchUserData,
+  } = useGetUserForHomeContainerQuery();
 
   // To do (eventually): Use a loading spinner for loading state
   if (!userData) return null;
@@ -78,7 +81,9 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
       <button onClick={() => toggleNewPersonFieldVisible(true)}>
         Add a new person profile
       </button>
-      {newPersonFieldVisible && <AddPersonForm />}
+      {newPersonFieldVisible && (
+        <AddPersonForm refetchUserData={refetchUserData} />
+      )}
       {profileLinks}
     </>
   );

@@ -19,7 +19,7 @@ FactoryBot.define do
 
         trait :with_full_birthdate do
             birth_year { 1937 }
-            birth_month { 'May' }
+            birth_month { 5 }
             birth_day { 8 }
         end
     end
