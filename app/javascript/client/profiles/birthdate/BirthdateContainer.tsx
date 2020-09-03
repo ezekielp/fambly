@@ -39,6 +39,8 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
     month: string,
     day: string,
   ) => {
+    if (deletedFlag) return <></>;
+
     if (year && month && !day) {
       return (
         <div>

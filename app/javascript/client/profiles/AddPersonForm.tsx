@@ -7,13 +7,15 @@ import * as yup from 'yup';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 const ValidationSchema = yup.object().shape({
-  firstName: yup.string().required(),
+  firstName: yup
+    .string()
+    .required('Please provide at least a first name when adding a new person'),
   lastName: yup.string(),
 });
 
-interface AddPersonFormProps {}
+export interface AddPersonFormProps {}
 
-interface AddPersonFormData {
+export interface AddPersonFormData {
   firstName: string;
   lastName?: string;
 }
