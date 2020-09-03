@@ -13,7 +13,10 @@
         "baseUrl": "app/javascript/",
         "strict": true,
         "esModuleInterop": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "typeRoots": [
+            "node_modules/@types"
+        ],
     },
     "exclude": [
         "**/*.spec.ts",

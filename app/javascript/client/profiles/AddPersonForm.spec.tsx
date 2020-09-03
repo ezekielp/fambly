@@ -25,6 +25,8 @@ describe('<AddPersonForm />', () => {
   let history: History;
 
   beforeEach(() => {
+    const refetchUserData = jest.fn();
+
     mountComponent = async (mocks = [createPersonMutation()]) => {
       await act(async () => {
         component = mount(
@@ -34,7 +36,12 @@ describe('<AddPersonForm />', () => {
                 path="/home"
                 render={(routerProps) => {
                   history = routerProps.history;
-                  return <AddPersonForm {...routerProps} />;
+                  return (
+                    <AddPersonForm
+                      refetchUserData={refetchUserData}
+                      {...routerProps}
+                    />
+                  );
                 }}
               />
             </MemoryRouter>

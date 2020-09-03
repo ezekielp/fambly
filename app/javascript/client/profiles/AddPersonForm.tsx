@@ -13,14 +13,17 @@ const ValidationSchema = yup.object().shape({
   lastName: yup.string(),
 });
 
-export interface AddPersonFormProps {}
+export interface AddPersonFormProps extends RouteComponentProps {
+  refetchUserData?: () => void;
+}
 
 export interface AddPersonFormData {
   firstName: string;
   lastName?: string;
 }
 
-const InternalAddPersonForm: FC<AddPersonFormProps & RouteComponentProps> = ({
+const InternalAddPersonForm: FC<AddPersonFormProps> = ({
+  refetchUserData,
   history,
 }) => {
   const [createPersonMutation] = useCreatePersonMutation();
@@ -45,6 +48,7 @@ const InternalAddPersonForm: FC<AddPersonFormProps & RouteComponentProps> = ({
       handleFormErrors<AddPersonFormData>(errors, setErrors, setStatus);
     } else {
       const personId = response.data?.createPerson.person?.id;
+      refetchUserData && refetchUserData();
       history.push(`/profiles/${personId}`);
     }
   };
@@ -83,4 +87,7 @@ const InternalAddPersonForm: FC<AddPersonFormProps & RouteComponentProps> = ({
   );
 };
 
-export const AddPersonForm = withRouter(InternalAddPersonForm);
+export const AddPersonForm = withRouter(
+  InternalAddPersonForm,
+) as React.ComponentType<any>;
+// The type-casting hack above solves a TypeScript error from extending RouteComponentProps
