@@ -82,6 +82,10 @@ type CreateUserPayload {
   user: User
 }
 
+input DeleteBirthdateInput {
+  personId: ID!
+}
+
 input DeleteNoteInput {
   noteId: ID!
 }
@@ -115,6 +119,7 @@ type Mutation {
   createParentChildRelationship(input: CreateParentChildRelationshipInput!): CreateParentChildRelationshipPayload!
   createPerson(input: CreatePersonInput!): CreatePersonPayload!
   createUser(input: CreateUserInput!): CreateUserPayload!
+  deleteBirthdate(input: DeleteBirthdateInput!): Boolean!
   deleteNote(input: DeleteNoteInput!): Boolean!
   deleteParentChildRelationship(input: DeleteParentChildRelationshipInput!): Boolean!
   login(input: LoginInput!): LoginPayload!

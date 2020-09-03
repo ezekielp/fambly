@@ -1,6 +1,14 @@
 import React, { FC, useState } from 'react';
+import { useDeleteBirthdateMutation } from 'client/graphqlTypes';
 import { BirthdateForm } from './BirthdateForm';
 import { MONTHS } from './utils';
+import { gql } from '@apollo/client';
+
+gql`
+  mutation DeleteBirthdate($input: DeleteBirthdateInput!) {
+    deleteBirthdate(input: $input)
+  }
+`;
 
 interface BirthdateContainerProps {
   birthYear?: number | null;
@@ -10,10 +18,21 @@ interface BirthdateContainerProps {
 }
 
 export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
+  const [deleteBirthdateMutation] = useDeleteBirthdateMutation();
   const { birthYear, birthMonth, birthDay, personId } = props;
   const [editFlag, setEditFlag] = useState(false);
+  const [deletedFlag, setDeletedFlag] = useState(false);
 
-  const editButton = <button onClick={() => setEditFlag(true)}>Edit</button>;
+  const deleteBirthdate = async () => {
+    await deleteBirthdateMutation({
+      variables: {
+        input: {
+          personId,
+        },
+      },
+    });
+    setDeletedFlag(true);
+  };
 
   const birthdateContainerContent = (
     year: number | null | undefined,
@@ -67,7 +86,8 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
   ) : (
     <>
       {birthdateContainerContent(birthYear, month, day)}
-      {editButton}
+      <button onClick={() => setEditFlag(true)}>Edit</button>
+      <button onClick={() => deleteBirthdate()}>Delete</button>
     </>
   );
 };
