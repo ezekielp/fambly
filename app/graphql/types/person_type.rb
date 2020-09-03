@@ -18,7 +18,7 @@ module Types
     end
 
     def months_old
-      return nil if self.age && self.age > 23
+      return nil if self.age && self.age > 1
 
       object.months_old_from_full_birthdate || object.approximate_months_old_from_months_old
     end
