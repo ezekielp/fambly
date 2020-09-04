@@ -212,7 +212,7 @@ export type ParentChild = {
   __typename?: 'ParentChild';
   child: Person;
   id: Scalars['ID'];
-  note?: Maybe<Scalars['String']>;
+  notes?: Maybe<Array<Note>>;
   parent: Person;
   parentType?: Maybe<Scalars['String']>;
 };
@@ -270,7 +270,6 @@ export type UpdateNotePayload = {
 };
 
 export type UpdateParentChildRelationshipInput = {
-  note?: Maybe<Scalars['String']>;
   parentChildId: Scalars['ID'];
   parentType?: Maybe<Scalars['String']>;
 };
@@ -539,14 +538,17 @@ export type CreateParentChildRelationshipMutation = (
     { __typename?: 'CreateParentChildRelationshipPayload' }
     & { parentChildRelationship?: Maybe<(
       { __typename?: 'ParentChild' }
-      & Pick<ParentChild, 'id' | 'parentType' | 'note'>
+      & Pick<ParentChild, 'id' | 'parentType'>
       & { parent: (
         { __typename?: 'Person' }
         & Pick<Person, 'id' | 'firstName' | 'lastName'>
       ), child: (
         { __typename?: 'Person' }
         & Pick<Person, 'id' | 'firstName' | 'lastName'>
-      ) }
+      ), notes?: Maybe<Array<(
+        { __typename?: 'Note' }
+        & Pick<Note, 'id' | 'content'>
+      )>> }
     )>, errors?: Maybe<Array<(
       { __typename?: 'Error' }
       & Pick<Error, 'path' | 'message'>
@@ -1113,7 +1115,10 @@ export const CreateParentChildRelationshipDocument = gql`
         lastName
       }
       parentType
-      note
+      notes {
+        id
+        content
+      }
     }
     errors {
       path
