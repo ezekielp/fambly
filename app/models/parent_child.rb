@@ -3,7 +3,6 @@
 # Table name: parent_children
 #
 #  id          :uuid             not null, primary key
-#  note        :text
 #  parent_type :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
@@ -25,5 +24,6 @@ class ParentChild < ApplicationRecord
 
   belongs_to :parent, class_name: 'Person', foreign_key: 'parent_id'
   belongs_to :child, class_name: 'Person', foreign_key: 'child_id'
+  has_many :notes, as: :notable
 
 end

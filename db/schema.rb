@@ -10,25 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_02_202917) do
+ActiveRecord::Schema.define(version: 2020_09_04_164322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "notes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "person_id"
     t.text "content", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["person_id"], name: "index_notes_on_person_id"
+    t.string "notable_type"
+    t.uuid "notable_id"
+    t.index ["notable_type", "notable_id"], name: "index_notes_on_notable_type_and_notable_id"
   end
 
   create_table "parent_children", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "parent_id"
     t.uuid "child_id"
     t.string "parent_type"
-    t.text "note"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["child_id"], name: "index_parent_children_on_child_id"
@@ -61,7 +61,6 @@ ActiveRecord::Schema.define(version: 2020_09_02_202917) do
     t.index ["session_token"], name: "index_users_on_session_token", unique: true
   end
 
-  add_foreign_key "notes", "people"
   add_foreign_key "parent_children", "people", column: "child_id"
   add_foreign_key "parent_children", "people", column: "parent_id"
   add_foreign_key "people", "users"
