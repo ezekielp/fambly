@@ -104,7 +104,7 @@ export interface ParentChildFormProps {
   setEditFlag?: (bool: boolean) => void;
 }
 
-const blankInitialValues = {
+export const blankInitialValues = {
   firstName: '',
   lastName: '',
   formParentId: '',

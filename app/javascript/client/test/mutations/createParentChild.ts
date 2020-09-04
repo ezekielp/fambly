@@ -6,22 +6,22 @@ import {
 import { MockedResponse } from '@apollo/client/testing';
 
 export const createParentChildRelationshipInput: CreateParentChildRelationshipInput = {
-  parentId: 'some-person-id',
-  childId: 'another-person-id',
+  parentId: 'lord-byron-uuid',
+  childId: 'ada-lovelace-uuid',
   parentType: 'biological',
 };
 
 export const createParentChildRelationshipResult: CreateParentChildRelationshipMutation['createParentChildRelationship'] = {
   errors: null,
   parentChildRelationship: {
-    id: 'some-uuid',
+    id: 'byron-lovelace-uuid',
     parent: {
-      id: 'some-person-id',
+      id: 'lord-byron-uuid',
       firstName: 'Lord',
       lastName: 'Byron',
     },
     child: {
-      id: 'another-person-id',
+      id: 'ada-lovelace-uuid',
       firstName: 'Ada',
       lastName: 'Lovelace',
     },
