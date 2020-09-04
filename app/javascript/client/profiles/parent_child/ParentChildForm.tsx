@@ -4,6 +4,7 @@ import {
   useCreateAgeMutation,
   useCreateParentChildRelationshipMutation,
   useGetUserForHomeContainerQuery,
+  useGetPersonForPersonContainerQuery,
 } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import {
@@ -14,6 +15,7 @@ import {
   FormikTextArea,
   FormikCheckbox,
 } from 'client/form/inputs';
+import { GlobalError } from 'client/common/GlobalError';
 import {
   NEW_OR_CURRENT_CONTACT_OPTIONS,
   PARENT_TYPE_OPTIONS,
@@ -159,8 +161,9 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
       note,
     } = data;
     const { setErrors, setStatus } = formikHelpers;
-    const currentPersonId = propParentId ? propParentId : propChildId;
+    // const currentPersonId = propParentId ? propParentId : propChildId;
     let createPersonResponse;
+    let newPersonId;
 
     if (newOrCurrentContact === 'new_person' && firstName) {
       createPersonResponse = await createPersonMutation({
@@ -182,12 +185,13 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
         return;
       } else {
         if (age || monthsOld) {
+          newPersonId = createPersonResponse.data?.createPerson?.person?.id;
           const createAgeResponse = await createAgeMutation({
             variables: {
               input: {
                 age,
                 monthsOld: monthsOld && !age ? monthsOld : null,
-                personId: currentPersonId ? currentPersonId : '',
+                personId: newPersonId ? newPersonId : '',
               },
             },
           });
@@ -203,7 +207,7 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
         }
       }
     }
-    const newPersonId = createPersonResponse
+    newPersonId = createPersonResponse
       ? createPersonResponse.data?.createPerson.person?.id
       : null;
 
@@ -251,7 +255,7 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
       onSubmit={handleSubmit}
       validationSchema={ParentChildFormValidationSchema}
     >
-      {({ values, isSubmitting }) => {
+      {({ values, isSubmitting, status }) => {
         return (
           <Form>
             <Field
@@ -310,6 +314,7 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
               label="Note (optional)"
               component={FormikTextArea}
             />
+            {status && <GlobalError>{status}</GlobalError>}
             <button type="submit" disabled={isSubmitting}>
               Save
             </button>

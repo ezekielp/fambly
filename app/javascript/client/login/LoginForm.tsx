@@ -66,9 +66,7 @@ const InternalLoginForm: FC<LoginFormProps & RouteComponentProps> = ({
             type="password"
             component={FormikTextInput}
           />
-
           {status && <GlobalError>{status}</GlobalError>}
-
           <button type="submit" disabled={isSubmitting}>
             Log In
           </button>

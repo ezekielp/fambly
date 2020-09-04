@@ -76,6 +76,10 @@ export const PersonContainer: FC = () => {
   });
 
   useEffect(() => {
+    setFieldToAdd('');
+  }, []);
+
+  useEffect(() => {
     refetchPersonData();
   }, [fieldToAdd]);
 

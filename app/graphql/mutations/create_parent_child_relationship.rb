@@ -16,9 +16,9 @@ module Mutations
     def resolve(input:)
       parent_id, child_id, parent_type, note = input.parent_id, input.child_id, input.parent_type, input.note
 
-      if !parent_id
+      if !parent_id || parent_id == ''
         return { errors: [{ path: '', message: 'Please create or choose a parent to add!' }] }
-      elsif !child_id
+      elsif !child_id || child_id == ''
         return { errors: [{ path: '', message: 'Please create or choose a child to add!' }] }
       end
 
