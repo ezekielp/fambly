@@ -14,6 +14,12 @@ module Mutations
     field :parent_child_relationship, Types::ParentChildType, null: true
 
     def resolve(input:)
+      if !input.parent_id
+        return { errors: [{ path: '', message: 'Please create or choose a parent to add!' }] }
+      elsif !input.child_id
+        return { errors: [{ path: '', message: 'Please create or choose a child to add!' }] }
+      end
+
       parent_child = ParentChild.new(
         **input
       )

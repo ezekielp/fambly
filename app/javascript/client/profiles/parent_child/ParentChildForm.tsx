@@ -82,7 +82,7 @@ const ParentChildFormValidationSchema = yup.object().shape({
   note: yup.string(),
 });
 
-interface ParentChildFormData {
+export interface ParentChildFormData {
   firstName?: string;
   lastName?: string;
   formParentId: string;
@@ -95,7 +95,7 @@ interface ParentChildFormData {
   note?: string | null | undefined;
 }
 
-interface ParentChildFormProps {
+export interface ParentChildFormProps {
   setFieldToAdd?: (field: string) => void;
   personFirstName: string;
   parentId?: string;
@@ -104,7 +104,7 @@ interface ParentChildFormProps {
   setEditFlag?: (bool: boolean) => void;
 }
 
-const blankInitialValues = {
+export const blankInitialValues = {
   firstName: '',
   lastName: '',
   formParentId: '',
