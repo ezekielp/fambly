@@ -1,20 +1,24 @@
 module Types
-  class CreateNoteInputType < Types::BaseInputObject
-    argument :content, String, required: true
+  class CreatePersonNoteInputType < Types::BaseInputObject
     argument :person_id, ID, required: true
+    argument :content, String, required: true
   end
 end
 
 module Mutations
-  class CreateNote < BaseMutation
-    argument :input, Types::CreateNoteInputType, required: true
+  class CreatePersonNote < BaseMutation
+    argument :input, Types::CreatePersonNoteInputType, required: true
 
     field :note, Types::NoteType, null: true
 
     def resolve(input:)
+      person_id = input.person_id
+
+      person = Person.find(person_id)
+
       note = Note.new(
         content: input.content,
-        person_id: input.person_id
+        notable: person
       )
 
       if note.save

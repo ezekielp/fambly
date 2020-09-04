@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import {
-  useCreateNoteMutation,
+  useCreatePersonNoteMutation,
   useUpdateNoteMutation,
 } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
@@ -10,8 +10,8 @@ import * as yup from 'yup';
 import { gql } from '@apollo/client';
 
 gql`
-  mutation CreateNote($input: CreateNoteInput!) {
-    createNote(input: $input) {
+  mutation CreatePersonNote($input: CreatePersonNoteInput!) {
+    createPersonNote(input: $input) {
       note {
         id
         content
@@ -51,7 +51,7 @@ export const NoteForm: FC<NoteFormProps> = ({
   noteId,
   setEditFlag,
 }) => {
-  const [createNoteMutation] = useCreateNoteMutation();
+  const [createPersonNoteMutation] = useCreatePersonNoteMutation();
   const [updateNoteMutation] = useUpdateNoteMutation();
 
   const handleSubmit = async (
@@ -61,7 +61,7 @@ export const NoteForm: FC<NoteFormProps> = ({
     const { setErrors, setStatus } = formikHelpers;
 
     if (personId && setFieldToAdd) {
-      const createResponse = await createNoteMutation({
+      const createResponse = await createPersonNoteMutation({
         variables: {
           input: {
             content: data.content,
@@ -69,7 +69,7 @@ export const NoteForm: FC<NoteFormProps> = ({
           },
         },
       });
-      const createErrors = createResponse.data?.createNote.errors;
+      const createErrors = createResponse.data?.createPersonNote.errors;
 
       if (createErrors) {
         handleFormErrors<NoteFormData>(createErrors, setErrors, setStatus);

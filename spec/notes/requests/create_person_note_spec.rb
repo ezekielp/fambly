@@ -1,13 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe 'create_note mutation', type: :request do
+RSpec.describe 'create_person_note mutation', type: :request do
   let(:endpoint) { '/graphql' }
   let(:person) { create(:person) }
   let(:note_content) { 'Pirate was always a bit of a rascal. Some people never change' }
   let(:query_string) do
     "
-        mutation CreateNote($input: CreateNoteInput!) {
-            createNote(input: $input) {
+        mutation CreatePersonNote($input: CreatePersonNoteInput!) {
+            createPersonNote(input: $input) {
                 note {
                     id
                     content
@@ -35,7 +35,7 @@ RSpec.describe 'create_note mutation', type: :request do
       params: { query: query_string, variables: variables }
     )
 
-    note = JSON.parse(response.body).dig('data', 'createNote', 'note')
+    note = JSON.parse(response.body).dig('data', 'createPersonNote', 'note')
     expect(note['content']).to eq(note_content)
     expect(person.notes.first.content).to eq(note_content)
   end
