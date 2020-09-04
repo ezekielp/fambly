@@ -2,20 +2,17 @@
 #
 # Table name: notes
 #
-#  id         :uuid             not null, primary key
-#  content    :text             not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  person_id  :uuid
+#  id           :uuid             not null, primary key
+#  content      :text             not null
+#  notable_type :string
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  notable_id   :uuid
 #
 # Indexes
 #
-#  index_notes_on_person_id  (person_id)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (person_id => people.id)
+#  index_notes_on_notable_type_and_notable_id  (notable_type,notable_id)
 #
 class Note < ApplicationRecord
-  belongs_to :person
+  belongs_to :notable, polymorphic: true
 end

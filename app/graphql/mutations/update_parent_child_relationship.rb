@@ -2,7 +2,6 @@ module Types
   class UpdateParentChildRelationshipInputType < Types::BaseInputObject
     argument :parent_child_id, ID, required: true
     argument :parent_type, String, required: false
-    argument :note, String, required: false
   end
 end
 
@@ -15,11 +14,10 @@ module Mutations
     def resolve(input:)
       parent_child_relationship = ParentChild.find_by(id: input.parent_child_id)
 
-      parent_type, note = input.parent_type, input.note
+      parent_type = input.parent_type
 
       if parent_child_relationship
         parent_child_relationship.update(parent_type: parent_type) if parent_type
-        parent_child_relationship.update(note: note) if note
 
         return { parent_child_relationship: parent_child_relationship }
       end

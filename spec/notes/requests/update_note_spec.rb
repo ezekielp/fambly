@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'update_note mutation', type: :request do
   let(:endpoint) { '/graphql' }
-  let(:note) { create(:note) }
-  let(:person) { note.person }
+  let(:person_note) { create(:person_note) }
+  let(:person) { person_note.notable }
   let(:new_note_content) { "A skulk of foxes, a cowardice of curs are tonight's traffic whispering in the yards and lanes." }
   let(:query_string) do
     "
@@ -26,7 +26,7 @@ RSpec.describe 'update_note mutation', type: :request do
     variables =
       {
           input: {
-              noteId: note.id,
+              noteId: person_note.id,
               content: new_note_content,
           }
       }

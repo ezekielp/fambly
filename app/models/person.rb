@@ -30,7 +30,7 @@ class Person < ApplicationRecord
   validate :birth_year_must_be_in_past
 
   belongs_to :user
-  has_many :notes
+  has_many :notes, as: :notable
   has_many :parent_child_relationships, class_name: 'ParentChild', foreign_key: 'parent_id'
   has_many :child_parent_relationships, class_name: 'ParentChild', foreign_key: 'child_id'
   has_many :parents, through: :child_parent_relationships

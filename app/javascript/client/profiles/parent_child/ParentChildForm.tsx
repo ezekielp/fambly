@@ -42,7 +42,10 @@ gql`
           lastName
         }
         parentType
-        note
+        notes {
+          id
+          content
+        }
       }
       errors {
         path
