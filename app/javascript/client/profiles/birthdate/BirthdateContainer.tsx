@@ -41,29 +41,39 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
   ) => {
     if (deletedFlag) return <></>;
 
+    let textContent;
+
     if (year && month && !day) {
-      return (
+      textContent = (
         <div>
           Born in: {MONTHS[month]} {year}
         </div>
       );
     } else if (year && !month && !day) {
-      return <div>Born in: {year}</div>;
+      textContent = <div>Born in: {year}</div>;
     } else if (month && day && !year) {
-      return (
+      textContent = (
         <div>
           Birthdate: {MONTHS[month]} {day}
         </div>
       );
     } else if (month && day && year) {
-      return (
+      textContent = (
         <div>
           Birthdate: {MONTHS[month]} {day}, {year}
         </div>
       );
     } else {
-      return <></>;
+      textContent = '';
     }
+
+    return (
+      <>
+        {textContent}
+        <button onClick={() => setEditFlag(true)}>Edit</button>
+        <button onClick={() => deleteBirthdate()}>Delete</button>
+      </>
+    );
   };
 
   const month = birthMonth ? birthMonth.toString() : '';
@@ -86,10 +96,6 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
   return editFlag ? (
     editBirthdateForm
   ) : (
-    <>
-      {birthdateContainerContent(birthYear, month, day)}
-      <button onClick={() => setEditFlag(true)}>Edit</button>
-      <button onClick={() => deleteBirthdate()}>Delete</button>
-    </>
+    <>{birthdateContainerContent(birthYear, month, day)}</>
   );
 };
