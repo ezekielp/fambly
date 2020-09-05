@@ -69,6 +69,14 @@ export const GenderForm: FC<GenderFormProps> = ({
 }) => {
   const [createOrUpdateGenderMutation] = useCreateOrUpdateGenderMutation();
 
+  const cancel = () => {
+    if (setFieldToAdd) {
+      setFieldToAdd('');
+    } else if (setEditFlag) {
+      setEditFlag(false);
+    }
+  };
+
   const handleSubmit = async (
     data: GenderFormData,
     formikHelpers: FormikHelpers<GenderFormData>,
@@ -80,7 +88,7 @@ export const GenderForm: FC<GenderFormProps> = ({
       variables: {
         input: {
           personId,
-          gender: customGender ? customGender : gender,
+          gender: gender === 'custom' && customGender ? customGender : gender,
         },
       },
     });
@@ -121,6 +129,7 @@ export const GenderForm: FC<GenderFormProps> = ({
           <button type="submit" disabled={isSubmitting}>
             Save
           </button>
+          <button onClick={() => cancel()}>Cancel</button>
         </Form>
       )}
     </Formik>

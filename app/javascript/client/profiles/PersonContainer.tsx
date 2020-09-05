@@ -6,6 +6,8 @@ import {
 } from 'client/graphqlTypes';
 import { AgeForm } from './age/AgeForm';
 import { AgeContainer } from './age/AgeContainer';
+import { GenderForm } from './gender/GenderForm';
+import { GenderContainer } from './gender/GenderContainer';
 import { NoteForm } from './notes/NoteForm';
 import { NotesContainer } from './notes/NotesContainer';
 import { BirthdateForm } from './birthdate/BirthdateForm';
@@ -32,6 +34,7 @@ gql`
     id
     firstName
     lastName
+    gender
     age
     monthsOld
     birthYear
@@ -89,6 +92,7 @@ export const PersonContainer: FC = () => {
     firstName,
     lastName,
     age,
+    gender,
     monthsOld,
     birthYear,
     birthMonth,
@@ -118,6 +122,9 @@ export const PersonContainer: FC = () => {
       {fieldToAdd === 'birthdate' && (
         <BirthdateForm setFieldToAdd={setFieldToAdd} personId={personId} />
       )}
+      {fieldToAdd === 'gender' && (
+        <GenderForm setFieldToAdd={setFieldToAdd} personId={personId} />
+      )}
       {fieldToAdd === 'note' && (
         <NoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
       )}
@@ -135,6 +142,7 @@ export const PersonContainer: FC = () => {
           personFirstName={firstName}
         />
       )}
+      {gender && <GenderContainer gender={gender} personId={personId} />}
       {hasAge && (
         <AgeContainer
           age={age}

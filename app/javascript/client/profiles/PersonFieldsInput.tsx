@@ -16,6 +16,7 @@ export const PersonFieldsInput: FC<PersonFieldsInputProps> = ({
     lastName,
     age,
     monthsOld,
+    gender,
     birthYear,
     birthMonth,
     birthDay,
@@ -30,6 +31,7 @@ export const PersonFieldsInput: FC<PersonFieldsInputProps> = ({
           <option value="birthdate">Birthdate</option>
         )}
         <option value="child">Child</option>
+        {!gender && <option value="gender">Gender</option>}
         {!lastName && <option value="lastName">Last name</option>}
         <option value="note">Note</option>
         <option value="parent">Parent</option>

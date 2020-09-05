@@ -433,7 +433,7 @@ export type GetPersonForPersonContainerQuery = (
 
 export type PersonInfoFragment = (
   { __typename?: 'Person' }
-  & Pick<Person, 'id' | 'firstName' | 'lastName' | 'age' | 'monthsOld' | 'birthYear' | 'birthMonth' | 'birthDay'>
+  & Pick<Person, 'id' | 'firstName' | 'lastName' | 'gender' | 'age' | 'monthsOld' | 'birthYear' | 'birthMonth' | 'birthDay'>
   & { notes?: Maybe<Array<(
     { __typename?: 'Note' }
     & Pick<Note, 'id' | 'content'>
@@ -648,6 +648,7 @@ export const PersonInfoFragmentDoc = gql`
   id
   firstName
   lastName
+  gender
   age
   monthsOld
   birthYear
