@@ -130,17 +130,6 @@ describe('<ParentChildForm />', () => {
         //   formikHelpers,
         //   'handleFormErrors',
         // );
-
-        // const noParentChosenInput = {
-        //   parentId: '',
-        //   childId: 'ada-lovelace-uuid',
-        // };
-        // const noParentChosenResult = {
-        //   errors: [
-        //     { path: '', message: 'Please create or choose a parent to add!' },
-        //   ],
-        //   parentChildRelationship: null,
-        // };
         const noParentChosenMock = {
           input: {
             parentId: '',
