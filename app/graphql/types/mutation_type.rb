@@ -8,6 +8,7 @@ module Types
     # Person + person fields
     field :create_person, mutation: Mutations::CreatePerson
     field :create_person_note, mutation: Mutations::CreatePersonNote
+    field :create_or_update_gender, mutation: Mutations::CreateOrUpdateGender
     field :update_note, mutation: Mutations::UpdateNote
     field :delete_note, mutation: Mutations::DeleteNote
     field :create_age, mutation: Mutations::CreateAge
