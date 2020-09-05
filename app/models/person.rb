@@ -9,6 +9,7 @@
 #  birth_year        :integer
 #  date_age_added    :date
 #  first_name        :string           not null
+#  gender            :string
 #  last_name         :string
 #  months_old        :integer
 #  show_on_dashboard :boolean          default(TRUE)
