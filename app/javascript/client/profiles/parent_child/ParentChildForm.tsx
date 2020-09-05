@@ -14,11 +14,12 @@ import {
   FormikTextArea,
   FormikCheckbox,
 } from 'client/form/inputs';
+import { GlobalError } from 'client/common/GlobalError';
 import {
   NEW_OR_CURRENT_CONTACT_OPTIONS,
   PARENT_TYPE_OPTIONS,
   buildParentOrChildOptions,
-  getParentAndChildIds,
+  // getParentAndChildIds,
 } from './utils';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
@@ -159,8 +160,9 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
       note,
     } = data;
     const { setErrors, setStatus } = formikHelpers;
-    const currentPersonId = propParentId ? propParentId : propChildId;
+    // const currentPersonId = propParentId ? propParentId : propChildId;
     let createPersonResponse;
+    let newPersonId;
 
     if (newOrCurrentContact === 'new_person' && firstName) {
       createPersonResponse = await createPersonMutation({
@@ -182,12 +184,13 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
         return;
       } else {
         if (age || monthsOld) {
+          newPersonId = createPersonResponse.data?.createPerson?.person?.id;
           const createAgeResponse = await createAgeMutation({
             variables: {
               input: {
                 age,
                 monthsOld: monthsOld && !age ? monthsOld : null,
-                personId: currentPersonId ? currentPersonId : '',
+                personId: newPersonId ? newPersonId : '',
               },
             },
           });
@@ -203,9 +206,55 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
         }
       }
     }
-    const newPersonId = createPersonResponse
+    newPersonId = createPersonResponse
       ? createPersonResponse.data?.createPerson.person?.id
       : null;
+
+    interface PotentialParentAndChildIds {
+      newPersonId: string | null | undefined;
+      propParentId: string | null | undefined;
+      propChildId: string | null | undefined;
+      formParentId: string | null | undefined;
+      formChildId: string | null | undefined;
+    }
+
+    interface ParentAndChildIds {
+      parentId: string;
+      childId: string;
+    }
+
+    const getParentAndChildIds = (
+      potentialParentAndChildIds: PotentialParentAndChildIds,
+    ): ParentAndChildIds => {
+      const {
+        newPersonId,
+        propParentId,
+        propChildId,
+        formParentId,
+        formChildId,
+      } = potentialParentAndChildIds;
+      let parentId, childId;
+
+      if (propParentId) {
+        parentId = propParentId;
+        if (newPersonId) {
+          childId = newPersonId;
+        } else {
+          childId = formChildId;
+        }
+      } else {
+        childId = propChildId;
+        if (newPersonId) {
+          parentId = newPersonId;
+        } else {
+          parentId = formParentId;
+        }
+      }
+
+      parentId = parentId ? parentId : '';
+      childId = childId ? childId : '';
+      return { parentId, childId };
+    };
 
     const { parentId, childId } = getParentAndChildIds({
       newPersonId,
@@ -251,7 +300,7 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
       onSubmit={handleSubmit}
       validationSchema={ParentChildFormValidationSchema}
     >
-      {({ values, isSubmitting }) => {
+      {({ values, isSubmitting, status }) => {
         return (
           <Form>
             <Field
@@ -310,6 +359,7 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
               label="Note (optional)"
               component={FormikTextArea}
             />
+            {status && <GlobalError>{status}</GlobalError>}
             <button type="submit" disabled={isSubmitting}>
               Save
             </button>

@@ -89,6 +89,10 @@ export type CreateUserPayload = {
   user?: Maybe<User>;
 };
 
+export type DeleteAgeInput = {
+  personId: Scalars['ID'];
+};
+
 export type DeleteBirthdateInput = {
   personId: Scalars['ID'];
 };
@@ -127,6 +131,7 @@ export type Mutation = {
   createPerson: CreatePersonPayload;
   createPersonNote: CreatePersonNotePayload;
   createUser: CreateUserPayload;
+  deleteAge: Scalars['Boolean'];
   deleteBirthdate: Scalars['Boolean'];
   deleteNote: Scalars['Boolean'];
   deleteParentChildRelationship: Scalars['Boolean'];
@@ -165,6 +170,11 @@ export type MutationCreatePersonNoteArgs = {
 
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
+};
+
+
+export type MutationDeleteAgeArgs = {
+  input: DeleteAgeInput;
 };
 
 
@@ -429,6 +439,16 @@ export type UpdateAgeMutation = (
       & Pick<Error, 'path' | 'message'>
     )>> }
   ) }
+);
+
+export type DeleteAgeMutationVariables = Exact<{
+  input: DeleteAgeInput;
+}>;
+
+
+export type DeleteAgeMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteAge'>
 );
 
 export type CreateAgeMutationVariables = Exact<{
@@ -878,6 +898,36 @@ export function useUpdateAgeMutation(baseOptions?: Apollo.MutationHookOptions<Up
 export type UpdateAgeMutationHookResult = ReturnType<typeof useUpdateAgeMutation>;
 export type UpdateAgeMutationResult = Apollo.MutationResult<UpdateAgeMutation>;
 export type UpdateAgeMutationOptions = Apollo.BaseMutationOptions<UpdateAgeMutation, UpdateAgeMutationVariables>;
+export const DeleteAgeDocument = gql`
+    mutation DeleteAge($input: DeleteAgeInput!) {
+  deleteAge(input: $input)
+}
+    `;
+export type DeleteAgeMutationFn = Apollo.MutationFunction<DeleteAgeMutation, DeleteAgeMutationVariables>;
+
+/**
+ * __useDeleteAgeMutation__
+ *
+ * To run a mutation, you first call `useDeleteAgeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAgeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAgeMutation, { data, loading, error }] = useDeleteAgeMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteAgeMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAgeMutation, DeleteAgeMutationVariables>) {
+        return Apollo.useMutation<DeleteAgeMutation, DeleteAgeMutationVariables>(DeleteAgeDocument, baseOptions);
+      }
+export type DeleteAgeMutationHookResult = ReturnType<typeof useDeleteAgeMutation>;
+export type DeleteAgeMutationResult = Apollo.MutationResult<DeleteAgeMutation>;
+export type DeleteAgeMutationOptions = Apollo.BaseMutationOptions<DeleteAgeMutation, DeleteAgeMutationVariables>;
 export const CreateAgeDocument = gql`
     mutation CreateAge($input: CreateAgeInput!) {
   createAge(input: $input) {

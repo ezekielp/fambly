@@ -14,12 +14,6 @@ export const formUtils = <FormType extends { [key: string]: any }>(
       });
       await act(async () => await wait(0));
     },
-    // check: async (values: string[]) => {
-    //   values.forEach((value) => {
-    //     Component.find(`input[value="${value}"]`).simulate('click');
-    //   });
-    //   await act(async () => await wait(0));
-    // },
     submit: async () => {
       Component.simulate('submit');
       await act(async () => await wait(0));

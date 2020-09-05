@@ -9,6 +9,7 @@ export const createParentChildRelationshipInput: CreateParentChildRelationshipIn
   parentId: 'lord-byron-uuid',
   childId: 'ada-lovelace-uuid',
   parentType: 'biological',
+  note: null,
 };
 
 export const createParentChildRelationshipResult: CreateParentChildRelationshipMutation['createParentChildRelationship'] = {
@@ -25,6 +26,7 @@ export const createParentChildRelationshipResult: CreateParentChildRelationshipM
       firstName: 'Ada',
       lastName: 'Lovelace',
     },
+    notes: null,
     parentType: 'biological',
   },
 };
@@ -44,3 +46,18 @@ export const createParentChildRelationshipMutation = ({
     data: { createParentChildRelationship: result },
   })),
 });
+// export const createParentChildRelationshipMutation = ({
+//   input = createParentChildRelationshipInput,
+//   result = createParentChildRelationshipResult,
+// } = {}): MockedResponse => ({
+//   request: {
+//     query: CreateParentChildRelationshipDocument,
+//     variables: {
+//       input,
+//     },
+//   },
+//   result: { data: { createParentChildRelationship: result } },
+//   newData: jest.fn(() => ({
+//     data: { createParentChildRelationship: result },
+//   })),
+// });

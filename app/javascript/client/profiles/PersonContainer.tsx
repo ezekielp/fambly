@@ -76,6 +76,10 @@ export const PersonContainer: FC = () => {
   });
 
   useEffect(() => {
+    setFieldToAdd('');
+  }, []);
+
+  useEffect(() => {
     refetchPersonData();
   }, [fieldToAdd]);
 
@@ -93,8 +97,10 @@ export const PersonContainer: FC = () => {
     parents,
     children,
   } = personData.personById;
-  const ageFlag = age || monthsOld;
-  const birthdateFlag = birthYear || birthMonth;
+
+  const hasAge = age || monthsOld;
+  const hasBirthdate = birthYear || birthMonth;
+  const hasFullBirthdate = birthYear && birthMonth && birthDay ? true : false;
 
   return (
     <>
@@ -129,10 +135,15 @@ export const PersonContainer: FC = () => {
           personFirstName={firstName}
         />
       )}
-      {ageFlag && (
-        <AgeContainer age={age} monthsOld={monthsOld} personId={personId} />
+      {hasAge && (
+        <AgeContainer
+          age={age}
+          monthsOld={monthsOld}
+          personId={personId}
+          hasFullBirthdate={hasFullBirthdate}
+        />
       )}
-      {birthdateFlag && (
+      {hasBirthdate && (
         <BirthdateContainer
           birthYear={birthYear}
           birthMonth={birthMonth}

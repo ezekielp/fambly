@@ -9,8 +9,8 @@ export const getUserForHomeContainerData: GetUserForHomeContainerQuery = {
     id: 'ada-lovelace-uuid',
     people: [
       {
-        id: 'lady-byron-uuid',
-        firstName: 'Lady',
+        id: 'lord-byron-uuid',
+        firstName: 'Lord',
         lastName: 'Byron',
         showOnDashboard: true,
       },
