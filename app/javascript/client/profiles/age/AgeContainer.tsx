@@ -53,9 +53,7 @@ export const AgeContainer: FC<AgeContainerProps> = ({
     setDeletedFlag(true);
   };
 
-  const ageContainerContent = deletedFlag ? (
-    <></>
-  ) : (
+  const ageContainerContent = (
     <div>Age: {age ? `${age} years` : `${monthsOld} months`} old</div>
   );
 
@@ -85,8 +83,8 @@ export const AgeContainer: FC<AgeContainerProps> = ({
     editAgeForm
   ) : (
     <>
-      {ageContainerContent}
-      {editAndDeleteButtons}
+      {!deletedFlag && ageContainerContent}
+      {!deletedFlag && editAndDeleteButtons}
     </>
   );
 };
