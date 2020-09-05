@@ -9,6 +9,10 @@ FactoryBot.define do
         first_name { 'Pirate' }
         last_name { 'Prentice' }
 
+        trait :with_gender do
+            gender { 'female' }
+        end
+
         trait :with_age do
             age { 27 }
         end
