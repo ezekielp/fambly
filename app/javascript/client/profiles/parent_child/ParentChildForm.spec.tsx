@@ -8,16 +8,14 @@ import {
 import { FormUtils, formUtils } from 'client/test/utils/formik';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
-import {
-  createParentChildRelationshipMutation,
-  createParentChildRelationshipResult,
-} from 'client/test/mutations/createParentChild';
+import { createParentChildRelationshipMutation } from 'client/test/mutations/createParentChild';
 import { getUserForHomeContainerQuery } from 'client/test/queries/getUserForHomeContainer';
+import { createAgeMutation } from 'client/test/mutations/createAge';
 import { ReactWrapper, mount } from 'enzyme';
 import { Form } from 'formik';
 import { act } from 'react-dom/test-utils';
 import wait from 'waait';
-import * as formikHelpers from 'client/utils/formik';
+// import * as formikHelpers from 'client/utils/formik';
 
 describe('<ParentChildForm />', () => {
   let mountComponent: (
@@ -40,6 +38,7 @@ describe('<ParentChildForm />', () => {
     defaultMocks = [
       createParentChildRelationshipMutation(),
       getUserForHomeContainerQuery(),
+      createAgeMutation(),
     ];
     currentPersonProps = {
       ...defaultProps,
@@ -92,16 +91,6 @@ describe('<ParentChildForm />', () => {
   });
 
   it('has four form fields when the parent or child to be added is a current_contact', async () => {
-    // const props = {
-    //   initialValues: {
-    //     ...blankInitialValues,
-    //     newOrCurrentContact: 'current_person',
-    //   },
-    //   personFirstName: 'Ada',
-    //   setFieldToAdd: jest.fn(),
-    //   childId: 'ada-lovelace-uuid',
-    // };
-
     await mountComponent(defaultMocks, currentPersonProps);
     form = formUtils<ParentChildFormData>(component.find(Form));
 
@@ -136,17 +125,26 @@ describe('<ParentChildForm />', () => {
     });
 
     describe('when the parent or child being added is a current_contact', () => {
-      it.skip('returns a server-side error if the parent or child is not selected', async () => {
-        const handleFormErrorsSpy = jest.spyOn(
-          formikHelpers,
-          'handleFormErrors',
-        );
+      it.only('returns a server-side error if the parent or child is not selected', async () => {
+        // const handleFormErrorsSpy = jest.spyOn(
+        //   formikHelpers,
+        //   'handleFormErrors',
+        // );
 
+        // const noParentChosenInput = {
+        //   parentId: '',
+        //   childId: 'ada-lovelace-uuid',
+        // };
+        // const noParentChosenResult = {
+        //   errors: [
+        //     { path: '', message: 'Please create or choose a parent to add!' },
+        //   ],
+        //   parentChildRelationship: null,
+        // };
         const noParentChosenMock = {
           input: {
             parentId: '',
             childId: 'ada-lovelace-uuid',
-            parentType: 'biological',
           },
           result: {
             errors: [
@@ -170,19 +168,14 @@ describe('<ParentChildForm />', () => {
           await wait(0);
         });
         expect(createParentChildRelationship.newData).toHaveBeenCalled();
-        console.log(component.debug());
+        // console.log(component.debug());
         // expect(handleFormErrorsSpy).toHaveBeenCalled();
         expect(
           component.text().includes('Please create or choose a parent to add!'),
         ).toBe(true);
       });
 
-      it.skip('submits the form when a parent is selected', async () => {
-        const handleFormErrorsSpy = jest.spyOn(
-          formikHelpers,
-          'handleFormErrors',
-        );
-
+      it.only('submits the form when a parent is selected', async () => {
         const props = {
           ...defaultProps,
           initialValues: {
@@ -204,12 +197,8 @@ describe('<ParentChildForm />', () => {
         await act(async () => {
           await wait(2000);
         });
-        console.log(component.debug());
+        // console.log(component.debug());
         expect(createParentChildRelationship.newData).toHaveBeenCalled();
-        // expect(handleFormErrorsSpy).toHaveBeenCalled();
-        // expect(
-        //   component.text().includes('Please create or choose a parent to add!'),
-        // ).toBe(true);
       });
     });
   });

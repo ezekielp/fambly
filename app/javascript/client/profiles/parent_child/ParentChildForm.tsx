@@ -4,7 +4,6 @@ import {
   useCreateAgeMutation,
   useCreateParentChildRelationshipMutation,
   useGetUserForHomeContainerQuery,
-  useGetPersonForPersonContainerQuery,
 } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import {
@@ -20,7 +19,7 @@ import {
   NEW_OR_CURRENT_CONTACT_OPTIONS,
   PARENT_TYPE_OPTIONS,
   buildParentOrChildOptions,
-  getParentAndChildIds,
+  // getParentAndChildIds,
 } from './utils';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
@@ -210,6 +209,52 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
     newPersonId = createPersonResponse
       ? createPersonResponse.data?.createPerson.person?.id
       : null;
+
+    interface PotentialParentAndChildIds {
+      newPersonId: string | null | undefined;
+      propParentId: string | null | undefined;
+      propChildId: string | null | undefined;
+      formParentId: string | null | undefined;
+      formChildId: string | null | undefined;
+    }
+
+    interface ParentAndChildIds {
+      parentId: string;
+      childId: string;
+    }
+
+    const getParentAndChildIds = (
+      potentialParentAndChildIds: PotentialParentAndChildIds,
+    ): ParentAndChildIds => {
+      const {
+        newPersonId,
+        propParentId,
+        propChildId,
+        formParentId,
+        formChildId,
+      } = potentialParentAndChildIds;
+      let parentId, childId;
+
+      if (propParentId) {
+        parentId = propParentId;
+        if (newPersonId) {
+          childId = newPersonId;
+        } else {
+          childId = formChildId;
+        }
+      } else {
+        childId = propChildId;
+        if (newPersonId) {
+          parentId = newPersonId;
+        } else {
+          parentId = formParentId;
+        }
+      }
+
+      parentId = parentId ? parentId : '';
+      childId = childId ? childId : '';
+      return { parentId, childId };
+    };
 
     const { parentId, childId } = getParentAndChildIds({
       newPersonId,
