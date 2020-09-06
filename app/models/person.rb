@@ -36,6 +36,8 @@ class Person < ApplicationRecord
   has_many :child_parent_relationships, class_name: 'ParentChild', foreign_key: 'child_id'
   has_many :parents, through: :child_parent_relationships
   has_many :children, through: :parent_child_relationships
+  has_many :person_places
+  has_many :places, through: :person_places
 
   def birth_year_must_be_in_past
     if birth_year.present? && birth_year > Time.zone.now.year

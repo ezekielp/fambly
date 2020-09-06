@@ -17,8 +17,13 @@ module Types
     field :delete_age, mutation: Mutations::DeleteAge
     field :create_or_update_birthdate, mutation: Mutations::CreateOrUpdateBirthdate
     field :delete_birthdate, mutation: Mutations::DeleteBirthdate
+
+    # Parent-child relationship
     field :create_parent_child_relationship, mutation: Mutations::CreateParentChildRelationship
     field :update_parent_child_relationship, mutation: Mutations::UpdateParentChildRelationship
     field :delete_parent_child_relationship, mutation: Mutations::DeleteParentChildRelationship
+
+    # Person-places
+    field :create_person_place, mutation: Mutations::CreatePersonPlace
   end
 end
