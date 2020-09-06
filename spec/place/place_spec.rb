@@ -14,5 +14,18 @@
 require 'rails_helper'
 
 RSpec.describe Place, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:country) { 'USA' }
+  let(:state_or_region) { 'NY' }
+  let(:town) { 'Glen Cove' }
+  let(:street) { 'High Pine Rd' }
+  let(:zip_code) { '11542' }
+
+  describe 'ActiveModel validations' do
+    it 'is valid with valid attributes' do
+      place = Place.create(country: country, state_or_region: state_or_region, town: town, street: street, zip_code: zip_code)
+      
+      expect(place).to be_valid
+    end
+  end
+
 end
