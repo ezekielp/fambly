@@ -49,7 +49,6 @@ RSpec.describe 'create_parent_child mutation', type: :request do
     )
 
     parent_child_relationship = JSON.parse(response.body).dig('data', 'createParentChildRelationship', 'parentChildRelationship')
-    debugger
     expect(parent_child_relationship['parent']['firstName']).to eq(parent.first_name)
     expect(parent_child_relationship['child']['firstName']).to eq(child.first_name)
     expect(parent.children.first.first_name).to eq(child.first_name)

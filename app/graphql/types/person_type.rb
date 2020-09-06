@@ -13,6 +13,7 @@ module Types
     field :notes, [Types::NoteType], null: true
     field :parents, [Types::PersonType], null: true
     field :children, [Types::PersonType], null: true
+    field :person_places, [Types::PersonPlaceType], null: true
 
     def age
       object.age_from_full_birthdate || object.approximate_age_from_birth_year || object.approximate_current_age_from_age

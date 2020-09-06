@@ -29,4 +29,5 @@ class PersonPlace < ApplicationRecord
 
   belongs_to :place
   belongs_to :person
+  has_many :notes, as: :notable
 end
