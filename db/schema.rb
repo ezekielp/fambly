@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_05_180222) do
+ActiveRecord::Schema.define(version: 2020_09_06_020158) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -50,6 +50,16 @@ ActiveRecord::Schema.define(version: 2020_09_05_180222) do
     t.boolean "show_on_dashboard", default: true
     t.string "gender"
     t.index ["user_id"], name: "index_people_on_user_id"
+  end
+
+  create_table "places", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "country", null: false
+    t.string "state_or_region"
+    t.string "town"
+    t.string "street"
+    t.string "zip_code"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
