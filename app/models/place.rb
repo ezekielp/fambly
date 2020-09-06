@@ -12,4 +12,5 @@
 #  updated_at      :datetime         not null
 #
 class Place < ApplicationRecord
+  has_many :person_places
 end

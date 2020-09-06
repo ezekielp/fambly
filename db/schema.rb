@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_06_020158) do
+ActiveRecord::Schema.define(version: 2020_09_06_020909) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -52,6 +52,21 @@ ActiveRecord::Schema.define(version: 2020_09_06_020158) do
     t.index ["user_id"], name: "index_people_on_user_id"
   end
 
+  create_table "person_places", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "person_id"
+    t.uuid "place_id"
+    t.boolean "current", default: false
+    t.boolean "birth_place", default: false
+    t.integer "start_year"
+    t.integer "start_month"
+    t.integer "end_year"
+    t.integer "end_month"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["person_id"], name: "index_person_places_on_person_id"
+    t.index ["place_id"], name: "index_person_places_on_place_id"
+  end
+
   create_table "places", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "country", null: false
     t.string "state_or_region"
@@ -75,4 +90,6 @@ ActiveRecord::Schema.define(version: 2020_09_06_020158) do
   add_foreign_key "parent_children", "people", column: "child_id"
   add_foreign_key "parent_children", "people", column: "parent_id"
   add_foreign_key "people", "users"
+  add_foreign_key "person_places", "people"
+  add_foreign_key "person_places", "places"
 end
