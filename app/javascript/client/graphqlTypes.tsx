@@ -773,6 +773,35 @@ export type CreatePersonPlaceMutation = (
   ) }
 );
 
+export type UpdatePersonPlaceMutationVariables = Exact<{
+  input: UpdatePersonPlaceInput;
+}>;
+
+
+export type UpdatePersonPlaceMutation = (
+  { __typename?: 'Mutation' }
+  & { updatePersonPlace: (
+    { __typename?: 'UpdatePersonPlacePayload' }
+    & { personPlace?: Maybe<(
+      { __typename?: 'PersonPlace' }
+      & Pick<PersonPlace, 'id' | 'birthPlace' | 'current' | 'startMonth' | 'startYear' | 'endMonth' | 'endYear'>
+      & { person: (
+        { __typename?: 'Person' }
+        & Pick<Person, 'id' | 'firstName'>
+      ), place: (
+        { __typename?: 'Place' }
+        & Pick<Place, 'id' | 'country' | 'stateOrRegion' | 'town' | 'street' | 'zipCode'>
+      ), notes?: Maybe<Array<(
+        { __typename?: 'Note' }
+        & Pick<Note, 'id' | 'content'>
+      )>> }
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'Error' }
+      & Pick<Error, 'path' | 'message'>
+    )>> }
+  ) }
+);
+
 export type DeletePersonPlaceMutationVariables = Exact<{
   input: DeletePersonPlaceInput;
 }>;
@@ -1570,6 +1599,66 @@ export function useCreatePersonPlaceMutation(baseOptions?: Apollo.MutationHookOp
 export type CreatePersonPlaceMutationHookResult = ReturnType<typeof useCreatePersonPlaceMutation>;
 export type CreatePersonPlaceMutationResult = Apollo.MutationResult<CreatePersonPlaceMutation>;
 export type CreatePersonPlaceMutationOptions = Apollo.BaseMutationOptions<CreatePersonPlaceMutation, CreatePersonPlaceMutationVariables>;
+export const UpdatePersonPlaceDocument = gql`
+    mutation UpdatePersonPlace($input: UpdatePersonPlaceInput!) {
+  updatePersonPlace(input: $input) {
+    personPlace {
+      id
+      person {
+        id
+        firstName
+      }
+      place {
+        id
+        country
+        stateOrRegion
+        town
+        street
+        zipCode
+      }
+      birthPlace
+      current
+      startMonth
+      startYear
+      endMonth
+      endYear
+      notes {
+        id
+        content
+      }
+    }
+    errors {
+      path
+      message
+    }
+  }
+}
+    `;
+export type UpdatePersonPlaceMutationFn = Apollo.MutationFunction<UpdatePersonPlaceMutation, UpdatePersonPlaceMutationVariables>;
+
+/**
+ * __useUpdatePersonPlaceMutation__
+ *
+ * To run a mutation, you first call `useUpdatePersonPlaceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePersonPlaceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePersonPlaceMutation, { data, loading, error }] = useUpdatePersonPlaceMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdatePersonPlaceMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePersonPlaceMutation, UpdatePersonPlaceMutationVariables>) {
+        return Apollo.useMutation<UpdatePersonPlaceMutation, UpdatePersonPlaceMutationVariables>(UpdatePersonPlaceDocument, baseOptions);
+      }
+export type UpdatePersonPlaceMutationHookResult = ReturnType<typeof useUpdatePersonPlaceMutation>;
+export type UpdatePersonPlaceMutationResult = Apollo.MutationResult<UpdatePersonPlaceMutation>;
+export type UpdatePersonPlaceMutationOptions = Apollo.BaseMutationOptions<UpdatePersonPlaceMutation, UpdatePersonPlaceMutationVariables>;
 export const DeletePersonPlaceDocument = gql`
     mutation DeletePersonPlace($input: DeletePersonPlaceInput!) {
   deletePersonPlace(input: $input)

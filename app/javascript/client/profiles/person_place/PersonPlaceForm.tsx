@@ -1,5 +1,8 @@
 import React, { FC } from 'react';
-import { useCreatePersonPlaceMutation } from 'client/graphqlTypes';
+import {
+  useCreatePersonPlaceMutation,
+  useUpdatePersonPlaceMutation,
+} from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import {
   FormikTextInput,
@@ -18,6 +21,42 @@ import * as yup from 'yup';
 gql`
   mutation CreatePersonPlace($input: CreatePersonPlaceInput!) {
     createPersonPlace(input: $input) {
+      personPlace {
+        id
+        person {
+          id
+          firstName
+        }
+        place {
+          id
+          country
+          stateOrRegion
+          town
+          street
+          zipCode
+        }
+        birthPlace
+        current
+        startMonth
+        startYear
+        endMonth
+        endYear
+        notes {
+          id
+          content
+        }
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`;
+
+gql`
+  mutation UpdatePersonPlace($input: UpdatePersonPlaceInput!) {
+    updatePersonPlace(input: $input) {
       personPlace {
         id
         person {
@@ -109,6 +148,7 @@ interface PersonPlaceFormProps {
   personId: string;
   initialValues?: PersonPlaceFormData;
   setEditFlag?: (bool: boolean) => void;
+  personPlaceId?: string;
 }
 
 const blankInitialValues = {
@@ -130,8 +170,10 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
   personId,
   initialValues = blankInitialValues,
   setEditFlag,
+  personPlaceId,
 }) => {
   const [createPersonPlace] = useCreatePersonPlaceMutation();
+  const [updatePersonPlace] = useUpdatePersonPlaceMutation();
 
   const handleSubmit = async (
     data: PersonPlaceFormData,
@@ -151,35 +193,61 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
       note,
     } = data;
     const { setErrors, setStatus } = formikHelpers;
+    const input = {
+      country,
+      stateOrRegion: stateOrRegion ? stateOrRegion : null,
+      town: town ? town : null,
+      street: street ? street : null,
+      zipCode: zipCode ? zipCode : null,
+      birthPlace: birthPlace.length > 0 ? true : false,
+      startYear,
+      startMonth: startMonth ? parseInt(startMonth) : null,
+      endYear,
+      endMonth: endMonth ? parseInt(endMonth) : null,
+    };
 
-    const response = await createPersonPlace({
-      variables: {
-        input: {
-          personId,
-          country,
-          stateOrRegion: stateOrRegion ? stateOrRegion : null,
-          town: town ? town : null,
-          street: street ? street : null,
-          zipCode: zipCode ? zipCode : null,
-          birthPlace: birthPlace.length > 0 ? true : false,
-          startYear,
-          startMonth: startMonth ? parseInt(startMonth) : null,
-          endYear,
-          endMonth: endMonth ? parseInt(endMonth) : null,
-          note: note ? note : null,
-        },
-      },
-    });
-
-    const errors = response.data?.createPersonPlace.errors;
-
-    if (errors) {
-      handleFormErrors<PersonPlaceFormData>(errors, setErrors, setStatus);
-      return;
-    }
     if (setFieldToAdd) {
+      const createResponse = await createPersonPlace({
+        variables: {
+          input: {
+            ...input,
+            personId,
+            note: note ? note : null,
+          },
+        },
+      });
+
+      const createErrors = createResponse.data?.createPersonPlace.errors;
+
+      if (createErrors) {
+        handleFormErrors<PersonPlaceFormData>(
+          createErrors,
+          setErrors,
+          setStatus,
+        );
+        return;
+      }
       setFieldToAdd('');
     } else if (setEditFlag) {
+      const updateResponse = await updatePersonPlace({
+        variables: {
+          input: {
+            ...input,
+            personPlaceId: personPlaceId ? personPlaceId : '',
+          },
+        },
+      });
+
+      const updateErrors = updateResponse.data?.updatePersonPlace.errors;
+
+      if (updateErrors) {
+        handleFormErrors<PersonPlaceFormData>(
+          updateErrors,
+          setErrors,
+          setStatus,
+        );
+        return;
+      }
       setEditFlag(false);
     }
   };
@@ -252,11 +320,13 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
               component={FormikSelectInput}
               options={MONTH_OPTIONS}
             />
-            <Field
-              name="note"
-              label="Note (optional)"
-              component={FormikTextArea}
-            />
+            {setFieldToAdd && (
+              <Field
+                name="note"
+                label="Note (optional)"
+                component={FormikTextArea}
+              />
+            )}
             {status && <GlobalError>{status}</GlobalError>}
             <button type="submit" disabled={isSubmitting}>
               Save
