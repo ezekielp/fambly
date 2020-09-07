@@ -12,7 +12,7 @@ import {
   FormikRadioGroup,
   FormikSelectInput,
   FormikTextArea,
-  FormikCheckbox,
+  FormikCheckboxGroup,
 } from 'client/form/inputs';
 import { GlobalError } from 'client/common/GlobalError';
 import {
@@ -79,7 +79,6 @@ const ParentChildFormValidationSchema = yup.object().shape({
     .max(1000000, "Wow, that's old! Please enter a lower age")
     .nullable(),
   newOrCurrentContact: yup.string().required(),
-  showOnDashboard: yup.boolean().required(),
   formParentId: yup.string(),
   formChildId: yup.string(),
   parentType: yup.string(),
@@ -94,7 +93,7 @@ export interface ParentChildFormData {
   age: number | null;
   monthsOld: number | null;
   newOrCurrentContact: string;
-  showOnDashboard?: boolean;
+  showOnDashboard: string[];
   parentType?: string;
   note?: string | null | undefined;
 }
@@ -116,7 +115,7 @@ export const blankInitialValues = {
   age: null,
   monthsOld: null,
   newOrCurrentContact: 'new_person',
-  showOnDashboard: false,
+  showOnDashboard: [],
   parentType: '',
   note: '',
 };
@@ -160,7 +159,6 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
       note,
     } = data;
     const { setErrors, setStatus } = formikHelpers;
-    // const currentPersonId = propParentId ? propParentId : propChildId;
     let createPersonResponse;
     let newPersonId;
 
@@ -170,7 +168,7 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
           input: {
             firstName,
             lastName: lastName ? lastName : null,
-            showOnDashboard,
+            showOnDashboard: showOnDashboard.length > 0 ? true : false,
           },
         },
       });
@@ -313,8 +311,14 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
               <>
                 <Field
                   name="showOnDashboard"
-                  label={`Add this person to your dashboard of contacts? (Even if you don't add them to your dashboard, you will always be able to access and add to their profile from ${personFirstName}'s page.`}
-                  component={FormikCheckbox}
+                  label=""
+                  component={FormikCheckboxGroup}
+                  options={[
+                    {
+                      label: `Add this person to your dashboard of contacts? (Even if you don't add them to your dashboard, you will always be able to access and add to their profile from ${personFirstName}'s page.`,
+                      value: 'showOnDashboard',
+                    },
+                  ]}
                 />
                 <Field
                   name="firstName"

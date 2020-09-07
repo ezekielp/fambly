@@ -3,6 +3,7 @@ import {
   useGetPersonForPersonContainerQuery,
   PersonInfoFragmentDoc,
   SubContactInfoFragmentDoc,
+  PersonPlaceInfoFragmentDoc,
 } from 'client/graphqlTypes';
 import { AgeForm } from './age/AgeForm';
 import { AgeContainer } from './age/AgeContainer';
@@ -15,6 +16,8 @@ import { BirthdateContainer } from './birthdate/BirthdateContainer';
 import { ParentChildForm } from './parent_child/ParentChildForm';
 import { ParentsContainer } from './parent_child/ParentsContainer';
 import { ChildrenContainer } from './parent_child/ChildrenContainer';
+import { PersonPlaceForm } from './person_place/PersonPlaceForm';
+import { PersonPlacesContainer } from './person_place/PersonPlaceContainer';
 import { PersonFieldsInput } from './PersonFieldsInput';
 import { useParams } from 'react-router-dom';
 import { gql } from '@apollo/client';
@@ -50,9 +53,13 @@ gql`
     children {
       ...SubContactInfo
     }
+    personPlaces {
+      ...PersonPlaceInfo
+    }
   }
 
   ${SubContactInfoFragmentDoc}
+  ${PersonPlaceInfoFragmentDoc}
 `;
 
 gql`
@@ -62,6 +69,34 @@ gql`
     lastName
     age
     monthsOld
+  }
+`;
+
+gql`
+  fragment PersonPlaceInfo on PersonPlace {
+    id
+    place {
+      id
+      country
+      stateOrRegion
+      town
+      street
+      zipCode
+    }
+    person {
+      id
+      firstName
+    }
+    birthPlace
+    current
+    startMonth
+    startYear
+    endMonth
+    endYear
+    notes {
+      id
+      content
+    }
   }
 `;
 
@@ -100,6 +135,7 @@ export const PersonContainer: FC = () => {
     notes,
     parents,
     children,
+    personPlaces,
   } = personData.personById;
 
   const hasAge = age || monthsOld;
@@ -142,6 +178,9 @@ export const PersonContainer: FC = () => {
           personFirstName={firstName}
         />
       )}
+      {fieldToAdd === 'personPlace' && (
+        <PersonPlaceForm setFieldToAdd={setFieldToAdd} personId={personId} />
+      )}
       {gender && <GenderContainer gender={gender} personId={personId} />}
       {hasAge && (
         <AgeContainer
@@ -171,6 +210,12 @@ export const PersonContainer: FC = () => {
           actualChildren={children}
           parentId={personId}
           parentLastName={lastName}
+        />
+      )}
+      {personPlaces && personPlaces.length > 0 && (
+        <PersonPlacesContainer
+          personPlaces={personPlaces}
+          firstName={firstName}
         />
       )}
       {notes && <NotesContainer notes={notes} />}
