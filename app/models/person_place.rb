@@ -29,5 +29,5 @@ class PersonPlace < ApplicationRecord
 
   belongs_to :place
   belongs_to :person
-  has_many :notes, as: :notable
+  has_many :notes, as: :notable, dependent: :destroy
 end
