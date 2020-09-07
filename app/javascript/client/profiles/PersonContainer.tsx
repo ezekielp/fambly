@@ -17,7 +17,7 @@ import { ParentChildForm } from './parent_child/ParentChildForm';
 import { ParentsContainer } from './parent_child/ParentsContainer';
 import { ChildrenContainer } from './parent_child/ChildrenContainer';
 import { PersonPlaceForm } from './person_place/PersonPlaceForm';
-import { PersonPlacesContainer } from './person_place/PersonPlaceContainer';
+import { PersonPlacesContainer } from './person_place/PersonPlacesContainer';
 import { PersonFieldsInput } from './PersonFieldsInput';
 import { useParams } from 'react-router-dom';
 import { gql } from '@apollo/client';
