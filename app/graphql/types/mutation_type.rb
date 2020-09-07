@@ -26,5 +26,6 @@ module Types
     # Person-places
     field :create_person_place, mutation: Mutations::CreatePersonPlace
     field :update_person_place, mutation: Mutations::UpdatePersonPlace
+    field :delete_person_place, mutation: Mutations::DeletePersonPlace
   end
 end
