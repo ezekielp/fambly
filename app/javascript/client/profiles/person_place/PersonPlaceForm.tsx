@@ -5,7 +5,7 @@ import {
   FormikTextInput,
   FormikNumberInput,
   FormikTextArea,
-  FormikCheckbox,
+  FormikCheckboxGroup,
   FormikSelectInput,
 } from 'client/form/inputs';
 import { MONTH_OPTIONS } from 'client/profiles/birthdate/utils';
@@ -57,8 +57,6 @@ const PersonPlaceFormValidationSchema = yup.object().shape({
   town: yup.string(),
   street: yup.string(),
   zipCode: yup.string(),
-  birthPlace: yup.boolean(),
-  current: yup.boolean(),
   startYear: yup
     .number()
     .integer()
@@ -98,8 +96,7 @@ interface PersonPlaceFormData {
   town?: string;
   street?: string;
   zipCode?: string;
-  birthPlace?: string;
-  current?: string;
+  birthPlace: string[];
   startYear?: number | null;
   startMonth?: string;
   endYear?: number | null;
@@ -120,8 +117,7 @@ const blankInitialValues = {
   town: '',
   street: '',
   zipCode: '',
-  birthPlace: '',
-  current: '',
+  birthPlace: [],
   startYear: null,
   startMonth: '',
   endYear: null,
@@ -148,7 +144,6 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
       street,
       zipCode,
       birthPlace,
-      current,
       startYear,
       startMonth,
       endYear,
@@ -166,8 +161,7 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
           town: town ? town : null,
           street: street ? street : null,
           zipCode: zipCode ? zipCode : null,
-          birthPlace: birthPlace === 'birthPlace' ? true : false,
-          current: current === 'current' ? true : false,
+          birthPlace: birthPlace.length > 0 ? true : false,
           startYear,
           startMonth: startMonth ? parseInt(startMonth) : null,
           endYear,
@@ -232,13 +226,9 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
             />
             <Field
               name="birthPlace"
-              label="Birth place?"
-              component={FormikCheckbox}
-            />
-            <Field
-              name="current"
-              label="Current home address?"
-              component={FormikCheckbox}
+              label=""
+              component={FormikCheckboxGroup}
+              options={[{ label: 'Birth place?', value: 'birthPlace' }]}
             />
             <Field
               name="startYear"

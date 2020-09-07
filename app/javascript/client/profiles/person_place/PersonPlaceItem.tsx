@@ -19,7 +19,6 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
     notes,
   } = personPlace;
   const { country, stateOrRegion, town, street, zipCode } = place;
-  // const currentYear = new Date().getFullYear();
 
   const getTimingText = () => {
     const startMonthText = startMonth ? startMonth : '';

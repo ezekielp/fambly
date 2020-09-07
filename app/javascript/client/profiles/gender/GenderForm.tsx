@@ -29,11 +29,7 @@ gql`
 `;
 
 export const GenderFormValidationSchema = yup.object().shape({
-  gender: yup
-    .string()
-    .required(
-      'You must choose a gender to save to this profile, or you can press the cancel button!',
-    ),
+  gender: yup.string(),
   customGender: yup.string().when('gender', {
     is: (val: string) => val === 'custom',
     then: yup
@@ -82,6 +78,7 @@ export const GenderForm: FC<GenderFormProps> = ({
     formikHelpers: FormikHelpers<GenderFormData>,
   ) => {
     const { gender, customGender } = data;
+    if (!gender) return;
     const { setErrors, setStatus } = formikHelpers;
 
     const response = await createOrUpdateGenderMutation({
