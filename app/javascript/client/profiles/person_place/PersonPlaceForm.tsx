@@ -101,7 +101,7 @@ interface PersonPlaceFormData {
   startMonth?: string;
   endYear?: number | null;
   endMonth?: string;
-  note: string;
+  note?: string;
 }
 
 interface PersonPlaceFormProps {
