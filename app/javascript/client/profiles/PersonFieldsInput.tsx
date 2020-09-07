@@ -13,6 +13,7 @@ export const PersonFieldsInput: FC<PersonFieldsInputProps> = ({
   onChange,
 }) => {
   const {
+    firstName,
     lastName,
     age,
     monthsOld,
@@ -35,6 +36,7 @@ export const PersonFieldsInput: FC<PersonFieldsInputProps> = ({
         {!lastName && <option value="lastName">Last name</option>}
         <option value="note">Note</option>
         <option value="parent">Parent</option>
+        <option value="personPlace">Place {firstName} has lived</option>
       </select>
     </>
   );

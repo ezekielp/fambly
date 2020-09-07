@@ -497,12 +497,30 @@ export type PersonInfoFragment = (
   )>>, children?: Maybe<Array<(
     { __typename?: 'Person' }
     & SubContactInfoFragment
+  )>>, personPlaces?: Maybe<Array<(
+    { __typename?: 'PersonPlace' }
+    & PersonPlaceInfoFragment
   )>> }
 );
 
 export type SubContactInfoFragment = (
   { __typename?: 'Person' }
   & Pick<Person, 'id' | 'firstName' | 'lastName' | 'age' | 'monthsOld'>
+);
+
+export type PersonPlaceInfoFragment = (
+  { __typename?: 'PersonPlace' }
+  & Pick<PersonPlace, 'id' | 'birthPlace' | 'current' | 'startMonth' | 'startYear' | 'endMonth' | 'endYear'>
+  & { place: (
+    { __typename?: 'Place' }
+    & Pick<Place, 'id' | 'country' | 'stateOrRegion' | 'town' | 'street' | 'zipCode'>
+  ), person: (
+    { __typename?: 'Person' }
+    & Pick<Person, 'id' | 'firstName'>
+  ), notes?: Maybe<Array<(
+    { __typename?: 'Note' }
+    & Pick<Note, 'id' | 'content'>
+  )>> }
 );
 
 export type UpdateAgeMutationVariables = Exact<{
@@ -726,6 +744,33 @@ export const SubContactInfoFragmentDoc = gql`
   monthsOld
 }
     `;
+export const PersonPlaceInfoFragmentDoc = gql`
+    fragment PersonPlaceInfo on PersonPlace {
+  id
+  place {
+    id
+    country
+    stateOrRegion
+    town
+    street
+    zipCode
+  }
+  person {
+    id
+    firstName
+  }
+  birthPlace
+  current
+  startMonth
+  startYear
+  endMonth
+  endYear
+  notes {
+    id
+    content
+  }
+}
+    `;
 export const PersonInfoFragmentDoc = gql`
     fragment PersonInfo on Person {
   id
@@ -747,8 +792,12 @@ export const PersonInfoFragmentDoc = gql`
   children {
     ...SubContactInfo
   }
+  personPlaces {
+    ...PersonPlaceInfo
+  }
 }
-    ${SubContactInfoFragmentDoc}`;
+    ${SubContactInfoFragmentDoc}
+${PersonPlaceInfoFragmentDoc}`;
 export const GetUserDocument = gql`
     query GetUser {
   user {

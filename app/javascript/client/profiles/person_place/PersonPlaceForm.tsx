@@ -8,6 +8,8 @@ import {
   FormikCheckbox,
   FormikSelectInput,
 } from 'client/form/inputs';
+import { MONTH_OPTIONS } from 'client/profiles/birthdate/utils';
+import { STATE_OPTIONS } from './utils';
 import { GlobalError } from 'client/common/GlobalError';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
@@ -57,28 +59,36 @@ const PersonPlaceFormValidationSchema = yup.object().shape({
   zipCode: yup.string(),
   birthPlace: yup.boolean(),
   current: yup.boolean(),
-  startYear: yup.number().integer().positive().nullable(),
-  startMonth: yup
-    .string()
+  startYear: yup
+    .number()
+    .integer()
+    .positive()
     .nullable()
-    .when('startYear', {
+    .when('startMonth', {
       is: (val) => val !== undefined && val !== null,
       then: yup
-        .string()
-        .required('Month is required if you specify a year')
+        .number()
+        .integer()
+        .positive()
+        .required('Year is required if you specify a month')
         .nullable(),
     }),
-  endYear: yup.number().integer().positive().nullable(),
-  endMonth: yup
-    .string()
+  startMonth: yup.string().nullable(),
+  endYear: yup
+    .number()
+    .integer()
+    .positive()
     .nullable()
-    .when('endYear', {
-      is: (val) => val !== undefined && val !== null,
+    .when('endMonth', {
+      is: (val) => val !== undefined && val !== null && val !== '',
       then: yup
-        .string()
-        .required('Month is required if you specify a year')
+        .number()
+        .integer()
+        .positive()
+        .required('Year is required if you specify a month')
         .nullable(),
     }),
+  endMonth: yup.string().nullable(),
   note: yup.string(),
 });
 
@@ -88,8 +98,8 @@ interface PersonPlaceFormData {
   town?: string;
   street?: string;
   zipCode?: string;
-  birthPlace?: boolean;
-  current?: boolean;
+  birthPlace?: string;
+  current?: string;
   startYear?: number | null;
   startMonth?: string;
   endYear?: number | null;
@@ -105,13 +115,13 @@ interface PersonPlaceFormProps {
 }
 
 const blankInitialValues = {
-  country: '',
+  country: 'USA',
   stateOrRegion: '',
   town: '',
   street: '',
   zipCode: '',
-  birthPlace: false,
-  current: false,
+  birthPlace: '',
+  current: '',
   startYear: null,
   startMonth: '',
   endYear: null,
@@ -156,8 +166,8 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
           town: town ? town : null,
           street: street ? street : null,
           zipCode: zipCode ? zipCode : null,
-          birthPlace,
-          current,
+          birthPlace: birthPlace === 'birthPlace' ? true : false,
+          current: current === 'current' ? true : false,
           startYear,
           startMonth: startMonth ? parseInt(startMonth) : null,
           endYear,
@@ -186,15 +196,25 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
       onSubmit={handleSubmit}
       validationSchema={PersonPlaceFormValidationSchema}
     >
-      {({ isSubmitting, status }) => {
+      {({ values, isSubmitting, status }) => {
         return (
           <Form>
             <Field name="country" label="Country" component={FormikTextInput} />
-            <Field
-              name="stateOrRegion"
-              label="State or region (optional)"
-              component={FormikTextInput}
-            />
+            {values.country === 'USA' && (
+              <Field
+                name="stateOrRegion"
+                label="State (optional)"
+                component={FormikSelectInput}
+                options={STATE_OPTIONS}
+              />
+            )}
+            {values.country !== 'USA' && (
+              <Field
+                name="stateOrRegion"
+                label="State or region (optional)"
+                component={FormikTextInput}
+              />
+            )}
             <Field
               name="town"
               label="City or town (optional)"
@@ -229,7 +249,7 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
               name="startMonth"
               label="Start month (optional)"
               component={FormikSelectInput}
-              options={}
+              options={MONTH_OPTIONS}
             />
             <Field
               name="endYear"
@@ -240,7 +260,7 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
               name="endMonth"
               label="End month (optional)"
               component={FormikSelectInput}
-              options={}
+              options={MONTH_OPTIONS}
             />
             <Field
               name="note"
