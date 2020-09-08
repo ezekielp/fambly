@@ -14,6 +14,14 @@ export const formUtils = <FormType extends { [key: string]: any }>(
       });
       await act(async () => await wait(0));
     },
+    select: async (data: Partial<FormType>) => {
+      Object.keys(data).forEach((key) => {
+        Component.find(`select[name='${key}']`).simulate('change', {
+          target: { value: data[key] },
+        });
+      });
+      await act(async () => await wait(0));
+    },
     submit: async () => {
       Component.simulate('submit');
       await act(async () => await wait(0));
