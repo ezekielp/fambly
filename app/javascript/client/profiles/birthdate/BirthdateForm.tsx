@@ -54,20 +54,20 @@ const ValidationSchema = yup.object().shape({
   birthDay: yup.string().nullable(),
 });
 
-interface BirthdateFormData {
+export interface BirthdateFormData {
   birthYear?: number | null;
   birthMonth?: string;
   birthDay?: string;
 }
 
-interface BirthdateFormProps {
+export interface BirthdateFormProps {
   setFieldToAdd?: (field: string) => void;
   personId: string;
   initialValues?: BirthdateFormData;
   setEditFlag?: (bool: boolean) => void;
 }
 
-const blankInitialValues = {
+export const blankInitialValues = {
   birthYear: null,
   birthMonth: '',
   birthDay: '',
