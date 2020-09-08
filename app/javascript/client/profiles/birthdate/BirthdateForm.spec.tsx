@@ -5,12 +5,8 @@ import {
   BirthdateFormProps,
   blankInitialValues,
 } from './BirthdateForm';
-import {
-  createOrUpdateBirthdateMutation,
-  createOrUpdateBirthdateResult,
-} from 'client/test/mutations/createOrUpdateBirthdate';
+import { createOrUpdateBirthdateMutation } from 'client/test/mutations/createOrUpdateBirthdate';
 import { FormUtils, formUtils } from 'client/test/utils/formik';
-import { fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { ReactWrapper, mount } from 'enzyme';
@@ -27,7 +23,6 @@ describe('<BirthdateForm />', () => {
   let defaultMocks: MockedResponse[];
   let defaultProps: BirthdateFormProps;
   let form: FormUtils;
-  let history: History;
 
   beforeEach(() => {
     defaultMocks = [createOrUpdateBirthdateMutation()];
@@ -118,6 +113,15 @@ describe('<BirthdateForm />', () => {
   });
 
   describe('form submission', () => {
-    it('submits the form and calls the createOrUpdateBirthdate mutation when the data is valid', async () => {});
+    it('submits the form and calls the createOrUpdateBirthdate mutation when the data is valid', async () => {
+      const createOrUpdateBirthdate = createOrUpdateBirthdateMutation();
+
+      await mountComponent([createOrUpdateBirthdate], defaultProps);
+      form = formUtils<BirthdateFormData>(component.find(Form));
+      await form.select({ birthMonth: '4', birthDay: '24' });
+      await form.fill({ birthYear: 1919 });
+      await form.submit();
+      expect(createOrUpdateBirthdate.newData).toHaveBeenCalled();
+    });
   });
 });
