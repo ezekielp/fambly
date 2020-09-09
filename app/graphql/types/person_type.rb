@@ -24,5 +24,37 @@ module Types
 
       object.months_old_from_full_birthdate || object.approximate_months_old_from_months_old
     end
+
+    def parents
+      child_parent_relationships.then do |child_parent_relationship_list|
+        parent_ids = child_parent_relationship_list.map(&:parent_id)
+        RecordLoader.for(Person).load_many(parent_ids)
+      end
+    end
+
+    def children
+      parent_child_relationships.then do |parent_child_relationship_list|
+        children_ids = parent_child_relationship_list.map(&:child_id)
+        RecordLoader.for(Person).load_many(children_ids)
+      end
+    end
+
+    def notes
+      AssociationLoader.for(Person, :notes).load(object)
+    end
+
+    def person_places
+      AssociationLoader.for(Person, :person_places).load(object)
+    end
+
+    private
+
+    def parent_child_relationships
+      AssociationLoader.for(Person, :parent_child_relationships).load(object)
+    end
+
+    def child_parent_relationships
+      AssociationLoader.for(Person, :child_parent_relationships).load(object)
+    end
   end
 end
