@@ -40,19 +40,19 @@ export const GenderFormValidationSchema = yup.object().shape({
   }),
 });
 
-interface GenderFormData {
+export interface GenderFormData {
   gender: string;
   customGender?: string;
 }
 
-interface GenderFormProps {
+export interface GenderFormProps {
   setFieldToAdd?: (field: string) => void;
   personId: string;
   initialValues?: GenderFormData;
   setEditFlag?: (bool: boolean) => void;
 }
 
-const blankInitialValues: GenderFormData = {
+export const blankInitialValues: GenderFormData = {
   gender: '',
   customGender: '',
 };
