@@ -8,4 +8,7 @@ class FamblySchema < GraphQL::Schema
 
   # Add built-in connections for pagination
   use GraphQL::Pagination::Connections
+
+  # Shopify plugin for making batch queries
+  use GraphQL::Batch
 end
