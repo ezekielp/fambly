@@ -28,11 +28,11 @@ const ValidationSchema = yup.object().shape({
   content: yup.string().required(),
 });
 
-interface NoteFormData {
+export interface NoteFormData {
   content: string;
 }
 
-interface NoteFormProps {
+export interface NoteFormProps {
   setFieldToAdd?: (field: string) => void;
   personId?: string;
   initialValues?: NoteFormData;
@@ -40,7 +40,7 @@ interface NoteFormProps {
   setEditFlag?: (bool: boolean) => void;
 }
 
-const blankInitialValues: NoteFormData = {
+export const blankInitialValues: NoteFormData = {
   content: '',
 };
 
