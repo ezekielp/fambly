@@ -86,8 +86,8 @@ describe('<ParentChildForm />', () => {
     expect(form.findInputByName('lastName').exists()).toBe(true);
     expect(form.findInputByName('age').exists()).toBe(true);
     expect(form.findInputByName('monthsOld').exists()).toBe(true);
-    expect(form.findSelectByName('parentType').exists()).toBe(true);
-    expect(form.findTextareaByName('note').exists()).toBe(true);
+    expect(form.findInputByName('parentType', 'select').exists()).toBe(true);
+    expect(form.findInputByName('note', 'textarea').exists()).toBe(true);
   });
 
   it('has four form fields when the parent or child to be added is a current_contact', async () => {
@@ -95,9 +95,9 @@ describe('<ParentChildForm />', () => {
     form = formUtils<ParentChildFormData>(component.find(Form));
 
     expect(form.findInputByName('newOrCurrentContact').exists()).toBe(true);
-    expect(form.findSelectByName('formParentId').exists()).toBe(true);
-    expect(form.findSelectByName('parentType').exists()).toBe(true);
-    expect(form.findTextareaByName('note').exists()).toBe(true);
+    expect(form.findInputByName('formParentId', 'select').exists()).toBe(true);
+    expect(form.findInputByName('parentType', 'select').exists()).toBe(true);
+    expect(form.findInputByName('note', 'textarea').exists()).toBe(true);
   });
 
   describe('form validations', () => {

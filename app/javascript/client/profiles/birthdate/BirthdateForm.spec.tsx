@@ -63,21 +63,21 @@ describe('<BirthdateForm />', () => {
 
     form = formUtils<BirthdateFormData>(component.find(Form));
     expect(form.findInputByName('birthYear').exists()).toBe(true);
-    expect(form.findSelectByName('birthMonth').exists()).toBe(true);
-    expect(form.findSelectByName('birthDay').exists()).toBe(true);
+    expect(form.findInputByName('birthMonth', 'select').exists()).toBe(true);
+    expect(form.findInputByName('birthDay', 'select').exists()).toBe(true);
   });
 
   describe('form validations', () => {
     it('requires a birthMonth when birthDay is specified', async () => {
       await mountComponent();
       form = formUtils<BirthdateFormData>(component.find(Form));
-      await form.select({ birthDay: '24' });
+      await form.fill({ birthDay: '24' }, 'select');
       await form.submit();
       expect(
         component.text().includes('Month is required if you specify a day'),
       ).toBe(true);
 
-      await form.select({ birthMonth: '4' });
+      await form.fill({ birthMonth: '4' }, 'select');
       await form.fill({ birthYear: 1919 });
       await form.submit();
       expect(
@@ -99,7 +99,7 @@ describe('<BirthdateForm />', () => {
           ),
       ).toBe(true);
 
-      await form.select({ birthMonth: '4', birthDay: '24' });
+      await form.fill({ birthMonth: '4', birthDay: '24' }, 'select');
       await form.fill({ birthYear: 1919 });
       await form.submit();
       expect(
@@ -118,7 +118,7 @@ describe('<BirthdateForm />', () => {
 
       await mountComponent([createOrUpdateBirthdate], defaultProps);
       form = formUtils<BirthdateFormData>(component.find(Form));
-      await form.select({ birthMonth: '4', birthDay: '24' });
+      await form.fill({ birthMonth: '4', birthDay: '24' }, 'select');
       await form.fill({ birthYear: 1919 });
       await form.submit();
       expect(createOrUpdateBirthdate.newData).toHaveBeenCalled();
