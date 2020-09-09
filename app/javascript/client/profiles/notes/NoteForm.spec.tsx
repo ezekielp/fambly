@@ -25,7 +25,6 @@ describe('<NoteForm />', () => {
   let component: ReactWrapper<NoteFormProps>;
   let createMocks: MockedResponse[];
   let createProps: NoteFormProps;
-  let updateMocks: MockedResponse[];
   let updateProps: NoteFormProps;
   let form: FormUtils;
 
@@ -36,12 +35,11 @@ describe('<NoteForm />', () => {
       setFieldToAdd: jest.fn(),
       personId: 'john-von-neumann-uuid',
     };
-    updateMocks = [updateNoteMutation()];
     updateProps = {
       initialValues: {
         content: 'Current random note of some kind',
       },
-      setFieldToAdd: jest.fn(),
+      setEditFlag: jest.fn(),
       noteId: 'einstein-note-uuid',
     };
 
@@ -78,7 +76,7 @@ describe('<NoteForm />', () => {
   });
 
   describe('form validations', () => {
-    it.only('requires text for the note content', async () => {
+    it('requires text for the note content', async () => {
       await mountComponent(createMocks, createProps);
       form = formUtils<NoteFormData>(component.find(Form));
       await form.submit();
@@ -100,6 +98,42 @@ describe('<NoteForm />', () => {
           .text()
           .includes('Please add a note or hit the cancel button!'),
       ).toBe(false);
+    });
+  });
+
+  describe('form submission', () => {
+    describe('when creating a new note', () => {
+      it('submits the form and calls the createPersonNote mutation when the data is valid', async () => {
+        const createPersonNote = createPersonNoteMutation();
+        await mountComponent([createPersonNote], createProps);
+        form = formUtils<NoteFormData>(component.find(Form));
+        await form.fill(
+          {
+            content:
+              "Young man, in mathematics you don't understand things. You just get used to them.",
+          },
+          'textarea',
+        );
+        await form.submit();
+        expect(createPersonNote.newData).toHaveBeenCalled();
+      });
+    });
+
+    describe('when updating an existing note', () => {
+      it('submits the form and calls the updateNote mutation when the data is valid', async () => {
+        const updateNote = updateNoteMutation();
+        await mountComponent([updateNote], updateProps);
+        form = formUtils<NoteFormData>(component.find(Form));
+        await form.fill(
+          {
+            content:
+              'I have no special talents. I am only passionately curious.',
+          },
+          'textarea',
+        );
+        await form.submit();
+        expect(updateNote.newData).toHaveBeenCalled();
+      });
     });
   });
 });
