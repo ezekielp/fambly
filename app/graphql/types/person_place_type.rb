@@ -11,4 +11,16 @@ module Types
     field :end_year, Int, null: true
     field :notes, [Types::NoteType], null: true
   end
+
+  def place
+    RecordLoader.for(Place).load(object.place_id)
+  end
+  
+  def person
+    RecordLoader.for(Person).load(object.person_id)
+  end
+
+  def notes
+    AssociationLoader.for(PersonPlace, :notes).load(object)
+  end
 end
