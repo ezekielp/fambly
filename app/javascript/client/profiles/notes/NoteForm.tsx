@@ -25,7 +25,7 @@ gql`
 `;
 
 const ValidationSchema = yup.object().shape({
-  content: yup.string().required(),
+  content: yup.string().required('Please add a note or hit the cancel button!'),
 });
 
 export interface NoteFormData {

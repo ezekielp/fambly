@@ -6,18 +6,10 @@ export const formUtils = <FormType extends { [key: string]: any }>(
   Component: ReactWrapper,
 ) => {
   return {
-    fill: async (data: Partial<FormType>) => {
+    fill: async (data: Partial<FormType>, inputType = 'input') => {
       Object.keys(data).forEach((key) => {
-        Component.find(`input[name='${key}']`).simulate('change', {
+        Component.find(`${inputType}[name='${key}']`).simulate('change', {
           target: { name: key, value: data[key] },
-        });
-      });
-      await act(async () => await wait(0));
-    },
-    select: async (data: Partial<FormType>) => {
-      Object.keys(data).forEach((key) => {
-        Component.find(`select[name='${key}']`).simulate('change', {
-          target: { value: data[key] },
         });
       });
       await act(async () => await wait(0));
@@ -26,11 +18,8 @@ export const formUtils = <FormType extends { [key: string]: any }>(
       Component.simulate('submit');
       await act(async () => await wait(0));
     },
-    findInputByName: (name: string) => Component.find(`input[name="${name}"]`),
-    findSelectByName: (name: string) =>
-      Component.find(`select[name="${name}"]`),
-    findTextareaByName: (name: string) =>
-      Component.find(`textarea[name="${name}"]`),
+    findInputByName: (name: string, inputType = 'input') =>
+      Component.find(`${inputType}[name="${name}"]`),
   };
 };
 

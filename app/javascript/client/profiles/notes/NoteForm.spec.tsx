@@ -74,6 +74,32 @@ describe('<NoteForm />', () => {
     await mountComponent(createMocks, createProps);
     form = formUtils<NoteFormData>(component.find(Form));
 
-    expect(form.findTextareaByName('content').exists()).toBe(true);
+    expect(form.findInputByName('content', 'textarea').exists()).toBe(true);
+  });
+
+  describe('form validations', () => {
+    it.only('requires text for the note content', async () => {
+      await mountComponent(createMocks, createProps);
+      form = formUtils<NoteFormData>(component.find(Form));
+      await form.submit();
+      expect(
+        component
+          .text()
+          .includes('Please add a note or hit the cancel button!'),
+      ).toBe(true);
+
+      await form.fill(
+        {
+          content:
+            "Young man, in mathematics you don't understand things. You just get used to them.",
+        },
+        'textarea',
+      );
+      expect(
+        component
+          .text()
+          .includes('Please add a note or hit the cancel button!'),
+      ).toBe(false);
+    });
   });
 });
