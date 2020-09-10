@@ -38,7 +38,6 @@ const InternalAppContainer: FC<AppContainerProps> = () => {
 
   return (
     <>
-      <Link to="/home">fambly</Link>
       <Switch>
         <Route path="/signup">
           <SignupContainer />

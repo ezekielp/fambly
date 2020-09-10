@@ -6,7 +6,7 @@ export interface Colors {
 
 export const colors: Colors = {
   black: '#000',
-  orange: 'ff7315',
+  orange: '#ff7315',
   white: '#fff',
 };
 

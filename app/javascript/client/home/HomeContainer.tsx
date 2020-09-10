@@ -7,6 +7,8 @@ import {
 import { AddPersonForm } from 'client/profiles/AddPersonForm';
 import { gql } from '@apollo/client';
 import { withRouter, Link } from 'react-router-dom';
+import { Wrapper } from 'client/common/Wrapper';
+import { NavBar } from 'client/nav/NavBar';
 
 gql`
   mutation Logout {
@@ -74,10 +76,11 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
     window.location.href = '/login';
   };
 
+  const navMenuItems = [{ label: 'Log out', onClick: handleLogout }];
+
   return (
-    <>
-      <button onClick={handleLogout}>Log Out</button>
-      <div>Hello from your Fambly home page!</div>
+    <Wrapper>
+      <NavBar dropdownItems={navMenuItems} />
       <button onClick={() => toggleNewPersonFieldVisible(true)}>
         Add a new person profile
       </button>
@@ -85,7 +88,7 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
         <AddPersonForm refetchUserData={refetchUserData} />
       )}
       {profileLinks}
-    </>
+    </Wrapper>
   );
 };
 

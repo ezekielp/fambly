@@ -7,9 +7,12 @@ import styled from 'styled-components';
 
 const DropdownContainer = styled.div`
   position: relative;
+  margin-top: 8px;
 `;
 
-const IconContainer = styled.div``;
+const IconContainer = styled.div`
+  cursor: pointer;
+`;
 
 const MenuContainer = styled.nav`
   width: 150px;
@@ -18,8 +21,9 @@ const MenuContainer = styled.nav`
   border: 1px solid ${colors.black};
   position: absolute;
   top: 50px;
-  right: 0;
+  right: -5px;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+  background: ${colors.white};
 `;
 
 const MenuList = styled.ul`
@@ -29,12 +33,18 @@ const MenuList = styled.ul`
 `;
 
 const MenuItem = styled.li`
-  border-bottom: 1px solid ${colors.black};
+  cursor: pointer;
+  padding: 0.5rem;
+  font-weight: 700;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid ${colors.black};
+  }
 `;
 
-interface DropdownMenuItem {
+export interface DropdownMenuItem {
   label: string;
-  onClick?: (arg?: boolean | string) => void;
+  onClick?: (event: React.MouseEvent) => void;
 }
 
 interface DropdownProps {
@@ -46,12 +56,16 @@ export const Dropdown: FC<DropdownProps> = ({ menuItems }) => {
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
   const onClick = () => setIsActive(!isActive);
 
-  const icon = isActive ? <XMark /> : <Sandwich width="35" height="35" />;
+  const icon = isActive ? (
+    <XMark fill={colors.white} width="30" />
+  ) : (
+    <Sandwich fill={colors.white} width="35" />
+  );
 
   const items = menuItems.map((item) => {
     const { label, onClick } = item;
     return (
-      <MenuItem key={label} onClick={() => (onClick ? onClick : null)}>
+      <MenuItem key={label} onClick={onClick ? onClick : () => null}>
         {label}
       </MenuItem>
     );
@@ -61,7 +75,7 @@ export const Dropdown: FC<DropdownProps> = ({ menuItems }) => {
     <DropdownContainer>
       <IconContainer onClick={onClick}>{icon}</IconContainer>
       {isActive && (
-        <MenuContainer>
+        <MenuContainer ref={dropdownRef}>
           <MenuList>{items}</MenuList>
         </MenuContainer>
       )}
