@@ -19,6 +19,7 @@ import { ChildrenContainer } from './parent_child/ChildrenContainer';
 import { PersonPlaceForm } from './person_place/PersonPlaceForm';
 import { PersonPlacesContainer } from './person_place/PersonPlacesContainer';
 import { PersonFieldsInput } from './PersonFieldsInput';
+import { Wrapper } from 'client/common/Wrapper';
 import { useParams } from 'react-router-dom';
 import { gql } from '@apollo/client';
 
@@ -143,7 +144,7 @@ export const PersonContainer: FC = () => {
   const hasFullBirthdate = birthYear && birthMonth && birthDay ? true : false;
 
   return (
-    <>
+    <Wrapper>
       <h1>
         {firstName} {lastName && ` ${lastName}`}
       </h1>
@@ -219,6 +220,6 @@ export const PersonContainer: FC = () => {
         />
       )}
       {notes && <NotesContainer notes={notes} />}
-    </>
+    </Wrapper>
   );
 };

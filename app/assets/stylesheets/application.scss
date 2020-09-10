@@ -27,9 +27,22 @@ input {
   text-align: inherit;
   color: inherit;
   background: transparent;
-  font-family: 'Quicksand', sans-serif;
 }
 
 li {
   list-style: none;
+}
+
+#root {
+  height: 100vh;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: #F8F8F8;
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Quicksand', sans-serif;
 }
