@@ -81,6 +81,14 @@ export const BirthdateForm: FC<BirthdateFormProps> = ({
 }) => {
   const [createOrEditBirthdateMutation] = useCreateOrUpdateBirthdateMutation();
 
+  const cancel = () => {
+    if (setFieldToAdd) {
+      setFieldToAdd('');
+    } else if (setEditFlag) {
+      setEditFlag(false);
+    }
+  };
+
   const handleSubmit = async (
     data: BirthdateFormData,
     formikHelpers: FormikHelpers<BirthdateFormData>,
@@ -148,6 +156,7 @@ export const BirthdateForm: FC<BirthdateFormProps> = ({
             <button type="submit" disabled={isSubmitting}>
               Save
             </button>
+            <button onClick={() => cancel()}>Cancel</button>
           </Form>
         );
       }}

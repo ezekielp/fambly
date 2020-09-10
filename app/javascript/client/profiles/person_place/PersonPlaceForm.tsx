@@ -175,6 +175,14 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
   const [createPersonPlace] = useCreatePersonPlaceMutation();
   const [updatePersonPlace] = useUpdatePersonPlaceMutation();
 
+  const cancel = () => {
+    if (setFieldToAdd) {
+      setFieldToAdd('');
+    } else if (setEditFlag) {
+      setEditFlag(false);
+    }
+  };
+
   const handleSubmit = async (
     data: PersonPlaceFormData,
     formikHelpers: FormikHelpers<PersonPlaceFormData>,
@@ -331,6 +339,7 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
             <button type="submit" disabled={isSubmitting}>
               Save
             </button>
+            <button onClick={() => cancel()}>Cancel</button>
           </Form>
         );
       }}

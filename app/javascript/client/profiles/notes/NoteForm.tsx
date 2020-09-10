@@ -54,6 +54,14 @@ export const NoteForm: FC<NoteFormProps> = ({
   const [createPersonNoteMutation] = useCreatePersonNoteMutation();
   const [updateNoteMutation] = useUpdateNoteMutation();
 
+  const cancel = () => {
+    if (setFieldToAdd) {
+      setFieldToAdd('');
+    } else if (setEditFlag) {
+      setEditFlag(false);
+    }
+  };
+
   const handleSubmit = async (
     data: NoteFormData,
     formikHelpers: FormikHelpers<NoteFormData>,
@@ -107,6 +115,7 @@ export const NoteForm: FC<NoteFormProps> = ({
           <button type="submit" disabled={isSubmitting}>
             Save
           </button>
+          <button onClick={() => cancel()}>Cancel</button>
         </Form>
       )}
     </Formik>

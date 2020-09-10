@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useDeleteGenderMutation } from 'client/graphqlTypes';
 import { GenderForm } from './GenderForm';
+import { GENDER_TEXT_RENDERINGS } from './utils';
 
 interface GenderContainerProps {
   gender: string;
@@ -26,7 +27,11 @@ export const GenderContainer: FC<GenderContainerProps> = ({
     setDeletedFlag(true);
   };
 
-  const genderTextContent = <div>Gender: {gender}</div>;
+  const genderText = GENDER_TEXT_RENDERINGS[gender]
+    ? GENDER_TEXT_RENDERINGS[gender]
+    : gender;
+
+  const genderTextComponent = <div>Gender: {genderText}</div>;
 
   const editAndDeleteButtons = (
     <>
@@ -55,7 +60,7 @@ export const GenderContainer: FC<GenderContainerProps> = ({
     editGenderForm
   ) : (
     <>
-      {!deletedFlag && genderTextContent}
+      {!deletedFlag && genderTextComponent}
       {!deletedFlag && editAndDeleteButtons}
     </>
   );

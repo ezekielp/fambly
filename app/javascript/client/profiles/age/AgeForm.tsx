@@ -66,6 +66,14 @@ export const AgeForm: FC<AgeFormProps> = ({
   const [createAgeMutation] = useCreateAgeMutation();
   const [updateAgeMutation] = useUpdateAgeMutation();
 
+  const cancel = () => {
+    if (setFieldToAdd) {
+      setFieldToAdd('');
+    } else if (setEditFlag) {
+      setEditFlag(false);
+    }
+  };
+
   const handleSubmit = async (
     data: AgeFormData,
     formikHelpers: FormikHelpers<AgeFormData>,
@@ -122,6 +130,7 @@ export const AgeForm: FC<AgeFormProps> = ({
           <button type="submit" disabled={isSubmitting}>
             Save
           </button>
+          <button onClick={() => cancel()}>Cancel</button>
         </Form>
       )}
     </Formik>
