@@ -14,6 +14,7 @@ import {
   FormikTextArea,
   FormikCheckboxGroup,
 } from 'client/form/inputs';
+import { Button } from 'client/common/Button';
 import { GlobalError } from 'client/common/GlobalError';
 import {
   NEW_OR_CURRENT_CONTACT_OPTIONS,
@@ -130,6 +131,14 @@ export const ParentForm: FC<ParentFormProps> = ({
   const { data: userData } = useGetUserForHomeContainerQuery();
   const people = userData?.user?.people ? userData?.user?.people : [];
   const peopleOptions = buildParentOrChildOptions(people, childId);
+
+  const cancel = () => {
+    if (setFieldToAdd) {
+      setFieldToAdd('');
+    } else if (setEditFlag) {
+      setEditFlag(false);
+    }
+  };
 
   const handleSubmit = async (
     data: ParentFormData,
@@ -301,9 +310,10 @@ export const ParentForm: FC<ParentFormProps> = ({
               component={FormikTextArea}
             />
             {status && <GlobalError>{status}</GlobalError>}
-            <button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting}>
               Save
-            </button>
+            </Button>
+            <Button onClick={() => cancel()}>Cancel</Button>
           </Form>
         );
       }}

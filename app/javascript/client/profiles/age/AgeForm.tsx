@@ -5,6 +5,7 @@ import {
 } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikNumberInput } from 'client/form/inputs';
+import { Button } from 'client/common/Button';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
@@ -127,10 +128,10 @@ export const AgeForm: FC<AgeFormProps> = ({
             label="Months old"
             component={FormikNumberInput}
           />
-          <button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting}>
             Save
-          </button>
-          <button onClick={() => cancel()}>Cancel</button>
+          </Button>
+          <Button onClick={() => cancel()}>Cancel</Button>
         </Form>
       )}
     </Formik>

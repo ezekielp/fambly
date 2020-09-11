@@ -3,6 +3,7 @@ import { useCreateOrUpdateGenderMutation } from 'client/graphqlTypes';
 import { GENDER_OPTIONS } from './utils';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikSelectInput, FormikTextInput } from 'client/form/inputs';
+import { Button } from 'client/common/Button';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
@@ -123,10 +124,10 @@ export const GenderForm: FC<GenderFormProps> = ({
               component={FormikTextInput}
             />
           )}
-          <button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting}>
             Save
-          </button>
-          <button onClick={() => cancel()}>Cancel</button>
+          </Button>
+          <Button onClick={() => cancel()}>Cancel</Button>
         </Form>
       )}
     </Formik>

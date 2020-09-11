@@ -1,5 +1,11 @@
 import React, { FC, ChangeEvent } from 'react';
 import { PersonInfoFragment } from 'client/graphqlTypes';
+import { spacing } from 'client/shared/styles';
+import styled from 'styled-components';
+
+const TemporaryContainer = styled.div`
+  margin-bottom: ${spacing[3]};
+`;
 
 interface PersonFieldsInputProps {
   personData: PersonInfoFragment;
@@ -24,7 +30,7 @@ export const PersonFieldsInput: FC<PersonFieldsInputProps> = ({
   } = personData;
 
   return (
-    <>
+    <TemporaryContainer>
       <select value={fieldToAdd} onChange={onChange}>
         <option value="">Select a field to add</option>
         <option value="note">Note</option>
@@ -44,6 +50,6 @@ export const PersonFieldsInput: FC<PersonFieldsInputProps> = ({
           <option value="personPlace">Place {firstName} has lived</option>
         </optgroup>
       </select>
-    </>
+    </TemporaryContainer>
   );
 };
