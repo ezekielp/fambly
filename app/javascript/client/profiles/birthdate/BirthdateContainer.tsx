@@ -1,8 +1,9 @@
 import React, { FC, useState } from 'react';
 import { useDeleteBirthdateMutation } from 'client/graphqlTypes';
 import { Dropdown } from 'client/common/Dropdown';
-import { colors } from 'client/shared/styles';
+import { colors, spacing } from 'client/shared/styles';
 import { BirthdateForm } from './BirthdateForm';
+import { ProfileLabel } from 'client/common/ProfileLabel';
 import { MONTHS } from './utils';
 import { gql } from '@apollo/client';
 import styled from 'styled-components';
@@ -17,6 +18,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-bottom: ${spacing[2]};
 `;
 
 const BirthdateTextContainer = styled.div`
@@ -52,39 +54,22 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
     { label: 'Delete', onClick: () => deleteBirthdate() },
   ];
 
-  const birthdateContainerContent = (
+  const birthdateLabel = birthMonth && birthDay ? 'birthdate' : 'birth year';
+
+  const birthdateText = (
     year: number | null | undefined,
     month: string,
     day: string,
   ) => {
-    if (deletedFlag) return <></>;
-
-    let textContent;
-
     if (year && month && !day) {
-      textContent = `Born in: ${MONTHS[month]} ${year}`;
+      return `${MONTHS[month]} ${year}`;
     } else if (year && !month && !day) {
-      textContent = `Born in: ${year}`;
+      return `${year}`;
     } else if (month && day && !year) {
-      textContent = `Birthdate: ${MONTHS[month]} ${day}`;
+      return `${MONTHS[month]} ${day}`;
     } else if (month && day && year) {
-      textContent = `Birthdate: ${MONTHS[month]} ${day}, ${year}`;
-    } else {
-      textContent = <></>;
+      return `${MONTHS[month]} ${day}, ${year}`;
     }
-
-    return (
-      <Container>
-        <BirthdateTextContainer>{textContent}</BirthdateTextContainer>
-        <Dropdown
-          menuItems={dropdownItems}
-          xMarkSize="15"
-          sandwichSize="20"
-          color={colors.orange}
-          topSpacing="30px"
-        />
-      </Container>
-    );
   };
 
   const month = birthMonth ? birthMonth.toString() : '';
@@ -107,6 +92,22 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
   return editFlag ? (
     editBirthdateForm
   ) : (
-    <>{birthdateContainerContent(birthYear, month, day)}</>
+    <>
+      {!deletedFlag && (
+        <Container>
+          <ProfileLabel>{birthdateLabel}</ProfileLabel>
+          <BirthdateTextContainer>
+            {birthdateText(birthYear, month, day)}
+          </BirthdateTextContainer>
+          <Dropdown
+            menuItems={dropdownItems}
+            xMarkSize="15"
+            sandwichSize="20"
+            color={colors.orange}
+            topSpacing="30px"
+          />
+        </Container>
+      )}
+    </>
   );
 };

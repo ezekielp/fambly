@@ -1,7 +1,8 @@
 import React, { FC, useState } from 'react';
 import { useDeleteGenderMutation } from 'client/graphqlTypes';
 import { Dropdown } from 'client/common/Dropdown';
-import { colors } from 'client/shared/styles';
+import { colors, spacing } from 'client/shared/styles';
+import { ProfileLabel } from 'client/common/ProfileLabel';
 import { GenderForm } from './GenderForm';
 import { GENDER_TEXT_RENDERINGS } from './utils';
 import styled from 'styled-components';
@@ -10,6 +11,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-bottom: ${spacing[2]};
 `;
 
 const GenderTextContainer = styled.div`
@@ -50,7 +52,7 @@ export const GenderContainer: FC<GenderContainerProps> = ({
     : gender;
 
   const genderTextComponent = (
-    <GenderTextContainer>Gender: {genderText}</GenderTextContainer>
+    <GenderTextContainer>{genderText}</GenderTextContainer>
   );
 
   const customGender =
@@ -75,6 +77,7 @@ export const GenderContainer: FC<GenderContainerProps> = ({
     <>
       {!deletedFlag && (
         <Container>
+          <ProfileLabel>gender</ProfileLabel>
           {genderTextComponent}
           <Dropdown
             menuItems={dropdownItems}

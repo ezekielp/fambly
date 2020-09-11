@@ -1,11 +1,13 @@
 export interface Colors {
   black: string;
+  lightGray: string;
   orange: string;
   white: string;
 }
 
 export const colors: Colors = {
   black: '#000',
+  lightGray: '#D3D3D3',
   orange: '#ff7315',
   white: '#fff',
 };

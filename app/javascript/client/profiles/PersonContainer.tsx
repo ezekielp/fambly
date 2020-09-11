@@ -20,9 +20,10 @@ import { ChildrenContainer } from './parent_child/ChildrenContainer';
 import { PersonPlaceForm } from './person_place/PersonPlaceForm';
 import { PersonPlacesContainer } from './person_place/PersonPlacesContainer';
 import { PersonFieldsInput } from './PersonFieldsInput';
-import { Wrapper } from 'client/common/Wrapper';
 import { useParams } from 'react-router-dom';
 import { gql } from '@apollo/client';
+import { text, spacing, colors } from 'client/shared/styles';
+import styled from 'styled-components';
 
 gql`
   query GetPersonForPersonContainer($personId: String!) {
@@ -102,6 +103,28 @@ gql`
   }
 `;
 
+const ProfileContainer = styled.div`
+  padding: 1rem 2rem;
+`;
+
+const ProfileHeader = styled.h1`
+  font-size: ${text[4]};
+  font-weight: 700;
+  margin-bottom: ${spacing[2]};
+`;
+
+const Subheading = styled.div`
+  font-size: ${text[3]};
+  margin-bottom: ${spacing[2]};
+`;
+
+const SectionDivider = styled.hr`
+  height: 1px;
+  border: none;
+  background-color: ${colors.lightGray};
+  margin: ${spacing[3]} 0;
+`;
+
 interface PersonContainerProps {}
 
 export const PersonContainer: FC = () => {
@@ -143,12 +166,15 @@ export const PersonContainer: FC = () => {
   const hasAge = age || monthsOld;
   const hasBirthdate = birthYear || birthMonth;
   const hasFullBirthdate = birthYear && birthMonth && birthDay ? true : false;
+  const hasFamily =
+    (parents && parents.length > 0) || (children && children.length > 0);
+  const hasPersonalHistory = personPlaces && personPlaces.length > 0;
 
   return (
-    <>
-      <h1>
+    <ProfileContainer>
+      <ProfileHeader>
         {firstName} {lastName && ` ${lastName}`}
-      </h1>
+      </ProfileHeader>
       <PersonFieldsInput
         personData={personData.personById}
         fieldToAdd={fieldToAdd}
@@ -200,6 +226,12 @@ export const PersonContainer: FC = () => {
           personId={personId}
         />
       )}
+      {hasFamily && (
+        <>
+          <SectionDivider />
+          <Subheading>Family</Subheading>
+        </>
+      )}
       {parents && parents.length > 0 && (
         <ParentsContainer
           parents={parents}
@@ -214,6 +246,12 @@ export const PersonContainer: FC = () => {
           parentLastName={lastName}
         />
       )}
+      {hasPersonalHistory && (
+        <>
+          <SectionDivider />
+          <Subheading>Personal history</Subheading>
+        </>
+      )}
       {personPlaces && personPlaces.length > 0 && (
         <PersonPlacesContainer
           personPlaces={personPlaces}
@@ -221,6 +259,6 @@ export const PersonContainer: FC = () => {
         />
       )}
       {notes && <NotesContainer notes={notes} />}
-    </>
+    </ProfileContainer>
   );
 };
