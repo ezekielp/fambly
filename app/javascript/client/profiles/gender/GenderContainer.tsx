@@ -1,7 +1,20 @@
 import React, { FC, useState } from 'react';
 import { useDeleteGenderMutation } from 'client/graphqlTypes';
+import { Dropdown } from 'client/common/Dropdown';
+import { colors } from 'client/shared/styles';
 import { GenderForm } from './GenderForm';
 import { GENDER_TEXT_RENDERINGS } from './utils';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const GenderTextContainer = styled.div`
+  margin-right: 10px;
+`;
 
 interface GenderContainerProps {
   gender: string;
@@ -27,17 +40,17 @@ export const GenderContainer: FC<GenderContainerProps> = ({
     setDeletedFlag(true);
   };
 
+  const dropdownItems = [
+    { label: 'Edit', onClick: () => setEditFlag(true) },
+    { label: 'Delete', onClick: () => deleteGender() },
+  ];
+
   const genderText = GENDER_TEXT_RENDERINGS[gender]
     ? GENDER_TEXT_RENDERINGS[gender]
     : gender;
 
-  const genderTextComponent = <div>Gender: {genderText}</div>;
-
-  const editAndDeleteButtons = (
-    <>
-      <button onClick={() => setEditFlag(true)}>Edit</button>
-      <button onClick={() => deleteGender()}>Delete</button>
-    </>
+  const genderTextComponent = (
+    <GenderTextContainer>Gender: {genderText}</GenderTextContainer>
   );
 
   const customGender =
@@ -60,8 +73,18 @@ export const GenderContainer: FC<GenderContainerProps> = ({
     editGenderForm
   ) : (
     <>
-      {!deletedFlag && genderTextComponent}
-      {!deletedFlag && editAndDeleteButtons}
+      {!deletedFlag && (
+        <Container>
+          {genderTextComponent}
+          <Dropdown
+            menuItems={dropdownItems}
+            xMarkSize="15"
+            sandwichSize="20"
+            color={colors.orange}
+            topSpacing="30px"
+          />
+        </Container>
+      )}
     </>
   );
 };

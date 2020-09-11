@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { colors, text } from 'client/shared/styles';
 import { Dropdown, DropdownMenuItem } from 'client/common/Dropdown';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const NavBarContainer = styled.nav`
@@ -26,7 +27,9 @@ interface NavBarProps {
 export const NavBar: FC<NavBarProps> = ({ dropdownItems }) => {
   return (
     <NavBarContainer>
-      <FamblyContainer>fambly</FamblyContainer>
+      <FamblyContainer>
+        <Link to="/home">fambly</Link>
+      </FamblyContainer>
       <Dropdown menuItems={dropdownItems} />
     </NavBarContainer>
   );
