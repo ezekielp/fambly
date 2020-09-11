@@ -13,7 +13,9 @@ import { NoteForm } from './notes/NoteForm';
 import { NotesContainer } from './notes/NotesContainer';
 import { BirthdateForm } from './birthdate/BirthdateForm';
 import { BirthdateContainer } from './birthdate/BirthdateContainer';
-import { ParentChildForm } from './parent_child/ParentChildForm';
+// import { ParentChildForm } from './parent_child/ParentChildForm';
+import { ParentForm } from './parent_child/ParentForm';
+import { ChildForm } from './parent_child/ChildForm';
 import { ParentsContainer } from './parent_child/ParentsContainer';
 import { ChildrenContainer } from './parent_child/ChildrenContainer';
 import { PersonPlaceForm } from './person_place/PersonPlaceForm';
@@ -166,6 +168,20 @@ export const PersonContainer: FC = () => {
         <NoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
       )}
       {fieldToAdd === 'parent' && (
+        <ParentForm
+          setFieldToAdd={setFieldToAdd}
+          childId={personId}
+          personFirstName={firstName}
+        />
+      )}
+      {fieldToAdd === 'child' && (
+        <ChildForm
+          setFieldToAdd={setFieldToAdd}
+          parentId={personId}
+          personFirstName={firstName}
+        />
+      )}
+      {/* {fieldToAdd === 'parent' && (
         <ParentChildForm
           setFieldToAdd={setFieldToAdd}
           childId={personId}
@@ -178,7 +194,7 @@ export const PersonContainer: FC = () => {
           parentId={personId}
           personFirstName={firstName}
         />
-      )}
+      )} */}
       {fieldToAdd === 'personPlace' && (
         <PersonPlaceForm setFieldToAdd={setFieldToAdd} personId={personId} />
       )}
