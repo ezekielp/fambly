@@ -1,9 +1,10 @@
 import React, { FC, useState } from 'react';
 import { useDeleteBirthdateMutation } from 'client/graphqlTypes';
 import { Dropdown } from 'client/common/Dropdown';
-import { colors, spacing } from 'client/shared/styles';
+import { colors } from 'client/shared/styles';
 import { BirthdateForm } from './BirthdateForm';
 import { ProfileLabel } from 'client/common/ProfileLabel';
+import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
 import { MONTHS } from './utils';
 import { gql } from '@apollo/client';
 import styled from 'styled-components';
@@ -12,13 +13,6 @@ gql`
   mutation DeleteBirthdate($input: DeleteBirthdateInput!) {
     deleteBirthdate(input: $input)
   }
-`;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: ${spacing[2]};
 `;
 
 const BirthdateTextContainer = styled.div`
@@ -94,7 +88,7 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
   ) : (
     <>
       {!deletedFlag && (
-        <Container>
+        <ProfileFieldContainer>
           <ProfileLabel>{birthdateLabel}</ProfileLabel>
           <BirthdateTextContainer>
             {birthdateText(birthYear, month, day)}
@@ -106,7 +100,7 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
             color={colors.orange}
             topSpacing="30px"
           />
-        </Container>
+        </ProfileFieldContainer>
       )}
     </>
   );

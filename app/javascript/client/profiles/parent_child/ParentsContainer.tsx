@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { SubContactInfoFragment } from 'client/graphqlTypes';
 import { ParentItem } from './ParentItem';
+import { ProfileLabel } from 'client/common/ProfileLabel';
+import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
 import styled from 'styled-components';
-
-const ParentsHeader = styled.div``;
 
 const ParentItemsContainer = styled.div``;
 
@@ -30,9 +30,9 @@ export const ParentsContainer: FC<ParentsContainerProps> = ({
   });
 
   return (
-    <>
-      <ParentsHeader>Parents</ParentsHeader>
+    <ProfileFieldContainer>
+      <ProfileLabel>parents</ProfileLabel>
       <ParentItemsContainer>{parentItems}</ParentItemsContainer>
-    </>
+    </ProfileFieldContainer>
   );
 };

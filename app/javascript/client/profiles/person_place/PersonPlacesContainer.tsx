@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { PersonPlaceInfoFragment } from 'client/graphqlTypes';
 import { PersonPlaceItem } from './PersonPlaceItem';
+import { ProfileLabel } from 'client/common/ProfileLabel';
+import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
 import styled from 'styled-components';
-
-const PersonPlacesHeader = styled.div``;
 
 const PersonPlaceItemsContainer = styled.div``;
 
@@ -21,9 +21,9 @@ export const PersonPlacesContainer: FC<PersonPlacesContainerProps> = ({
   });
 
   return (
-    <div>
-      <PersonPlacesHeader>Places {firstName} has lived</PersonPlacesHeader>
+    <ProfileFieldContainer>
+      <ProfileLabel>places {firstName} has lived</ProfileLabel>
       <PersonPlaceItemsContainer>{personPlaceItems}</PersonPlaceItemsContainer>
-    </div>
+    </ProfileFieldContainer>
   );
 };

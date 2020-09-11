@@ -1,18 +1,12 @@
 import React, { FC, useState } from 'react';
 import { useDeleteGenderMutation } from 'client/graphqlTypes';
 import { Dropdown } from 'client/common/Dropdown';
-import { colors, spacing } from 'client/shared/styles';
+import { colors } from 'client/shared/styles';
 import { ProfileLabel } from 'client/common/ProfileLabel';
+import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
 import { GenderForm } from './GenderForm';
 import { GENDER_TEXT_RENDERINGS } from './utils';
 import styled from 'styled-components';
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: ${spacing[2]};
-`;
 
 const GenderTextContainer = styled.div`
   margin-right: 10px;
@@ -76,7 +70,7 @@ export const GenderContainer: FC<GenderContainerProps> = ({
   ) : (
     <>
       {!deletedFlag && (
-        <Container>
+        <ProfileFieldContainer>
           <ProfileLabel>gender</ProfileLabel>
           {genderTextComponent}
           <Dropdown
@@ -86,7 +80,7 @@ export const GenderContainer: FC<GenderContainerProps> = ({
             color={colors.orange}
             topSpacing="30px"
           />
-        </Container>
+        </ProfileFieldContainer>
       )}
     </>
   );

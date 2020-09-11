@@ -2,8 +2,9 @@ import React, { FC, useState } from 'react';
 import { useDeleteAgeMutation } from 'client/graphqlTypes';
 import { Dropdown } from 'client/common/Dropdown';
 import { AgeForm } from './AgeForm';
-import { colors, spacing } from 'client/shared/styles';
+import { colors } from 'client/shared/styles';
 import { ProfileLabel } from 'client/common/ProfileLabel';
+import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
 import { gql } from '@apollo/client';
 import styled from 'styled-components';
 
@@ -27,13 +28,6 @@ gql`
   mutation DeleteAge($input: DeleteAgeInput!) {
     deleteAge(input: $input)
   }
-`;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: ${spacing[2]};
 `;
 
 const AgeTextContainer = styled.div`
@@ -97,7 +91,7 @@ export const AgeContainer: FC<AgeContainerProps> = ({
   ) : (
     <>
       {!deletedFlag && (
-        <Container>
+        <ProfileFieldContainer>
           <ProfileLabel>age</ProfileLabel>
           {ageContainerContent}
           {!hasFullBirthdate && (
@@ -109,7 +103,7 @@ export const AgeContainer: FC<AgeContainerProps> = ({
               topSpacing="30px"
             />
           )}
-        </Container>
+        </ProfileFieldContainer>
       )}
     </>
   );

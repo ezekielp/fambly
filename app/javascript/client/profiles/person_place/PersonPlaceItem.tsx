@@ -1,14 +1,22 @@
 import React, { FC, useState } from 'react';
 import { useDeletePersonPlaceMutation } from 'client/graphqlTypes';
+import { Dropdown } from 'client/common/Dropdown';
+import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
 import { PersonPlaceInfoFragment } from 'client/graphqlTypes';
 import { PersonPlaceForm } from './PersonPlaceForm';
 import { NoteItem } from 'client/profiles/notes/NoteItem';
 import { gql } from '@apollo/client';
+import { colors } from 'client/shared/styles';
+import styled from 'styled-components';
 
 gql`
   mutation DeletePersonPlace($input: DeletePersonPlaceInput!) {
     deletePersonPlace(input: $input)
   }
+`;
+
+const PersonPlaceTextContainer = styled.div`
+  margin-right: 10px;
 `;
 
 interface PersonPlaceItemProps {
@@ -62,12 +70,10 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
     return <></>;
   };
 
-  const editAndDeleteButtons = (
-    <>
-      <button onClick={() => setEditFlag(true)}>Edit</button>
-      <button onClick={() => deletePersonPlace()}>Delete</button>
-    </>
-  );
+  const dropdownItems = [
+    { label: 'Edit', onClick: () => setEditFlag(true) },
+    { label: 'Delete', onClick: () => deletePersonPlace() },
+  ];
 
   const initialValues = {
     country,
@@ -86,14 +92,15 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
     notes && notes.map((note) => <NoteItem note={note} key={note.id} />);
 
   const personPlaceContent = (
-    <>
+    <PersonPlaceTextContainer>
       {getTimingText()}
       <div>{street && street}</div>
       <div>
-        {town && town}, {stateOrRegion && stateOrRegion} {zipCode && zipCode}
+        {town && town}
+        {stateOrRegion && `, ${stateOrRegion}`} {zipCode && zipCode}
       </div>
       <div>{country}</div>
-    </>
+    </PersonPlaceTextContainer>
   );
 
   return editFlag ? (
@@ -104,9 +111,21 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
     />
   ) : (
     <>
-      {!deletedFlag && personPlaceContent}
-      {!deletedFlag && editAndDeleteButtons}
-      {!deletedFlag && noteItems}
+      {!deletedFlag && (
+        <>
+          <ProfileFieldContainer>
+            {personPlaceContent}
+            <Dropdown
+              menuItems={dropdownItems}
+              xMarkSize="15"
+              sandwichSize="20"
+              color={colors.orange}
+              topSpacing="30px"
+            />
+          </ProfileFieldContainer>
+          {!deletedFlag && noteItems}
+        </>
+      )}
     </>
   );
 };

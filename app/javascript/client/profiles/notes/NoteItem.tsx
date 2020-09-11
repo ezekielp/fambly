@@ -2,7 +2,11 @@ import React, { FC, useState } from 'react';
 import { useDeleteNoteMutation } from 'client/graphqlTypes';
 import { NoteForm } from './NoteForm';
 import { Note } from './NotesContainer';
+import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
+import { Dropdown } from 'client/common/Dropdown';
 import { gql } from '@apollo/client';
+import { colors } from 'client/shared/styles';
+import styled from 'styled-components';
 
 gql`
   mutation UpdateNote($input: UpdateNoteInput!) {
@@ -23,6 +27,14 @@ gql`
   mutation DeleteNote($input: DeleteNoteInput!) {
     deleteNote(input: $input)
   }
+`;
+
+const NoteTextContainer = styled.div`
+  border: 1px solid lightgray;
+  border-radius: 6px;
+  padding: 0.5rem;
+  width: 89%;
+  margin-right: 10px;
 `;
 
 interface NoteProps {
@@ -46,15 +58,10 @@ export const NoteItem: FC<NoteProps> = ({ note }) => {
     setDeletedFlag(true);
   };
 
-  const noteItemContent = !deletedFlag ? (
-    <>
-      <div>{content}</div>
-      <button onClick={() => setEditFlag(true)}>Edit</button>
-      <button onClick={() => deleteNote()}>Delete</button>
-    </>
-  ) : (
-    <></>
-  );
+  const dropdownItems = [
+    { label: 'Edit', onClick: () => setEditFlag(true) },
+    { label: 'Delete', onClick: () => deleteNote() },
+  ];
 
   const initialValues = {
     content,
@@ -68,5 +75,22 @@ export const NoteItem: FC<NoteProps> = ({ note }) => {
     />
   );
 
-  return editFlag ? editNoteForm : noteItemContent;
+  return editFlag ? (
+    editNoteForm
+  ) : (
+    <>
+      {!deletedFlag && (
+        <ProfileFieldContainer>
+          <NoteTextContainer>{content}</NoteTextContainer>
+          <Dropdown
+            menuItems={dropdownItems}
+            xMarkSize="15"
+            sandwichSize="20"
+            color={colors.orange}
+            topSpacing="30px"
+          />
+        </ProfileFieldContainer>
+      )}
+    </>
+  );
 };

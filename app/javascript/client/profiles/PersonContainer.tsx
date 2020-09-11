@@ -166,6 +166,7 @@ export const PersonContainer: FC = () => {
   const hasAge = age || monthsOld;
   const hasBirthdate = birthYear || birthMonth;
   const hasFullBirthdate = birthYear && birthMonth && birthDay ? true : false;
+  const hasVitals = gender || hasAge || hasBirthdate;
   const hasFamily =
     (parents && parents.length > 0) || (children && children.length > 0);
   const hasPersonalHistory = personPlaces && personPlaces.length > 0;
@@ -209,6 +210,14 @@ export const PersonContainer: FC = () => {
       {fieldToAdd === 'personPlace' && (
         <PersonPlaceForm setFieldToAdd={setFieldToAdd} personId={personId} />
       )}
+      {notes && (
+        <>
+          <SectionDivider />
+          <Subheading>Notes</Subheading>
+          <NotesContainer notes={notes} />
+        </>
+      )}
+      {hasVitals && <SectionDivider />}
       {gender && <GenderContainer gender={gender} personId={personId} />}
       {hasAge && (
         <AgeContainer
@@ -258,7 +267,6 @@ export const PersonContainer: FC = () => {
           firstName={firstName}
         />
       )}
-      {notes && <NotesContainer notes={notes} />}
     </ProfileContainer>
   );
 };
