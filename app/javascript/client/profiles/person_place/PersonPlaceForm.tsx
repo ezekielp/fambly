@@ -11,6 +11,7 @@ import {
   FormikCheckboxGroup,
   FormikSelectInput,
 } from 'client/form/inputs';
+import { Button } from 'client/common/Button';
 import { MONTH_OPTIONS } from 'client/profiles/birthdate/utils';
 import { STATE_OPTIONS } from './utils';
 import { GlobalError } from 'client/common/GlobalError';
@@ -336,10 +337,10 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
               />
             )}
             {status && <GlobalError>{status}</GlobalError>}
-            <button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting}>
               Save
-            </button>
-            <button onClick={() => cancel()}>Cancel</button>
+            </Button>
+            <Button onClick={() => cancel()}>Cancel</Button>
           </Form>
         );
       }}

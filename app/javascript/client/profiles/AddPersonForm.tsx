@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { useCreatePersonMutation } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikTextInput } from 'client/form/inputs';
+import { Button } from 'client/common/Button';
 import { handleFormErrors } from 'client/utils/formik';
 import * as yup from 'yup';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
@@ -15,6 +16,7 @@ const ValidationSchema = yup.object().shape({
 
 export interface AddPersonFormProps extends RouteComponentProps {
   refetchUserData?: () => void;
+  toggleNewPersonFieldVisible: (state: boolean) => void;
 }
 
 export interface AddPersonFormData {
@@ -24,6 +26,7 @@ export interface AddPersonFormData {
 
 const InternalAddPersonForm: FC<AddPersonFormProps> = ({
   refetchUserData,
+  toggleNewPersonFieldVisible,
   history,
 }) => {
   const [createPersonMutation] = useCreatePersonMutation();
@@ -78,9 +81,15 @@ const InternalAddPersonForm: FC<AddPersonFormProps> = ({
             component={FormikTextInput}
             type="text"
           />
-          <button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting}>
             Create profile
-          </button>
+          </Button>
+          <Button
+            type="button"
+            onClick={() => toggleNewPersonFieldVisible(false)}
+          >
+            Cancel
+          </Button>
         </Form>
       )}
     </Formik>

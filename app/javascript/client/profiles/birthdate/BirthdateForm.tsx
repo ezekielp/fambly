@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { useCreateOrUpdateBirthdateMutation } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikNumberInput, FormikSelectInput } from 'client/form/inputs';
+import { Button } from 'client/common/Button';
 import {
   MONTH_OPTIONS,
   determineDaysOptions,
@@ -153,10 +154,10 @@ export const BirthdateForm: FC<BirthdateFormProps> = ({
               component={FormikSelectInput}
               options={daysOptions}
             />
-            <button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting}>
               Save
-            </button>
-            <button onClick={() => cancel()}>Cancel</button>
+            </Button>
+            <Button onClick={() => cancel()}>Cancel</Button>
           </Form>
         );
       }}

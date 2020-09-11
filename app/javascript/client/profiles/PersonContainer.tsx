@@ -20,6 +20,7 @@ import { ChildrenContainer } from './parent_child/ChildrenContainer';
 import { PersonPlaceForm } from './person_place/PersonPlaceForm';
 import { PersonPlacesContainer } from './person_place/PersonPlacesContainer';
 import { PersonFieldsInput } from './PersonFieldsInput';
+import { StyledLink } from 'client/common/StyledLink';
 import { useParams } from 'react-router-dom';
 import { gql } from '@apollo/client';
 import { text, spacing, colors } from 'client/shared/styles';
@@ -107,18 +108,22 @@ const ProfileContainer = styled.div`
   padding: 1rem 2rem;
 `;
 
+const BackToPeopleLinkContainer = styled.div`
+  margin-bottom: ${spacing[2]};
+`;
+
 const ProfileHeader = styled.h1`
   font-size: ${text[4]};
   font-weight: 700;
   margin-bottom: ${spacing[2]};
 `;
 
-const Subheading = styled.div`
+export const Subheading = styled.div`
   font-size: ${text[3]};
   margin-bottom: ${spacing[2]};
 `;
 
-const SectionDivider = styled.hr`
+export const SectionDivider = styled.hr`
   height: 1px;
   border: none;
   background-color: ${colors.lightGray};
@@ -173,6 +178,9 @@ export const PersonContainer: FC = () => {
 
   return (
     <ProfileContainer>
+      <BackToPeopleLinkContainer>
+        <StyledLink to="/home">Back to people</StyledLink>
+      </BackToPeopleLinkContainer>
       <ProfileHeader>
         {firstName} {lastName && ` ${lastName}`}
       </ProfileHeader>
@@ -210,7 +218,7 @@ export const PersonContainer: FC = () => {
       {fieldToAdd === 'personPlace' && (
         <PersonPlaceForm setFieldToAdd={setFieldToAdd} personId={personId} />
       )}
-      {notes && (
+      {notes && notes.length > 0 && (
         <>
           <SectionDivider />
           <Subheading>Notes</Subheading>

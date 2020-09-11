@@ -2,9 +2,13 @@ import React, { FC, useContext, useState } from 'react';
 import { AuthContext } from 'client/contexts/AuthContext';
 import { useGetUserForHomeContainerQuery } from 'client/graphqlTypes';
 import { AddPersonForm } from 'client/profiles/AddPersonForm';
+import { Button } from 'client/common/Button';
 import { gql } from '@apollo/client';
 import { withRouter } from 'react-router-dom';
 import { StyledLink } from 'client/common/StyledLink';
+import { SectionDivider } from 'client/profiles/PersonContainer';
+import { text, spacing } from 'client/shared/styles';
+import styled from 'styled-components';
 
 gql`
   mutation Logout {
@@ -42,6 +46,20 @@ gql`
   }
 `;
 
+const HomeContentContainer = styled.div`
+  padding: 2rem;
+`;
+
+const PeopleHeader = styled.h1`
+  font-size: ${text[4]};
+  font-weight: 700;
+  margin-bottom: ${spacing[2]};
+`;
+
+const ProfileLinkContainer = styled.div`
+  margin-bottom: ${spacing[1]};
+`;
+
 interface HomeContainerProps {}
 
 const InternalHomeContainer: FC<HomeContainerProps> = () => {
@@ -58,24 +76,31 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
   if (!userData) return null;
 
   const profileLinks = userData.user?.people?.map((person) => (
-    <div key={person.id}>
+    <ProfileLinkContainer key={person.id}>
       <StyledLink to={`/profiles/${person.id}`}>
         {person.firstName}
         {person.lastName && ` ${person.lastName}`}
       </StyledLink>
-    </div>
+    </ProfileLinkContainer>
   ));
 
   return (
-    <>
-      <button onClick={() => toggleNewPersonFieldVisible(true)}>
-        Add a new person profile
-      </button>
-      {newPersonFieldVisible && (
-        <AddPersonForm refetchUserData={refetchUserData} />
+    <HomeContentContainer>
+      {!newPersonFieldVisible && (
+        <Button onClick={() => toggleNewPersonFieldVisible(true)}>
+          Add a new person profile
+        </Button>
       )}
+      {newPersonFieldVisible && (
+        <AddPersonForm
+          refetchUserData={refetchUserData}
+          toggleNewPersonFieldVisible={toggleNewPersonFieldVisible}
+        />
+      )}
+      <SectionDivider />
+      <PeopleHeader>People</PeopleHeader>
       {profileLinks}
-    </>
+    </HomeContentContainer>
   );
 };
 

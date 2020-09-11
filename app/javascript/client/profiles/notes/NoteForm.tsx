@@ -5,6 +5,7 @@ import {
 } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikTextArea } from 'client/form/inputs';
+import { Button } from 'client/common/Button';
 import { handleFormErrors } from 'client/utils/formik';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
@@ -112,10 +113,10 @@ export const NoteForm: FC<NoteFormProps> = ({
       {({ isSubmitting }) => (
         <Form>
           <Field name="content" label="Note" component={FormikTextArea} />
-          <button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting}>
             Save
-          </button>
-          <button onClick={() => cancel()}>Cancel</button>
+          </Button>
+          <Button onClick={() => cancel()}>Cancel</Button>
         </Form>
       )}
     </Formik>

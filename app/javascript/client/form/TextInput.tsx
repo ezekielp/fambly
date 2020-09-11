@@ -1,11 +1,21 @@
 import React, { HTMLProps } from 'react';
+import { colors } from 'client/shared/styles';
 import styled from 'styled-components';
 
 interface TextInputProps
   extends Omit<HTMLProps<HTMLInputElement>, 'as' | 'ref' | 'autoComplete'> {}
 
-const StyledTextInput = styled.input`
+const StyledTextInput = styled.input.attrs({ autoComplete: 'off' })`
+  border: 1px solid ${colors.lightGray};
+  border-radius: 8px;
+  height: 50px;
+  width: 100%;
   line-height: 150%;
+  padding: 0 1rem;
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 export const TextInput = React.forwardRef(
