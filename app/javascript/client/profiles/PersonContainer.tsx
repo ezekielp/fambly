@@ -13,7 +13,6 @@ import { NoteForm } from './notes/NoteForm';
 import { NotesContainer } from './notes/NotesContainer';
 import { BirthdateForm } from './birthdate/BirthdateForm';
 import { BirthdateContainer } from './birthdate/BirthdateContainer';
-// import { ParentChildForm } from './parent_child/ParentChildForm';
 import { ParentForm } from './parent_child/ParentForm';
 import { ChildForm } from './parent_child/ChildForm';
 import { ParentsContainer } from './parent_child/ParentsContainer';
@@ -181,20 +180,6 @@ export const PersonContainer: FC = () => {
           personFirstName={firstName}
         />
       )}
-      {/* {fieldToAdd === 'parent' && (
-        <ParentChildForm
-          setFieldToAdd={setFieldToAdd}
-          childId={personId}
-          personFirstName={firstName}
-        />
-      )}
-      {fieldToAdd === 'child' && (
-        <ParentChildForm
-          setFieldToAdd={setFieldToAdd}
-          parentId={personId}
-          personFirstName={firstName}
-        />
-      )} */}
       {fieldToAdd === 'personPlace' && (
         <PersonPlaceForm setFieldToAdd={setFieldToAdd} personId={personId} />
       )}
