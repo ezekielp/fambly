@@ -1,17 +1,19 @@
 import React, { FC, useContext } from 'react';
 import {
-  Link,
   Redirect,
   Route,
   Switch,
   withRouter,
   RouteProps,
 } from 'react-router-dom';
+import { useLogoutMutation } from 'client/graphqlTypes';
 import { AuthContext } from 'client/contexts/AuthContext';
 import { SignupContainer } from './login/SignupContainer';
 import { LoginContainer } from './login/LoginContainer';
 import { HomeContainer } from './home/HomeContainer';
 import { PersonContainer } from './profiles/PersonContainer';
+import { Wrapper } from 'client/common/Wrapper';
+import { NavBar } from 'client/nav/NavBar';
 
 interface ProtectedRouteProps extends RouteProps {
   accessAllowed: boolean;
@@ -35,9 +37,28 @@ interface AppContainerProps {}
 const InternalAppContainer: FC<AppContainerProps> = () => {
   const { userId } = useContext(AuthContext);
   const loggedIn = !!userId;
+  const [logoutMutation] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    await logoutMutation();
+    window.location.href = '/login';
+  };
+
+  const navMenuItems = [];
+  const logoutItem = { label: 'Log out', onClick: handleLogout };
+  const signupItem = { label: 'Sign up', href: '/signup' };
+  const loginItem = { label: 'Log in', href: '/login' };
+
+  if (loggedIn) {
+    navMenuItems.push(logoutItem);
+  } else {
+    navMenuItems.push(signupItem);
+    navMenuItems.push(loginItem);
+  }
 
   return (
-    <>
+    <Wrapper>
+      <NavBar dropdownItems={navMenuItems} />
       <Switch>
         <Route path="/signup">
           <SignupContainer />
@@ -59,7 +80,7 @@ const InternalAppContainer: FC<AppContainerProps> = () => {
           <Redirect to="/home" />
         </Route>
       </Switch>
-    </>
+    </Wrapper>
   );
 };
 
