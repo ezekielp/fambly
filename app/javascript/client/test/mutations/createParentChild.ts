@@ -46,34 +46,3 @@ export const createParentChildRelationshipMutation = ({
     data: { createParentChildRelationship: result },
   })),
 });
-
-export const createPersonMock = {
-  input: {
-    firstName: 'Lord',
-    lastName: 'Byron',
-  },
-  result: {
-    errors: null,
-    person: {
-      id: 'lord-byron-uuid',
-      firstName: 'Lord',
-      lastName: 'Byron',
-    },
-  },
-};
-
-// export const createParentChildRelationshipMutation = ({
-//   input = createParentChildRelationshipInput,
-//   result = createParentChildRelationshipResult,
-// } = {}): MockedResponse => ({
-//   request: {
-//     query: CreateParentChildRelationshipDocument,
-//     variables: {
-//       input,
-//     },
-//   },
-//   result: { data: { createParentChildRelationship: result } },
-//   newData: jest.fn(() => ({
-//     data: { createParentChildRelationship: result },
-//   })),
-// });

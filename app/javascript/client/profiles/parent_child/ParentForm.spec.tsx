@@ -8,10 +8,7 @@ import {
 import { FormUtils, formUtils } from 'client/test/utils/formik';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
-import {
-  createParentChildRelationshipMutation,
-  createPersonMock,
-} from 'client/test/mutations/createParentChild';
+import { createParentChildRelationshipMutation } from 'client/test/mutations/createParentChild';
 import { getUserForHomeContainerQuery } from 'client/test/queries/getUserForHomeContainer';
 import { createAgeMutation } from 'client/test/mutations/createAge';
 import { createPersonMutation } from 'client/test/mutations/addPerson';
@@ -43,7 +40,7 @@ describe('<ParentChildForm />', () => {
       createParentChildRelationshipMutation(),
       getUserForHomeContainerQuery(),
       createAgeMutation(),
-      createPersonMutation(createPersonMock),
+      createPersonMutation(),
     ];
     currentPersonProps = {
       ...defaultProps,
@@ -128,8 +125,10 @@ describe('<ParentChildForm />', () => {
         ).toBe(false);
       });
     });
+  });
 
-    describe('when the parent or child being added is a current_contact', () => {
+  describe('submitting the form', () => {
+    describe('when the parent being added is a current_contact', () => {
       it('returns a server-side error if the parent or child is not selected', async () => {
         const handleFormErrorsSpy = jest.spyOn(
           formikHelpers,
@@ -188,11 +187,95 @@ describe('<ParentChildForm />', () => {
         );
         form = formUtils<ParentFormData>(component.find(Form));
         await form.submit();
-        await act(async () => {
-          await wait(2000);
-        });
-        // console.log(component.debug());
         expect(createParentChildRelationship.newData).toHaveBeenCalled();
+      });
+    });
+
+    describe('when the parent is a new_contact', () => {
+      it('calls up to three mutations and submits the form', async () => {
+        const createPersonMock = {
+          input: {
+            firstName: 'Lady',
+            lastName: 'Byron',
+            showOnDashboard: false,
+          },
+          result: {
+            errors: null,
+            person: {
+              id: 'lady-byron-uuid',
+              firstName: 'Lady',
+              lastName: 'Byron',
+              showOnDashboard: false,
+            },
+          },
+        };
+        const createAgeMock = {
+          input: {
+            personId: 'lady-byron-uuid',
+            age: 37,
+            monthsOld: null,
+          },
+          result: {
+            errors: null,
+            person: {
+              id: 'lady-byron-uuid',
+              age: 37,
+              monthsOld: null,
+            },
+          },
+        };
+        const createParentChildMock = {
+          input: {
+            parentId: 'lady-byron-uuid',
+            childId: 'ada-lovelace-uuid',
+            parentType: 'biological',
+            note: null,
+          },
+          result: {
+            errors: null,
+            parentChildRelationship: {
+              id: 'lady-byron-ada-lovelace-uuid',
+              parent: {
+                id: 'lady-byron-uuid',
+                firstName: 'Lady',
+                lastName: 'Byron',
+              },
+              child: {
+                id: 'ada-lovelace-uuid',
+                firstName: 'Ada',
+                lastName: 'Lovelace',
+              },
+              notes: null,
+              parentType: 'biological',
+            },
+          },
+        };
+        const createPerson = createPersonMutation(createPersonMock);
+        const createAge = createAgeMutation(createAgeMock);
+        const createParentChild = createParentChildRelationshipMutation(
+          createParentChildMock,
+        );
+
+        await mountComponent(
+          [
+            createPerson,
+            createAge,
+            createParentChild,
+            getUserForHomeContainerQuery(),
+          ],
+          defaultProps,
+        );
+        form = formUtils<ParentFormData>(component.find(Form));
+
+        await form.fill({ firstName: 'Lady', lastName: 'Byron', age: 37 });
+        await form.fill({ parentType: 'biological' }, 'select');
+        await form.submit();
+        await act(async () => {
+          await wait(1000);
+        });
+        expect(createPerson.newData).toHaveBeenCalled();
+        expect(createAge.newData).toHaveBeenCalled();
+        expect(createParentChild.newData).toHaveBeenCalled();
       });
     });
   });
