@@ -46,6 +46,22 @@ export const createParentChildRelationshipMutation = ({
     data: { createParentChildRelationship: result },
   })),
 });
+
+export const createPersonMock = {
+  input: {
+    firstName: 'Lord',
+    lastName: 'Byron',
+  },
+  result: {
+    errors: null,
+    person: {
+      id: 'lord-byron-uuid',
+      firstName: 'Lord',
+      lastName: 'Byron',
+    },
+  },
+};
+
 // export const createParentChildRelationshipMutation = ({
 //   input = createParentChildRelationshipInput,
 //   result = createParentChildRelationshipResult,
