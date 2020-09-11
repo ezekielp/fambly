@@ -3,6 +3,7 @@ import { useDetectOutsideClick } from './useDetectOutsideClick';
 import { colors } from 'client/shared/styles';
 import { Sandwich } from 'client/assets/Sandwich';
 import { XMark } from 'client/assets/XMark';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const DropdownContainer = styled.div`
@@ -24,6 +25,7 @@ const MenuContainer = styled.nav`
   right: -5px;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
   background: ${colors.white};
+  z-index: 1;
 `;
 
 const MenuList = styled.ul`
@@ -45,6 +47,7 @@ const MenuItem = styled.li`
 export interface DropdownMenuItem {
   label: string;
   onClick?: (event: React.MouseEvent) => void;
+  href?: string;
 }
 
 interface DropdownProps {
@@ -63,12 +66,19 @@ export const Dropdown: FC<DropdownProps> = ({ menuItems }) => {
   );
 
   const items = menuItems.map((item) => {
-    const { label, onClick } = item;
-    return (
-      <MenuItem key={label} onClick={onClick ? onClick : () => null}>
-        {label}
-      </MenuItem>
-    );
+    const { label, onClick, href } = item;
+    if (onClick)
+      return (
+        <MenuItem key={label} onClick={onClick}>
+          {label}
+        </MenuItem>
+      );
+    if (href)
+      return (
+        <MenuItem key={label}>
+          <Link to={href}>{label}</Link>
+        </MenuItem>
+      );
   });
 
   return (

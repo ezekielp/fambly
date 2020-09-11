@@ -17,46 +17,13 @@ import {
 import { GlobalError } from 'client/common/GlobalError';
 import {
   NEW_OR_CURRENT_CONTACT_OPTIONS,
-  PARENT_TYPE_OPTIONS,
+  CHILD_TYPE_OPTIONS,
   buildParentOrChildOptions,
-  // getParentAndChildIds,
 } from './utils';
 import * as yup from 'yup';
-import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
 
-gql`
-  mutation CreateParentChildRelationship(
-    $input: CreateParentChildRelationshipInput!
-  ) {
-    createParentChildRelationship(input: $input) {
-      parentChildRelationship {
-        id
-        parent {
-          id
-          firstName
-          lastName
-        }
-        child {
-          id
-          firstName
-          lastName
-        }
-        parentType
-        notes {
-          id
-          content
-        }
-      }
-      errors {
-        path
-        message
-      }
-    }
-  }
-`;
-
-const ParentChildFormValidationSchema = yup.object().shape({
+const ChildFormValidationSchema = yup.object().shape({
   firstName: yup.string().when('newOrCurrentContact', {
     is: (val: string) => val === 'new_person',
     then: yup
@@ -79,16 +46,14 @@ const ParentChildFormValidationSchema = yup.object().shape({
     .max(1000000, "Wow, that's old! Please enter a lower age")
     .nullable(),
   newOrCurrentContact: yup.string().required(),
-  formParentId: yup.string(),
   formChildId: yup.string(),
   parentType: yup.string(),
   note: yup.string(),
 });
 
-export interface ParentChildFormData {
+export interface ChildFormData {
   firstName?: string;
   lastName?: string;
-  formParentId: string;
   formChildId: string;
   age: number | null;
   monthsOld: number | null;
@@ -98,19 +63,17 @@ export interface ParentChildFormData {
   note?: string | null | undefined;
 }
 
-export interface ParentChildFormProps {
+export interface ChildFormProps {
   setFieldToAdd?: (field: string) => void;
   personFirstName: string;
-  parentId?: string;
-  childId?: string;
-  initialValues?: ParentChildFormData;
+  parentId: string;
+  initialValues?: ChildFormData;
   setEditFlag?: (bool: boolean) => void;
 }
 
 export const blankInitialValues = {
   firstName: '',
   lastName: '',
-  formParentId: '',
   formChildId: '',
   age: null,
   monthsOld: null,
@@ -120,12 +83,11 @@ export const blankInitialValues = {
   note: '',
 };
 
-export const ParentChildForm: FC<ParentChildFormProps> = ({
+export const ChildForm: FC<ChildFormProps> = ({
   setFieldToAdd,
   initialValues = blankInitialValues,
   personFirstName,
-  parentId: propParentId,
-  childId: propChildId,
+  parentId,
   setEditFlag,
 }) => {
   const [
@@ -135,16 +97,11 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
   const [createAgeMutation] = useCreateAgeMutation();
   const { data: userData } = useGetUserForHomeContainerQuery();
   const people = userData?.user?.people ? userData?.user?.people : [];
-  const peopleOptions = buildParentOrChildOptions(
-    people,
-    propParentId ? propParentId : propChildId,
-  );
-  const parentChildName = propParentId ? 'formChildId' : 'formParentId';
-  const parentChildLabel = propParentId ? 'Child' : 'Parent';
+  const peopleOptions = buildParentOrChildOptions(people, parentId);
 
   const handleSubmit = async (
-    data: ParentChildFormData,
-    formikHelpers: FormikHelpers<ParentChildFormData>,
+    data: ChildFormData,
+    formikHelpers: FormikHelpers<ChildFormData>,
   ) => {
     const {
       firstName,
@@ -153,7 +110,6 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
       monthsOld,
       newOrCurrentContact,
       showOnDashboard,
-      formParentId,
       formChildId,
       parentType,
       note,
@@ -174,27 +130,28 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
       });
       const createPersonErrors = createPersonResponse.data?.createPerson.errors;
       if (createPersonErrors) {
-        handleFormErrors<ParentChildFormData>(
+        handleFormErrors<ChildFormData>(
           createPersonErrors,
           setErrors,
           setStatus,
         );
         return;
       } else {
-        if (age || monthsOld) {
-          newPersonId = createPersonResponse.data?.createPerson?.person?.id;
+        newPersonId = createPersonResponse.data?.createPerson?.person?.id;
+
+        if ((age || monthsOld) && newPersonId) {
           const createAgeResponse = await createAgeMutation({
             variables: {
               input: {
                 age,
                 monthsOld: monthsOld && !age ? monthsOld : null,
-                personId: newPersonId ? newPersonId : '',
+                personId: newPersonId,
               },
             },
           });
           const createAgeErrors = createAgeResponse.data?.createAge.errors;
           if (createAgeErrors) {
-            handleFormErrors<ParentChildFormData>(
+            handleFormErrors<ChildFormData>(
               createAgeErrors,
               setErrors,
               setStatus,
@@ -208,59 +165,7 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
       ? createPersonResponse.data?.createPerson.person?.id
       : null;
 
-    interface PotentialParentAndChildIds {
-      newPersonId: string | null | undefined;
-      propParentId: string | null | undefined;
-      propChildId: string | null | undefined;
-      formParentId: string | null | undefined;
-      formChildId: string | null | undefined;
-    }
-
-    interface ParentAndChildIds {
-      parentId: string;
-      childId: string;
-    }
-
-    const getParentAndChildIds = (
-      potentialParentAndChildIds: PotentialParentAndChildIds,
-    ): ParentAndChildIds => {
-      const {
-        newPersonId,
-        propParentId,
-        propChildId,
-        formParentId,
-        formChildId,
-      } = potentialParentAndChildIds;
-      let parentId, childId;
-
-      if (propParentId) {
-        parentId = propParentId;
-        if (newPersonId) {
-          childId = newPersonId;
-        } else {
-          childId = formChildId;
-        }
-      } else {
-        childId = propChildId;
-        if (newPersonId) {
-          parentId = newPersonId;
-        } else {
-          parentId = formParentId;
-        }
-      }
-
-      parentId = parentId ? parentId : '';
-      childId = childId ? childId : '';
-      return { parentId, childId };
-    };
-
-    const { parentId, childId } = getParentAndChildIds({
-      newPersonId,
-      propParentId,
-      propChildId,
-      formParentId,
-      formChildId,
-    });
+    const childId = newPersonId ? newPersonId : formChildId;
 
     const createParentChildResponse = await createParentChildRelationshipMutation(
       {
@@ -278,7 +183,7 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
       createParentChildResponse.data?.createParentChildRelationship.errors;
 
     if (createParentChildErrors) {
-      handleFormErrors<ParentChildFormData>(
+      handleFormErrors<ChildFormData>(
         createParentChildErrors,
         setErrors,
         setStatus,
@@ -296,7 +201,7 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
     <Formik
       initialValues={initialValues}
       onSubmit={handleSubmit}
-      validationSchema={ParentChildFormValidationSchema}
+      validationSchema={ChildFormValidationSchema}
     >
       {({ values, isSubmitting, status }) => {
         return (
@@ -346,17 +251,17 @@ export const ParentChildForm: FC<ParentChildFormProps> = ({
             )}
             {values.newOrCurrentContact === 'current_person' && (
               <Field
-                name={parentChildName}
-                label={parentChildLabel}
+                name="formChildId"
+                label="Child"
                 component={FormikSelectInput}
                 options={peopleOptions}
               />
             )}
             <Field
               name="parentType"
-              label="Type of parent (optional)"
+              label="Type of child (optional)"
               component={FormikSelectInput}
-              options={PARENT_TYPE_OPTIONS}
+              options={CHILD_TYPE_OPTIONS}
             />
             <Field
               name="note"

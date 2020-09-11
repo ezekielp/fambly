@@ -1,32 +1,33 @@
 import React from 'react';
 import {
-  ParentChildForm,
-  ParentChildFormData,
-  ParentChildFormProps,
+  ParentForm,
+  ParentFormData,
+  ParentFormProps,
   blankInitialValues,
-} from './ParentChildForm';
+} from './ParentForm';
 import { FormUtils, formUtils } from 'client/test/utils/formik';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { createParentChildRelationshipMutation } from 'client/test/mutations/createParentChild';
 import { getUserForHomeContainerQuery } from 'client/test/queries/getUserForHomeContainer';
 import { createAgeMutation } from 'client/test/mutations/createAge';
+import { createPersonMutation } from 'client/test/mutations/addPerson';
 import { ReactWrapper, mount } from 'enzyme';
 import { Form } from 'formik';
 import { act } from 'react-dom/test-utils';
 import wait from 'waait';
-// import * as formikHelpers from 'client/utils/formik';
+import * as formikHelpers from 'client/utils/formik';
 
 describe('<ParentChildForm />', () => {
   let mountComponent: (
     mocks?: MockedResponse[],
-    props?: ParentChildFormProps,
+    props?: ParentFormProps,
   ) => Promise<void>;
-  let component: ReactWrapper<ParentChildFormProps>;
+  let component: ReactWrapper<ParentFormProps>;
   let form: FormUtils;
   let defaultMocks: MockedResponse[];
-  let defaultProps: ParentChildFormProps;
-  let currentPersonProps: ParentChildFormProps;
+  let defaultProps: ParentFormProps;
+  let currentPersonProps: ParentFormProps;
 
   beforeEach(() => {
     defaultProps = {
@@ -39,6 +40,7 @@ describe('<ParentChildForm />', () => {
       createParentChildRelationshipMutation(),
       getUserForHomeContainerQuery(),
       createAgeMutation(),
+      createPersonMutation(),
     ];
     currentPersonProps = {
       ...defaultProps,
@@ -57,7 +59,7 @@ describe('<ParentChildForm />', () => {
             >
               <Route
                 path="/profiles/ada-lovelace-uuid"
-                render={() => <ParentChildForm {...props} />}
+                render={() => <ParentForm {...props} />}
               />
               ;
             </MemoryRouter>
@@ -74,9 +76,9 @@ describe('<ParentChildForm />', () => {
     expect(component.exists()).toBe(true);
   });
 
-  it('has eight form fields when the parent or child to be added is a new_contact', async () => {
+  it('has eight form fields when the parent to be added is a new_contact', async () => {
     await mountComponent();
-    form = formUtils<ParentChildFormData>(component.find(Form));
+    form = formUtils<ParentFormData>(component.find(Form));
 
     expect(component.find(Form).exists()).toBe(true);
 
@@ -92,7 +94,7 @@ describe('<ParentChildForm />', () => {
 
   it('has four form fields when the parent or child to be added is a current_contact', async () => {
     await mountComponent(defaultMocks, currentPersonProps);
-    form = formUtils<ParentChildFormData>(component.find(Form));
+    form = formUtils<ParentFormData>(component.find(Form));
 
     expect(form.findInputByName('newOrCurrentContact').exists()).toBe(true);
     expect(form.findInputByName('formParentId', 'select').exists()).toBe(true);
@@ -104,7 +106,7 @@ describe('<ParentChildForm />', () => {
     describe('when the parent or child being added is a new_contact', () => {
       it('requires a first name for the new contact', async () => {
         await mountComponent();
-        form = formUtils<ParentChildFormData>(component.find(Form));
+        form = formUtils<ParentFormData>(component.find(Form));
         await form.submit();
         expect(
           component
@@ -123,17 +125,21 @@ describe('<ParentChildForm />', () => {
         ).toBe(false);
       });
     });
+  });
 
-    describe('when the parent or child being added is a current_contact', () => {
-      it.only('returns a server-side error if the parent or child is not selected', async () => {
-        // const handleFormErrorsSpy = jest.spyOn(
-        //   formikHelpers,
-        //   'handleFormErrors',
-        // );
+  describe('submitting the form', () => {
+    describe('when the parent being added is a current_contact', () => {
+      it('returns a server-side error if the parent or child is not selected', async () => {
+        const handleFormErrorsSpy = jest.spyOn(
+          formikHelpers,
+          'handleFormErrors',
+        );
         const noParentChosenMock = {
           input: {
             parentId: '',
             childId: 'ada-lovelace-uuid',
+            parentType: null,
+            note: null,
           },
           result: {
             errors: [
@@ -151,20 +157,18 @@ describe('<ParentChildForm />', () => {
           [createParentChildRelationship, getUserForHomeContainerQuery()],
           currentPersonProps,
         );
-        form = formUtils<ParentChildFormData>(component.find(Form));
+        form = formUtils<ParentFormData>(component.find(Form));
         await form.submit();
         await act(async () => {
           await wait(0);
         });
-        expect(createParentChildRelationship.newData).toHaveBeenCalled();
-        // console.log(component.debug());
-        // expect(handleFormErrorsSpy).toHaveBeenCalled();
+        expect(handleFormErrorsSpy).toHaveBeenCalled();
         expect(
           component.text().includes('Please create or choose a parent to add!'),
         ).toBe(true);
       });
 
-      it.only('submits the form when a parent is selected', async () => {
+      it('submits the form when a parent is selected', async () => {
         const props = {
           ...defaultProps,
           initialValues: {
@@ -181,13 +185,97 @@ describe('<ParentChildForm />', () => {
           [createParentChildRelationship, getUserForHomeContainerQuery()],
           props,
         );
-        form = formUtils<ParentChildFormData>(component.find(Form));
+        form = formUtils<ParentFormData>(component.find(Form));
+        await form.submit();
+        expect(createParentChildRelationship.newData).toHaveBeenCalled();
+      });
+    });
+
+    describe('when the parent is a new_contact', () => {
+      it('calls up to three mutations and submits the form', async () => {
+        const createPersonMock = {
+          input: {
+            firstName: 'Lady',
+            lastName: 'Byron',
+            showOnDashboard: false,
+          },
+          result: {
+            errors: null,
+            person: {
+              id: 'lady-byron-uuid',
+              firstName: 'Lady',
+              lastName: 'Byron',
+              showOnDashboard: false,
+            },
+          },
+        };
+        const createAgeMock = {
+          input: {
+            personId: 'lady-byron-uuid',
+            age: 37,
+            monthsOld: null,
+          },
+          result: {
+            errors: null,
+            person: {
+              id: 'lady-byron-uuid',
+              age: 37,
+              monthsOld: null,
+            },
+          },
+        };
+        const createParentChildMock = {
+          input: {
+            parentId: 'lady-byron-uuid',
+            childId: 'ada-lovelace-uuid',
+            parentType: 'biological',
+            note: null,
+          },
+          result: {
+            errors: null,
+            parentChildRelationship: {
+              id: 'lady-byron-ada-lovelace-uuid',
+              parent: {
+                id: 'lady-byron-uuid',
+                firstName: 'Lady',
+                lastName: 'Byron',
+              },
+              child: {
+                id: 'ada-lovelace-uuid',
+                firstName: 'Ada',
+                lastName: 'Lovelace',
+              },
+              notes: null,
+              parentType: 'biological',
+            },
+          },
+        };
+        const createPerson = createPersonMutation(createPersonMock);
+        const createAge = createAgeMutation(createAgeMock);
+        const createParentChild = createParentChildRelationshipMutation(
+          createParentChildMock,
+        );
+
+        await mountComponent(
+          [
+            createPerson,
+            createAge,
+            createParentChild,
+            getUserForHomeContainerQuery(),
+          ],
+          defaultProps,
+        );
+        form = formUtils<ParentFormData>(component.find(Form));
+
+        await form.fill({ firstName: 'Lady', lastName: 'Byron', age: 37 });
+        await form.fill({ parentType: 'biological' }, 'select');
         await form.submit();
         await act(async () => {
-          await wait(2000);
+          await wait(1000);
         });
-        // console.log(component.debug());
-        expect(createParentChildRelationship.newData).toHaveBeenCalled();
+        expect(createPerson.newData).toHaveBeenCalled();
+        expect(createAge.newData).toHaveBeenCalled();
+        expect(createParentChild.newData).toHaveBeenCalled();
       });
     });
   });

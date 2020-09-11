@@ -11,8 +11,15 @@ export const NEW_OR_CURRENT_CONTACT_OPTIONS = [
 
 export const PARENT_TYPE_OPTIONS = [
   { label: '', value: '' },
-  { label: 'Step parent', value: 'step_parent' },
+  { label: 'Step-parent', value: 'step_parent' },
   { label: 'Parent in-law', value: 'in_law' },
+  { label: 'Biological', value: 'biological' },
+];
+
+export const CHILD_TYPE_OPTIONS = [
+  { label: '', value: '' },
+  { label: 'Step-child', value: 'step_parent' },
+  { label: 'In-law', value: 'in_law' },
   { label: 'Biological', value: 'biological' },
 ];
 
