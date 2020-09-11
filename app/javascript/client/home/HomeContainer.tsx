@@ -3,7 +3,8 @@ import { AuthContext } from 'client/contexts/AuthContext';
 import { useGetUserForHomeContainerQuery } from 'client/graphqlTypes';
 import { AddPersonForm } from 'client/profiles/AddPersonForm';
 import { gql } from '@apollo/client';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import { StyledLink } from 'client/common/StyledLink';
 
 gql`
   mutation Logout {
@@ -58,10 +59,10 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
 
   const profileLinks = userData.user?.people?.map((person) => (
     <div key={person.id}>
-      <Link to={`/profiles/${person.id}`}>
+      <StyledLink to={`/profiles/${person.id}`}>
         {person.firstName}
         {person.lastName && ` ${person.lastName}`}
-      </Link>
+      </StyledLink>
     </div>
   ));
 

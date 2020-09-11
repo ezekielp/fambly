@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { SubContactInfoFragment } from 'client/graphqlTypes';
-import { Link } from 'react-router-dom';
+import { StyledLink } from 'client/common/StyledLink';
 
 interface ChildItemProps {
   child: SubContactInfoFragment;
@@ -43,10 +43,10 @@ export const ChildItem: FC<ChildItemProps> = ({
 
   return (
     <div>
-      <Link to={`/profiles/${id}`}>
+      <StyledLink to={`/profiles/${id}`}>
         {firstName}
         {getLastNameContent(lastName, parentLastName)}
-      </Link>
+      </StyledLink>
       {getAgeContent(age, monthsOld)}
     </div>
   );
