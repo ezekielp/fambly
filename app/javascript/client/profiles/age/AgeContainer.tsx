@@ -1,7 +1,10 @@
 import React, { FC, useState } from 'react';
 import { useDeleteAgeMutation } from 'client/graphqlTypes';
+import { Dropdown } from 'client/common/Dropdown';
 import { AgeForm } from './AgeForm';
+import { colors } from 'client/shared/styles';
 import { gql } from '@apollo/client';
+import styled from 'styled-components';
 
 gql`
   mutation UpdateAge($input: UpdateAgeInput!) {
@@ -23,6 +26,16 @@ gql`
   mutation DeleteAge($input: DeleteAgeInput!) {
     deleteAge(input: $input)
   }
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const AgeTextContainer = styled.div`
+  margin-right: 10px;
 `;
 
 interface AgeContainerProps {
@@ -54,17 +67,15 @@ export const AgeContainer: FC<AgeContainerProps> = ({
   };
 
   const ageContainerContent = (
-    <div>Age: {age ? `${age} years` : `${monthsOld} months`} old</div>
+    <AgeTextContainer>
+      Age: {age ? `${age} years` : `${monthsOld} months`} old
+    </AgeTextContainer>
   );
 
-  const editAndDeleteButtons = hasFullBirthdate ? (
-    <></>
-  ) : (
-    <>
-      <button onClick={() => setEditFlag(true)}>Edit</button>
-      <button onClick={() => deleteAge()}>Delete</button>
-    </>
-  );
+  const dropdownItems = [
+    { label: 'Edit', onClick: () => setEditFlag(true) },
+    { label: 'Delete', onClick: () => deleteAge() },
+  ];
 
   const initialValues = {
     age,
@@ -83,8 +94,20 @@ export const AgeContainer: FC<AgeContainerProps> = ({
     editAgeForm
   ) : (
     <>
-      {!deletedFlag && ageContainerContent}
-      {!deletedFlag && editAndDeleteButtons}
+      {!deletedFlag && (
+        <Container>
+          {ageContainerContent}
+          {!hasFullBirthdate && (
+            <Dropdown
+              menuItems={dropdownItems}
+              xMarkSize="15"
+              sandwichSize="20"
+              color={colors.orange}
+              topSpacing="30px"
+            />
+          )}
+        </Container>
+      )}
     </>
   );
 };

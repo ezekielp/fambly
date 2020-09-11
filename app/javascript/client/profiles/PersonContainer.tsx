@@ -145,7 +145,7 @@ export const PersonContainer: FC = () => {
   const hasFullBirthdate = birthYear && birthMonth && birthDay ? true : false;
 
   return (
-    <Wrapper>
+    <>
       <h1>
         {firstName} {lastName && ` ${lastName}`}
       </h1>
@@ -221,6 +221,6 @@ export const PersonContainer: FC = () => {
         />
       )}
       {notes && <NotesContainer notes={notes} />}
-    </Wrapper>
+    </>
   );
 };

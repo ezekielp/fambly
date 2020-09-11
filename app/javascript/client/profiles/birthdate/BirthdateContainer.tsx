@@ -1,13 +1,26 @@
 import React, { FC, useState } from 'react';
 import { useDeleteBirthdateMutation } from 'client/graphqlTypes';
+import { Dropdown } from 'client/common/Dropdown';
+import { colors } from 'client/shared/styles';
 import { BirthdateForm } from './BirthdateForm';
 import { MONTHS } from './utils';
 import { gql } from '@apollo/client';
+import styled from 'styled-components';
 
 gql`
   mutation DeleteBirthdate($input: DeleteBirthdateInput!) {
     deleteBirthdate(input: $input)
   }
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const BirthdateTextContainer = styled.div`
+  margin-right: 10px;
 `;
 
 interface BirthdateContainerProps {
@@ -34,6 +47,11 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
     setDeletedFlag(true);
   };
 
+  const dropdownItems = [
+    { label: 'Edit', onClick: () => setEditFlag(true) },
+    { label: 'Delete', onClick: () => deleteBirthdate() },
+  ];
+
   const birthdateContainerContent = (
     year: number | null | undefined,
     month: string,
@@ -44,35 +62,28 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
     let textContent;
 
     if (year && month && !day) {
-      textContent = (
-        <div>
-          Born in: {MONTHS[month]} {year}
-        </div>
-      );
+      textContent = `Born in: ${MONTHS[month]} ${year}`;
     } else if (year && !month && !day) {
-      textContent = <div>Born in: {year}</div>;
+      textContent = `Born in: ${year}`;
     } else if (month && day && !year) {
-      textContent = (
-        <div>
-          Birthdate: {MONTHS[month]} {day}
-        </div>
-      );
+      textContent = `Birthdate: ${MONTHS[month]} ${day}`;
     } else if (month && day && year) {
-      textContent = (
-        <div>
-          Birthdate: {MONTHS[month]} {day}, {year}
-        </div>
-      );
+      textContent = `Birthdate: ${MONTHS[month]} ${day}, ${year}`;
     } else {
-      textContent = '';
+      textContent = <></>;
     }
 
     return (
-      <>
-        {textContent}
-        <button onClick={() => setEditFlag(true)}>Edit</button>
-        <button onClick={() => deleteBirthdate()}>Delete</button>
-      </>
+      <Container>
+        <BirthdateTextContainer>{textContent}</BirthdateTextContainer>
+        <Dropdown
+          menuItems={dropdownItems}
+          xMarkSize="15"
+          sandwichSize="20"
+          color={colors.orange}
+          topSpacing="30px"
+        />
+      </Container>
     );
   };
 

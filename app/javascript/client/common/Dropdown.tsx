@@ -15,13 +15,21 @@ const IconContainer = styled.div`
   cursor: pointer;
 `;
 
+const StyledXMark = styled(XMark)`
+  margin-bottom: 3px;
+`;
+
+interface MenuContainerProps {
+  topSpacing: string;
+}
+
 const MenuContainer = styled.nav`
   width: 150px;
   height: auto;
   border-radius: 5px;
   border: 1px solid ${colors.black};
   position: absolute;
-  top: 50px;
+  top: ${({ topSpacing }: MenuContainerProps) => topSpacing};
   right: -5px;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
   background: ${colors.white};
@@ -37,7 +45,6 @@ const MenuList = styled.ul`
 const MenuItem = styled.li`
   cursor: pointer;
   padding: 0.5rem;
-  font-weight: 700;
 
   &:not(:last-child) {
     border-bottom: 1px solid ${colors.black};
@@ -52,17 +59,27 @@ export interface DropdownMenuItem {
 
 interface DropdownProps {
   menuItems: DropdownMenuItem[];
+  xMarkSize?: string;
+  sandwichSize?: string;
+  color?: string;
+  topSpacing?: string;
 }
 
-export const Dropdown: FC<DropdownProps> = ({ menuItems }) => {
+export const Dropdown: FC<DropdownProps> = ({
+  menuItems,
+  xMarkSize = '30',
+  sandwichSize = '35',
+  color = colors.white,
+  topSpacing = '50px',
+}) => {
   const dropdownRef = useRef(null);
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
   const onClick = () => setIsActive(!isActive);
 
   const icon = isActive ? (
-    <XMark fill={colors.white} width="30" />
+    <StyledXMark fill={color} width={xMarkSize} />
   ) : (
-    <Sandwich fill={colors.white} width="35" />
+    <Sandwich fill={color} width={sandwichSize} />
   );
 
   const items = menuItems.map((item) => {
@@ -85,7 +102,7 @@ export const Dropdown: FC<DropdownProps> = ({ menuItems }) => {
     <DropdownContainer>
       <IconContainer onClick={onClick}>{icon}</IconContainer>
       {isActive && (
-        <MenuContainer ref={dropdownRef}>
+        <MenuContainer topSpacing={topSpacing} ref={dropdownRef}>
           <MenuList>{items}</MenuList>
         </MenuContainer>
       )}
