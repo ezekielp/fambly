@@ -154,7 +154,7 @@ export const BirthdateForm: FC<BirthdateFormProps> = ({
               component={FormikSelectInput}
               options={daysOptions}
             />
-            <Button type="submit" disabled={isSubmitting}>
+            <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
               Save
             </Button>
             <Button onClick={() => cancel()}>Cancel</Button>

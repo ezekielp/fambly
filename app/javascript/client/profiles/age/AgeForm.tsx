@@ -128,7 +128,7 @@ export const AgeForm: FC<AgeFormProps> = ({
             label="Months old"
             component={FormikNumberInput}
           />
-          <Button type="submit" disabled={isSubmitting}>
+          <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
             Save
           </Button>
           <Button onClick={() => cancel()}>Cancel</Button>

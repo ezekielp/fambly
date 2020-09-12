@@ -62,9 +62,11 @@ export const AgeContainer: FC<AgeContainerProps> = ({
     setDeletedFlag(true);
   };
 
+  const yearsText = age && age !== 1 ? 'years' : 'year';
+
   const ageContainerContent = (
     <AgeTextContainer>
-      {age ? `${age} years` : `${monthsOld} months`} old
+      {age ? `${age} ${yearsText}` : `${monthsOld} months`} old
     </AgeTextContainer>
   );
 

@@ -81,7 +81,7 @@ const InternalAddPersonForm: FC<AddPersonFormProps> = ({
             component={FormikTextInput}
             type="text"
           />
-          <Button type="submit" disabled={isSubmitting}>
+          <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
             Create profile
           </Button>
           <Button

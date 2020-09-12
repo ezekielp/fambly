@@ -1,9 +1,12 @@
 import React, { FC } from 'react';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikTextInput } from 'client/form/inputs';
+import { Button } from 'client/common/Button';
+import { BelowNavContainer } from 'client/common/BelowNavContainer';
 import { OnSubmit, handleFormErrors } from 'client/utils/formik';
 import { CreateUserMutation } from 'client/graphqlTypes';
 import * as yup from 'yup';
+import { Header } from 'client/login/LoginForm';
 
 export interface SignupFormData {
   email: string;
@@ -54,36 +57,39 @@ export const SignupForm: FC<SignupFormProps> = ({
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      validationSchema={ValidationSchema}
-    >
-      {({ isSubmitting }) => (
-        <Form>
-          <Field
-            name="email"
-            label="Email address"
-            component={FormikTextInput}
-            type="email"
-          />
-          <Field
-            name="password"
-            label="Password"
-            type="password"
-            component={FormikTextInput}
-          />
-          <Field
-            name="confirmedPassword"
-            label="Confirm password"
-            type="password"
-            component={FormikTextInput}
-          />
-          <button type="submit" disabled={isSubmitting}>
-            Sign Up
-          </button>
-        </Form>
-      )}
-    </Formik>
+    <BelowNavContainer>
+      <Header>Sign up</Header>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={ValidationSchema}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <Field
+              name="email"
+              label="Email address"
+              component={FormikTextInput}
+              type="email"
+            />
+            <Field
+              name="password"
+              label="Password"
+              type="password"
+              component={FormikTextInput}
+            />
+            <Field
+              name="confirmedPassword"
+              label="Confirm password"
+              type="password"
+              component={FormikTextInput}
+            />
+            <Button type="submit" disabled={isSubmitting}>
+              Sign up
+            </Button>
+          </Form>
+        )}
+      </Formik>
+    </BelowNavContainer>
   );
 };

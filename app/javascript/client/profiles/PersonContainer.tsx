@@ -23,6 +23,7 @@ import { PersonFieldsInput } from './PersonFieldsInput';
 import { StyledLink } from 'client/common/StyledLink';
 import { useParams } from 'react-router-dom';
 import { gql } from '@apollo/client';
+import { BelowNavContainer } from 'client/common/BelowNavContainer';
 import { text, spacing, colors } from 'client/shared/styles';
 import styled from 'styled-components';
 
@@ -104,10 +105,6 @@ gql`
   }
 `;
 
-const ProfileContainer = styled.div`
-  padding: 1rem 2rem;
-`;
-
 const BackToPeopleLinkContainer = styled.div`
   margin-bottom: ${spacing[2]};
 `;
@@ -177,7 +174,7 @@ export const PersonContainer: FC = () => {
   const hasPersonalHistory = personPlaces && personPlaces.length > 0;
 
   return (
-    <ProfileContainer>
+    <BelowNavContainer>
       <BackToPeopleLinkContainer>
         <StyledLink to="/home">Back to people</StyledLink>
       </BackToPeopleLinkContainer>
@@ -275,6 +272,6 @@ export const PersonContainer: FC = () => {
           firstName={firstName}
         />
       )}
-    </ProfileContainer>
+    </BelowNavContainer>
   );
 };

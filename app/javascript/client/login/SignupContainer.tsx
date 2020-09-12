@@ -32,7 +32,6 @@ export const SignupContainer: FC<SignupContainerProps> = () => {
 
   return (
     <>
-      <h1>Sign Up</h1>
       <SignupForm
         initialValues={{ email: '', password: '', confirmedPassword: '' }}
         onSubmit={handleSubmit}
