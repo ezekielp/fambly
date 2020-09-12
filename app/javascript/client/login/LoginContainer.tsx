@@ -37,7 +37,6 @@ const InternalLoginContainer: FC<LoginContainerProps> = () => {
 
   return (
     <>
-      <h1>Log In</h1>
       <LoginForm
         initialValues={{ email: '', password: '' }}
         onSubmit={handleSubmit}

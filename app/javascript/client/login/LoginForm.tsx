@@ -2,10 +2,20 @@ import React, { FC } from 'react';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikTextInput } from '../form/inputs';
 import { GlobalError } from '../common/GlobalError';
+import { Button } from 'client/common/Button';
+import { BelowNavContainer } from 'client/common/BelowNavContainer';
 import { OnSubmit, handleFormErrors } from 'client/utils/formik';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { LoginMutation } from 'client/graphqlTypes';
 import * as yup from 'yup';
+import styled from 'styled-components';
+import { text, spacing } from 'client/shared/styles';
+
+export const Header = styled.h1`
+  font-size: ${text[3]};
+  font-weight: 700;
+  margin-bottom: ${spacing[2]};
+`;
 
 export interface LoginFormData {
   email: string;
@@ -47,32 +57,35 @@ const InternalLoginForm: FC<LoginFormProps & RouteComponentProps> = ({
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      validationSchema={ValidationSchema}
-    >
-      {({ isSubmitting, status }) => (
-        <Form>
-          <Field
-            name="email"
-            label="Email address"
-            component={FormikTextInput}
-            type="email"
-          />
-          <Field
-            name="password"
-            label="Password"
-            type="password"
-            component={FormikTextInput}
-          />
-          {status && <GlobalError>{status}</GlobalError>}
-          <button type="submit" disabled={isSubmitting}>
-            Log In
-          </button>
-        </Form>
-      )}
-    </Formik>
+    <BelowNavContainer>
+      <Header>Log in</Header>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={ValidationSchema}
+      >
+        {({ isSubmitting, status }) => (
+          <Form>
+            <Field
+              name="email"
+              label="Email address"
+              component={FormikTextInput}
+              type="email"
+            />
+            <Field
+              name="password"
+              label="Password"
+              type="password"
+              component={FormikTextInput}
+            />
+            {status && <GlobalError>{status}</GlobalError>}
+            <Button type="submit" disabled={isSubmitting}>
+              Log in
+            </Button>
+          </Form>
+        )}
+      </Formik>
+    </BelowNavContainer>
   );
 };
 
