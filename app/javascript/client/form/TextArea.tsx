@@ -1,4 +1,5 @@
 import React, { HTMLProps, forwardRef, RefObject } from 'react';
+import { colors } from 'client/shared/styles';
 import styled from 'styled-components';
 
 interface TextAreaProps
@@ -6,6 +7,9 @@ interface TextAreaProps
 
 const StyledTextArea = styled.textarea`
   width: 100%;
+  border: 1px solid ${colors.lightGray};
+  border-radius: 8px;
+  height: 100px;
 `;
 
 export const TextArea = forwardRef(({ ...rest }: TextAreaProps, ref) => (

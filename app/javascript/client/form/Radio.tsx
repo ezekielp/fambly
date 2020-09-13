@@ -11,6 +11,11 @@ interface RadioProps
 const RadioWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
+
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
 `;
 
 const HiddenRadio = styled.input.attrs({ type: 'radio' })`
