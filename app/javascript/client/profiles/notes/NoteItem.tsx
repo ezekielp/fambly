@@ -32,7 +32,7 @@ gql`
 const NoteTextContainer = styled.div`
   border: 1px solid lightgray;
   border-radius: 6px;
-  padding: 0.5rem;
+  padding: 1rem;
   width: 89%;
   margin-right: 10px;
 `;
