@@ -1,9 +1,10 @@
 import React, { FC, ChangeEvent } from 'react';
 import { PersonInfoFragment } from 'client/graphqlTypes';
+import { SelectWrapper, StyledSelect } from 'client/form/SelectInput';
 import { spacing } from 'client/shared/styles';
 import styled from 'styled-components';
 
-const TemporaryContainer = styled.div`
+const Container = styled.div`
   margin-bottom: ${spacing[3]};
 `;
 
@@ -30,26 +31,28 @@ export const PersonFieldsInput: FC<PersonFieldsInputProps> = ({
   } = personData;
 
   return (
-    <TemporaryContainer>
-      <select value={fieldToAdd} onChange={onChange}>
-        <option value="">Select a field to add</option>
-        <option value="note">Note</option>
-        <optgroup label="Essential info">
-          {!age && !monthsOld && <option value="age">Age</option>}
-          {!birthYear && !birthMonth && !birthDay && (
-            <option value="birthdate">Birthdate</option>
-          )}
-          {!gender && <option value="gender">Gender</option>}
-          {!lastName && <option value="lastName">Last name</option>}
-        </optgroup>
-        <optgroup label="Family">
-          <option value="child">Child</option>
-          <option value="parent">Parent</option>
-        </optgroup>
-        <optgroup label="Personal history">
-          <option value="personPlace">Place {firstName} has lived</option>
-        </optgroup>
-      </select>
-    </TemporaryContainer>
+    <Container>
+      <SelectWrapper>
+        <StyledSelect value={fieldToAdd} onChange={onChange}>
+          <option value="">Select a field to add</option>
+          <option value="note">Note</option>
+          <optgroup label="Essential info">
+            {!age && !monthsOld && <option value="age">Age</option>}
+            {!birthYear && !birthMonth && !birthDay && (
+              <option value="birthdate">Birthdate</option>
+            )}
+            {!gender && <option value="gender">Gender</option>}
+            {!lastName && <option value="lastName">Last name</option>}
+          </optgroup>
+          <optgroup label="Family">
+            <option value="child">Child</option>
+            <option value="parent">Parent</option>
+          </optgroup>
+          <optgroup label="Personal history">
+            <option value="personPlace">Place {firstName} has lived</option>
+          </optgroup>
+        </StyledSelect>
+      </SelectWrapper>
+    </Container>
   );
 };
