@@ -3,7 +3,7 @@ import { FieldProps, ErrorMessage } from 'formik';
 import styled from 'styled-components';
 
 interface WithFormikProps {
-  label: string;
+  label?: string;
   onChange?: (newVal: any) => any;
   innerRef?: React.RefObject<HTMLInputElement>;
 }
@@ -41,9 +41,11 @@ export const withFormik = <AdditionalFieldPropsType extends object>(
 
   return (
     <FormFieldWrapper>
-      <Label as="label" htmlFor={name}>
-        {label}
-      </Label>
+      {label && (
+        <Label as="label" htmlFor={name}>
+          {label}
+        </Label>
+      )}
       <WrappedComponent
         {...(rest as AdditionalFieldPropsType)}
         {...field}

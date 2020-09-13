@@ -14,6 +14,7 @@ import { HomeContainer } from './home/HomeContainer';
 import { PersonContainer } from './profiles/PersonContainer';
 import { Wrapper } from 'client/common/Wrapper';
 import { NavBar } from 'client/nav/NavBar';
+import { Footer } from 'client/nav/Footer';
 
 interface ProtectedRouteProps extends RouteProps {
   accessAllowed: boolean;
@@ -80,6 +81,7 @@ const InternalAppContainer: FC<AppContainerProps> = () => {
           <Redirect to="/home" />
         </Route>
       </Switch>
+      <Footer />
     </Wrapper>
   );
 };

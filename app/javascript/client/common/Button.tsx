@@ -9,7 +9,7 @@ interface ButtonProps extends Omit<HTMLProps<HTMLButtonElement>, 'as' | 'ref'> {
 export const Button = styled.button`
   border: 1px solid ${colors.black};
   border-radius: 50px;
-  padding: 0.5rem;
+  padding: 0.5rem 1.5rem;
   margin-right: ${({ marginRight }: ButtonProps) =>
     marginRight ? marginRight : '0'};
 
