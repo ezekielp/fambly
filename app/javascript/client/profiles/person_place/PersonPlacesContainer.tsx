@@ -5,7 +5,9 @@ import { ProfileLabel } from 'client/common/ProfileLabel';
 import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
 import styled from 'styled-components';
 
-const PersonPlaceItemsContainer = styled.div``;
+const PersonPlaceItemsContainer = styled.div`
+  margin: 0 auto;
+`;
 
 interface PersonPlacesContainerProps {
   personPlaces: PersonPlaceInfoFragment[];

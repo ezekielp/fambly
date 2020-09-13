@@ -16,6 +16,7 @@ gql`
 `;
 
 const PersonPlaceTextContainer = styled.div`
+  text-align: center;
   margin-right: 10px;
 `;
 
