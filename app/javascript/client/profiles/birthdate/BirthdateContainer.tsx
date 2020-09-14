@@ -6,6 +6,9 @@ import { BirthdateForm } from './BirthdateForm';
 import { ProfileLabel } from 'client/common/ProfileLabel';
 import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
 import { MONTHS } from './utils';
+import { Modal } from 'client/common/Modal';
+import { Text } from 'client/common/Text';
+import { Button } from 'client/common/Button';
 import { gql } from '@apollo/client';
 import styled from 'styled-components';
 
@@ -31,6 +34,7 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
   const { birthYear, birthMonth, birthDay, personId } = props;
   const [editFlag, setEditFlag] = useState(false);
   const [deletedFlag, setDeletedFlag] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const deleteBirthdate = async () => {
     await deleteBirthdateMutation({
@@ -41,11 +45,12 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
       },
     });
     setDeletedFlag(true);
+    setModalOpen(false);
   };
 
   const dropdownItems = [
     { label: 'Edit', onClick: () => setEditFlag(true) },
-    { label: 'Delete', onClick: () => deleteBirthdate() },
+    { label: 'Delete', onClick: () => setModalOpen(true) },
   ];
 
   const birthdateLabel = birthMonth && birthDay ? 'birthdate' : 'birth year';
@@ -95,12 +100,23 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
           </BirthdateTextContainer>
           <Dropdown
             menuItems={dropdownItems}
-            xMarkSize="15"
+            xMarkSize="20"
             sandwichSize="20"
             color={colors.orange}
             topSpacing="30px"
           />
         </ProfileFieldContainer>
+      )}
+      {modalOpen && (
+        <Modal onClose={() => setModalOpen(false)}>
+          <Text marginBottom={3} fontSize={3} bold>
+            Are you sure you want to delete this field?
+          </Text>
+          <Button marginRight="1rem" onClick={() => deleteBirthdate()}>
+            Yes
+          </Button>
+          <Button onClick={() => setModalOpen(false)}>Cancel</Button>
+        </Modal>
       )}
     </>
   );

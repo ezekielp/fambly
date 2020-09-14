@@ -33,10 +33,11 @@ const StyledXMark = styled(XMark)`
 `;
 
 interface ModalProps {
-  setFieldToAdd?: (field: string) => void;
+  // setFieldToAdd?: (field: string) => void;
+  onClose?: () => void;
 }
 
-export const Modal: FC<ModalProps> = ({ setFieldToAdd, children }) => {
+export const Modal: FC<ModalProps> = ({ onClose, children }) => {
   const modalRef = useRef(null);
   const [isActive, setIsActive] = useDetectOutsideClick(modalRef, true);
 
@@ -49,8 +50,8 @@ export const Modal: FC<ModalProps> = ({ setFieldToAdd, children }) => {
   });
 
   useEffect(() => {
-    if (!isActive && setFieldToAdd) {
-      setFieldToAdd('');
+    if (!isActive && onClose) {
+      onClose();
     }
   }, [isActive]);
 

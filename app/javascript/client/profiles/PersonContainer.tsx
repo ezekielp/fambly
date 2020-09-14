@@ -168,7 +168,6 @@ export const PersonContainer: FC = () => {
 
   const hasAge = age || monthsOld;
   const hasBirthdate = birthYear || birthMonth;
-  const hasFullBirthdate = birthYear && birthMonth && birthDay ? true : false;
   const hasVitals = gender || hasAge || hasBirthdate;
   const hasFamily =
     (parents && parents.length > 0) || (children && children.length > 0);
@@ -188,27 +187,27 @@ export const PersonContainer: FC = () => {
         onChange={(e) => setFieldToAdd(e.target.value)}
       />
       {fieldToAdd === 'age' && (
-        <Modal setFieldToAdd={setFieldToAdd}>
+        <Modal onClose={() => setFieldToAdd('')}>
           <AgeForm setFieldToAdd={setFieldToAdd} personId={personId} />
         </Modal>
       )}
       {fieldToAdd === 'birthdate' && (
-        <Modal setFieldToAdd={setFieldToAdd}>
+        <Modal onClose={() => setFieldToAdd('')}>
           <BirthdateForm setFieldToAdd={setFieldToAdd} personId={personId} />
         </Modal>
       )}
       {fieldToAdd === 'gender' && (
-        <Modal setFieldToAdd={setFieldToAdd}>
+        <Modal onClose={() => setFieldToAdd('')}>
           <GenderForm setFieldToAdd={setFieldToAdd} personId={personId} />
         </Modal>
       )}
       {fieldToAdd === 'note' && (
-        <Modal setFieldToAdd={setFieldToAdd}>
+        <Modal onClose={() => setFieldToAdd('')}>
           <NoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
         </Modal>
       )}
       {fieldToAdd === 'parent' && (
-        <Modal setFieldToAdd={setFieldToAdd}>
+        <Modal onClose={() => setFieldToAdd('')}>
           <ParentForm
             setFieldToAdd={setFieldToAdd}
             childId={personId}
@@ -217,7 +216,7 @@ export const PersonContainer: FC = () => {
         </Modal>
       )}
       {fieldToAdd === 'child' && (
-        <Modal setFieldToAdd={setFieldToAdd}>
+        <Modal onClose={() => setFieldToAdd('')}>
           <ChildForm
             setFieldToAdd={setFieldToAdd}
             parentId={personId}
@@ -226,7 +225,7 @@ export const PersonContainer: FC = () => {
         </Modal>
       )}
       {fieldToAdd === 'personPlace' && (
-        <Modal setFieldToAdd={setFieldToAdd}>
+        <Modal onClose={() => setFieldToAdd('')}>
           <PersonPlaceForm setFieldToAdd={setFieldToAdd} personId={personId} />
         </Modal>
       )}
@@ -244,7 +243,7 @@ export const PersonContainer: FC = () => {
           age={age}
           monthsOld={monthsOld}
           personId={personId}
-          hasFullBirthdate={hasFullBirthdate}
+          hasBirthYear={!!birthYear}
         />
       )}
       {hasBirthdate && (

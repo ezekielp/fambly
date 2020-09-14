@@ -6,6 +6,9 @@ import { ProfileLabel } from 'client/common/ProfileLabel';
 import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
 import { GenderForm } from './GenderForm';
 import { GENDER_TEXT_RENDERINGS } from './utils';
+import { Modal } from 'client/common/Modal';
+import { Text } from 'client/common/Text';
+import { Button } from 'client/common/Button';
 import styled from 'styled-components';
 
 const GenderTextContainer = styled.div`
@@ -24,6 +27,7 @@ export const GenderContainer: FC<GenderContainerProps> = ({
   const [deleteGenderMutation] = useDeleteGenderMutation();
   const [editFlag, setEditFlag] = useState(false);
   const [deletedFlag, setDeletedFlag] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const deleteGender = async () => {
     await deleteGenderMutation({
@@ -34,11 +38,12 @@ export const GenderContainer: FC<GenderContainerProps> = ({
       },
     });
     setDeletedFlag(true);
+    setModalOpen(false);
   };
 
   const dropdownItems = [
     { label: 'Edit', onClick: () => setEditFlag(true) },
-    { label: 'Delete', onClick: () => deleteGender() },
+    { label: 'Delete', onClick: () => setModalOpen(true) },
   ];
 
   const genderText = GENDER_TEXT_RENDERINGS[gender]
@@ -75,12 +80,23 @@ export const GenderContainer: FC<GenderContainerProps> = ({
           {genderTextComponent}
           <Dropdown
             menuItems={dropdownItems}
-            xMarkSize="15"
+            xMarkSize="20"
             sandwichSize="20"
             color={colors.orange}
             topSpacing="30px"
           />
         </ProfileFieldContainer>
+      )}
+      {modalOpen && (
+        <Modal onClose={() => setModalOpen(false)}>
+          <Text marginBottom={3} fontSize={3} bold>
+            Are you sure you want to delete this field?
+          </Text>
+          <Button marginRight="1rem" onClick={() => deleteGender()}>
+            Yes
+          </Button>
+          <Button onClick={() => setModalOpen(false)}>Cancel</Button>
+        </Modal>
       )}
     </>
   );
