@@ -21,6 +21,7 @@ import { PersonPlaceForm } from './person_place/PersonPlaceForm';
 import { PersonPlacesContainer } from './person_place/PersonPlacesContainer';
 import { PersonFieldsInput } from './PersonFieldsInput';
 import { StyledLink } from 'client/common/StyledLink';
+import { Modal } from 'client/common/Modal';
 import { useParams } from 'react-router-dom';
 import { gql } from '@apollo/client';
 import { BelowNavContainer } from 'client/common/BelowNavContainer';
@@ -187,7 +188,9 @@ export const PersonContainer: FC = () => {
         onChange={(e) => setFieldToAdd(e.target.value)}
       />
       {fieldToAdd === 'age' && (
-        <AgeForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        <Modal setFieldToAdd={setFieldToAdd}>
+          <AgeForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        </Modal>
       )}
       {fieldToAdd === 'birthdate' && (
         <BirthdateForm setFieldToAdd={setFieldToAdd} personId={personId} />

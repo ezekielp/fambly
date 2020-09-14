@@ -1,0 +1,57 @@
+import React, { FC, useRef, useEffect } from 'react';
+import { useDetectOutsideClick } from 'client/common/useDetectOutsideClick';
+import { colors } from 'client/shared/styles';
+import styled from 'styled-components';
+
+const ModalBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.6);
+  overflow-y: auto;
+`;
+
+const ModalContainer = styled.div`
+  background: ${colors.white};
+  border-radius: 5px;
+  width: 90%;
+  margin: 200px auto;
+  padding: 2rem;
+  z-index: 11;
+`;
+
+interface ModalProps {
+  setFieldToAdd?: (field: string) => void;
+}
+
+export const Modal: FC<ModalProps> = ({ setFieldToAdd, children }) => {
+  const modalRef = useRef(null);
+  const [isActive, setIsActive] = useDetectOutsideClick(modalRef, true);
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = 'inherit';
+    };
+  });
+
+  useEffect(() => {
+    if (!isActive && setFieldToAdd) {
+      setFieldToAdd('');
+    }
+  }, [isActive]);
+
+  return (
+    <>
+      {isActive && (
+        <ModalBackground>
+          <ModalContainer ref={modalRef}>{children}</ModalContainer>
+        </ModalBackground>
+      )}
+    </>
+  );
+};
