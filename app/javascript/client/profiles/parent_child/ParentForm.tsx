@@ -16,6 +16,8 @@ import {
 } from 'client/form/inputs';
 import { Button } from 'client/common/Button';
 import { GlobalError } from 'client/common/GlobalError';
+import { Text } from 'client/common/Text';
+import { SectionDivider } from 'client/profiles/PersonContainer';
 import {
   NEW_OR_CURRENT_CONTACT_OPTIONS,
   PARENT_TYPE_OPTIONS,
@@ -239,84 +241,90 @@ export const ParentForm: FC<ParentFormProps> = ({
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      validationSchema={ParentFormValidationSchema}
-    >
-      {({ values, isSubmitting, status }) => {
-        return (
-          <Form>
-            <Field
-              name="newOrCurrentContact"
-              label=""
-              component={FormikRadioGroup}
-              options={NEW_OR_CURRENT_CONTACT_OPTIONS}
-            />
-            {values.newOrCurrentContact === 'new_person' && (
-              <>
-                <Field
-                  name="showOnDashboard"
-                  label=""
-                  component={FormikCheckboxGroup}
-                  options={[
-                    {
-                      label: `Add this person to your dashboard of contacts? (Even if you don't add them to your dashboard, you will always be able to access and add to their profile from ${personFirstName}'s page.`,
-                      value: 'showOnDashboard',
-                    },
-                  ]}
-                />
-                <Field
-                  name="firstName"
-                  label="First name"
-                  component={FormikTextInput}
-                  type="test"
-                />
-                <Field
-                  name="lastName"
-                  label="Last name (optional)"
-                  component={FormikTextInput}
-                  type="test"
-                />
-                <Field
-                  name="age"
-                  label="Age (optional)"
-                  component={FormikNumberInput}
-                />
-                <Field
-                  name="monthsOld"
-                  label="Months old (optional)"
-                  component={FormikNumberInput}
-                />
-              </>
-            )}
-            {values.newOrCurrentContact === 'current_person' && (
+    <>
+      <Text marginBottom={3} fontSize={4} bold>
+        Parent
+      </Text>
+      <SectionDivider />
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={ParentFormValidationSchema}
+      >
+        {({ values, isSubmitting, status }) => {
+          return (
+            <Form>
               <Field
-                name="formParentId"
-                label="Parent"
-                component={FormikSelectInput}
-                options={peopleOptions}
+                name="newOrCurrentContact"
+                label=""
+                component={FormikRadioGroup}
+                options={NEW_OR_CURRENT_CONTACT_OPTIONS}
               />
-            )}
-            <Field
-              name="parentType"
-              label="Type of parent (optional)"
-              component={FormikSelectInput}
-              options={PARENT_TYPE_OPTIONS}
-            />
-            <Field
-              name="note"
-              label="Note (optional)"
-              component={FormikTextArea}
-            />
-            {status && <GlobalError>{status}</GlobalError>}
-            <Button type="submit" disabled={isSubmitting}>
-              Save
-            </Button>
-            <Button onClick={() => cancel()}>Cancel</Button>
-          </Form>
-        );
-      }}
-    </Formik>
+              {values.newOrCurrentContact === 'new_person' && (
+                <>
+                  <Field
+                    name="showOnDashboard"
+                    label=""
+                    component={FormikCheckboxGroup}
+                    options={[
+                      {
+                        label: `Add this person to your dashboard of contacts? (Even if you don't add them to your dashboard, you will always be able to access and add to their profile from ${personFirstName}'s page.)`,
+                        value: 'showOnDashboard',
+                      },
+                    ]}
+                  />
+                  <Field
+                    name="firstName"
+                    label="First name"
+                    component={FormikTextInput}
+                    type="test"
+                  />
+                  <Field
+                    name="lastName"
+                    label="Last name (optional)"
+                    component={FormikTextInput}
+                    type="test"
+                  />
+                  <Field
+                    name="age"
+                    label="Age (optional)"
+                    component={FormikNumberInput}
+                  />
+                  <Field
+                    name="monthsOld"
+                    label="Months old (optional)"
+                    component={FormikNumberInput}
+                  />
+                </>
+              )}
+              {values.newOrCurrentContact === 'current_person' && (
+                <Field
+                  name="formParentId"
+                  label="Parent"
+                  component={FormikSelectInput}
+                  options={peopleOptions}
+                />
+              )}
+              <Field
+                name="parentType"
+                label="Type of parent (optional)"
+                component={FormikSelectInput}
+                options={PARENT_TYPE_OPTIONS}
+              />
+              <Field
+                name="note"
+                label="Note (optional)"
+                component={FormikTextArea}
+              />
+              {status && <GlobalError>{status}</GlobalError>}
+              <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
+                Save
+              </Button>
+              <Button onClick={() => cancel()}>Cancel</Button>
+            </Form>
+          );
+        }}
+      </Formik>
+    </>
   );
 };

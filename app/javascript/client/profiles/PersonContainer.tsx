@@ -193,30 +193,42 @@ export const PersonContainer: FC = () => {
         </Modal>
       )}
       {fieldToAdd === 'birthdate' && (
-        <BirthdateForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        <Modal setFieldToAdd={setFieldToAdd}>
+          <BirthdateForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        </Modal>
       )}
       {fieldToAdd === 'gender' && (
-        <GenderForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        <Modal setFieldToAdd={setFieldToAdd}>
+          <GenderForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        </Modal>
       )}
       {fieldToAdd === 'note' && (
-        <NoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        <Modal setFieldToAdd={setFieldToAdd}>
+          <NoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        </Modal>
       )}
       {fieldToAdd === 'parent' && (
-        <ParentForm
-          setFieldToAdd={setFieldToAdd}
-          childId={personId}
-          personFirstName={firstName}
-        />
+        <Modal setFieldToAdd={setFieldToAdd}>
+          <ParentForm
+            setFieldToAdd={setFieldToAdd}
+            childId={personId}
+            personFirstName={firstName}
+          />
+        </Modal>
       )}
       {fieldToAdd === 'child' && (
-        <ChildForm
-          setFieldToAdd={setFieldToAdd}
-          parentId={personId}
-          personFirstName={firstName}
-        />
+        <Modal setFieldToAdd={setFieldToAdd}>
+          <ChildForm
+            setFieldToAdd={setFieldToAdd}
+            parentId={personId}
+            personFirstName={firstName}
+          />
+        </Modal>
       )}
       {fieldToAdd === 'personPlace' && (
-        <PersonPlaceForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        <Modal setFieldToAdd={setFieldToAdd}>
+          <PersonPlaceForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        </Modal>
       )}
       {notes && notes.length > 0 && (
         <>

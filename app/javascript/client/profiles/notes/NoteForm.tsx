@@ -6,6 +6,7 @@ import {
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikTextArea } from 'client/form/inputs';
 import { Button } from 'client/common/Button';
+import { Text } from 'client/common/Text';
 import { handleFormErrors } from 'client/utils/formik';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
@@ -105,20 +106,25 @@ export const NoteForm: FC<NoteFormProps> = ({
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      validationSchema={ValidationSchema}
-    >
-      {({ isSubmitting }) => (
-        <Form>
-          <Field name="content" label="Note" component={FormikTextArea} />
-          <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
-            Save
-          </Button>
-          <Button onClick={() => cancel()}>Cancel</Button>
-        </Form>
-      )}
-    </Formik>
+    <>
+      <Text marginBottom={3} fontSize={4} bold>
+        Note
+      </Text>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={ValidationSchema}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <Field name="content" component={FormikTextArea} />
+            <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
+              Save
+            </Button>
+            <Button onClick={() => cancel()}>Cancel</Button>
+          </Form>
+        )}
+      </Formik>
+    </>
   );
 };

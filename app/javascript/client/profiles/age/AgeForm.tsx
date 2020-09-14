@@ -6,6 +6,8 @@ import {
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikNumberInput } from 'client/form/inputs';
 import { Button } from 'client/common/Button';
+import { Text } from 'client/common/Text';
+import { SectionDivider } from 'client/profiles/PersonContainer';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
@@ -115,25 +117,34 @@ export const AgeForm: FC<AgeFormProps> = ({
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      validationSchema={AgeFormValidationSchema}
-    >
-      {({ isSubmitting }) => (
-        <Form>
-          <Field name="age" label="Years old" component={FormikNumberInput} />
-          <Field
-            name="monthsOld"
-            label="Months old"
-            component={FormikNumberInput}
-          />
-          <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
-            Save
-          </Button>
-          <Button onClick={() => cancel()}>Cancel</Button>
-        </Form>
-      )}
-    </Formik>
+    <>
+      <Text marginBottom={3} fontSize={4} bold>
+        Age
+      </Text>
+      <SectionDivider />
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={AgeFormValidationSchema}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <Field name="age" label="Years old" component={FormikNumberInput} />
+            <Text marginBottom={5} bold>
+              Or
+            </Text>
+            <Field
+              name="monthsOld"
+              label="Months old"
+              component={FormikNumberInput}
+            />
+            <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
+              Save
+            </Button>
+            <Button onClick={() => cancel()}>Cancel</Button>
+          </Form>
+        )}
+      </Formik>
+    </>
   );
 };

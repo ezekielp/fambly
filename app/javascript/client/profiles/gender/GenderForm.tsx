@@ -4,6 +4,8 @@ import { GENDER_OPTIONS } from './utils';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikSelectInput, FormikTextInput } from 'client/form/inputs';
 import { Button } from 'client/common/Button';
+import { Text } from 'client/common/Text';
+import { SectionDivider } from 'client/profiles/PersonContainer';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
@@ -104,32 +106,38 @@ export const GenderForm: FC<GenderFormProps> = ({
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      validationSchema={GenderFormValidationSchema}
-    >
-      {({ values, isSubmitting }) => (
-        <Form>
-          <Field
-            name="gender"
-            label="Gender"
-            component={FormikSelectInput}
-            options={GENDER_OPTIONS}
-          />
-          {values.gender === 'custom' && (
+    <>
+      <Text marginBottom={3} fontSize={4} bold>
+        Gender
+      </Text>
+      <SectionDivider />
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={GenderFormValidationSchema}
+      >
+        {({ values, isSubmitting }) => (
+          <Form>
             <Field
-              name="customGender"
-              label="Other (please specify)"
-              component={FormikTextInput}
+              name="gender"
+              label="Gender"
+              component={FormikSelectInput}
+              options={GENDER_OPTIONS}
             />
-          )}
-          <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
-            Save
-          </Button>
-          <Button onClick={() => cancel()}>Cancel</Button>
-        </Form>
-      )}
-    </Formik>
+            {values.gender === 'custom' && (
+              <Field
+                name="customGender"
+                label="Other (please specify)"
+                component={FormikTextInput}
+              />
+            )}
+            <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
+              Save
+            </Button>
+            <Button onClick={() => cancel()}>Cancel</Button>
+          </Form>
+        )}
+      </Formik>
+    </>
   );
 };

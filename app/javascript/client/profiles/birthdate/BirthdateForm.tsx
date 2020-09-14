@@ -3,6 +3,8 @@ import { useCreateOrUpdateBirthdateMutation } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikNumberInput, FormikSelectInput } from 'client/form/inputs';
 import { Button } from 'client/common/Button';
+import { Text } from 'client/common/Text';
+import { SectionDivider } from 'client/profiles/PersonContainer';
 import {
   MONTH_OPTIONS,
   determineDaysOptions,
@@ -122,45 +124,50 @@ export const BirthdateForm: FC<BirthdateFormProps> = ({
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      validationSchema={ValidationSchema}
-    >
-      {({ values, isSubmitting }) => {
-        const daysOptions = determineDaysOptions(
-          values.birthMonth,
-          FEBRUARY_DAYS_OPTIONS,
-          THIRTY_DAYS_OPTIONS,
-          THIRTY_ONE_DAYS_OPTIONS,
-        );
-
-        return (
-          <Form>
-            <Field
-              name="birthYear"
-              label="Year (optional)"
-              component={FormikNumberInput}
-            />
-            <Field
-              name="birthMonth"
-              label="Month (optional)"
-              component={FormikSelectInput}
-              options={MONTH_OPTIONS}
-            />
-            <Field
-              name="birthDay"
-              label="Day (optional)"
-              component={FormikSelectInput}
-              options={daysOptions}
-            />
-            <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
-              Save
-            </Button>
-            <Button onClick={() => cancel()}>Cancel</Button>
-          </Form>
-        );
-      }}
-    </Formik>
+    <>
+      <Text marginBottom={3} fontSize={4} bold>
+        Birthdate
+      </Text>
+      <SectionDivider />
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={ValidationSchema}
+      >
+        {({ values, isSubmitting }) => {
+          const daysOptions = determineDaysOptions(
+            values.birthMonth,
+            FEBRUARY_DAYS_OPTIONS,
+            THIRTY_DAYS_OPTIONS,
+            THIRTY_ONE_DAYS_OPTIONS,
+          );
+          return (
+            <Form>
+              <Field
+                name="birthYear"
+                label="Year (optional)"
+                component={FormikNumberInput}
+              />
+              <Field
+                name="birthMonth"
+                label="Month (optional)"
+                component={FormikSelectInput}
+                options={MONTH_OPTIONS}
+              />
+              <Field
+                name="birthDay"
+                label="Day (optional)"
+                component={FormikSelectInput}
+                options={daysOptions}
+              />
+              <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
+                Save
+              </Button>
+              <Button onClick={() => cancel()}>Cancel</Button>
+            </Form>
+          );
+        }}
+      </Formik>
+    </>
   );
 };
