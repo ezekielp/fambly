@@ -1,5 +1,6 @@
 import React, { FC, useRef, useEffect } from 'react';
 import { useDetectOutsideClick } from 'client/common/useDetectOutsideClick';
+import { XMark } from 'client/assets/XMark';
 import { colors } from 'client/shared/styles';
 import styled from 'styled-components';
 
@@ -21,6 +22,14 @@ const ModalContainer = styled.div`
   margin: 200px auto;
   padding: 2rem;
   z-index: 11;
+  position: relative;
+`;
+
+const StyledXMark = styled(XMark)`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  cursor: pointer;
 `;
 
 interface ModalProps {
@@ -49,7 +58,14 @@ export const Modal: FC<ModalProps> = ({ setFieldToAdd, children }) => {
     <>
       {isActive && (
         <ModalBackground>
-          <ModalContainer ref={modalRef}>{children}</ModalContainer>
+          <ModalContainer ref={modalRef}>
+            <StyledXMark
+              onClick={() => setIsActive(false)}
+              fill={colors.orange}
+              width="25"
+            />
+            {children}
+          </ModalContainer>
         </ModalBackground>
       )}
     </>

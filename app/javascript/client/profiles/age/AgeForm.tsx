@@ -122,7 +122,7 @@ export const AgeForm: FC<AgeFormProps> = ({
     >
       {({ isSubmitting }) => (
         <Form>
-          <Field name="age" label="Age" component={FormikNumberInput} />
+          <Field name="age" label="Years old" component={FormikNumberInput} />
           <Field
             name="monthsOld"
             label="Months old"
