@@ -7,6 +7,9 @@ import { PersonPlaceForm } from './PersonPlaceForm';
 import { NoteItem } from 'client/profiles/notes/NoteItem';
 import { gql } from '@apollo/client';
 import { colors } from 'client/shared/styles';
+import { Modal } from 'client/common/Modal';
+import { Text } from 'client/common/Text';
+import { Button } from 'client/common/Button';
 import styled from 'styled-components';
 
 gql`
@@ -41,6 +44,7 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
   const [deletePersonPlaceMutation] = useDeletePersonPlaceMutation();
   const [editFlag, setEditFlag] = useState(false);
   const [deletedFlag, setDeletedFlag] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const deletePersonPlace = async () => {
     await deletePersonPlaceMutation({
@@ -51,6 +55,7 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
       },
     });
     setDeletedFlag(true);
+    setModalOpen(false);
   };
 
   const getTimingText = () => {
@@ -73,7 +78,7 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
 
   const dropdownItems = [
     { label: 'Edit', onClick: () => setEditFlag(true) },
-    { label: 'Delete', onClick: () => deletePersonPlace() },
+    { label: 'Delete', onClick: () => setModalOpen(true) },
   ];
 
   const initialValues = {
@@ -118,7 +123,7 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
             {personPlaceContent}
             <Dropdown
               menuItems={dropdownItems}
-              xMarkSize="15"
+              xMarkSize="20"
               sandwichSize="20"
               color={colors.orange}
               topSpacing="30px"
@@ -126,6 +131,17 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
           </ProfileFieldContainer>
           {!deletedFlag && noteItems}
         </>
+      )}
+      {modalOpen && (
+        <Modal onClose={() => setModalOpen(false)}>
+          <Text marginBottom={3} fontSize={3} bold>
+            Are you sure you want to delete this field?
+          </Text>
+          <Button marginRight="1rem" onClick={() => deletePersonPlace()}>
+            Yes
+          </Button>
+          <Button onClick={() => setModalOpen(false)}>Cancel</Button>
+        </Modal>
       )}
     </>
   );

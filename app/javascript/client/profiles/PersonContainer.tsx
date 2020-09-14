@@ -21,6 +21,7 @@ import { PersonPlaceForm } from './person_place/PersonPlaceForm';
 import { PersonPlacesContainer } from './person_place/PersonPlacesContainer';
 import { PersonFieldsInput } from './PersonFieldsInput';
 import { StyledLink } from 'client/common/StyledLink';
+import { Modal } from 'client/common/Modal';
 import { useParams } from 'react-router-dom';
 import { gql } from '@apollo/client';
 import { BelowNavContainer } from 'client/common/BelowNavContainer';
@@ -167,7 +168,6 @@ export const PersonContainer: FC = () => {
 
   const hasAge = age || monthsOld;
   const hasBirthdate = birthYear || birthMonth;
-  const hasFullBirthdate = birthYear && birthMonth && birthDay ? true : false;
   const hasVitals = gender || hasAge || hasBirthdate;
   const hasFamily =
     (parents && parents.length > 0) || (children && children.length > 0);
@@ -187,33 +187,47 @@ export const PersonContainer: FC = () => {
         onChange={(e) => setFieldToAdd(e.target.value)}
       />
       {fieldToAdd === 'age' && (
-        <AgeForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        <Modal onClose={() => setFieldToAdd('')}>
+          <AgeForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        </Modal>
       )}
       {fieldToAdd === 'birthdate' && (
-        <BirthdateForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        <Modal onClose={() => setFieldToAdd('')}>
+          <BirthdateForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        </Modal>
       )}
       {fieldToAdd === 'gender' && (
-        <GenderForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        <Modal onClose={() => setFieldToAdd('')}>
+          <GenderForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        </Modal>
       )}
       {fieldToAdd === 'note' && (
-        <NoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        <Modal onClose={() => setFieldToAdd('')}>
+          <NoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        </Modal>
       )}
       {fieldToAdd === 'parent' && (
-        <ParentForm
-          setFieldToAdd={setFieldToAdd}
-          childId={personId}
-          personFirstName={firstName}
-        />
+        <Modal onClose={() => setFieldToAdd('')}>
+          <ParentForm
+            setFieldToAdd={setFieldToAdd}
+            childId={personId}
+            personFirstName={firstName}
+          />
+        </Modal>
       )}
       {fieldToAdd === 'child' && (
-        <ChildForm
-          setFieldToAdd={setFieldToAdd}
-          parentId={personId}
-          personFirstName={firstName}
-        />
+        <Modal onClose={() => setFieldToAdd('')}>
+          <ChildForm
+            setFieldToAdd={setFieldToAdd}
+            parentId={personId}
+            personFirstName={firstName}
+          />
+        </Modal>
       )}
       {fieldToAdd === 'personPlace' && (
-        <PersonPlaceForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        <Modal onClose={() => setFieldToAdd('')}>
+          <PersonPlaceForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        </Modal>
       )}
       {notes && notes.length > 0 && (
         <>
@@ -229,7 +243,7 @@ export const PersonContainer: FC = () => {
           age={age}
           monthsOld={monthsOld}
           personId={personId}
-          hasFullBirthdate={hasFullBirthdate}
+          hasBirthYear={!!birthYear}
         />
       )}
       {hasBirthdate && (

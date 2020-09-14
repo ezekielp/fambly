@@ -15,6 +15,8 @@ import { Button } from 'client/common/Button';
 import { MONTH_OPTIONS } from 'client/profiles/birthdate/utils';
 import { STATE_OPTIONS } from './utils';
 import { GlobalError } from 'client/common/GlobalError';
+import { Text } from 'client/common/Text';
+import { SectionDivider } from 'client/profiles/PersonContainer';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
 import * as yup from 'yup';
@@ -262,88 +264,98 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      validationSchema={PersonPlaceFormValidationSchema}
-    >
-      {({ values, isSubmitting, status }) => {
-        return (
-          <Form>
-            <Field name="country" label="Country" component={FormikTextInput} />
-            {values.country === 'USA' && (
+    <>
+      <Text marginBottom={3} fontSize={4} bold>
+        Place
+      </Text>
+      <SectionDivider />
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={PersonPlaceFormValidationSchema}
+      >
+        {({ values, isSubmitting, status }) => {
+          return (
+            <Form>
               <Field
-                name="stateOrRegion"
-                label="State (optional)"
-                component={FormikSelectInput}
-                options={STATE_OPTIONS}
-              />
-            )}
-            {values.country !== 'USA' && (
-              <Field
-                name="stateOrRegion"
-                label="State or region (optional)"
+                name="country"
+                label="Country"
                 component={FormikTextInput}
               />
-            )}
-            <Field
-              name="town"
-              label="City or town (optional)"
-              component={FormikTextInput}
-            />
-            <Field
-              name="street"
-              label="Street address (optional)"
-              component={FormikTextInput}
-            />
-            <Field
-              name="zipCode"
-              label="Zip code (optional)"
-              component={FormikTextInput}
-            />
-            <Field
-              name="birthPlace"
-              label=""
-              component={FormikCheckboxGroup}
-              options={[{ label: 'Birth place?', value: 'birthPlace' }]}
-            />
-            <Field
-              name="startYear"
-              label="Start year (optional)"
-              component={FormikNumberInput}
-            />
-            <Field
-              name="startMonth"
-              label="Start month (optional)"
-              component={FormikSelectInput}
-              options={MONTH_OPTIONS}
-            />
-            <Field
-              name="endYear"
-              label="End year (optional)"
-              component={FormikNumberInput}
-            />
-            <Field
-              name="endMonth"
-              label="End month (optional)"
-              component={FormikSelectInput}
-              options={MONTH_OPTIONS}
-            />
-            {setFieldToAdd && (
+              {values.country === 'USA' && (
+                <Field
+                  name="stateOrRegion"
+                  label="State (optional)"
+                  component={FormikSelectInput}
+                  options={STATE_OPTIONS}
+                />
+              )}
+              {values.country !== 'USA' && (
+                <Field
+                  name="stateOrRegion"
+                  label="State or region (optional)"
+                  component={FormikTextInput}
+                />
+              )}
               <Field
-                name="note"
-                label="Note (optional)"
-                component={FormikTextArea}
+                name="town"
+                label="City or town (optional)"
+                component={FormikTextInput}
               />
-            )}
-            {status && <GlobalError>{status}</GlobalError>}
-            <Button type="submit" disabled={isSubmitting}>
-              Save
-            </Button>
-            <Button onClick={() => cancel()}>Cancel</Button>
-          </Form>
-        );
-      }}
-    </Formik>
+              <Field
+                name="street"
+                label="Street address (optional)"
+                component={FormikTextInput}
+              />
+              <Field
+                name="zipCode"
+                label="Zip code (optional)"
+                component={FormikTextInput}
+              />
+              <Field
+                name="birthPlace"
+                label=""
+                component={FormikCheckboxGroup}
+                options={[{ label: 'Birth place?', value: 'birthPlace' }]}
+              />
+              <Field
+                name="startYear"
+                label="Start year (optional)"
+                component={FormikNumberInput}
+              />
+              <Field
+                name="startMonth"
+                label="Start month (optional)"
+                component={FormikSelectInput}
+                options={MONTH_OPTIONS}
+              />
+              <Field
+                name="endYear"
+                label="End year (optional)"
+                component={FormikNumberInput}
+              />
+              <Field
+                name="endMonth"
+                label="End month (optional)"
+                component={FormikSelectInput}
+                options={MONTH_OPTIONS}
+              />
+              {setFieldToAdd && (
+                <Field
+                  name="note"
+                  label="Note (optional)"
+                  component={FormikTextArea}
+                />
+              )}
+              {status && <GlobalError>{status}</GlobalError>}
+              <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
+                Save
+              </Button>
+              <Button onClick={() => cancel()}>Cancel</Button>
+            </Form>
+          );
+        }}
+      </Formik>
+    </>
   );
 };

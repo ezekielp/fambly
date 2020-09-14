@@ -83,10 +83,10 @@ export const Dropdown: FC<DropdownProps> = ({
   );
 
   const items = menuItems.map((item) => {
-    const { label, onClick, href } = item;
-    if (onClick)
+    const { label, onClick: onItemClick, href } = item;
+    if (onItemClick)
       return (
-        <MenuItem key={label} onClick={onClick}>
+        <MenuItem key={label} onClick={onItemClick}>
           {label}
         </MenuItem>
       );

@@ -6,6 +6,9 @@ import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
 import { Dropdown } from 'client/common/Dropdown';
 import { gql } from '@apollo/client';
 import { colors } from 'client/shared/styles';
+import { Modal } from 'client/common/Modal';
+import { Text } from 'client/common/Text';
+import { Button } from 'client/common/Button';
 import styled from 'styled-components';
 
 gql`
@@ -46,6 +49,7 @@ export const NoteItem: FC<NoteProps> = ({ note }) => {
   const [deleteNoteMutation] = useDeleteNoteMutation();
   const [editFlag, setEditFlag] = useState(false);
   const [deletedFlag, setDeletedFlag] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const deleteNote = async () => {
     await deleteNoteMutation({
@@ -56,11 +60,12 @@ export const NoteItem: FC<NoteProps> = ({ note }) => {
       },
     });
     setDeletedFlag(true);
+    setModalOpen(false);
   };
 
   const dropdownItems = [
     { label: 'Edit', onClick: () => setEditFlag(true) },
-    { label: 'Delete', onClick: () => deleteNote() },
+    { label: 'Delete', onClick: () => setModalOpen(true) },
   ];
 
   const initialValues = {
@@ -84,12 +89,23 @@ export const NoteItem: FC<NoteProps> = ({ note }) => {
           <NoteTextContainer>{content}</NoteTextContainer>
           <Dropdown
             menuItems={dropdownItems}
-            xMarkSize="15"
+            xMarkSize="20"
             sandwichSize="20"
             color={colors.orange}
             topSpacing="30px"
           />
         </ProfileFieldContainer>
+      )}
+      {modalOpen && (
+        <Modal onClose={() => setModalOpen(false)}>
+          <Text marginBottom={3} fontSize={3} bold>
+            Are you sure you want to delete this field?
+          </Text>
+          <Button marginRight="1rem" onClick={() => deleteNote()}>
+            Yes
+          </Button>
+          <Button onClick={() => setModalOpen(false)}>Cancel</Button>
+        </Modal>
       )}
     </>
   );

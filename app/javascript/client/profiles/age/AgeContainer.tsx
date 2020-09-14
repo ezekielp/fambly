@@ -5,6 +5,9 @@ import { AgeForm } from './AgeForm';
 import { colors } from 'client/shared/styles';
 import { ProfileLabel } from 'client/common/ProfileLabel';
 import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
+import { Modal } from 'client/common/Modal';
+import { Text } from 'client/common/Text';
+import { Button } from 'client/common/Button';
 import { gql } from '@apollo/client';
 import styled from 'styled-components';
 
@@ -37,7 +40,7 @@ const AgeTextContainer = styled.div`
 interface AgeContainerProps {
   age?: number | null;
   monthsOld?: number | null;
-  hasFullBirthdate: boolean;
+  hasBirthYear: boolean;
   personId: string;
 }
 
@@ -45,11 +48,12 @@ export const AgeContainer: FC<AgeContainerProps> = ({
   age,
   monthsOld,
   personId,
-  hasFullBirthdate,
+  hasBirthYear,
 }) => {
   const [deleteAgeMutation] = useDeleteAgeMutation();
   const [editFlag, setEditFlag] = useState(false);
   const [deletedFlag, setDeletedFlag] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const deleteAge = async () => {
     await deleteAgeMutation({
@@ -60,6 +64,7 @@ export const AgeContainer: FC<AgeContainerProps> = ({
       },
     });
     setDeletedFlag(true);
+    setModalOpen(false);
   };
 
   const yearsText = age && age !== 1 ? 'years' : 'year';
@@ -72,7 +77,7 @@ export const AgeContainer: FC<AgeContainerProps> = ({
 
   const dropdownItems = [
     { label: 'Edit', onClick: () => setEditFlag(true) },
-    { label: 'Delete', onClick: () => deleteAge() },
+    { label: 'Delete', onClick: () => setModalOpen(true) },
   ];
 
   const initialValues = {
@@ -96,7 +101,7 @@ export const AgeContainer: FC<AgeContainerProps> = ({
         <ProfileFieldContainer>
           <ProfileLabel>age</ProfileLabel>
           {ageContainerContent}
-          {!hasFullBirthdate && (
+          {!hasBirthYear && (
             <Dropdown
               menuItems={dropdownItems}
               xMarkSize="15"
@@ -106,6 +111,17 @@ export const AgeContainer: FC<AgeContainerProps> = ({
             />
           )}
         </ProfileFieldContainer>
+      )}
+      {modalOpen && (
+        <Modal onClose={() => setModalOpen(false)}>
+          <Text marginBottom={3} fontSize={3} bold>
+            Are you sure you want to delete this field?
+          </Text>
+          <Button marginRight="1rem" onClick={() => deleteAge()}>
+            Yes
+          </Button>
+          <Button onClick={() => setModalOpen(false)}>Cancel</Button>
+        </Modal>
       )}
     </>
   );
