@@ -79,7 +79,8 @@ test:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
-  <<: *default
-  database: fambly_production
-  username: fambly
-  password: <%= ENV['FAMBLY_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
+  # <<: *default
+  # database: fambly_production
+  # username: fambly
+  # password: <%= ENV['FAMBLY_DATABASE_PASSWORD'] %>
