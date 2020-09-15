@@ -153,7 +153,7 @@ export const blankInitialValues = {
 export const ParentForm: FC<ParentFormProps> = ({
   setFieldToAdd,
   initialValues = blankInitialValues,
-  personFirstName,
+  personFirstName = '',
   childId,
   setEditFlag,
 }) => {
