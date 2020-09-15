@@ -124,7 +124,7 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
           </BirthdateTextContainer>
           <Dropdown
             menuItems={dropdownItems}
-            xMarkSize="20"
+            xMarkSize="15"
             sandwichSize="20"
             color={colors.orange}
             topSpacing="30px"

@@ -7,7 +7,7 @@ export const GENDER_OPTIONS = [
 ];
 
 export const GENDER_TEXT_RENDERINGS: Record<string, string> = {
-  male: 'man',
-  female: 'woman',
+  male: 'male',
+  female: 'female',
   non_binary: 'non-binary',
 };

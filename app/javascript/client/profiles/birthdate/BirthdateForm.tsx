@@ -120,8 +120,9 @@ export const BirthdateForm: FC<BirthdateFormProps> = ({
     } else {
       if (setFieldToAdd) {
         setFieldToAdd('');
-      } else if (setEditFlag) {
+      } else if (setEditFlag && setModalOpen) {
         setEditFlag(false);
+        setModalOpen(false);
       }
     }
   };

@@ -67,6 +67,16 @@ export const AgeContainer: FC<AgeContainerProps> = ({
     setModalOpen(false);
   };
 
+  const handleEdit = () => {
+    setEditFlag(true);
+    setModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setModalOpen(false);
+    setEditFlag(false);
+  };
+
   const yearsText = age && age !== 1 ? 'years' : 'year';
 
   const ageContainerContent = (
@@ -76,7 +86,7 @@ export const AgeContainer: FC<AgeContainerProps> = ({
   );
 
   const dropdownItems = [
-    { label: 'Edit', onClick: () => setEditFlag(true) },
+    { label: 'Edit', onClick: handleEdit },
     { label: 'Delete', onClick: () => setModalOpen(true) },
   ];
 
@@ -85,16 +95,30 @@ export const AgeContainer: FC<AgeContainerProps> = ({
     monthsOld,
   };
 
-  const editAgeForm = (
-    <AgeForm
-      initialValues={initialValues}
-      personId={personId}
-      setEditFlag={setEditFlag}
-    />
-  );
-
-  return editFlag ? (
-    editAgeForm
+  return modalOpen ? (
+    <>
+      {editFlag && (
+        <Modal onClose={handleEditModalClose}>
+          <AgeForm
+            initialValues={initialValues}
+            personId={personId}
+            setEditFlag={setEditFlag}
+            setModalOpen={setModalOpen}
+          />
+        </Modal>
+      )}
+      {!editFlag && (
+        <Modal onClose={() => setModalOpen(false)}>
+          <Text marginBottom={3} fontSize={3} bold>
+            Are you sure you want to delete this field?
+          </Text>
+          <Button marginRight="1rem" onClick={() => deleteAge()}>
+            Yes
+          </Button>
+          <Button onClick={() => setModalOpen(false)}>Cancel</Button>
+        </Modal>
+      )}
+    </>
   ) : (
     <>
       {!deletedFlag && (
@@ -111,17 +135,6 @@ export const AgeContainer: FC<AgeContainerProps> = ({
             />
           )}
         </ProfileFieldContainer>
-      )}
-      {modalOpen && (
-        <Modal onClose={() => setModalOpen(false)}>
-          <Text marginBottom={3} fontSize={3} bold>
-            Are you sure you want to delete this field?
-          </Text>
-          <Button marginRight="1rem" onClick={() => deleteAge()}>
-            Yes
-          </Button>
-          <Button onClick={() => setModalOpen(false)}>Cancel</Button>
-        </Modal>
       )}
     </>
   );
