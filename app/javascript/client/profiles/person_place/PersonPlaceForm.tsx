@@ -151,6 +151,7 @@ interface PersonPlaceFormProps {
   personId: string;
   initialValues?: PersonPlaceFormData;
   setEditFlag?: (bool: boolean) => void;
+  setModalOpen?: (bool: boolean) => void;
   personPlaceId?: string;
 }
 
@@ -174,6 +175,7 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
   initialValues = blankInitialValues,
   setEditFlag,
   personPlaceId,
+  setModalOpen,
 }) => {
   const [createPersonPlace] = useCreatePersonPlaceMutation();
   const [updatePersonPlace] = useUpdatePersonPlaceMutation();
@@ -181,8 +183,9 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
   const cancel = () => {
     if (setFieldToAdd) {
       setFieldToAdd('');
-    } else if (setEditFlag) {
+    } else if (setEditFlag && setModalOpen) {
       setEditFlag(false);
+      setModalOpen(false);
     }
   };
 
@@ -260,6 +263,7 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
         return;
       }
       setEditFlag(false);
+      setModalOpen && setModalOpen(false);
     }
   };
 
