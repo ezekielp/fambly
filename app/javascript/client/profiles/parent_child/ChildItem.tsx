@@ -1,6 +1,18 @@
-import React, { FC } from 'react';
-import { SubContactInfoFragment } from 'client/graphqlTypes';
+import React, { FC, useState } from 'react';
+import { ChildForm } from './ChildForm';
+import {
+  SubContactInfoFragment,
+  useGetParentChildRelationshipQuery,
+} from 'client/graphqlTypes';
 import { StyledLink } from 'client/common/StyledLink';
+import {
+  StyledProfileFieldContainer,
+  FlexContainer,
+  AgeContainer,
+} from './ParentItem';
+import { Modal } from 'client/common/Modal';
+import { colors } from 'client/shared/styles';
+import { Dropdown } from 'client/common/Dropdown';
 
 interface ChildItemProps {
   child: SubContactInfoFragment;
@@ -14,6 +26,23 @@ export const ChildItem: FC<ChildItemProps> = ({
   parentLastName,
 }) => {
   const { id, firstName, lastName, age, monthsOld } = child;
+  const { data: parentChildData } = useGetParentChildRelationshipQuery({
+    variables: {
+      input: {
+        parentId,
+        childId: id,
+      },
+    },
+  });
+  const [editFlag, setEditFlag] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleEdit = () => {
+    setEditFlag(true);
+    setModalOpen(true);
+  };
+
+  const dropdownItems = [{ label: 'Edit', onClick: handleEdit }];
 
   const getLastNameContent = (
     childLastName: string | null | undefined,
@@ -34,20 +63,56 @@ export const ChildItem: FC<ChildItemProps> = ({
     monthsOld: number | null | undefined,
   ) => {
     if (monthsOld) {
-      return ` (${monthsOld} months)`;
+      return <AgeContainer>{`(${monthsOld} months)`}</AgeContainer>;
     } else if (age) {
-      return ` (${age})`;
+      return <AgeContainer>{`(${age} months)`}</AgeContainer>;
     }
     return '';
   };
 
-  return (
-    <div>
-      <StyledLink to={`/profiles/${id}`}>
-        {firstName}
-        {getLastNameContent(lastName, parentLastName)}
-      </StyledLink>
-      {getAgeContent(age, monthsOld)}
-    </div>
+  const parentType =
+    parentChildData?.parentChildRelationshipByParentIdAndChildId?.parentType;
+
+  const editFormInitialValues = {
+    formChildId: id,
+    newOrCurrentContact: 'current_person',
+    parentType: parentType ? parentType : '',
+    age: null,
+    monthsOld: null,
+    showOnDashboard: [],
+  };
+
+  return editFlag ? (
+    <>
+      {modalOpen && (
+        <Modal onClose={() => setModalOpen(false)}>
+          <ChildForm
+            initialValues={editFormInitialValues}
+            setEditFlag={setEditFlag}
+            parentId={parentId}
+            personFirstName=""
+          />
+        </Modal>
+      )}
+    </>
+  ) : (
+    <>
+      <StyledProfileFieldContainer>
+        <FlexContainer>
+          <StyledLink to={`/profiles/${id}`}>
+            {firstName}
+            {getLastNameContent(lastName, parentLastName)}
+          </StyledLink>
+          {getAgeContent(age, monthsOld)}
+        </FlexContainer>
+        <Dropdown
+          menuItems={dropdownItems}
+          xMarkSize="15"
+          sandwichSize="20"
+          color={colors.orange}
+          topSpacing="30px"
+        />
+      </StyledProfileFieldContainer>
+    </>
   );
 };

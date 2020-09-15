@@ -12,17 +12,17 @@ import { Dropdown } from 'client/common/Dropdown';
 import { gql } from '@apollo/client';
 import styled from 'styled-components';
 
-const StyledProfileFieldContainer = styled(ProfileFieldContainer)`
+export const StyledProfileFieldContainer = styled(ProfileFieldContainer)`
   margin-bottom: ${spacing[0]};
 `;
 
-const FlexContainer = styled.div`
+export const FlexContainer = styled.div`
   display: flex;
   flex-direction: row;
   margin-right: 10px;
 `;
 
-const AgeContainer = styled.div`
+export const AgeContainer = styled.div`
   margin-left: 5px;
 `;
 
@@ -84,7 +84,7 @@ export const ParentItem: FC<ParentItemProps> = ({
     parentChildData?.parentChildRelationshipByParentIdAndChildId?.parentType;
 
   const editFormInitialValues = {
-    formParentId: parent.id,
+    formParentId: id,
     newOrCurrentContact: 'current_person',
     parentType: parentType ? parentType : '',
     age: null,
@@ -117,7 +117,7 @@ export const ParentItem: FC<ParentItemProps> = ({
         </FlexContainer>
         <Dropdown
           menuItems={dropdownItems}
-          xMarkSize="20"
+          xMarkSize="15"
           sandwichSize="20"
           color={colors.orange}
           topSpacing="30px"
