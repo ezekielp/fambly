@@ -73,6 +73,7 @@ export interface ChildFormProps {
   parentId: string;
   initialValues?: ChildFormData;
   setEditFlag?: (bool: boolean) => void;
+  setModalOpen?: (bool: boolean) => void;
 }
 
 export const blankInitialValues = {
@@ -93,6 +94,7 @@ export const ChildForm: FC<ChildFormProps> = ({
   personFirstName = '',
   parentId,
   setEditFlag,
+  setModalOpen,
 }) => {
   const [
     createParentChildRelationshipMutation,
@@ -109,8 +111,9 @@ export const ChildForm: FC<ChildFormProps> = ({
   const cancel = () => {
     if (setFieldToAdd) {
       setFieldToAdd('');
-    } else if (setEditFlag) {
+    } else if (setEditFlag && setModalOpen) {
       setEditFlag(false);
+      setModalOpen(false);
     }
   };
 
@@ -229,6 +232,7 @@ export const ChildForm: FC<ChildFormProps> = ({
         );
       } else {
         setEditFlag(false);
+        setModalOpen && setModalOpen(false);
       }
     }
   };
