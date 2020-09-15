@@ -15,6 +15,13 @@
  *= require_self
  */
 
+@font-face {
+  font-family: 'Quicksand';
+  src:font-url('Quicksand-VariableFont_wght.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
  html, body, section, article,
 h1, h2, p, strong, em, a, button,
 input, select {
@@ -46,4 +53,6 @@ html {
 
 body {
   font-family: 'Quicksand', sans-serif;
+  font-weight: normal;
+  font-style: normal;
 }

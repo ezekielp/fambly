@@ -112,7 +112,7 @@ const BackToPeopleLinkContainer = styled.div`
 
 const ProfileHeader = styled.h1`
   font-size: ${text[4]};
-  font-weight: 700;
+  font-variation-settings: 'wght' 700;
   margin-bottom: ${spacing[2]};
 `;
 

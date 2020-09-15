@@ -21,7 +21,7 @@ export const SelectWrapper = styled.div`
 
   &::before {
     content: ' ';
-    font-weight: 700;
+    font-variation-settings: 'wght' 700;
     color: ${colors.lightGray};
     position: absolute;
     right: 1rem;

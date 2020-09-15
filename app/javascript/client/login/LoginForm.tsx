@@ -13,7 +13,7 @@ import { text, spacing } from 'client/shared/styles';
 
 export const Header = styled.h1`
   font-size: ${text[3]};
-  font-weight: 700;
+  font-variation-settings: 'wght' 700;
   margin-bottom: ${spacing[2]};
 `;
 

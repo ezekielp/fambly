@@ -18,7 +18,7 @@ const EmailText = styled.div`
 `;
 
 const CopyrightText = styled.div`
-  font-weight: 700;
+  font-variation-settings: 'wght' 700;
 `;
 
 interface FooterProps {}
