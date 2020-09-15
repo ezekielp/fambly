@@ -269,7 +269,8 @@ type UpdateNotePayload {
 }
 
 input UpdateParentChildRelationshipInput {
-  parentChildId: ID!
+  childId: ID!
+  parentId: ID!
   parentType: String
 }
 
