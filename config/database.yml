@@ -80,7 +80,11 @@ test:
 #
 production:
   url: <%= ENV['DATABASE_URL'] %>
-  # <<: *default
+  <<: *default
+  adapter: postgresql
+  host: db
+  username: postgres
+  password: 
   # database: fambly_production
   # username: fambly
   # password: <%= ENV['FAMBLY_DATABASE_PASSWORD'] %>
