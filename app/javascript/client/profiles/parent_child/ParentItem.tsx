@@ -63,6 +63,11 @@ export const ParentItem: FC<ParentItemProps> = ({
     setModalOpen(true);
   };
 
+  const handleEditModalClose = () => {
+    setModalOpen(false);
+    setEditFlag(false);
+  };
+
   const dropdownItems = [{ label: 'Edit', onClick: handleEdit }];
 
   const getLastNameContent = (
@@ -95,12 +100,13 @@ export const ParentItem: FC<ParentItemProps> = ({
   return editFlag ? (
     <>
       {modalOpen && (
-        <Modal onClose={() => setModalOpen(false)}>
+        <Modal onClose={handleEditModalClose}>
           <ParentForm
             initialValues={editFormInitialValues}
             setEditFlag={setEditFlag}
             childId={childId}
             personFirstName=""
+            setModalOpen={setModalOpen}
           />
         </Modal>
       )}

@@ -63,8 +63,18 @@ export const NoteItem: FC<NoteProps> = ({ note }) => {
     setModalOpen(false);
   };
 
+  const handleEdit = () => {
+    setEditFlag(true);
+    setModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setModalOpen(false);
+    setEditFlag(false);
+  };
+
   const dropdownItems = [
-    { label: 'Edit', onClick: () => setEditFlag(true) },
+    { label: 'Edit', onClick: handleEdit },
     { label: 'Delete', onClick: () => setModalOpen(true) },
   ];
 
@@ -72,16 +82,30 @@ export const NoteItem: FC<NoteProps> = ({ note }) => {
     content,
   };
 
-  const editNoteForm = (
-    <NoteForm
-      initialValues={initialValues}
-      noteId={id}
-      setEditFlag={setEditFlag}
-    />
-  );
-
-  return editFlag ? (
-    editNoteForm
+  return modalOpen ? (
+    <>
+      {editFlag && (
+        <Modal onClose={handleEditModalClose}>
+          <NoteForm
+            initialValues={initialValues}
+            noteId={id}
+            setEditFlag={setEditFlag}
+            setModalOpen={setModalOpen}
+          />
+        </Modal>
+      )}
+      {!editFlag && (
+        <Modal onClose={() => setModalOpen(false)}>
+          <Text marginBottom={3} fontSize={3} bold>
+            Are you sure you want to delete this field?
+          </Text>
+          <Button marginRight="1rem" onClick={() => deleteNote()}>
+            Yes
+          </Button>
+          <Button onClick={() => setModalOpen(false)}>Cancel</Button>
+        </Modal>
+      )}
+    </>
   ) : (
     <>
       {!deletedFlag && (
@@ -95,17 +119,6 @@ export const NoteItem: FC<NoteProps> = ({ note }) => {
             topSpacing="30px"
           />
         </ProfileFieldContainer>
-      )}
-      {modalOpen && (
-        <Modal onClose={() => setModalOpen(false)}>
-          <Text marginBottom={3} fontSize={3} bold>
-            Are you sure you want to delete this field?
-          </Text>
-          <Button marginRight="1rem" onClick={() => deleteNote()}>
-            Yes
-          </Button>
-          <Button onClick={() => setModalOpen(false)}>Cancel</Button>
-        </Modal>
       )}
     </>
   );

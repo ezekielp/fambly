@@ -33,7 +33,7 @@ module Types
     def parent_child_relationship_by_parent_id_and_child_id(args)
       return nil unless args
 
-      ParentChild.find_by(parent_id: args[:parent_id], child_id: args[:child_id])
+      ParentChild.find_by(parent_id: args[:input][:parent_id], child_id: args[:input][:child_id])
     end
   end
 end

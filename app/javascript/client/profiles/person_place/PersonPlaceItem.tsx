@@ -58,6 +58,16 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
     setModalOpen(false);
   };
 
+  const handleEdit = () => {
+    setEditFlag(true);
+    setModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setModalOpen(false);
+    setEditFlag(false);
+  };
+
   const getTimingText = () => {
     const startMonthText = startMonth ? startMonth : '';
     const endMonthText = endMonth ? endMonth + ' ' : ' ';
@@ -77,7 +87,7 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
   };
 
   const dropdownItems = [
-    { label: 'Edit', onClick: () => setEditFlag(true) },
+    { label: 'Edit', onClick: handleEdit },
     { label: 'Delete', onClick: () => setModalOpen(true) },
   ];
 
@@ -109,12 +119,31 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
     </PersonPlaceTextContainer>
   );
 
-  return editFlag ? (
-    <PersonPlaceForm
-      initialValues={initialValues}
-      setEditFlag={setEditFlag}
-      personId={person.id}
-    />
+  return modalOpen ? (
+    <>
+      {editFlag && (
+        <Modal onClose={handleEditModalClose}>
+          <PersonPlaceForm
+            initialValues={initialValues}
+            setEditFlag={setEditFlag}
+            personId={person.id}
+            setModalOpen={setModalOpen}
+            personPlaceId={id}
+          />
+        </Modal>
+      )}
+      {!editFlag && (
+        <Modal onClose={() => setModalOpen(false)}>
+          <Text marginBottom={3} fontSize={3} bold>
+            Are you sure you want to delete this field?
+          </Text>
+          <Button marginRight="1rem" onClick={() => deletePersonPlace()}>
+            Yes
+          </Button>
+          <Button onClick={() => setModalOpen(false)}>Cancel</Button>
+        </Modal>
+      )}
+    </>
   ) : (
     <>
       {!deletedFlag && (
@@ -131,17 +160,6 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
           </ProfileFieldContainer>
           {!deletedFlag && noteItems}
         </>
-      )}
-      {modalOpen && (
-        <Modal onClose={() => setModalOpen(false)}>
-          <Text marginBottom={3} fontSize={3} bold>
-            Are you sure you want to delete this field?
-          </Text>
-          <Button marginRight="1rem" onClick={() => deletePersonPlace()}>
-            Yes
-          </Button>
-          <Button onClick={() => setModalOpen(false)}>Cancel</Button>
-        </Modal>
       )}
     </>
   );

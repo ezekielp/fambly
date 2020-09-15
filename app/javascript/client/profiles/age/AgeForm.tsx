@@ -53,6 +53,7 @@ interface AgeFormProps {
   personId: string;
   initialValues?: AgeFormData;
   setEditFlag?: (bool: boolean) => void;
+  setModalOpen?: (bool: boolean) => void;
 }
 
 const blankInitialValues: AgeFormData = {
@@ -65,6 +66,7 @@ export const AgeForm: FC<AgeFormProps> = ({
   personId,
   initialValues = blankInitialValues,
   setEditFlag,
+  setModalOpen,
 }) => {
   const [createAgeMutation] = useCreateAgeMutation();
   const [updateAgeMutation] = useUpdateAgeMutation();
@@ -72,8 +74,9 @@ export const AgeForm: FC<AgeFormProps> = ({
   const cancel = () => {
     if (setFieldToAdd) {
       setFieldToAdd('');
-    } else if (setEditFlag) {
+    } else if (setEditFlag && setModalOpen) {
       setEditFlag(false);
+      setModalOpen(false);
     }
   };
 
@@ -112,6 +115,7 @@ export const AgeForm: FC<AgeFormProps> = ({
         handleFormErrors<AgeFormData>(updateErrors, setErrors, setStatus);
       } else {
         setEditFlag(false);
+        setModalOpen && setModalOpen(false);
       }
     }
   };

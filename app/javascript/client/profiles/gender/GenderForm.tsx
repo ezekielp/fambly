@@ -53,6 +53,7 @@ export interface GenderFormProps {
   personId: string;
   initialValues?: GenderFormData;
   setEditFlag?: (bool: boolean) => void;
+  setModalOpen?: (bool: boolean) => void;
 }
 
 export const blankInitialValues: GenderFormData = {
@@ -65,14 +66,16 @@ export const GenderForm: FC<GenderFormProps> = ({
   personId,
   initialValues = blankInitialValues,
   setEditFlag,
+  setModalOpen,
 }) => {
   const [createOrUpdateGenderMutation] = useCreateOrUpdateGenderMutation();
 
   const cancel = () => {
     if (setFieldToAdd) {
       setFieldToAdd('');
-    } else if (setEditFlag) {
+    } else if (setEditFlag && setModalOpen) {
       setEditFlag(false);
+      setModalOpen(false);
     }
   };
 
@@ -101,6 +104,7 @@ export const GenderForm: FC<GenderFormProps> = ({
         setFieldToAdd('');
       } else if (setEditFlag) {
         setEditFlag(false);
+        setModalOpen && setModalOpen(false);
       }
     }
   };

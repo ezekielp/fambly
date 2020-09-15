@@ -41,8 +41,18 @@ export const GenderContainer: FC<GenderContainerProps> = ({
     setModalOpen(false);
   };
 
+  const handleEdit = () => {
+    setEditFlag(true);
+    setModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setModalOpen(false);
+    setEditFlag(false);
+  };
+
   const dropdownItems = [
-    { label: 'Edit', onClick: () => setEditFlag(true) },
+    { label: 'Edit', onClick: handleEdit },
     { label: 'Delete', onClick: () => setModalOpen(true) },
   ];
 
@@ -62,32 +72,19 @@ export const GenderContainer: FC<GenderContainerProps> = ({
     customGender: customGender ? gender : '',
   };
 
-  const editGenderForm = (
-    <GenderForm
-      initialValues={initialValues}
-      personId={personId}
-      setEditFlag={setEditFlag}
-    />
-  );
-
-  return editFlag ? (
-    editGenderForm
-  ) : (
+  return modalOpen ? (
     <>
-      {!deletedFlag && (
-        <ProfileFieldContainer>
-          <ProfileLabel>gender</ProfileLabel>
-          {genderTextComponent}
-          <Dropdown
-            menuItems={dropdownItems}
-            xMarkSize="20"
-            sandwichSize="20"
-            color={colors.orange}
-            topSpacing="30px"
+      {editFlag && (
+        <Modal onClose={handleEditModalClose}>
+          <GenderForm
+            initialValues={initialValues}
+            personId={personId}
+            setEditFlag={setEditFlag}
+            setModalOpen={setModalOpen}
           />
-        </ProfileFieldContainer>
+        </Modal>
       )}
-      {modalOpen && (
+      {!editFlag && (
         <Modal onClose={() => setModalOpen(false)}>
           <Text marginBottom={3} fontSize={3} bold>
             Are you sure you want to delete this field?
@@ -97,6 +94,22 @@ export const GenderContainer: FC<GenderContainerProps> = ({
           </Button>
           <Button onClick={() => setModalOpen(false)}>Cancel</Button>
         </Modal>
+      )}
+    </>
+  ) : (
+    <>
+      {!deletedFlag && (
+        <ProfileFieldContainer>
+          <ProfileLabel>gender</ProfileLabel>
+          {genderTextComponent}
+          <Dropdown
+            menuItems={dropdownItems}
+            xMarkSize="15"
+            sandwichSize="20"
+            color={colors.orange}
+            topSpacing="30px"
+          />
+        </ProfileFieldContainer>
       )}
     </>
   );

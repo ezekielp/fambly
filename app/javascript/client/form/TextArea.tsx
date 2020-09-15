@@ -10,6 +10,8 @@ const StyledTextArea = styled.textarea`
   border: 1px solid ${colors.lightGray};
   border-radius: 8px;
   height: 100px;
+  padding-top: 1rem;
+  padding-left: 1rem;
 `;
 
 export const TextArea = forwardRef(({ ...rest }: TextAreaProps, ref) => (
