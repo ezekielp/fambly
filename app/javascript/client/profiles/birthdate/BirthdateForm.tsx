@@ -68,6 +68,7 @@ export interface BirthdateFormProps {
   personId: string;
   initialValues?: BirthdateFormData;
   setEditFlag?: (bool: boolean) => void;
+  setModalOpen?: (bool: boolean) => void;
 }
 
 export const blankInitialValues = {
@@ -81,14 +82,16 @@ export const BirthdateForm: FC<BirthdateFormProps> = ({
   personId,
   initialValues = blankInitialValues,
   setEditFlag,
+  setModalOpen,
 }) => {
   const [createOrEditBirthdateMutation] = useCreateOrUpdateBirthdateMutation();
 
   const cancel = () => {
     if (setFieldToAdd) {
       setFieldToAdd('');
-    } else if (setEditFlag) {
+    } else if (setEditFlag && setModalOpen) {
       setEditFlag(false);
+      setModalOpen(false);
     }
   };
 

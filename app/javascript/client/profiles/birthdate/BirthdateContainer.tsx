@@ -48,8 +48,18 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
     setModalOpen(false);
   };
 
+  const handleEdit = () => {
+    setEditFlag(true);
+    setModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setModalOpen(false);
+    setEditFlag(false);
+  };
+
   const dropdownItems = [
-    { label: 'Edit', onClick: () => setEditFlag(true) },
+    { label: 'Edit', onClick: handleEdit },
     { label: 'Delete', onClick: () => setModalOpen(true) },
   ];
 
@@ -80,16 +90,30 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
     birthDay: day,
   };
 
-  const editBirthdateForm = (
-    <BirthdateForm
-      initialValues={initialValues}
-      personId={personId}
-      setEditFlag={setEditFlag}
-    />
-  );
-
-  return editFlag ? (
-    editBirthdateForm
+  return modalOpen ? (
+    <>
+      {editFlag && (
+        <Modal onClose={handleEditModalClose}>
+          <BirthdateForm
+            initialValues={initialValues}
+            personId={personId}
+            setEditFlag={setEditFlag}
+            setModalOpen={setModalOpen}
+          />
+        </Modal>
+      )}
+      {!editFlag && (
+        <Modal onClose={() => setModalOpen(false)}>
+          <Text marginBottom={3} fontSize={3} bold>
+            Are you sure you want to delete this field?
+          </Text>
+          <Button marginRight="1rem" onClick={() => deleteBirthdate()}>
+            Yes
+          </Button>
+          <Button onClick={() => setModalOpen(false)}>Cancel</Button>
+        </Modal>
+      )}
+    </>
   ) : (
     <>
       {!deletedFlag && (
@@ -106,17 +130,6 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
             topSpacing="30px"
           />
         </ProfileFieldContainer>
-      )}
-      {modalOpen && (
-        <Modal onClose={() => setModalOpen(false)}>
-          <Text marginBottom={3} fontSize={3} bold>
-            Are you sure you want to delete this field?
-          </Text>
-          <Button marginRight="1rem" onClick={() => deleteBirthdate()}>
-            Yes
-          </Button>
-          <Button onClick={() => setModalOpen(false)}>Cancel</Button>
-        </Modal>
       )}
     </>
   );

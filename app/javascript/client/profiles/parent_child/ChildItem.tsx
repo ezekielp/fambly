@@ -65,7 +65,7 @@ export const ChildItem: FC<ChildItemProps> = ({
     if (monthsOld) {
       return <AgeContainer>{`(${monthsOld} months)`}</AgeContainer>;
     } else if (age) {
-      return <AgeContainer>{`(${age} months)`}</AgeContainer>;
+      return <AgeContainer>{`(${age})`}</AgeContainer>;
     }
     return '';
   };
