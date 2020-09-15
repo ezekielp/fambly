@@ -20,7 +20,7 @@ const CheckboxWrapper = styled.div`
 
 const CheckMark = styled.div`
   color: ${colors.orange};
-  font-weight: 700;
+  font-variation-settings: 'wght' 700;
   width: 0.95rem;
 `;
 

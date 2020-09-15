@@ -197,6 +197,11 @@ type ParentChild {
   parentType: String
 }
 
+input ParentChildInput {
+  childId: String!
+  parentId: String!
+}
+
 type Person {
   age: Int
   birthDay: Int
@@ -237,6 +242,7 @@ type Place {
 }
 
 type Query {
+  parentChildRelationshipByParentIdAndChildId(input: ParentChildInput!): ParentChild
   personById(personId: String!): Person
   user: User
 }
@@ -269,7 +275,8 @@ type UpdateNotePayload {
 }
 
 input UpdateParentChildRelationshipInput {
-  parentChildId: ID!
+  childId: ID!
+  parentId: ID!
   parentType: String
 }
 

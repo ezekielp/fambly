@@ -300,6 +300,11 @@ export type ParentChild = {
   parentType?: Maybe<Scalars['String']>;
 };
 
+export type ParentChildInput = {
+  childId: Scalars['String'];
+  parentId: Scalars['String'];
+};
+
 export type Person = {
   __typename?: 'Person';
   age?: Maybe<Scalars['Int']>;
@@ -344,8 +349,14 @@ export type Place = {
 
 export type Query = {
   __typename?: 'Query';
+  parentChildRelationshipByParentIdAndChildId?: Maybe<ParentChild>;
   personById?: Maybe<Person>;
   user?: Maybe<User>;
+};
+
+
+export type QueryParentChildRelationshipByParentIdAndChildIdArgs = {
+  input: ParentChildInput;
 };
 
 
@@ -379,7 +390,8 @@ export type UpdateNotePayload = {
 };
 
 export type UpdateParentChildRelationshipInput = {
-  parentChildId: Scalars['ID'];
+  childId: Scalars['ID'];
+  parentId: Scalars['ID'];
   parentType?: Maybe<Scalars['String']>;
 };
 
@@ -742,6 +754,48 @@ export type CreateParentChildRelationshipMutation = (
       & Pick<Error, 'path' | 'message'>
     )>> }
   ) }
+);
+
+export type UpdateParentChildRelationshipMutationVariables = Exact<{
+  input: UpdateParentChildRelationshipInput;
+}>;
+
+
+export type UpdateParentChildRelationshipMutation = (
+  { __typename?: 'Mutation' }
+  & { updateParentChildRelationship: (
+    { __typename?: 'UpdateParentChildRelationshipPayload' }
+    & { parentChildRelationship?: Maybe<(
+      { __typename?: 'ParentChild' }
+      & Pick<ParentChild, 'id' | 'parentType'>
+      & { parent: (
+        { __typename?: 'Person' }
+        & Pick<Person, 'id' | 'firstName' | 'lastName'>
+      ), child: (
+        { __typename?: 'Person' }
+        & Pick<Person, 'id' | 'firstName' | 'lastName'>
+      ), notes?: Maybe<Array<(
+        { __typename?: 'Note' }
+        & Pick<Note, 'id' | 'content'>
+      )>> }
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'Error' }
+      & Pick<Error, 'path' | 'message'>
+    )>> }
+  ) }
+);
+
+export type GetParentChildRelationshipQueryVariables = Exact<{
+  input: ParentChildInput;
+}>;
+
+
+export type GetParentChildRelationshipQuery = (
+  { __typename?: 'Query' }
+  & { parentChildRelationshipByParentIdAndChildId?: Maybe<(
+    { __typename?: 'ParentChild' }
+    & Pick<ParentChild, 'id' | 'parentType'>
+  )> }
 );
 
 export type CreatePersonPlaceMutationVariables = Exact<{
@@ -1539,6 +1593,93 @@ export function useCreateParentChildRelationshipMutation(baseOptions?: Apollo.Mu
 export type CreateParentChildRelationshipMutationHookResult = ReturnType<typeof useCreateParentChildRelationshipMutation>;
 export type CreateParentChildRelationshipMutationResult = Apollo.MutationResult<CreateParentChildRelationshipMutation>;
 export type CreateParentChildRelationshipMutationOptions = Apollo.BaseMutationOptions<CreateParentChildRelationshipMutation, CreateParentChildRelationshipMutationVariables>;
+export const UpdateParentChildRelationshipDocument = gql`
+    mutation UpdateParentChildRelationship($input: UpdateParentChildRelationshipInput!) {
+  updateParentChildRelationship(input: $input) {
+    parentChildRelationship {
+      id
+      parent {
+        id
+        firstName
+        lastName
+      }
+      child {
+        id
+        firstName
+        lastName
+      }
+      parentType
+      notes {
+        id
+        content
+      }
+    }
+    errors {
+      path
+      message
+    }
+  }
+}
+    `;
+export type UpdateParentChildRelationshipMutationFn = Apollo.MutationFunction<UpdateParentChildRelationshipMutation, UpdateParentChildRelationshipMutationVariables>;
+
+/**
+ * __useUpdateParentChildRelationshipMutation__
+ *
+ * To run a mutation, you first call `useUpdateParentChildRelationshipMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateParentChildRelationshipMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateParentChildRelationshipMutation, { data, loading, error }] = useUpdateParentChildRelationshipMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateParentChildRelationshipMutation(baseOptions?: Apollo.MutationHookOptions<UpdateParentChildRelationshipMutation, UpdateParentChildRelationshipMutationVariables>) {
+        return Apollo.useMutation<UpdateParentChildRelationshipMutation, UpdateParentChildRelationshipMutationVariables>(UpdateParentChildRelationshipDocument, baseOptions);
+      }
+export type UpdateParentChildRelationshipMutationHookResult = ReturnType<typeof useUpdateParentChildRelationshipMutation>;
+export type UpdateParentChildRelationshipMutationResult = Apollo.MutationResult<UpdateParentChildRelationshipMutation>;
+export type UpdateParentChildRelationshipMutationOptions = Apollo.BaseMutationOptions<UpdateParentChildRelationshipMutation, UpdateParentChildRelationshipMutationVariables>;
+export const GetParentChildRelationshipDocument = gql`
+    query GetParentChildRelationship($input: ParentChildInput!) {
+  parentChildRelationshipByParentIdAndChildId(input: $input) {
+    id
+    parentType
+  }
+}
+    `;
+
+/**
+ * __useGetParentChildRelationshipQuery__
+ *
+ * To run a query within a React component, call `useGetParentChildRelationshipQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetParentChildRelationshipQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetParentChildRelationshipQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetParentChildRelationshipQuery(baseOptions?: Apollo.QueryHookOptions<GetParentChildRelationshipQuery, GetParentChildRelationshipQueryVariables>) {
+        return Apollo.useQuery<GetParentChildRelationshipQuery, GetParentChildRelationshipQueryVariables>(GetParentChildRelationshipDocument, baseOptions);
+      }
+export function useGetParentChildRelationshipLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetParentChildRelationshipQuery, GetParentChildRelationshipQueryVariables>) {
+          return Apollo.useLazyQuery<GetParentChildRelationshipQuery, GetParentChildRelationshipQueryVariables>(GetParentChildRelationshipDocument, baseOptions);
+        }
+export type GetParentChildRelationshipQueryHookResult = ReturnType<typeof useGetParentChildRelationshipQuery>;
+export type GetParentChildRelationshipLazyQueryHookResult = ReturnType<typeof useGetParentChildRelationshipLazyQuery>;
+export type GetParentChildRelationshipQueryResult = Apollo.QueryResult<GetParentChildRelationshipQuery, GetParentChildRelationshipQueryVariables>;
 export const CreatePersonPlaceDocument = gql`
     mutation CreatePersonPlace($input: CreatePersonPlaceInput!) {
   createPersonPlace(input: $input) {

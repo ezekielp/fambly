@@ -16,7 +16,7 @@ const NavBarContainer = styled.nav`
 
 const FamblyContainer = styled.div`
   font-size: ${text[4]};
-  font-weight: 700;
+  font-variation-settings: 'wght' 700;
   color: ${colors.white};
 `;
 

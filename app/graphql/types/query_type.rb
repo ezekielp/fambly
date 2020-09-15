@@ -4,6 +4,9 @@ module Types
     field :person_by_id, Types::PersonType, null: true do
       argument :person_id, String, required: true
     end
+    field :parent_child_relationship_by_parent_id_and_child_id, Types::ParentChildType, null: true do
+      argument :input, Types::ParentChildInputType, required: true
+    end
 
     delegate :logged_in?,
              :current_user,
@@ -24,9 +27,13 @@ module Types
     def person_by_id(args)
       return nil unless args
 
-      person = Person.find(args[:person_id])
-      person
+      Person.find(args[:person_id])
     end
 
+    def parent_child_relationship_by_parent_id_and_child_id(args)
+      return nil unless args
+
+      ParentChild.find_by(parent_id: args[:parent_id], child_id: args[:child_id])
+    end
   end
 end

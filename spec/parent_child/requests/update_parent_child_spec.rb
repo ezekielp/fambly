@@ -5,7 +5,6 @@ RSpec.describe 'update_parent_child mutation', type: :request do
   let(:user) { create(:user) }
   let(:parent) { Person.create(user_id: user.id, first_name: 'Miksa', last_name: 'Neumann') }
   let(:child) { Person.create(user_id: user.id,first_name: 'Janos Lajos', last_name: 'Neumann') }
-  let(:parent_child_relationship) { ParentChild.create(parent_id: parent.id, child_id: child.id, parent_type: 'biological') }
   let(:new_parent_type) { 'step_parent' }
   let(:query_string) do
     "
@@ -26,13 +25,16 @@ RSpec.describe 'update_parent_child mutation', type: :request do
   let(:variables) do
     {
         input: {
-            parentChildId: parent_child_relationship.id,
+            parentId: parent.id,
+            childId: child.id,
             parentType: new_parent_type,
         }
     }
   end
 
   it 'updates an existing parent_child relationship' do
+    parent_child_relationship = ParentChild.create(parent_id: parent.id, child_id: child.id, parent_type: 'biological')
+    
     post(
       endpoint,
       params: { query: query_string, variables: variables }

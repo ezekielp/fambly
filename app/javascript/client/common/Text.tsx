@@ -18,7 +18,8 @@ export const Text = styled.div`
     textTransform ? textTransform : 'none'};
   font-size: ${({ fontSize }: TextProps) =>
     fontSize ? text[fontSize] : text[1]};
-  font-weight: ${({ bold }: TextProps) => (bold ? '700' : 'normal')};
+  font-variation-settings: ${({ bold }: TextProps) =>
+    bold ? "'wght' 700" : "'wght' 400"};
   margin-bottom: ${({ marginBottom }: TextProps) =>
     marginBottom ? spacing[marginBottom] : '0'};
   line-height: ${({ lineHeight }: TextProps) =>

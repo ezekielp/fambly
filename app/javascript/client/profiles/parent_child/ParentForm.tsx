@@ -3,6 +3,7 @@ import {
   useCreatePersonMutation,
   useCreateAgeMutation,
   useCreateParentChildRelationshipMutation,
+  useUpdateParentChildRelationshipMutation,
   useGetUserForHomeContainerQuery,
 } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
@@ -32,6 +33,37 @@ gql`
     $input: CreateParentChildRelationshipInput!
   ) {
     createParentChildRelationship(input: $input) {
+      parentChildRelationship {
+        id
+        parent {
+          id
+          firstName
+          lastName
+        }
+        child {
+          id
+          firstName
+          lastName
+        }
+        parentType
+        notes {
+          id
+          content
+        }
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`;
+
+gql`
+  mutation UpdateParentChildRelationship(
+    $input: UpdateParentChildRelationshipInput!
+  ) {
+    updateParentChildRelationship(input: $input) {
       parentChildRelationship {
         id
         parent {
@@ -121,7 +153,7 @@ export const blankInitialValues = {
 export const ParentForm: FC<ParentFormProps> = ({
   setFieldToAdd,
   initialValues = blankInitialValues,
-  personFirstName,
+  personFirstName = '',
   childId,
   setEditFlag,
 }) => {
@@ -130,6 +162,9 @@ export const ParentForm: FC<ParentFormProps> = ({
   ] = useCreateParentChildRelationshipMutation();
   const [createPersonMutation] = useCreatePersonMutation();
   const [createAgeMutation] = useCreateAgeMutation();
+  const [
+    updateParentChildRelationship,
+  ] = useUpdateParentChildRelationshipMutation();
   const { data: userData } = useGetUserForHomeContainerQuery();
   const people = userData?.user?.people ? userData?.user?.people : [];
   const peopleOptions = buildParentOrChildOptions(people, childId);
@@ -161,80 +196,101 @@ export const ParentForm: FC<ParentFormProps> = ({
     let createPersonResponse;
     let newPersonId;
 
-    if (newOrCurrentContact === 'new_person' && firstName) {
-      createPersonResponse = await createPersonMutation({
-        variables: {
-          input: {
-            firstName,
-            lastName: lastName ? lastName : null,
-            showOnDashboard: showOnDashboard.length > 0 ? true : false,
-          },
-        },
-      });
-      const createPersonErrors = createPersonResponse.data?.createPerson.errors;
-      if (createPersonErrors) {
-        handleFormErrors<ParentFormData>(
-          createPersonErrors,
-          setErrors,
-          setStatus,
-        );
-        return;
-      } else {
-        newPersonId = createPersonResponse.data?.createPerson?.person?.id;
-
-        if ((age || monthsOld) && newPersonId) {
-          const createAgeResponse = await createAgeMutation({
-            variables: {
-              input: {
-                age,
-                monthsOld: monthsOld && !age ? monthsOld : null,
-                personId: newPersonId,
-              },
+    if (setFieldToAdd) {
+      if (newOrCurrentContact === 'new_person' && firstName) {
+        createPersonResponse = await createPersonMutation({
+          variables: {
+            input: {
+              firstName,
+              lastName: lastName ? lastName : null,
+              showOnDashboard: showOnDashboard.length > 0 ? true : false,
             },
-          });
-          const createAgeErrors = createAgeResponse.data?.createAge.errors;
-          if (createAgeErrors) {
-            handleFormErrors<ParentFormData>(
-              createAgeErrors,
-              setErrors,
-              setStatus,
-            );
-            return;
+          },
+        });
+        const createPersonErrors =
+          createPersonResponse.data?.createPerson.errors;
+        if (createPersonErrors) {
+          handleFormErrors<ParentFormData>(
+            createPersonErrors,
+            setErrors,
+            setStatus,
+          );
+          return;
+        } else {
+          newPersonId = createPersonResponse.data?.createPerson?.person?.id;
+
+          if ((age || monthsOld) && newPersonId) {
+            const createAgeResponse = await createAgeMutation({
+              variables: {
+                input: {
+                  age,
+                  monthsOld: monthsOld && !age ? monthsOld : null,
+                  personId: newPersonId,
+                },
+              },
+            });
+            const createAgeErrors = createAgeResponse.data?.createAge.errors;
+            if (createAgeErrors) {
+              handleFormErrors<ParentFormData>(
+                createAgeErrors,
+                setErrors,
+                setStatus,
+              );
+              return;
+            }
           }
         }
       }
-    }
-    newPersonId = createPersonResponse
-      ? createPersonResponse.data?.createPerson.person?.id
-      : null;
+      newPersonId = createPersonResponse
+        ? createPersonResponse.data?.createPerson.person?.id
+        : null;
 
-    const parentId = newPersonId ? newPersonId : formParentId;
+      const parentId = newPersonId ? newPersonId : formParentId;
 
-    const createParentChildResponse = await createParentChildRelationshipMutation(
-      {
-        variables: {
-          input: {
-            parentId,
-            childId,
-            parentType: parentType ? parentType : null,
-            note: note ? note : null,
+      const createParentChildResponse = await createParentChildRelationshipMutation(
+        {
+          variables: {
+            input: {
+              parentId,
+              childId,
+              parentType: parentType ? parentType : null,
+              note: note ? note : null,
+            },
           },
         },
-      },
-    );
-    const createParentChildErrors =
-      createParentChildResponse.data?.createParentChildRelationship.errors;
-
-    if (createParentChildErrors) {
-      handleFormErrors<ParentFormData>(
-        createParentChildErrors,
-        setErrors,
-        setStatus,
       );
-    } else {
-      if (setFieldToAdd) {
+      const createParentChildErrors =
+        createParentChildResponse.data?.createParentChildRelationship.errors;
+
+      if (createParentChildErrors) {
+        handleFormErrors<ParentFormData>(
+          createParentChildErrors,
+          setErrors,
+          setStatus,
+        );
+      } else {
         setFieldToAdd('');
-      } else if (setEditFlag) {
+      }
+    } else if (setEditFlag) {
+      const updateParentChildResponse = await updateParentChildRelationship({
+        variables: {
+          input: {
+            parentId: formParentId,
+            childId,
+            parentType,
+          },
+        },
+      });
+      const updateParentChildErrors =
+        updateParentChildResponse.data?.updateParentChildRelationship.errors;
+
+      if (updateParentChildErrors) {
+        handleFormErrors<ParentFormData>(
+          updateParentChildErrors,
+          setErrors,
+          setStatus,
+        );
+      } else {
         setEditFlag(false);
       }
     }
@@ -254,12 +310,14 @@ export const ParentForm: FC<ParentFormProps> = ({
         {({ values, isSubmitting, status }) => {
           return (
             <Form>
-              <Field
-                name="newOrCurrentContact"
-                label=""
-                component={FormikRadioGroup}
-                options={NEW_OR_CURRENT_CONTACT_OPTIONS}
-              />
+              {setFieldToAdd && (
+                <Field
+                  name="newOrCurrentContact"
+                  label=""
+                  component={FormikRadioGroup}
+                  options={NEW_OR_CURRENT_CONTACT_OPTIONS}
+                />
+              )}
               {values.newOrCurrentContact === 'new_person' && (
                 <>
                   <Field
@@ -297,25 +355,28 @@ export const ParentForm: FC<ParentFormProps> = ({
                   />
                 </>
               )}
-              {values.newOrCurrentContact === 'current_person' && (
-                <Field
-                  name="formParentId"
-                  label="Parent"
-                  component={FormikSelectInput}
-                  options={peopleOptions}
-                />
-              )}
+              {values.newOrCurrentContact === 'current_person' &&
+                setFieldToAdd && (
+                  <Field
+                    name="formParentId"
+                    label="Parent"
+                    component={FormikSelectInput}
+                    options={peopleOptions}
+                  />
+                )}
               <Field
                 name="parentType"
                 label="Type of parent (optional)"
                 component={FormikSelectInput}
                 options={PARENT_TYPE_OPTIONS}
               />
-              <Field
-                name="note"
-                label="Note (optional)"
-                component={FormikTextArea}
-              />
+              {setFieldToAdd && (
+                <Field
+                  name="note"
+                  label="Note (optional)"
+                  component={FormikTextArea}
+                />
+              )}
               {status && <GlobalError>{status}</GlobalError>}
               <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
                 Save
