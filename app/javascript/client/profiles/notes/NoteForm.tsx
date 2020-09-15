@@ -40,6 +40,7 @@ export interface NoteFormProps {
   initialValues?: NoteFormData;
   noteId?: string;
   setEditFlag?: (bool: boolean) => void;
+  setModalOpen?: (bool: boolean) => void;
 }
 
 export const blankInitialValues: NoteFormData = {
@@ -52,6 +53,7 @@ export const NoteForm: FC<NoteFormProps> = ({
   initialValues = blankInitialValues,
   noteId,
   setEditFlag,
+  setModalOpen,
 }) => {
   const [createPersonNoteMutation] = useCreatePersonNoteMutation();
   const [updateNoteMutation] = useUpdateNoteMutation();
@@ -59,8 +61,9 @@ export const NoteForm: FC<NoteFormProps> = ({
   const cancel = () => {
     if (setFieldToAdd) {
       setFieldToAdd('');
-    } else if (setEditFlag) {
+    } else if (setEditFlag && setModalOpen) {
       setEditFlag(false);
+      setModalOpen(false);
     }
   };
 
@@ -101,6 +104,7 @@ export const NoteForm: FC<NoteFormProps> = ({
         handleFormErrors<NoteFormData>(updateErrors, setErrors, setStatus);
       } else {
         setEditFlag(false);
+        setModalOpen && setModalOpen(false);
       }
     }
   };
