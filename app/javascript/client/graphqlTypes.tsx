@@ -556,7 +556,7 @@ export type PersonInfoFragment = (
 
 export type SubContactInfoFragment = (
   { __typename?: 'Person' }
-  & Pick<Person, 'id' | 'firstName' | 'lastName' | 'age' | 'monthsOld'>
+  & Pick<Person, 'id' | 'firstName' | 'lastName' | 'age' | 'monthsOld' | 'gender'>
 );
 
 export type PersonPlaceInfoFragment = (
@@ -884,6 +884,7 @@ export const SubContactInfoFragmentDoc = gql`
   lastName
   age
   monthsOld
+  gender
 }
     `;
 export const PersonPlaceInfoFragmentDoc = gql`

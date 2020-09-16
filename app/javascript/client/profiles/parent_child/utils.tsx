@@ -1,5 +1,6 @@
 import { Option } from 'client/form/SelectInput';
 import { Person } from 'client/graphqlTypes';
+import { colors } from 'client/shared/styles';
 
 export const NEW_OR_CURRENT_CONTACT_OPTIONS = [
   { label: 'Create a new person', value: 'new_person' },
@@ -42,48 +43,84 @@ export const buildParentOrChildOptions = (
   return peopleOptions;
 };
 
-interface PotentialParentAndChildIds {
-  newPersonId: string | null | undefined;
-  propParentId: string | null | undefined;
-  propChildId: string | null | undefined;
-  formParentId: string | null | undefined;
-  formChildId: string | null | undefined;
-}
-
-interface ParentAndChildIds {
-  parentId: string;
-  childId: string;
-}
-
-export const getParentAndChildIds = (
-  potentialParentAndChildIds: PotentialParentAndChildIds,
-): ParentAndChildIds => {
-  const {
-    newPersonId,
-    propParentId,
-    propChildId,
-    formParentId,
-    formChildId,
-  } = potentialParentAndChildIds;
-  let parentId, childId;
-
-  if (propParentId) {
-    parentId = propParentId;
-    if (newPersonId) {
-      childId = newPersonId;
+export const getParentTypeText = (
+  parentType: string,
+  gender: string | null | undefined,
+): string => {
+  if (parentType === 'biological') {
+    if (gender === 'male') {
+      return 'father';
+    } else if (gender === 'female') {
+      return 'mother';
     } else {
-      childId = formChildId;
+      return 'bio';
     }
-  } else {
-    childId = propChildId;
-    if (newPersonId) {
-      parentId = newPersonId;
+  } else if (parentType === 'step_parent') {
+    if (gender === 'male') {
+      return 'stepdad';
+    } else if (gender === 'female') {
+      return 'stepmom';
     } else {
-      parentId = formParentId;
+      return 'step-parent';
+    }
+  } else if (parentType === 'in_law') {
+    if (gender === 'male') {
+      return 'father-in-law';
+    } else if (gender === 'female') {
+      return 'mother-in-law';
+    } else {
+      return 'in-law';
     }
   }
+  return '';
+};
 
-  parentId = parentId ? parentId : '';
-  childId = childId ? childId : '';
-  return { parentId, childId };
+export const getChildTypeText = (
+  parentType: string,
+  gender: string | null | undefined,
+): string => {
+  if (parentType === 'biological') {
+    if (gender === 'male') {
+      return 'son';
+    } else if (gender === 'female') {
+      return 'daughter';
+    } else {
+      return 'bio';
+    }
+  } else if (parentType === 'step_parent') {
+    if (gender === 'male') {
+      return 'stepson';
+    } else if (gender === 'female') {
+      return 'stepdaughter';
+    } else {
+      return 'step-child';
+    }
+  } else if (parentType === 'in_law') {
+    if (gender === 'male') {
+      return 'son-in-law';
+    } else if (gender === 'female') {
+      return 'daughter-in-law';
+    } else {
+      return 'in-law';
+    }
+  }
+  return '';
+};
+
+export const parentTypeColors: Record<
+  string,
+  Record<string, keyof typeof colors>
+> = {
+  biological: {
+    backgroundColor: 'darkGreen',
+    textColor: 'lightGreen',
+  },
+  step_parent: {
+    backgroundColor: 'darkBlue',
+    textColor: 'lightBlue',
+  },
+  in_law: {
+    backgroundColor: 'darkMagenta',
+    textColor: 'lightPink',
+  },
 };

@@ -75,6 +75,7 @@ gql`
     lastName
     age
     monthsOld
+    gender
   }
 `;
 
