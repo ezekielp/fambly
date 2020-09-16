@@ -132,7 +132,7 @@ const PersonPlaceFormValidationSchema = yup.object().shape({
   note: yup.string(),
 });
 
-interface PersonPlaceFormData {
+export interface PersonPlaceFormData {
   country: string;
   stateOrRegion?: string;
   town?: string;
@@ -146,7 +146,7 @@ interface PersonPlaceFormData {
   note?: string;
 }
 
-interface PersonPlaceFormProps {
+export interface PersonPlaceFormProps {
   setFieldToAdd?: (field: string) => void;
   personId: string;
   initialValues?: PersonPlaceFormData;
@@ -155,7 +155,7 @@ interface PersonPlaceFormProps {
   personPlaceId?: string;
 }
 
-const blankInitialValues = {
+export const blankInitialValues = {
   country: 'USA',
   stateOrRegion: '',
   town: '',
