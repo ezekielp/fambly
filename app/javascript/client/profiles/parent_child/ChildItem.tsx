@@ -6,6 +6,8 @@ import {
   useDeleteParentChildRelationshipMutation,
 } from 'client/graphqlTypes';
 import { StyledLink } from 'client/common/StyledLink';
+import { FieldBadge } from 'client/common/FieldBadge';
+import { getChildTypeText, parentTypeColors } from './utils';
 import {
   StyledProfileFieldContainer,
   FlexContainer,
@@ -28,7 +30,7 @@ export const ChildItem: FC<ChildItemProps> = ({
   parentId,
   parentLastName,
 }) => {
-  const { id, firstName, lastName, age, monthsOld } = child;
+  const { id, firstName, lastName, age, monthsOld, gender } = child;
   const { data: parentChildData } = useGetParentChildRelationshipQuery({
     variables: {
       input: {
@@ -149,6 +151,14 @@ export const ChildItem: FC<ChildItemProps> = ({
             </StyledLink>
             {getAgeContent(age, monthsOld)}
           </FlexContainer>
+          {parentType && (
+            <FieldBadge
+              backgroundColor={parentTypeColors[parentType]['backgroundColor']}
+              textColor={parentTypeColors[parentType]['textColor']}
+            >
+              {getChildTypeText(parentType, gender)}
+            </FieldBadge>
+          )}
           <Dropdown
             menuItems={dropdownItems}
             xMarkSize="15"

@@ -4,6 +4,12 @@ export interface Colors {
   orange: string;
   red: string;
   white: string;
+  darkGreen: string;
+  lightGreen: string;
+  darkMagenta: string;
+  lightPink: string;
+  darkBlue: string;
+  lightBlue: string;
 }
 
 export const colors: Colors = {
@@ -12,6 +18,12 @@ export const colors: Colors = {
   orange: '#ff7315',
   red: '#FF0000',
   white: '#fff',
+  darkGreen: '#006400',
+  lightGreen: '#90ee90',
+  darkMagenta: '#8b008b',
+  lightPink: '#ffb6c1',
+  darkBlue: '#00008B',
+  lightBlue: '#add8e6',
 };
 
 export const text = {
