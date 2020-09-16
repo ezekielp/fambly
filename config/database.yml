@@ -79,12 +79,23 @@ test:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
+  # TAKEN MORE OR LESS FROM APP ACADEMY'S DOCKER TUTORIAL
   url: <%= ENV['DATABASE_URL'] %>
-  <<: *default
   adapter: postgresql
+  encoding: unicode
   host: db
   username: postgres
   password: 
+
+  # WHAT RAPHAEL JAMBALOS HAD IN HIS TUTORIAL
+  # host: <%= ENV['POSTGRESQL_HOST'] %>
+  # username: <%= ENV['POSTGRESQL_USER_NAME'] %>
+  # password: <%= ENV['POSTGRESQL_PASSWORD'] %>
+  # pool: 5
+  # database: <%= ENV['POSTGRESQL_DB'] %>
+
+  # WHAT WAS HERE ORIGINALLY BEFORE TRYING TO DEPLOY
+  # <<: *default
   # database: fambly_production
   # username: fambly
   # password: <%= ENV['FAMBLY_DATABASE_PASSWORD'] %>
