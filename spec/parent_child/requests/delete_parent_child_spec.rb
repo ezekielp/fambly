@@ -5,7 +5,6 @@ RSpec.describe 'delete_parent_child_relationship mutation', type: :request do
   let(:user) { create(:user) }
   let(:parent) { Person.create(user_id: user.id, first_name: 'Miksa', last_name: 'Neumann') }
   let(:child) { Person.create(user_id: user.id,first_name: 'Janos Lajos', last_name: 'Neumann') }
-  let(:parent_child_relationship) { ParentChild.create(parent_id: parent.id, child_id: child.id) }
   let(:query_string) do
     "
         mutation DeleteParentChildRelationship($input: DeleteParentChildRelationshipInput!) {
@@ -15,10 +14,13 @@ RSpec.describe 'delete_parent_child_relationship mutation', type: :request do
   end
 
   it 'deletes an existing parent_child relationship and returns true if the parent_child entry existed' do
+    ParentChild.create(parent_id: parent.id, child_id: child.id)
+
     variables =
       {
           input: {
-              parentChildId: parent_child_relationship.id,
+            parentId: parent.id,
+            childId: child.id,
           }
       }
 
@@ -34,10 +36,13 @@ RSpec.describe 'delete_parent_child_relationship mutation', type: :request do
   end
 
   it 'does nothing and returns false if the parent_child_id does not exist' do
+    ParentChild.create(parent_id: parent.id, child_id: child.id)
+
     variables =
       {
           input: {
-              parentChildId: 'non-existent-parent-child-id',
+              parentId: 'non-existent-parent-id',
+              childId: 'non-existent-child-id',
           }
       }
 

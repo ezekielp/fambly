@@ -136,7 +136,8 @@ input DeleteNoteInput {
 }
 
 input DeleteParentChildRelationshipInput {
-  parentChildId: ID!
+  childId: ID!
+  parentId: ID!
 }
 
 input DeletePersonPlaceInput {

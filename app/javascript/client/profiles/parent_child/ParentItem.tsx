@@ -3,12 +3,15 @@ import { ParentForm } from './ParentForm';
 import {
   SubContactInfoFragment,
   useGetParentChildRelationshipQuery,
+  useDeleteParentChildRelationshipMutation,
 } from 'client/graphqlTypes';
 import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
 import { StyledLink } from 'client/common/StyledLink';
 import { Modal } from 'client/common/Modal';
 import { colors, spacing } from 'client/shared/styles';
 import { Dropdown } from 'client/common/Dropdown';
+import { Text } from 'client/common/Text';
+import { Button } from 'client/common/Button';
 import { gql } from '@apollo/client';
 import styled from 'styled-components';
 
@@ -35,6 +38,14 @@ gql`
   }
 `;
 
+gql`
+  mutation DeleteParentChildRelationship(
+    $input: DeleteParentChildRelationshipInput!
+  ) {
+    deleteParentChildRelationship(input: $input)
+  }
+`;
+
 interface ParentItemProps {
   parent: SubContactInfoFragment;
   childLastName?: string | null | undefined;
@@ -55,8 +66,25 @@ export const ParentItem: FC<ParentItemProps> = ({
       },
     },
   });
+  const [
+    deleteParentChildRelationshipMutation,
+  ] = useDeleteParentChildRelationshipMutation();
   const [editFlag, setEditFlag] = useState(false);
+  const [deletedFlag, setDeletedFlag] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+
+  const deleteParentChildRelationship = async () => {
+    await deleteParentChildRelationshipMutation({
+      variables: {
+        input: {
+          parentId: id,
+          childId,
+        },
+      },
+    });
+    setDeletedFlag(true);
+    setModalOpen(false);
+  };
 
   const handleEdit = () => {
     setEditFlag(true);
@@ -68,7 +96,10 @@ export const ParentItem: FC<ParentItemProps> = ({
     setEditFlag(false);
   };
 
-  const dropdownItems = [{ label: 'Edit', onClick: handleEdit }];
+  const dropdownItems = [
+    { label: 'Edit', onClick: handleEdit },
+    { label: 'Delete', onClick: () => setModalOpen(true) },
+  ];
 
   const getLastNameContent = (
     parentLastName: string | null | undefined,
@@ -97,9 +128,9 @@ export const ParentItem: FC<ParentItemProps> = ({
     showOnDashboard: [],
   };
 
-  return editFlag ? (
+  return modalOpen ? (
     <>
-      {modalOpen && (
+      {editFlag && (
         <Modal onClose={handleEditModalClose}>
           <ParentForm
             initialValues={editFormInitialValues}
@@ -110,25 +141,41 @@ export const ParentItem: FC<ParentItemProps> = ({
           />
         </Modal>
       )}
+      {!editFlag && (
+        <Modal onClose={() => setModalOpen(false)}>
+          <Text marginBottom={3} fontSize={3} bold>
+            Are you sure you want to delete this field?
+          </Text>
+          <Button
+            marginRight="1rem"
+            onClick={() => deleteParentChildRelationship()}
+          >
+            Yes
+          </Button>
+          <Button onClick={() => setModalOpen(false)}>Cancel</Button>
+        </Modal>
+      )}
     </>
   ) : (
     <>
-      <StyledProfileFieldContainer>
-        <FlexContainer>
-          <StyledLink to={`/profiles/${id}`}>
-            {firstName}
-            {getLastNameContent(lastName, childLastName)}
-          </StyledLink>
-          {ageContent}
-        </FlexContainer>
-        <Dropdown
-          menuItems={dropdownItems}
-          xMarkSize="15"
-          sandwichSize="20"
-          color={colors.orange}
-          topSpacing="30px"
-        />
-      </StyledProfileFieldContainer>
+      {!deletedFlag && (
+        <StyledProfileFieldContainer>
+          <FlexContainer>
+            <StyledLink to={`/profiles/${id}`}>
+              {firstName}
+              {getLastNameContent(lastName, childLastName)}
+            </StyledLink>
+            {ageContent}
+          </FlexContainer>
+          <Dropdown
+            menuItems={dropdownItems}
+            xMarkSize="15"
+            sandwichSize="20"
+            color={colors.orange}
+            topSpacing="30px"
+          />
+        </StyledProfileFieldContainer>
+      )}
     </>
   );
 };

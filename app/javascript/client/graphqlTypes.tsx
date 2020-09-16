@@ -141,7 +141,8 @@ export type DeleteNoteInput = {
 };
 
 export type DeleteParentChildRelationshipInput = {
-  parentChildId: Scalars['ID'];
+  childId: Scalars['ID'];
+  parentId: Scalars['ID'];
 };
 
 export type DeletePersonPlaceInput = {
@@ -796,6 +797,16 @@ export type GetParentChildRelationshipQuery = (
     { __typename?: 'ParentChild' }
     & Pick<ParentChild, 'id' | 'parentType'>
   )> }
+);
+
+export type DeleteParentChildRelationshipMutationVariables = Exact<{
+  input: DeleteParentChildRelationshipInput;
+}>;
+
+
+export type DeleteParentChildRelationshipMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteParentChildRelationship'>
 );
 
 export type CreatePersonPlaceMutationVariables = Exact<{
@@ -1680,6 +1691,36 @@ export function useGetParentChildRelationshipLazyQuery(baseOptions?: Apollo.Lazy
 export type GetParentChildRelationshipQueryHookResult = ReturnType<typeof useGetParentChildRelationshipQuery>;
 export type GetParentChildRelationshipLazyQueryHookResult = ReturnType<typeof useGetParentChildRelationshipLazyQuery>;
 export type GetParentChildRelationshipQueryResult = Apollo.QueryResult<GetParentChildRelationshipQuery, GetParentChildRelationshipQueryVariables>;
+export const DeleteParentChildRelationshipDocument = gql`
+    mutation DeleteParentChildRelationship($input: DeleteParentChildRelationshipInput!) {
+  deleteParentChildRelationship(input: $input)
+}
+    `;
+export type DeleteParentChildRelationshipMutationFn = Apollo.MutationFunction<DeleteParentChildRelationshipMutation, DeleteParentChildRelationshipMutationVariables>;
+
+/**
+ * __useDeleteParentChildRelationshipMutation__
+ *
+ * To run a mutation, you first call `useDeleteParentChildRelationshipMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteParentChildRelationshipMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteParentChildRelationshipMutation, { data, loading, error }] = useDeleteParentChildRelationshipMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteParentChildRelationshipMutation(baseOptions?: Apollo.MutationHookOptions<DeleteParentChildRelationshipMutation, DeleteParentChildRelationshipMutationVariables>) {
+        return Apollo.useMutation<DeleteParentChildRelationshipMutation, DeleteParentChildRelationshipMutationVariables>(DeleteParentChildRelationshipDocument, baseOptions);
+      }
+export type DeleteParentChildRelationshipMutationHookResult = ReturnType<typeof useDeleteParentChildRelationshipMutation>;
+export type DeleteParentChildRelationshipMutationResult = Apollo.MutationResult<DeleteParentChildRelationshipMutation>;
+export type DeleteParentChildRelationshipMutationOptions = Apollo.BaseMutationOptions<DeleteParentChildRelationshipMutation, DeleteParentChildRelationshipMutationVariables>;
 export const CreatePersonPlaceDocument = gql`
     mutation CreatePersonPlace($input: CreatePersonPlaceInput!) {
   createPersonPlace(input: $input) {
