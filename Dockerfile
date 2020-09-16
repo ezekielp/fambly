@@ -23,13 +23,15 @@ COPY package.json /usr/src/node_app/package.json
 # watch the whole thing download every time
 RUN yarn install --silent
 
-# Copy over the rest of our file(s?) so Webpack will be able bundle it
+# Copy over the rest of our file(s?) so Webpack will be able to bundle it
 COPY . /usr/src/node_app
 
 # Apparently this is a very important line for this build process!
 # It's where we 'create our bundle files that we will copy over later'
-RUN yarn run postinstall
-# 'yarn run postinstall' will (hopefully) run the command: "webpack --mode=production"
+# RUN 
+# RUN yarn dockerprod
+# RUN yarn postinstall
+# 'yarn postinstall' will (hopefully) run the command: "webpack --mode=production"
 
 
 
@@ -61,16 +63,16 @@ RUN gem install bundler && bundle install
 COPY . /my_app
 
 # Copy over the bundled JS files from earlier
-COPY --from=build /usr/src/node_app/app/assets/javascripts/bundle.js ./app/assets/javascripts/
-COPY --from=build /usr/src/node_app/app/assets/javascripts/bundle.js.map ./app/assets/javascripts/
+COPY --from=build /usr/src/node_app/app/javascript/bundle.js ./app/javascript/
+COPY --from=build /usr/src/node_app/app/javascript/bundle.js.map ./app/javascript/
 
 # Add the 'entrypoint.sh' script to be executed every time the container starts
 # to deal with a Rails-specific Docker issue
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 
-# Expose our port
-EXPOSE 3000
+# Expose our port (only for local development — right??)
+# EXPOSE 3000
 
 # Start the main process
-CMD ["rails", "server", "-b", "0.0.0.0"]
+# CMD ["rails", "server", "-b", "0.0.0.0"]
