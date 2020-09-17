@@ -32,7 +32,13 @@ workers ENV.fetch("WEB_CONCURRENCY") { 2 }
 # before forking the application. This takes advantage of Copy On Write
 # process behavior so workers use less memory.
 #
-preload_app!
+# preload_app!
+
+# on_worker_boot do
+#   require "active_record"
+#   ActiveRecord::Base.connection.disconnect! rescue ActiveRecord::ConnectionNotEstablished
+#   ActiveRecord::Base.establish_connection(YAML.load_file("#{app_dir}/config/database.yml")[rails_env])
+# end
 
 # Allow puma to be restarted by `rails restart` command.
-plugin :tmp_restart
+# plugin :tmp_restart

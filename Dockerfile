@@ -49,8 +49,8 @@ RUN apk add --no-cache --update build-base \
   yarn \
   tzdata
 
-# Set environment variables — they must be included in Dockerfile (???)
-ARG DATABASE_URL="postgres://postgres@db"
+# Set environment variables — they must be included in Dockerfile (Hmm no, I think if you're using AWS ECS, for isntance, you can add them there)
+# ARG DATABASE_URL="postgres://postgres@db"
 ARG RAILS_ENV=production
 ARG NODE_ENV=production
 
@@ -91,6 +91,8 @@ RUN bin/webpack
 # to deal with a Rails-specific Docker issue
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
+
+RUN bundle exec rake assets:precompile
 
 # Expose our port (only for local development — right??)
 # EXPOSE 3000
