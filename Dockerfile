@@ -92,7 +92,8 @@ RUN bin/webpack
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 
-RUN bundle exec rake assets:precompile
+ARG RAILS_MASTER_KEY
+RUN RAILS_MASTER_KEY=${RAILS_MASTER_KEY} bin/rake assets:precompile
 
 # Expose our port (only for local development — right??)
 # EXPOSE 3000
