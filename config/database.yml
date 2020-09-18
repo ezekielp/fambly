@@ -79,7 +79,16 @@ test:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
+  adapter: postgresql
+  encoding: unicode
+  host: <%= ENV['POSTGRESQL_HOST'] %>
+  username: postgres
+  password: <%= ENV['POSTGRESQL_PASSWORD'] %>
   url: <%= ENV['DATABASE_URL'] %>
+  database: <%= ENV['POSTGRESQL_DB'] %>
+  pool: 5
+
+  # WHAT WAS HERE ORIGINALLY BEFORE TRYING TO DEPLOY
   # <<: *default
   # database: fambly_production
   # username: fambly
