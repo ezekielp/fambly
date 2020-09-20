@@ -36,8 +36,18 @@ class Person < ApplicationRecord
   has_many :child_parent_relationships, class_name: 'ParentChild', foreign_key: 'child_id', dependent: :destroy
   has_many :parents, through: :child_parent_relationships
   has_many :children, through: :parent_child_relationships
+  has_many :sibling_one_relationships, class_name: 'SiblingRelationship', foreign_key: 'sibling_one_id', dependent: :destroy
+  has_many :sibling_two_relationships, class_name: 'SiblingRelationship', foreign_key: 'sibling_two_id', dependent: :destroy
+  has_many :sibling_ones, through: :sibling_two_relationships
+  has_many :sibling_twos, through: :sibling_one_relationships
   has_many :person_places, dependent: :destroy
   has_many :places, through: :person_places
+
+  def siblings
+    # NOTE: This returns an array, not an Active Record Relation
+    # So might want to refactor. But typical '.merge' was not working
+    sibling_ones + sibling_twos
+  end
 
   def birth_year_must_be_in_past
     if birth_year.present? && birth_year > Time.zone.now.year

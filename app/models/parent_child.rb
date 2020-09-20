@@ -25,5 +25,4 @@ class ParentChild < ApplicationRecord
   belongs_to :parent, class_name: 'Person', foreign_key: 'parent_id'
   belongs_to :child, class_name: 'Person', foreign_key: 'child_id'
   has_many :notes, as: :notable
-
 end

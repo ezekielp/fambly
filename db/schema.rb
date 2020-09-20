@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_06_020909) do
+ActiveRecord::Schema.define(version: 2020_09_20_160710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -77,6 +77,16 @@ ActiveRecord::Schema.define(version: 2020_09_06_020909) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "sibling_relationships", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "sibling_one_id"
+    t.uuid "sibling_two_id"
+    t.string "sibling_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["sibling_one_id"], name: "index_sibling_relationships_on_sibling_one_id"
+    t.index ["sibling_two_id"], name: "index_sibling_relationships_on_sibling_two_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", null: false
     t.string "password_digest", null: false
@@ -92,4 +102,6 @@ ActiveRecord::Schema.define(version: 2020_09_06_020909) do
   add_foreign_key "people", "users"
   add_foreign_key "person_places", "people"
   add_foreign_key "person_places", "places"
+  add_foreign_key "sibling_relationships", "people", column: "sibling_one_id"
+  add_foreign_key "sibling_relationships", "people", column: "sibling_two_id"
 end
