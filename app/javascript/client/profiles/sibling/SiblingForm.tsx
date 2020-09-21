@@ -21,6 +21,7 @@ import {
   NEW_OR_CURRENT_CONTACT_OPTIONS,
   buildPeopleOptions,
 } from 'client/profiles/utils';
+import { SIBLING_TYPE_OPTIONS } from './utils';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
@@ -246,4 +247,97 @@ export const SiblingForm: FC<SiblingFormProps> = ({
       }
     }
   };
+
+  return (
+    <>
+      <Text marginBottom={3} fontSize={4} bold>
+        Sibling
+      </Text>
+      <SectionDivider />
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={SiblingFormValidationSchema}
+      >
+        {({ values, isSubmitting, status }) => {
+          return (
+            <Form>
+              {setFieldToAdd && (
+                <Field
+                  name="newOrCurrentContact"
+                  label=""
+                  component={FormikRadioGroup}
+                  options={NEW_OR_CURRENT_CONTACT_OPTIONS}
+                />
+              )}
+              {values.newOrCurrentContact === 'new_person' && (
+                <>
+                  <Field
+                    name="showOnDashboard"
+                    label=""
+                    component={FormikCheckboxGroup}
+                    options={[
+                      {
+                        label: `Add this person to your dashboard of contacts? (Even if you don't add them to your dashboard, you will always be able to access and add to their profile from ${personFirstName}'s page.)`,
+                        value: 'showOnDashboard',
+                      },
+                    ]}
+                  />
+                  <Field
+                    name="firstName"
+                    label="First name"
+                    component={FormikTextInput}
+                    type="test"
+                  />
+                  <Field
+                    name="lastName"
+                    label="Last name (optional)"
+                    component={FormikTextInput}
+                    type="test"
+                  />
+                  <Field
+                    name="age"
+                    label="Age (optional)"
+                    component={FormikNumberInput}
+                  />
+                  <Field
+                    name="monthsOld"
+                    label="Months old (optional)"
+                    component={FormikNumberInput}
+                  />
+                </>
+              )}
+              {values.newOrCurrentContact === 'current_person' &&
+                setFieldToAdd && (
+                  <Field
+                    name="formSiblingId"
+                    label="Sibling"
+                    component={FormikSelectInput}
+                    options={peopleOptions}
+                  />
+                )}
+              <Field
+                name="siblingType"
+                label="Type of sibling (optional)"
+                component={FormikSelectInput}
+                options={SIBLING_TYPE_OPTIONS}
+              />
+              {setFieldToAdd && (
+                <Field
+                  name="note"
+                  label="Note (optional)"
+                  component={FormikTextArea}
+                />
+              )}
+              {status && <GlobalError>{status}</GlobalError>}
+              <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
+                Save
+              </Button>
+              <Button onClick={() => cancel()}>Cancel</Button>
+            </Form>
+          );
+        }}
+      </Formik>
+    </>
+  );
 };

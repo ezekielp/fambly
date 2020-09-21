@@ -19,11 +19,11 @@ import { Button } from 'client/common/Button';
 import { GlobalError } from 'client/common/GlobalError';
 import { Text } from 'client/common/Text';
 import { SectionDivider } from 'client/profiles/PersonContainer';
+import { CHILD_TYPE_OPTIONS } from './utils';
 import {
   NEW_OR_CURRENT_CONTACT_OPTIONS,
-  CHILD_TYPE_OPTIONS,
-  buildParentOrChildOptions,
-} from './utils';
+  buildPeopleOptions,
+} from 'client/profiles/utils';
 import * as yup from 'yup';
 import { handleFormErrors } from 'client/utils/formik';
 
@@ -106,7 +106,7 @@ export const ChildForm: FC<ChildFormProps> = ({
   ] = useUpdateParentChildRelationshipMutation();
   const { data: userData } = useGetUserForHomeContainerQuery();
   const people = userData?.user?.people ? userData?.user?.people : [];
-  const peopleOptions = buildParentOrChildOptions(people, parentId);
+  const peopleOptions = buildPeopleOptions(people, parentId);
 
   const cancel = () => {
     if (setFieldToAdd) {

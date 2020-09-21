@@ -15,6 +15,7 @@ import { BirthdateForm } from './birthdate/BirthdateForm';
 import { BirthdateContainer } from './birthdate/BirthdateContainer';
 import { ParentForm } from './parent_child/ParentForm';
 import { ChildForm } from './parent_child/ChildForm';
+import { SiblingForm } from './sibling/SiblingForm';
 import { ParentsContainer } from './parent_child/ParentsContainer';
 import { ChildrenContainer } from './parent_child/ChildrenContainer';
 import { PersonPlaceForm } from './person_place/PersonPlaceForm';
@@ -221,6 +222,15 @@ export const PersonContainer: FC = () => {
           <ChildForm
             setFieldToAdd={setFieldToAdd}
             parentId={personId}
+            personFirstName={firstName}
+          />
+        </Modal>
+      )}
+      {fieldToAdd === 'sibling' && (
+        <Modal onClose={() => setFieldToAdd('')}>
+          <SiblingForm
+            setFieldToAdd={setFieldToAdd}
+            siblingOneId={personId}
             personFirstName={firstName}
           />
         </Modal>

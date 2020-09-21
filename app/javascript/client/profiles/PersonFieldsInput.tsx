@@ -56,6 +56,7 @@ export const PersonFieldsInput: FC<PersonFieldsInputProps> = ({
           <optgroup label="Family">
             <option value="child">Child</option>
             <option value="parent">Parent</option>
+            <option value="sibling">Sibling</option>
           </optgroup>
           <optgroup label="Personal history">
             <option value="personPlace">Place {firstName} has lived</option>
