@@ -18,7 +18,7 @@ RSpec.describe User, type: :model do
             end
 
             it 'validates its uniqueness' do
-                user = User.create(email: valid_email, password: valid_password)
+                User.create(email: valid_email, password: valid_password)
                 expect(User.create(email: valid_email, password: valid_password)).to_not be_valid
             end
 
