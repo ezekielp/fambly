@@ -22,11 +22,11 @@ require 'rails_helper'
 
 RSpec.describe PersonTag, type: :model do
   let(:user) { create(:user) }
-  let(:person) { create(:person) }
-  let(:tag) { create(:tag) }
 
   describe 'ActiveModel validations' do
     it 'is valid with valid attributes' do
+      person = Person.create(first_name: 'Rob', last_name: 'Pike', user_id: user.id)
+      tag = Tag.create(name: 'gophers', color: '#aaa000', user_id: user.id)
       expect(PersonTag.create(person_id: person.id, tag_id: tag.id)).to be_valid
     end
 
