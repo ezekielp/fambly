@@ -2,7 +2,7 @@ import { colors } from 'client/shared/styles';
 
 export const SIBLING_TYPE_OPTIONS = [
   { label: '', value: '' },
-  { label: 'Step-sibling', value: 'step_parent' },
+  { label: 'Step-sibling', value: 'step_sibling' },
   { label: 'In-law', value: 'in_law' },
   { label: 'Biological', value: 'biological' },
 ];
@@ -19,7 +19,7 @@ export const getSiblingTypeText = (
     } else {
       return 'bio';
     }
-  } else if (siblingType === 'step_parent') {
+  } else if (siblingType === 'step_sibling') {
     if (gender === 'male') {
       return 'stepbrother';
     } else if (gender === 'female') {

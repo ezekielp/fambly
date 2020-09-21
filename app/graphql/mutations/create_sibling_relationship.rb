@@ -39,7 +39,7 @@ module Mutations
         if new_person.save
           sibling_relationship = SiblingRelationship.new(
             sibling_one_id: input.sibling_one_id,
-            sibling_two_id: input.new_person.id,
+            sibling_two_id: new_person.id,
             sibling_type: input.sibling_type
           )
         else
