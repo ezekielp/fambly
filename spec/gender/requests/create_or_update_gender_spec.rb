@@ -38,7 +38,6 @@ RSpec.describe 'create_or_update_gender mutation', type: :request do
     person.reload
   
     returned_person = JSON.parse(response.body).dig('data', 'createOrUpdateGender', 'person')
-    debugger
     expect(returned_person['gender']).to eq(gender)
     expect(person.gender).to eq(gender)
   end
