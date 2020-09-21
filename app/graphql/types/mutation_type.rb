@@ -23,6 +23,9 @@ module Types
     field :update_parent_child_relationship, mutation: Mutations::UpdateParentChildRelationship
     field :delete_parent_child_relationship, mutation: Mutations::DeleteParentChildRelationship
 
+    # Sibling relationship
+    field :create_sibling_relationship, mutation: Mutations::CreateSiblingRelationship
+
     # Person-places
     field :create_person_place, mutation: Mutations::CreatePersonPlace
     field :update_person_place, mutation: Mutations::UpdatePersonPlace
