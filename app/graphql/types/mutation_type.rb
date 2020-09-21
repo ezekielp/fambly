@@ -32,5 +32,8 @@ module Types
     field :create_person_place, mutation: Mutations::CreatePersonPlace
     field :update_person_place, mutation: Mutations::UpdatePersonPlace
     field :delete_person_place, mutation: Mutations::DeletePersonPlace
+
+    # Tags
+    field :create_person_tag, mutation: Mutations::CreatePersonTag
   end
 end

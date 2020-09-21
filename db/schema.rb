@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_21_192957) do
+ActiveRecord::Schema.define(version: 2020_09_21_201728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -101,6 +101,8 @@ ActiveRecord::Schema.define(version: 2020_09_21_192957) do
     t.string "color"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.uuid "user_id"
+    t.index ["user_id"], name: "index_tags_on_user_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -122,4 +124,5 @@ ActiveRecord::Schema.define(version: 2020_09_21_192957) do
   add_foreign_key "person_tags", "tags"
   add_foreign_key "sibling_relationships", "people", column: "sibling_one_id"
   add_foreign_key "sibling_relationships", "people", column: "sibling_two_id"
+  add_foreign_key "tags", "users"
 end

@@ -24,6 +24,7 @@ class User < ApplicationRecord
     after_initialize :ensure_session_token
 
     has_many :people, dependent: :destroy
+    has_many :tags
 
     def self.find_by_credentials(email, password)
         user = User.find_by(email: email)

@@ -42,6 +42,7 @@ FactoryBot.define do
     end
 
     factory :tag do
+        user
         name { 'gophers' }
         color { '#02a4d3' }
     end

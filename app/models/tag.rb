@@ -7,6 +7,15 @@
 #  name       :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  user_id    :uuid
+#
+# Indexes
+#
+#  index_tags_on_user_id  (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (user_id => users.id)
 #
 class Tag < ApplicationRecord
   validates :name, presence: true, uniqueness: true
@@ -14,4 +23,5 @@ class Tag < ApplicationRecord
 
   has_many :person_tags, dependent: :destroy
   has_many :people, through: :person_tags
+  belongs_to :user
 end
