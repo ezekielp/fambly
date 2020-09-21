@@ -42,6 +42,8 @@ class Person < ApplicationRecord
   has_many :sibling_twos, through: :sibling_one_relationships
   has_many :person_places, dependent: :destroy
   has_many :places, through: :person_places
+  has_many :person_tags, dependent: :destroy
+  has_many :tags, through: :person_tags
 
   def siblings
     # NOTE: This returns an array, not an Active Record Relation

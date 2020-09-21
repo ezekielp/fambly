@@ -22,9 +22,7 @@ RSpec.describe Place, type: :model do
 
   describe 'ActiveModel validations' do
     it 'is valid with valid attributes' do
-      place = Place.create(country: country, state_or_region: state_or_region, town: town, street: street, zip_code: zip_code)
-      
-      expect(place).to be_valid
+      expect(Place.create(country: country, state_or_region: state_or_region, town: town, street: street, zip_code: zip_code)).to be_valid
     end
   end
 
