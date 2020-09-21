@@ -40,4 +40,9 @@ FactoryBot.define do
         street { 'High Pine Rd' }
         zip_code { '11542' }
     end
+
+    factory :tag do
+        name { 'gophers' }
+        color { '#02a4d3' }
+    end
 end
