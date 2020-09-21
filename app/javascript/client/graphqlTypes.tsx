@@ -118,6 +118,7 @@ export type CreateSiblingRelationshipInput = {
   lastName?: Maybe<Scalars['String']>;
   monthsOld?: Maybe<Scalars['Int']>;
   note?: Maybe<Scalars['String']>;
+  showOnDashboard?: Maybe<Scalars['Boolean']>;
   siblingOneId: Scalars['ID'];
   siblingTwoId?: Maybe<Scalars['ID']>;
   siblingType?: Maybe<Scalars['String']>;
@@ -938,6 +939,64 @@ export type DeletePersonPlaceMutationVariables = Exact<{
 export type DeletePersonPlaceMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'deletePersonPlace'>
+);
+
+export type CreateSiblingRelationshipMutationVariables = Exact<{
+  input: CreateSiblingRelationshipInput;
+}>;
+
+
+export type CreateSiblingRelationshipMutation = (
+  { __typename?: 'Mutation' }
+  & { createSiblingRelationship: (
+    { __typename?: 'CreateSiblingRelationshipPayload' }
+    & { siblingRelationship?: Maybe<(
+      { __typename?: 'SiblingRelationship' }
+      & Pick<SiblingRelationship, 'id' | 'siblingType'>
+      & { siblingOne: (
+        { __typename?: 'Person' }
+        & Pick<Person, 'id' | 'firstName' | 'lastName'>
+      ), siblingTwo: (
+        { __typename?: 'Person' }
+        & Pick<Person, 'id' | 'firstName' | 'lastName'>
+      ), notes?: Maybe<Array<(
+        { __typename?: 'Note' }
+        & Pick<Note, 'id' | 'content'>
+      )>> }
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'Error' }
+      & Pick<Error, 'path' | 'message'>
+    )>> }
+  ) }
+);
+
+export type UpdateSiblingRelationshipMutationVariables = Exact<{
+  input: UpdateSiblingRelationshipInput;
+}>;
+
+
+export type UpdateSiblingRelationshipMutation = (
+  { __typename?: 'Mutation' }
+  & { updateSiblingRelationship: (
+    { __typename?: 'UpdateSiblingRelationshipPayload' }
+    & { siblingRelationship?: Maybe<(
+      { __typename?: 'SiblingRelationship' }
+      & Pick<SiblingRelationship, 'id' | 'siblingType'>
+      & { siblingOne: (
+        { __typename?: 'Person' }
+        & Pick<Person, 'id' | 'firstName' | 'lastName'>
+      ), siblingTwo: (
+        { __typename?: 'Person' }
+        & Pick<Person, 'id' | 'firstName' | 'lastName'>
+      ), notes?: Maybe<Array<(
+        { __typename?: 'Note' }
+        & Pick<Note, 'id' | 'content'>
+      )>> }
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'Error' }
+      & Pick<Error, 'path' | 'message'>
+    )>> }
+  ) }
 );
 
 export const SubContactInfoFragmentDoc = gql`
@@ -1935,3 +1994,109 @@ export function useDeletePersonPlaceMutation(baseOptions?: Apollo.MutationHookOp
 export type DeletePersonPlaceMutationHookResult = ReturnType<typeof useDeletePersonPlaceMutation>;
 export type DeletePersonPlaceMutationResult = Apollo.MutationResult<DeletePersonPlaceMutation>;
 export type DeletePersonPlaceMutationOptions = Apollo.BaseMutationOptions<DeletePersonPlaceMutation, DeletePersonPlaceMutationVariables>;
+export const CreateSiblingRelationshipDocument = gql`
+    mutation CreateSiblingRelationship($input: CreateSiblingRelationshipInput!) {
+  createSiblingRelationship(input: $input) {
+    siblingRelationship {
+      id
+      siblingOne {
+        id
+        firstName
+        lastName
+      }
+      siblingTwo {
+        id
+        firstName
+        lastName
+      }
+      siblingType
+      notes {
+        id
+        content
+      }
+    }
+    errors {
+      path
+      message
+    }
+  }
+}
+    `;
+export type CreateSiblingRelationshipMutationFn = Apollo.MutationFunction<CreateSiblingRelationshipMutation, CreateSiblingRelationshipMutationVariables>;
+
+/**
+ * __useCreateSiblingRelationshipMutation__
+ *
+ * To run a mutation, you first call `useCreateSiblingRelationshipMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSiblingRelationshipMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createSiblingRelationshipMutation, { data, loading, error }] = useCreateSiblingRelationshipMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateSiblingRelationshipMutation(baseOptions?: Apollo.MutationHookOptions<CreateSiblingRelationshipMutation, CreateSiblingRelationshipMutationVariables>) {
+        return Apollo.useMutation<CreateSiblingRelationshipMutation, CreateSiblingRelationshipMutationVariables>(CreateSiblingRelationshipDocument, baseOptions);
+      }
+export type CreateSiblingRelationshipMutationHookResult = ReturnType<typeof useCreateSiblingRelationshipMutation>;
+export type CreateSiblingRelationshipMutationResult = Apollo.MutationResult<CreateSiblingRelationshipMutation>;
+export type CreateSiblingRelationshipMutationOptions = Apollo.BaseMutationOptions<CreateSiblingRelationshipMutation, CreateSiblingRelationshipMutationVariables>;
+export const UpdateSiblingRelationshipDocument = gql`
+    mutation UpdateSiblingRelationship($input: UpdateSiblingRelationshipInput!) {
+  updateSiblingRelationship(input: $input) {
+    siblingRelationship {
+      id
+      siblingOne {
+        id
+        firstName
+        lastName
+      }
+      siblingTwo {
+        id
+        firstName
+        lastName
+      }
+      siblingType
+      notes {
+        id
+        content
+      }
+    }
+    errors {
+      path
+      message
+    }
+  }
+}
+    `;
+export type UpdateSiblingRelationshipMutationFn = Apollo.MutationFunction<UpdateSiblingRelationshipMutation, UpdateSiblingRelationshipMutationVariables>;
+
+/**
+ * __useUpdateSiblingRelationshipMutation__
+ *
+ * To run a mutation, you first call `useUpdateSiblingRelationshipMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateSiblingRelationshipMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateSiblingRelationshipMutation, { data, loading, error }] = useUpdateSiblingRelationshipMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateSiblingRelationshipMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSiblingRelationshipMutation, UpdateSiblingRelationshipMutationVariables>) {
+        return Apollo.useMutation<UpdateSiblingRelationshipMutation, UpdateSiblingRelationshipMutationVariables>(UpdateSiblingRelationshipDocument, baseOptions);
+      }
+export type UpdateSiblingRelationshipMutationHookResult = ReturnType<typeof useUpdateSiblingRelationshipMutation>;
+export type UpdateSiblingRelationshipMutationResult = Apollo.MutationResult<UpdateSiblingRelationshipMutation>;
+export type UpdateSiblingRelationshipMutationOptions = Apollo.BaseMutationOptions<UpdateSiblingRelationshipMutation, UpdateSiblingRelationshipMutationVariables>;

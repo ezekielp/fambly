@@ -19,11 +19,11 @@ import { Button } from 'client/common/Button';
 import { GlobalError } from 'client/common/GlobalError';
 import { Text } from 'client/common/Text';
 import { SectionDivider } from 'client/profiles/PersonContainer';
+import { PARENT_TYPE_OPTIONS } from './utils';
 import {
   NEW_OR_CURRENT_CONTACT_OPTIONS,
-  PARENT_TYPE_OPTIONS,
-  buildParentOrChildOptions,
-} from './utils';
+  buildPeopleOptions,
+} from 'client/profiles/utils';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
@@ -169,7 +169,7 @@ export const ParentForm: FC<ParentFormProps> = ({
   ] = useUpdateParentChildRelationshipMutation();
   const { data: userData } = useGetUserForHomeContainerQuery();
   const people = userData?.user?.people ? userData?.user?.people : [];
-  const peopleOptions = buildParentOrChildOptions(people, childId);
+  const peopleOptions = buildPeopleOptions(people, childId);
 
   const cancel = () => {
     if (setFieldToAdd) {

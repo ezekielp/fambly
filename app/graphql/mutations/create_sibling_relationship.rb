@@ -4,6 +4,7 @@ module Types
     argument :last_name, String, required: false
     argument :age, Int, required: false
     argument :months_old, Int, required: false
+    argument :show_on_dashboard, Boolean, required: false
     argument :sibling_one_id, ID, required: true
     argument :sibling_two_id, ID, required: false
     argument :sibling_type, String, required: false
@@ -18,29 +19,28 @@ module Mutations
     field :sibling_relationship, Types::SiblingRelationshipType, null: true
 
     def resolve(input:)
-      first_name, last_name, age, months_old, sibling_one_id, sibling_two_id, sibling_type, note = input.first_name, input.last_name, input.age, input.months_old, input.sibling_one_id, input.sibling_two_id, input.sibling_type, input.note
-
       sibling_relationship = nil
 
-      if sibling_two_id
+      if input.sibling_two_id
         sibling_relationship = SiblingRelationship.new(
-          sibling_one_id: sibling_one_id,
-          sibling_two_id: sibling_two_id,
-          sibling_type: sibling_type
+          sibling_one_id: input.sibling_one_id,
+          sibling_two_id: input.sibling_two_id,
+          sibling_type: input.sibling_type
         )
       else
         new_person = Person.new(
           user_id: current_user.id,
-          first_name: first_name,
-          last_name: last_name,
-          age: age,
-          months_old: months_old
+          first_name: input.first_name,
+          last_name: input.last_name,
+          age: input.age,
+          months_old: input.months_old,
+          show_on_dashboard: input.show_on_dashboard
         )
         if new_person.save
           sibling_relationship = SiblingRelationship.new(
-            sibling_one_id: sibling_one_id,
-            sibling_two_id: new_person.id,
-            sibling_type: sibling_type
+            sibling_one_id: input.sibling_one_id,
+            sibling_two_id: input.new_person.id,
+            sibling_type: input.sibling_type
           )
         else
           return { errors: [{ path: '', message: 'Oops! Something went wrong. Please refresh the page and try again.' }] }
@@ -48,9 +48,9 @@ module Mutations
       end
 
       if sibling_relationship && sibling_relationship.save
-        if note
+        if input.note
           sibling_note = Note.new(
-            content: note,
+            content: input.note,
             notable: sibling_relationship
           )
 

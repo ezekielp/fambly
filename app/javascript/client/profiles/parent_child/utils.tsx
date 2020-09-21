@@ -1,14 +1,4 @@
-import { Option } from 'client/form/SelectInput';
-import { Person } from 'client/graphqlTypes';
 import { colors } from 'client/shared/styles';
-
-export const NEW_OR_CURRENT_CONTACT_OPTIONS = [
-  { label: 'Create a new person', value: 'new_person' },
-  {
-    label: 'Select a person already in my contact list',
-    value: 'current_person',
-  },
-];
 
 export const PARENT_TYPE_OPTIONS = [
   { label: '', value: '' },
@@ -23,25 +13,6 @@ export const CHILD_TYPE_OPTIONS = [
   { label: 'In-law', value: 'in_law' },
   { label: 'Biological', value: 'biological' },
 ];
-
-export const buildParentOrChildOptions = (
-  people: Person[],
-  personIdToExclude: string | undefined,
-): Option[] => {
-  if (!personIdToExclude) return [];
-
-  const filteredPeople = people.filter(
-    (person) => person.id !== personIdToExclude,
-  );
-
-  const peopleOptions = filteredPeople.map((person) => {
-    const lastName = person.lastName ? ` ${person.lastName}` : '';
-    return { label: `${person.firstName}${lastName}`, value: person.id };
-  });
-
-  peopleOptions.unshift({ label: '', value: '' });
-  return peopleOptions;
-};
 
 export const getParentTypeText = (
   parentType: string,

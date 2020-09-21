@@ -112,6 +112,7 @@ input CreateSiblingRelationshipInput {
   lastName: String
   monthsOld: Int
   note: String
+  showOnDashboard: Boolean
   siblingOneId: ID!
   siblingTwoId: ID
   siblingType: String
