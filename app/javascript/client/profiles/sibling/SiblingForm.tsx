@@ -193,7 +193,7 @@ export const SiblingForm: FC<SiblingFormProps> = ({
         {
           variables: {
             input: {
-              firstName,
+              firstName: firstName ? firstName : null,
               lastName: lastName ? lastName : null,
               showOnDashboard: showOnDashboard.length > 0 ? true : false,
               age,
