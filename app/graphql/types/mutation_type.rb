@@ -36,5 +36,6 @@ module Types
     # Tags
     field :create_person_tag, mutation: Mutations::CreatePersonTag
     field :update_tag, mutation: Mutations::UpdateTag
+    field :delete_person_tag, mutation: Mutations::DeletePersonTag
   end
 end
