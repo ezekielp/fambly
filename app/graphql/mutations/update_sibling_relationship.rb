@@ -13,7 +13,7 @@ module Mutations
     field :sibling_relationship, Types::SiblingRelationshipType, null: true
 
     def resolve(input:)
-      sibling_relationship = SiblingRelationship.find_by(sibling_one_id: input.sibling_one_id, sibling_two_id: input.sibling_two_id)
+      sibling_relationship = SiblingRelationship.find_by(sibling_one_id: input.sibling_one_id, sibling_two_id: input.sibling_two_id) || SiblingRelationship.find_by(sibling_one_id: input.sibling_two_id, sibling_two_id: input.sibling_one_id)
 
       if sibling_relationship
         sibling_relationship.update(sibling_type: input.sibling_type)

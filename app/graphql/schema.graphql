@@ -112,6 +112,7 @@ input CreateSiblingRelationshipInput {
   lastName: String
   monthsOld: Int
   note: String
+  showOnDashboard: Boolean
   siblingOneId: ID!
   siblingTwoId: ID
   siblingType: String
@@ -245,6 +246,7 @@ type Person {
   parents: [Person!]
   personPlaces: [PersonPlace!]
   showOnDashboard: Boolean!
+  siblings: [Person!]
 }
 
 type PersonPlace {
@@ -272,6 +274,7 @@ type Place {
 type Query {
   parentChildRelationshipByParentIdAndChildId(input: ParentChildInput!): ParentChild
   personById(personId: String!): Person
+  siblingRelationshipBySiblingIds(input: SiblingRelationshipInput!): SiblingRelationship
   user: User
 }
 
@@ -281,6 +284,11 @@ type SiblingRelationship {
   siblingOne: Person!
   siblingTwo: Person!
   siblingType: String
+}
+
+input SiblingRelationshipInput {
+  siblingOneId: String!
+  siblingTwoId: String!
 }
 
 input UpdateAgeInput {

@@ -7,6 +7,9 @@ module Types
     field :parent_child_relationship_by_parent_id_and_child_id, Types::ParentChildType, null: true do
       argument :input, Types::ParentChildInputType, required: true
     end
+    field :sibling_relationship_by_sibling_ids, Types::SiblingRelationshipType, null: true do
+      argument :input, Types::SiblingRelationshipInputType, required: true
+    end
 
     delegate :logged_in?,
              :current_user,
@@ -34,6 +37,13 @@ module Types
       return nil unless args
 
       ParentChild.find_by(parent_id: args[:input][:parent_id], child_id: args[:input][:child_id])
+    end
+
+    def sibling_relationship_by_sibling_ids(args)
+      return nil unless args
+
+      SiblingRelationship.find_by(sibling_one_id: args[:input][:sibling_one_id], sibling_two_id: args[:input][:sibling_two_id]) ||
+      SiblingRelationship.find_by(sibling_one_id: args[:input][:sibling_two_id], sibling_two_id: args[:input][:sibling_one_id])
     end
   end
 end

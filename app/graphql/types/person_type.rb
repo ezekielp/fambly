@@ -13,6 +13,7 @@ module Types
     field :notes, [Types::NoteType], null: true
     field :parents, [Types::PersonType], null: true
     field :children, [Types::PersonType], null: true
+    field :siblings, [Types::PersonType], null: true
     field :person_places, [Types::PersonPlaceType], null: true
 
     def age
@@ -46,6 +47,8 @@ module Types
     def person_places
       AssociationLoader.for(Person, :person_places).load(object)
     end
+
+    # possible TO DO: Figure out a way to preload siblings
 
     private
 

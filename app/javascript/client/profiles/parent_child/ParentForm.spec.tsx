@@ -92,7 +92,7 @@ describe('<ParentChildForm />', () => {
     expect(form.findInputByName('note', 'textarea').exists()).toBe(true);
   });
 
-  it('has four form fields when the parent or child to be added is a current_contact', async () => {
+  it('has four form fields when the parent to be added is a current_contact', async () => {
     await mountComponent(defaultMocks, currentPersonProps);
     form = formUtils<ParentFormData>(component.find(Form));
 

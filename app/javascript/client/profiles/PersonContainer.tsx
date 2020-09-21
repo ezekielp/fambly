@@ -15,8 +15,10 @@ import { BirthdateForm } from './birthdate/BirthdateForm';
 import { BirthdateContainer } from './birthdate/BirthdateContainer';
 import { ParentForm } from './parent_child/ParentForm';
 import { ChildForm } from './parent_child/ChildForm';
+import { SiblingForm } from './sibling/SiblingForm';
 import { ParentsContainer } from './parent_child/ParentsContainer';
 import { ChildrenContainer } from './parent_child/ChildrenContainer';
+import { SiblingsContainer } from './sibling/SiblingsContainer';
 import { PersonPlaceForm } from './person_place/PersonPlaceForm';
 import { PersonPlacesContainer } from './person_place/PersonPlacesContainer';
 import { PersonFieldsInput } from './PersonFieldsInput';
@@ -57,6 +59,9 @@ gql`
       ...SubContactInfo
     }
     children {
+      ...SubContactInfo
+    }
+    siblings {
       ...SubContactInfo
     }
     personPlaces {
@@ -164,6 +169,7 @@ export const PersonContainer: FC = () => {
     notes,
     parents,
     children,
+    siblings,
     personPlaces,
   } = personData.personById;
 
@@ -171,7 +177,9 @@ export const PersonContainer: FC = () => {
   const hasBirthdate = birthYear || birthMonth;
   const hasVitals = gender || hasAge || hasBirthdate;
   const hasFamily =
-    (parents && parents.length > 0) || (children && children.length > 0);
+    (parents && parents.length > 0) ||
+    (children && children.length > 0) ||
+    (siblings && siblings.length > 0);
   const hasPersonalHistory = personPlaces && personPlaces.length > 0;
 
   return (
@@ -225,6 +233,15 @@ export const PersonContainer: FC = () => {
           />
         </Modal>
       )}
+      {fieldToAdd === 'sibling' && (
+        <Modal onClose={() => setFieldToAdd('')}>
+          <SiblingForm
+            setFieldToAdd={setFieldToAdd}
+            siblingOneId={personId}
+            personFirstName={firstName}
+          />
+        </Modal>
+      )}
       {fieldToAdd === 'personPlace' && (
         <Modal onClose={() => setFieldToAdd('')}>
           <PersonPlaceForm setFieldToAdd={setFieldToAdd} personId={personId} />
@@ -273,6 +290,13 @@ export const PersonContainer: FC = () => {
           actualChildren={children}
           parentId={personId}
           parentLastName={lastName}
+        />
+      )}
+      {siblings && siblings.length > 0 && (
+        <SiblingsContainer
+          siblings={siblings}
+          otherSiblingId={personId}
+          otherSiblingLastName={lastName}
         />
       )}
       {hasPersonalHistory && (

@@ -12,7 +12,7 @@ module Mutations
     type Boolean
 
     def resolve(input:)
-      sibling_relationship = SiblingRelationship.find_by(sibling_one_id: input.sibling_one_id, sibling_two_id: input.sibling_two_id)
+      sibling_relationship = SiblingRelationship.find_by(sibling_one_id: input.sibling_one_id, sibling_two_id: input.sibling_two_id) || SiblingRelationship.find_by(sibling_one_id: input.sibling_two_id, sibling_two_id: input.sibling_one_id)
 
       if sibling_relationship
         sibling_relationship.destroy

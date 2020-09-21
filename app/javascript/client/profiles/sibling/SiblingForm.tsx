@@ -1,9 +1,7 @@
 import React, { FC } from 'react';
 import {
-  useCreatePersonMutation,
-  useCreateAgeMutation,
-  useCreateParentChildRelationshipMutation,
-  useUpdateParentChildRelationshipMutation,
+  useCreateSiblingRelationshipMutation,
+  useUpdateSiblingRelationshipMutation,
   useGetUserForHomeContainerQuery,
 } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
@@ -19,33 +17,31 @@ import { Button } from 'client/common/Button';
 import { GlobalError } from 'client/common/GlobalError';
 import { Text } from 'client/common/Text';
 import { SectionDivider } from 'client/profiles/PersonContainer';
-import { PARENT_TYPE_OPTIONS } from './utils';
 import {
   NEW_OR_CURRENT_CONTACT_OPTIONS,
   buildPeopleOptions,
 } from 'client/profiles/utils';
+import { SIBLING_TYPE_OPTIONS } from './utils';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
 
 gql`
-  mutation CreateParentChildRelationship(
-    $input: CreateParentChildRelationshipInput!
-  ) {
-    createParentChildRelationship(input: $input) {
-      parentChildRelationship {
+  mutation CreateSiblingRelationship($input: CreateSiblingRelationshipInput!) {
+    createSiblingRelationship(input: $input) {
+      siblingRelationship {
         id
-        parent {
+        siblingOne {
           id
           firstName
           lastName
         }
-        child {
+        siblingTwo {
           id
           firstName
           lastName
         }
-        parentType
+        siblingType
         notes {
           id
           content
@@ -60,23 +56,21 @@ gql`
 `;
 
 gql`
-  mutation UpdateParentChildRelationship(
-    $input: UpdateParentChildRelationshipInput!
-  ) {
-    updateParentChildRelationship(input: $input) {
-      parentChildRelationship {
+  mutation UpdateSiblingRelationship($input: UpdateSiblingRelationshipInput!) {
+    updateSiblingRelationship(input: $input) {
+      siblingRelationship {
         id
-        parent {
+        siblingOne {
           id
           firstName
           lastName
         }
-        child {
+        siblingTwo {
           id
           firstName
           lastName
         }
-        parentType
+        siblingType
         notes {
           id
           content
@@ -90,7 +84,7 @@ gql`
   }
 `;
 
-const ParentFormValidationSchema = yup.object().shape({
+const SiblingFormValidationSchema = yup.object().shape({
   firstName: yup.string().when('newOrCurrentContact', {
     is: (val: string) => val === 'new_person',
     then: yup
@@ -113,28 +107,28 @@ const ParentFormValidationSchema = yup.object().shape({
     .max(1000000, "Wow, that's old! Please enter a lower age")
     .nullable(),
   newOrCurrentContact: yup.string().required(),
-  formParentId: yup.string(),
-  parentType: yup.string(),
+  formSiblingId: yup.string(),
+  siblingType: yup.string(),
   note: yup.string(),
 });
 
-export interface ParentFormData {
+export interface SiblingFormData {
   firstName?: string;
   lastName?: string;
-  formParentId: string;
+  formSiblingId: string;
   age: number | null;
   monthsOld: number | null;
   newOrCurrentContact: string;
   showOnDashboard: string[];
-  parentType?: string;
+  siblingType?: string;
   note?: string | null | undefined;
 }
 
-export interface ParentFormProps {
+export interface SiblingFormProps {
   setFieldToAdd?: (field: string) => void;
-  personFirstName: string;
-  childId: string;
-  initialValues?: ParentFormData;
+  personFirstName?: string;
+  siblingOneId: string;
+  initialValues?: SiblingFormData;
   setEditFlag?: (bool: boolean) => void;
   setModalOpen?: (bool: boolean) => void;
 }
@@ -142,34 +136,32 @@ export interface ParentFormProps {
 export const blankInitialValues = {
   firstName: '',
   lastName: '',
-  formParentId: '',
+  formSiblingId: '',
   age: null,
   monthsOld: null,
   newOrCurrentContact: 'new_person',
   showOnDashboard: [],
-  parentType: '',
+  siblingType: '',
   note: '',
 };
 
-export const ParentForm: FC<ParentFormProps> = ({
+export const SiblingForm: FC<SiblingFormProps> = ({
   setFieldToAdd,
   initialValues = blankInitialValues,
   personFirstName = '',
-  childId,
+  siblingOneId,
   setEditFlag,
   setModalOpen,
 }) => {
   const [
-    createParentChildRelationshipMutation,
-  ] = useCreateParentChildRelationshipMutation();
-  const [createPersonMutation] = useCreatePersonMutation();
-  const [createAgeMutation] = useCreateAgeMutation();
+    createSiblingRelationshipMutation,
+  ] = useCreateSiblingRelationshipMutation();
   const [
-    updateParentChildRelationship,
-  ] = useUpdateParentChildRelationshipMutation();
+    updateSiblingRelationshipMutation,
+  ] = useUpdateSiblingRelationshipMutation();
   const { data: userData } = useGetUserForHomeContainerQuery();
   const people = userData?.user?.people ? userData?.user?.people : [];
-  const peopleOptions = buildPeopleOptions(people, childId);
+  const peopleOptions = buildPeopleOptions(people, siblingOneId);
 
   const cancel = () => {
     if (setFieldToAdd) {
@@ -181,93 +173,46 @@ export const ParentForm: FC<ParentFormProps> = ({
   };
 
   const handleSubmit = async (
-    data: ParentFormData,
-    formikHelpers: FormikHelpers<ParentFormData>,
+    data: SiblingFormData,
+    formikHelpers: FormikHelpers<SiblingFormData>,
   ) => {
     const {
       firstName,
       lastName,
       age,
       monthsOld,
-      newOrCurrentContact,
       showOnDashboard,
-      formParentId,
-      parentType,
+      formSiblingId,
+      siblingType,
       note,
     } = data;
     const { setErrors, setStatus } = formikHelpers;
-    let createPersonResponse;
-    let newPersonId;
 
     if (setFieldToAdd) {
-      if (newOrCurrentContact === 'new_person' && firstName) {
-        createPersonResponse = await createPersonMutation({
-          variables: {
-            input: {
-              firstName,
-              lastName: lastName ? lastName : null,
-              showOnDashboard: showOnDashboard.length > 0 ? true : false,
-            },
-          },
-        });
-        const createPersonErrors =
-          createPersonResponse.data?.createPerson.errors;
-        if (createPersonErrors) {
-          handleFormErrors<ParentFormData>(
-            createPersonErrors,
-            setErrors,
-            setStatus,
-          );
-          return;
-        } else {
-          newPersonId = createPersonResponse.data?.createPerson?.person?.id;
-
-          if ((age || monthsOld) && newPersonId) {
-            const createAgeResponse = await createAgeMutation({
-              variables: {
-                input: {
-                  age,
-                  monthsOld: monthsOld && !age ? monthsOld : null,
-                  personId: newPersonId,
-                },
-              },
-            });
-            const createAgeErrors = createAgeResponse.data?.createAge.errors;
-            if (createAgeErrors) {
-              handleFormErrors<ParentFormData>(
-                createAgeErrors,
-                setErrors,
-                setStatus,
-              );
-              return;
-            }
-          }
-        }
-      }
-      newPersonId = createPersonResponse
-        ? createPersonResponse.data?.createPerson.person?.id
-        : null;
-
-      const parentId = newPersonId ? newPersonId : formParentId;
-
-      const createParentChildResponse = await createParentChildRelationshipMutation(
+      const createSiblingRelationshipResponse = await createSiblingRelationshipMutation(
         {
           variables: {
             input: {
-              parentId,
-              childId,
-              parentType: parentType ? parentType : null,
+              firstName: firstName ? firstName : null,
+              lastName: lastName ? lastName : null,
+              showOnDashboard: showOnDashboard.length > 0 ? true : false,
+              age,
+              monthsOld: age ? null : monthsOld,
+              siblingOneId,
+              siblingTwoId: formSiblingId ? formSiblingId : null,
+              siblingType: siblingType ? siblingType : null,
               note: note ? note : null,
             },
           },
         },
       );
-      const createParentChildErrors =
-        createParentChildResponse.data?.createParentChildRelationship.errors;
+      const createSiblingRelationshipErrors =
+        createSiblingRelationshipResponse.data?.createSiblingRelationship
+          .errors;
 
-      if (createParentChildErrors) {
-        handleFormErrors<ParentFormData>(
-          createParentChildErrors,
+      if (createSiblingRelationshipErrors) {
+        handleFormErrors<SiblingFormData>(
+          createSiblingRelationshipErrors,
           setErrors,
           setStatus,
         );
@@ -275,21 +220,24 @@ export const ParentForm: FC<ParentFormProps> = ({
         setFieldToAdd('');
       }
     } else if (setEditFlag) {
-      const updateParentChildResponse = await updateParentChildRelationship({
-        variables: {
-          input: {
-            parentId: formParentId,
-            childId,
-            parentType,
+      const updateSiblingRelationshipResponse = await updateSiblingRelationshipMutation(
+        {
+          variables: {
+            input: {
+              siblingOneId,
+              siblingTwoId: formSiblingId,
+              siblingType: siblingType ? siblingType : null,
+            },
           },
         },
-      });
-      const updateParentChildErrors =
-        updateParentChildResponse.data?.updateParentChildRelationship.errors;
+      );
+      const updateSiblingRelationshipErrors =
+        updateSiblingRelationshipResponse.data?.updateSiblingRelationship
+          .errors;
 
-      if (updateParentChildErrors) {
-        handleFormErrors<ParentFormData>(
-          updateParentChildErrors,
+      if (updateSiblingRelationshipErrors) {
+        handleFormErrors<SiblingFormData>(
+          updateSiblingRelationshipErrors,
           setErrors,
           setStatus,
         );
@@ -303,13 +251,13 @@ export const ParentForm: FC<ParentFormProps> = ({
   return (
     <>
       <Text marginBottom={3} fontSize={4} bold>
-        Parent
+        Sibling
       </Text>
       <SectionDivider />
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}
-        validationSchema={ParentFormValidationSchema}
+        validationSchema={SiblingFormValidationSchema}
       >
         {({ values, isSubmitting, status }) => {
           return (
@@ -362,17 +310,17 @@ export const ParentForm: FC<ParentFormProps> = ({
               {values.newOrCurrentContact === 'current_person' &&
                 setFieldToAdd && (
                   <Field
-                    name="formParentId"
-                    label="Parent"
+                    name="formSiblingId"
+                    label="Sibling"
                     component={FormikSelectInput}
                     options={peopleOptions}
                   />
                 )}
               <Field
-                name="parentType"
-                label="Type of parent (optional)"
+                name="siblingType"
+                label="Type of sibling (optional)"
                 component={FormikSelectInput}
-                options={PARENT_TYPE_OPTIONS}
+                options={SIBLING_TYPE_OPTIONS}
               />
               {setFieldToAdd && (
                 <Field
