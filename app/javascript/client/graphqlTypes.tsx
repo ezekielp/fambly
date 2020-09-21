@@ -364,6 +364,7 @@ export type Person = {
   parents?: Maybe<Array<Person>>;
   personPlaces?: Maybe<Array<PersonPlace>>;
   showOnDashboard: Scalars['Boolean'];
+  siblings?: Maybe<Array<Person>>;
 };
 
 export type PersonPlace = {
@@ -394,6 +395,7 @@ export type Query = {
   __typename?: 'Query';
   parentChildRelationshipByParentIdAndChildId?: Maybe<ParentChild>;
   personById?: Maybe<Person>;
+  siblingRelationshipBySiblingIds?: Maybe<SiblingRelationship>;
   user?: Maybe<User>;
 };
 
@@ -407,6 +409,11 @@ export type QueryPersonByIdArgs = {
   personId: Scalars['String'];
 };
 
+
+export type QuerySiblingRelationshipBySiblingIdsArgs = {
+  input: SiblingRelationshipInput;
+};
+
 export type SiblingRelationship = {
   __typename?: 'SiblingRelationship';
   id: Scalars['ID'];
@@ -414,6 +421,11 @@ export type SiblingRelationship = {
   siblingOne: Person;
   siblingTwo: Person;
   siblingType?: Maybe<Scalars['String']>;
+};
+
+export type SiblingRelationshipInput = {
+  siblingOneId: Scalars['String'];
+  siblingTwoId: Scalars['String'];
 };
 
 export type UpdateAgeInput = {
@@ -610,6 +622,9 @@ export type PersonInfoFragment = (
     { __typename?: 'Person' }
     & SubContactInfoFragment
   )>>, children?: Maybe<Array<(
+    { __typename?: 'Person' }
+    & SubContactInfoFragment
+  )>>, siblings?: Maybe<Array<(
     { __typename?: 'Person' }
     & SubContactInfoFragment
   )>>, personPlaces?: Maybe<Array<(
@@ -999,6 +1014,29 @@ export type UpdateSiblingRelationshipMutation = (
   ) }
 );
 
+export type GetSiblingRelationshipQueryVariables = Exact<{
+  input: SiblingRelationshipInput;
+}>;
+
+
+export type GetSiblingRelationshipQuery = (
+  { __typename?: 'Query' }
+  & { siblingRelationshipBySiblingIds?: Maybe<(
+    { __typename?: 'SiblingRelationship' }
+    & Pick<SiblingRelationship, 'id' | 'siblingType'>
+  )> }
+);
+
+export type DeleteSiblingRelationshipMutationVariables = Exact<{
+  input: DeleteSiblingRelationshipInput;
+}>;
+
+
+export type DeleteSiblingRelationshipMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteSiblingRelationship'>
+);
+
 export const SubContactInfoFragmentDoc = gql`
     fragment SubContactInfo on Person {
   id
@@ -1055,6 +1093,9 @@ export const PersonInfoFragmentDoc = gql`
     ...SubContactInfo
   }
   children {
+    ...SubContactInfo
+  }
+  siblings {
     ...SubContactInfo
   }
   personPlaces {
@@ -2100,3 +2141,67 @@ export function useUpdateSiblingRelationshipMutation(baseOptions?: Apollo.Mutati
 export type UpdateSiblingRelationshipMutationHookResult = ReturnType<typeof useUpdateSiblingRelationshipMutation>;
 export type UpdateSiblingRelationshipMutationResult = Apollo.MutationResult<UpdateSiblingRelationshipMutation>;
 export type UpdateSiblingRelationshipMutationOptions = Apollo.BaseMutationOptions<UpdateSiblingRelationshipMutation, UpdateSiblingRelationshipMutationVariables>;
+export const GetSiblingRelationshipDocument = gql`
+    query GetSiblingRelationship($input: SiblingRelationshipInput!) {
+  siblingRelationshipBySiblingIds(input: $input) {
+    id
+    siblingType
+  }
+}
+    `;
+
+/**
+ * __useGetSiblingRelationshipQuery__
+ *
+ * To run a query within a React component, call `useGetSiblingRelationshipQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSiblingRelationshipQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSiblingRelationshipQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetSiblingRelationshipQuery(baseOptions?: Apollo.QueryHookOptions<GetSiblingRelationshipQuery, GetSiblingRelationshipQueryVariables>) {
+        return Apollo.useQuery<GetSiblingRelationshipQuery, GetSiblingRelationshipQueryVariables>(GetSiblingRelationshipDocument, baseOptions);
+      }
+export function useGetSiblingRelationshipLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSiblingRelationshipQuery, GetSiblingRelationshipQueryVariables>) {
+          return Apollo.useLazyQuery<GetSiblingRelationshipQuery, GetSiblingRelationshipQueryVariables>(GetSiblingRelationshipDocument, baseOptions);
+        }
+export type GetSiblingRelationshipQueryHookResult = ReturnType<typeof useGetSiblingRelationshipQuery>;
+export type GetSiblingRelationshipLazyQueryHookResult = ReturnType<typeof useGetSiblingRelationshipLazyQuery>;
+export type GetSiblingRelationshipQueryResult = Apollo.QueryResult<GetSiblingRelationshipQuery, GetSiblingRelationshipQueryVariables>;
+export const DeleteSiblingRelationshipDocument = gql`
+    mutation DeleteSiblingRelationship($input: DeleteSiblingRelationshipInput!) {
+  deleteSiblingRelationship(input: $input)
+}
+    `;
+export type DeleteSiblingRelationshipMutationFn = Apollo.MutationFunction<DeleteSiblingRelationshipMutation, DeleteSiblingRelationshipMutationVariables>;
+
+/**
+ * __useDeleteSiblingRelationshipMutation__
+ *
+ * To run a mutation, you first call `useDeleteSiblingRelationshipMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteSiblingRelationshipMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteSiblingRelationshipMutation, { data, loading, error }] = useDeleteSiblingRelationshipMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteSiblingRelationshipMutation(baseOptions?: Apollo.MutationHookOptions<DeleteSiblingRelationshipMutation, DeleteSiblingRelationshipMutationVariables>) {
+        return Apollo.useMutation<DeleteSiblingRelationshipMutation, DeleteSiblingRelationshipMutationVariables>(DeleteSiblingRelationshipDocument, baseOptions);
+      }
+export type DeleteSiblingRelationshipMutationHookResult = ReturnType<typeof useDeleteSiblingRelationshipMutation>;
+export type DeleteSiblingRelationshipMutationResult = Apollo.MutationResult<DeleteSiblingRelationshipMutation>;
+export type DeleteSiblingRelationshipMutationOptions = Apollo.BaseMutationOptions<DeleteSiblingRelationshipMutation, DeleteSiblingRelationshipMutationVariables>;

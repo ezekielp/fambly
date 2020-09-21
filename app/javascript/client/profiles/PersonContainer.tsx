@@ -60,6 +60,9 @@ gql`
     children {
       ...SubContactInfo
     }
+    siblings {
+      ...SubContactInfo
+    }
     personPlaces {
       ...PersonPlaceInfo
     }

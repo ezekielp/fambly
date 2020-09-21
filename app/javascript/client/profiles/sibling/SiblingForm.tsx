@@ -126,7 +126,7 @@ export interface SiblingFormData {
 
 export interface SiblingFormProps {
   setFieldToAdd?: (field: string) => void;
-  personFirstName: string;
+  personFirstName?: string;
   siblingOneId: string;
   initialValues?: SiblingFormData;
   setEditFlag?: (bool: boolean) => void;
