@@ -9,9 +9,12 @@ jobs:
       - name: Set up Ruby
       - uses: actions/checkout@v2
       - uses: ruby/setup-ruby@v1
+
       - name: Install dependencies
-      - run: bundle install
+        run: bundle install
+
       - name: Run RSpec tests
-      - run: bin/rspec
+        run: bin/rspec
+
       - name: Run Jest tests
-      - run: yarn test
+        run: yarn test
