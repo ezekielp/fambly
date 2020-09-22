@@ -6,8 +6,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Ruby
       - uses: actions/checkout@v2
+
+      - name: Set up Ruby
       - uses: ruby/setup-ruby@v1
 
       - name: Install dependencies
