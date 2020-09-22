@@ -29,6 +29,7 @@ import { gql } from '@apollo/client';
 import { BelowNavContainer } from 'client/common/BelowNavContainer';
 import { text, spacing, colors } from 'client/shared/styles';
 import styled from 'styled-components';
+import { PersonTagForm } from 'client/profiles/tags/PersonTagForm';
 
 gql`
   query GetPersonForPersonContainer($personId: String!) {
@@ -190,6 +191,7 @@ export const PersonContainer: FC = () => {
       <ProfileHeader>
         {firstName} {lastName && ` ${lastName}`}
       </ProfileHeader>
+      <PersonTagForm setFieldToAdd={setFieldToAdd} personId={personId} />
       <PersonFieldsInput
         personData={personData.personById}
         fieldToAdd={fieldToAdd}
