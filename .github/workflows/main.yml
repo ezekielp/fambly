@@ -20,8 +20,11 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
 
-      - name: Install dependencies
+      - name: Install Ruby gems
         run: bundle install
+
+      - name: Install Yarn packages
+        run: bin/yarn
 
       - name: Set up database
         run: |
