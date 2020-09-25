@@ -30,6 +30,7 @@ import { BelowNavContainer } from 'client/common/BelowNavContainer';
 import { text, spacing, colors } from 'client/shared/styles';
 import styled from 'styled-components';
 import { PersonTagForm } from 'client/profiles/tags/PersonTagForm';
+import { Button } from 'client/common/Button';
 
 gql`
   query GetPersonForPersonContainer($personId: String!) {
@@ -123,6 +124,13 @@ const ProfileHeader = styled.h1`
   margin-bottom: ${spacing[2]};
 `;
 
+const AddTagButton = styled(Button)`
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  font-size: ${text[0]};
+  padding: 0.5rem 1rem;
+`;
+
 export const Subheading = styled.div`
   font-size: ${text[3]};
   margin-bottom: ${spacing[2]};
@@ -139,6 +147,7 @@ interface PersonContainerProps {}
 
 export const PersonContainer: FC = () => {
   const [fieldToAdd, setFieldToAdd] = useState('');
+  // const [modalOpen, setModalOpen] = useState(false);
   const { personId } = useParams();
 
   const {
@@ -183,6 +192,11 @@ export const PersonContainer: FC = () => {
     (siblings && siblings.length > 0);
   const hasPersonalHistory = personPlaces && personPlaces.length > 0;
 
+  const handleAddTagButtonClick = () => {
+    setFieldToAdd('person_tag');
+    // setModalOpen(true);
+  };
+
   return (
     <BelowNavContainer>
       <BackToPeopleLinkContainer>
@@ -191,7 +205,14 @@ export const PersonContainer: FC = () => {
       <ProfileHeader>
         {firstName} {lastName && ` ${lastName}`}
       </ProfileHeader>
-      <PersonTagForm setFieldToAdd={setFieldToAdd} personId={personId} />
+      <AddTagButton onClick={handleAddTagButtonClick}>
+        + Add to group
+      </AddTagButton>
+      {fieldToAdd === 'person_tag' && (
+        <Modal onClose={() => setFieldToAdd('')}>
+          <PersonTagForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        </Modal>
+      )}
       <PersonFieldsInput
         personData={personData.personById}
         fieldToAdd={fieldToAdd}
