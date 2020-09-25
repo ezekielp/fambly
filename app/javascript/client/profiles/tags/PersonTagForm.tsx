@@ -6,8 +6,10 @@ import { Text } from 'client/common/Text';
 import { handleFormErrors } from 'client/utils/formik';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
-import Autosuggest from 'react-autosuggest';
-import { OnSuggestionSelected } from 'react-autosuggest';
+import Autosuggest, {
+  SuggestionsFetchRequestedParams,
+  ShouldRenderSuggestions,
+} from 'react-autosuggest';
 
 gql`
   mutation CreatePersonTag($input: CreatePersonTagInput!) {
@@ -77,17 +79,16 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
     setFieldToAdd('');
   };
 
-  const getSuggestions = (inputValue: string): PersonTagFormData[] => {
-    const trimmedInputValue = inputValue.trim().toLowerCase();
-    const inputValueLength = trimmedInputValue.length;
+  const escapeRegexCharacters = (str: string) => {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  };
 
-    return inputValueLength === 0
-      ? []
-      : tags.filter(
-          (tag) =>
-            tag.name.toLowerCase().slice(0, inputValueLength) ===
-            trimmedInputValue,
-        );
+  const getSuggestions = (inputValue: string): PersonTagFormData[] => {
+    const trimmedInputValue = escapeRegexCharacters(
+      inputValue.trim().toLowerCase(),
+    );
+    const regex = new RegExp('^' + trimmedInputValue, 'i');
+    return tags.filter((tag) => regex.test(tag.name));
   };
 
   const getSuggestionValue = (suggestion: PersonTagFormData): string =>
@@ -97,17 +98,17 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
     <div>{suggestion.name}</div>
   );
 
-  const onSuggestionsFetchRequested = (props: any) => {
-    if (!props.value) {
-      setFilteredSuggestions([]);
-      return;
-    }
+  const onSuggestionsFetchRequested = (
+    props: SuggestionsFetchRequestedParams,
+  ) => {
     setFilteredSuggestions(getSuggestions(props.value));
   };
 
   const onSuggestionsClearRequested = () => {
     setFilteredSuggestions([]);
   };
+
+  const shouldRenderSuggestions = (): boolean => true;
 
   const handleSubmit = async (
     data: PersonTagFormData,
@@ -154,6 +155,7 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
                   onSuggestionsClearRequested={onSuggestionsClearRequested}
                   getSuggestionValue={getSuggestionValue}
                   renderSuggestion={renderSuggestion}
+                  shouldRenderSuggestions={shouldRenderSuggestions}
                   onSuggestionSelected={(event, data) => {
                     if (data.method === 'enter') {
                       event.preventDefault();
