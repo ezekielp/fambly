@@ -10,6 +10,7 @@ module Types
     field :birth_year, Int, null: true
     field :birth_month, Int, null: true
     field :birth_day, Int, null: true
+    field :tags, [Types::TagType], null: true
     field :notes, [Types::NoteType], null: true
     field :parents, [Types::PersonType], null: true
     field :children, [Types::PersonType], null: true

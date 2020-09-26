@@ -5,6 +5,7 @@ import {
   SubContactInfoFragmentDoc,
   PersonPlaceInfoFragmentDoc,
 } from 'client/graphqlTypes';
+import { TagsContainer } from 'client/profiles/tags/TagsContainer';
 import { AgeForm } from './age/AgeForm';
 import { AgeContainer } from './age/AgeContainer';
 import { GenderForm } from './gender/GenderForm';
@@ -51,6 +52,11 @@ gql`
     birthYear
     birthMonth
     birthDay
+    tags {
+      id
+      name
+      color
+    }
     notes {
       id
       content
@@ -166,6 +172,7 @@ export const PersonContainer: FC = () => {
     birthYear,
     birthMonth,
     birthDay,
+    tags,
     notes,
     parents,
     children,
@@ -190,6 +197,12 @@ export const PersonContainer: FC = () => {
       <ProfileHeader>
         {firstName} {lastName && ` ${lastName}`}
       </ProfileHeader>
+      <TagsContainer
+        personId={personId}
+        tags={tags ? tags : []}
+        setFieldToAdd={setFieldToAdd}
+        fieldToAdd={fieldToAdd}
+      />
       <PersonFieldsInput
         personData={personData.personById}
         fieldToAdd={fieldToAdd}

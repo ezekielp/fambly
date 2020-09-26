@@ -2,7 +2,8 @@ import { HTMLProps } from 'react';
 import { colors } from 'client/shared/styles';
 import styled from 'styled-components';
 
-interface ButtonProps extends Omit<HTMLProps<HTMLButtonElement>, 'as' | 'ref'> {
+export interface ButtonProps
+  extends Omit<HTMLProps<HTMLButtonElement>, 'as' | 'ref'> {
   marginRight?: string;
 }
 

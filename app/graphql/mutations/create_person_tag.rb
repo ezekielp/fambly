@@ -21,12 +21,12 @@ module Mutations
         tag.update(color: input.color)
       end
 
-      person_tag = PersonTag.new(
+      person_tag = PersonTag.find_or_create_by(
         person_id: input.person_id,
         tag_id: tag.id
       )
 
-      if person_tag.save
+      if person_tag || person_tag.save
         return { person_tag: person_tag }
       end
 
