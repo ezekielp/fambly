@@ -401,6 +401,7 @@ export type Person = {
   personPlaces?: Maybe<Array<PersonPlace>>;
   showOnDashboard: Scalars['Boolean'];
   siblings?: Maybe<Array<Person>>;
+  tags?: Maybe<Array<Tag>>;
 };
 
 export type PersonPlace = {
@@ -680,7 +681,10 @@ export type GetPersonForPersonContainerQuery = (
 export type PersonInfoFragment = (
   { __typename?: 'Person' }
   & Pick<Person, 'id' | 'firstName' | 'lastName' | 'gender' | 'age' | 'monthsOld' | 'birthYear' | 'birthMonth' | 'birthDay'>
-  & { notes?: Maybe<Array<(
+  & { tags?: Maybe<Array<(
+    { __typename?: 'Tag' }
+    & Pick<Tag, 'id' | 'name' | 'color'>
+  )>>, notes?: Maybe<Array<(
     { __typename?: 'Note' }
     & Pick<Note, 'id' | 'content'>
   )>>, parents?: Maybe<Array<(
@@ -1132,6 +1136,16 @@ export type CreatePersonTagMutation = (
   ) }
 );
 
+export type DeletePersonTagMutationVariables = Exact<{
+  input: DeletePersonTagInput;
+}>;
+
+
+export type DeletePersonTagMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deletePersonTag'>
+);
+
 export const SubContactInfoFragmentDoc = gql`
     fragment SubContactInfo on Person {
   id
@@ -1180,6 +1194,11 @@ export const PersonInfoFragmentDoc = gql`
   birthYear
   birthMonth
   birthDay
+  tags {
+    id
+    name
+    color
+  }
   notes {
     id
     content
@@ -2351,3 +2370,33 @@ export function useCreatePersonTagMutation(baseOptions?: Apollo.MutationHookOpti
 export type CreatePersonTagMutationHookResult = ReturnType<typeof useCreatePersonTagMutation>;
 export type CreatePersonTagMutationResult = Apollo.MutationResult<CreatePersonTagMutation>;
 export type CreatePersonTagMutationOptions = Apollo.BaseMutationOptions<CreatePersonTagMutation, CreatePersonTagMutationVariables>;
+export const DeletePersonTagDocument = gql`
+    mutation DeletePersonTag($input: DeletePersonTagInput!) {
+  deletePersonTag(input: $input)
+}
+    `;
+export type DeletePersonTagMutationFn = Apollo.MutationFunction<DeletePersonTagMutation, DeletePersonTagMutationVariables>;
+
+/**
+ * __useDeletePersonTagMutation__
+ *
+ * To run a mutation, you first call `useDeletePersonTagMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePersonTagMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePersonTagMutation, { data, loading, error }] = useDeletePersonTagMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeletePersonTagMutation(baseOptions?: Apollo.MutationHookOptions<DeletePersonTagMutation, DeletePersonTagMutationVariables>) {
+        return Apollo.useMutation<DeletePersonTagMutation, DeletePersonTagMutationVariables>(DeletePersonTagDocument, baseOptions);
+      }
+export type DeletePersonTagMutationHookResult = ReturnType<typeof useDeletePersonTagMutation>;
+export type DeletePersonTagMutationResult = Apollo.MutationResult<DeletePersonTagMutation>;
+export type DeletePersonTagMutationOptions = Apollo.BaseMutationOptions<DeletePersonTagMutation, DeletePersonTagMutationVariables>;

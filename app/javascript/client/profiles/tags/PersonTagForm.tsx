@@ -14,6 +14,7 @@ import { SwatchesPicker } from 'react-color';
 import { useDetectOutsideClick } from 'client/common/useDetectOutsideClick';
 import styled from 'styled-components';
 import { colors, text } from 'client/shared/styles';
+import { Tag } from './TagsContainer';
 
 gql`
   mutation CreatePersonTag($input: CreatePersonTagInput!) {
@@ -64,7 +65,7 @@ const ColorPickerButton = styled(Button)`
 
 const ColorPickerOuterContainer = styled.div`
   position: relative;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
   display: flex;
   width: 50%;
   justify-content: space-between;
@@ -82,10 +83,12 @@ const ColorPickerInnerContainer = styled.div`
 `;
 
 interface SwatchProps extends Omit<HTMLProps<HTMLDivElement>, 'as' | 'ref'> {
-  swatchColor?: string;
+  swatchColor?: string | null | undefined;
+  cursorPointer?: boolean;
+  marginBottom?: string | null | undefined;
 }
 
-const Swatch = styled.div`
+export const Swatch = styled.div`
   height: 20px;
   padding: 0.5rem 1rem;
   background-color: ${({ swatchColor }: SwatchProps) =>
@@ -98,6 +101,11 @@ const Swatch = styled.div`
     swatchColor ? `${colors.white}` : `${colors.black}`};
   line-height: 20px;
   font-variation-settings: 'wght' 550;
+  cursor: ${({ cursorPointer }: SwatchProps) =>
+    cursorPointer ? 'pointer' : 'default'};
+  margin-right: 10px;
+  margin-bottom: ${({ marginBottom }: SwatchProps) =>
+    marginBottom ? marginBottom : '0'};
 `;
 
 const PersonTagFormValidationSchema = yup.object().shape({
@@ -114,6 +122,7 @@ export interface PersonTagFormProps {
   setModalOpen?: (bool: boolean) => void;
   personId: string;
   initialValues?: PersonTagFormData;
+  tags: Tag[];
 }
 
 export const blankInitialValues: PersonTagFormData = {
@@ -123,16 +132,11 @@ export const blankInitialValues: PersonTagFormData = {
 
 export const PersonTagForm: FC<PersonTagFormProps> = ({
   personId,
+  tags,
   initialValues = blankInitialValues,
   setModalOpen,
   setFieldToAdd,
 }) => {
-  const tags: PersonTagFormData[] = [
-    { name: 'Rubyists', color: '#ff0000' },
-    { name: 'Gophers', color: '40e0D0' },
-    { name: 'Pythonistas', color: 'ffff00' },
-  ];
-
   const [createPersonTagMutation] = useCreatePersonTagMutation();
   const colorPickerRef = useRef(null);
   const [filteredSuggestions, setFilteredSuggestions] = useState(tags);
@@ -151,7 +155,7 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   };
 
-  const getSuggestions = (inputValue: string): PersonTagFormData[] => {
+  const getSuggestions = (inputValue: string): Tag[] => {
     const trimmedInputValue = escapeRegexCharacters(
       inputValue.trim().toLowerCase(),
     );
@@ -159,10 +163,9 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
     return tags.filter((tag) => regex.test(tag.name));
   };
 
-  const getSuggestionValue = (suggestion: PersonTagFormData): string =>
-    suggestion.name;
+  const getSuggestionValue = (suggestion: Tag): string => suggestion.name;
 
-  const renderSuggestion = (suggestion: PersonTagFormData): ReactNode => (
+  const renderSuggestion = (suggestion: Tag): ReactNode => (
     <div>{suggestion.name}</div>
   );
 
@@ -221,7 +224,7 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
         {({ values, isSubmitting }) => (
           <Form>
             <Label as="label" htmlFor="name">
-              Name (search or create new)
+              Name
             </Label>
             <Field name="name">
               {({ form }: FieldProps) => (

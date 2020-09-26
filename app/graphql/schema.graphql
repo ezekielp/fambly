@@ -269,6 +269,7 @@ type Person {
   personPlaces: [PersonPlace!]
   showOnDashboard: Boolean!
   siblings: [Person!]
+  tags: [Tag!]
 }
 
 type PersonPlace {
