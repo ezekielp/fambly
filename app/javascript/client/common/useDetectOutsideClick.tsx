@@ -7,21 +7,23 @@ export const useDetectOutsideClick = (
   const [isActive, setIsActive] = useState(initialState);
 
   useEffect(() => {
-    const pageClickEvent = (event: MouseEvent): void => {
+    const eventListener = (event: MouseEvent): void => {
       if (
-        element.current !== null &&
-        !element.current.contains(event.target as Node)
+        // Do nothing if clicking ref's element or descendent elements
+        !element.current ||
+        element.current.contains(event.target as Node)
       ) {
-        setIsActive(!isActive);
+        return;
       }
+      setIsActive(!isActive);
     };
 
     if (isActive) {
-      window.addEventListener('click', pageClickEvent);
+      window.addEventListener('mousedown', eventListener);
     }
 
     return () => {
-      window.removeEventListener('click', pageClickEvent);
+      window.removeEventListener('mousedown', eventListener);
     };
   }, [isActive, element]);
 

@@ -18,6 +18,7 @@ const AddTagButton = styled(Button)`
   border-radius: 10px;
   font-size: ${text[0]};
   padding: 0.5rem 1rem;
+  margin-bottom: 10px;
 `;
 
 export interface Tag {
@@ -51,7 +52,7 @@ export const TagsContainer: FC<TagsContainerProps> = ({
       <StyledTagsContainer>
         {tagItems}
         <AddTagButton onClick={handleAddTagButtonClick}>
-          + Add to group
+          + Add group
         </AddTagButton>
       </StyledTagsContainer>
       {fieldToAdd === 'person_tag' && (

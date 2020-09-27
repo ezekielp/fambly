@@ -1,4 +1,11 @@
-import React, { FC, ReactNode, useState, useRef, HTMLProps } from 'react';
+import React, {
+  FC,
+  ReactNode,
+  useState,
+  useRef,
+  useEffect,
+  HTMLProps,
+} from 'react';
 import { useCreatePersonTagMutation } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers, FieldProps } from 'formik';
 import { Button, ButtonProps } from 'client/common/Button';
@@ -139,12 +146,29 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
 }) => {
   const [createPersonTagMutation] = useCreatePersonTagMutation();
   const colorPickerRef = useRef(null);
+  const formikRef: React.RefObject<any> = useRef();
   const [filteredSuggestions, setFilteredSuggestions] = useState(tags);
   const [tagName, setTagName] = useState('');
   const [colorPickerActive, setColorPickerActive] = useDetectOutsideClick(
     colorPickerRef,
     false,
   );
+  const tagsToColorsHash = tags.reduce((hash: any, tag) => {
+    if (tag.color) {
+      if (hash[tag.name]) {
+        hash[tag.name] = '#fff';
+      } else {
+        hash[tag.name] = tag.color;
+      }
+    }
+    return hash;
+  }, {});
+
+  useEffect(() => {
+    if (tagName in tagsToColorsHash && formikRef.current) {
+      formikRef.current.setFieldValue('color', tagsToColorsHash[tagName]);
+    }
+  }, [tagName]);
 
   const cancel = () => {
     setFieldToAdd('');
@@ -220,6 +244,7 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
         initialValues={initialValues}
         onSubmit={handleSubmit}
         validationSchema={PersonTagFormValidationSchema}
+        innerRef={formikRef}
       >
         {({ values, isSubmitting }) => (
           <Form>
@@ -274,9 +299,9 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
                   </Field>
                 </ColorPickerInnerContainer>
               )}
-              <Swatch swatchColor={values.color}>
-                {values.name ? values.name : 'group name'}
-              </Swatch>
+              {values.name && (
+                <Swatch swatchColor={values.color}>{values.name}</Swatch>
+              )}
             </ColorPickerOuterContainer>
             <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
               Save
