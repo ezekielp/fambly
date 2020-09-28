@@ -11,6 +11,7 @@ import { AuthContext } from 'client/contexts/AuthContext';
 import { SignupContainer } from './login/SignupContainer';
 import { LoginContainer } from './login/LoginContainer';
 import { HomeContainer } from './home/HomeContainer';
+import { LandingPage } from './home/LandingPage';
 import { PersonContainer } from './profiles/PersonContainer';
 import { Wrapper } from 'client/common/Wrapper';
 import { NavBar } from 'client/nav/NavBar';
@@ -66,6 +67,9 @@ const InternalAppContainer: FC<AppContainerProps> = () => {
         </Route>
         <Route path="/login">
           <LoginContainer />
+        </Route>
+        <Route path="/landing">
+          <LandingPage />
         </Route>
         <ProtectedRoute
           path="/home"

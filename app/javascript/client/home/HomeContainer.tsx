@@ -64,7 +64,8 @@ interface HomeContainerProps {}
 
 const InternalHomeContainer: FC<HomeContainerProps> = () => {
   const { userId } = useContext(AuthContext);
-  if (!userId) window.location.href = '/login';
+  console.log(userId);
+  if (!userId) window.location.href = '/landing';
 
   const [newPersonFieldVisible, toggleNewPersonFieldVisible] = useState(false);
   const {

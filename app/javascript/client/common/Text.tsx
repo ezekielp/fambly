@@ -6,6 +6,7 @@ interface TextProps {
   marginBottom?: keyof typeof spacing;
   center?: boolean;
   bold?: boolean;
+  semiBold?: boolean;
   textTransform?: string;
   lineHeight?: string;
   fontSize?: keyof typeof text;
@@ -17,9 +18,15 @@ export const Text = styled.div`
   text-transform: ${({ textTransform }: TextProps) =>
     textTransform ? textTransform : 'none'};
   font-size: ${({ fontSize }: TextProps) =>
-    fontSize ? text[fontSize] : text[1]};
-  font-variation-settings: ${({ bold }: TextProps) =>
-    bold ? "'wght' 700" : "'wght' 400"};
+    fontSize !== null && fontSize !== undefined ? text[fontSize] : text[1]};
+  font-variation-settings: ${({ bold, semiBold }: TextProps) => {
+    if (bold) {
+      return "'wght' 700;";
+    } else if (semiBold) {
+      return "'wght' 550";
+    }
+    return "'wght' 400";
+  }};
   margin-bottom: ${({ marginBottom }: TextProps) =>
     marginBottom ? spacing[marginBottom] : '0'};
   line-height: ${({ lineHeight }: TextProps) =>

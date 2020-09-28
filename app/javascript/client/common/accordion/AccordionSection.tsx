@@ -11,11 +11,12 @@ export const AccordionHeader = styled.summary`
   font-size: ${text[2]};
   display: block;
   cursor: pointer;
-  padding: 5px;
+  padding: 0.5rem 1rem;
   background: ${colors.orange};
   border: 2px solid ${colors.white};
   color: ${colors.white};
   outline: none;
+  border-radius: 8px;
 `;
 
 const slideDown = keyframes`
