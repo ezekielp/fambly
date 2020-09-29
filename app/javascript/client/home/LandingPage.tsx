@@ -4,6 +4,7 @@ import { AccordionSection } from 'client/common/accordion/AccordionSection';
 import { frequentlyAskedQuestions } from './utils';
 import { Text } from 'client/common/Text';
 import { spacing } from 'client/shared/styles';
+import hangout_illustration from 'client/assets/hangout_illustration.svg';
 import styled from 'styled-components';
 
 const LandingPageContainer = styled.div`
@@ -13,6 +14,11 @@ const LandingPageContainer = styled.div`
 
 const HeaderContainer = styled.section`
   margin-bottom: 2rem;
+`;
+
+const HangoutIllustration = styled.img`
+  width: 100%;
+  margin-bottom: 1.5rem;
 `;
 
 const DescriptionContainer = styled.section`
@@ -43,6 +49,7 @@ export const LandingPage: FC<LandingPageProps> = () => {
         </Text>
         <Text fontSize={0}>Source: Urban Dictionary</Text>
       </HeaderContainer>
+      <HangoutIllustration src={hangout_illustration} />
       <DescriptionContainer>
         <Text fontSize={2}>
           Fambly is a tool to help you store and organize information about
