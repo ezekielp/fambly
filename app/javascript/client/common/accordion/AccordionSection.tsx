@@ -43,7 +43,7 @@ const showContent = keyframes`
 
 const AccordionTextContainer = styled.div`
   background: ${colors.white};
-  padding: 20px;
+  padding: 1rem 1rem 0 1rem;
   animation-name: ${slideDown};
   animation-duration: 0.3s;
   animation-fill-mode: forwards;

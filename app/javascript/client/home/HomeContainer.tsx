@@ -1,5 +1,4 @@
-import React, { FC, useContext, useState } from 'react';
-import { AuthContext } from 'client/contexts/AuthContext';
+import React, { FC, useState } from 'react';
 import { useGetUserForHomeContainerQuery } from 'client/graphqlTypes';
 import { AddPersonForm } from 'client/profiles/AddPersonForm';
 import { Button } from 'client/common/Button';
@@ -63,10 +62,6 @@ const ProfileLinkContainer = styled.div`
 interface HomeContainerProps {}
 
 const InternalHomeContainer: FC<HomeContainerProps> = () => {
-  const { userId } = useContext(AuthContext);
-  console.log(userId);
-  if (!userId) window.location.href = '/landing';
-
   const [newPersonFieldVisible, toggleNewPersonFieldVisible] = useState(false);
   const {
     data: userData,

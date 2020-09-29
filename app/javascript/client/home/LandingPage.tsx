@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
+import { AuthContext } from 'client/contexts/AuthContext';
 import { Accordion } from 'client/common/accordion/Accordion';
 import { AccordionSection } from 'client/common/accordion/AccordionSection';
 import { frequentlyAskedQuestions } from './utils';
@@ -37,6 +38,9 @@ const FAQContainer = styled.section``;
 interface LandingPageProps {}
 
 export const LandingPage: FC<LandingPageProps> = () => {
+  const { userId } = useContext(AuthContext);
+  if (userId) window.location.href = '/home';
+
   return (
     <LandingPageContainer>
       <HeaderContainer>
@@ -76,7 +80,9 @@ export const LandingPage: FC<LandingPageProps> = () => {
           {frequentlyAskedQuestions.map((qAndA) => (
             <AccordionSection header={qAndA.question} key={qAndA.question}>
               {qAndA.answer.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
+                <Text marginBottom={3} key={paragraph}>
+                  {paragraph}
+                </Text>
               ))}
             </AccordionSection>
           ))}
