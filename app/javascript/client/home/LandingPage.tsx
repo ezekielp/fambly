@@ -5,6 +5,7 @@ import { AccordionSection } from 'client/common/accordion/AccordionSection';
 import { frequentlyAskedQuestions } from './utils';
 import { Text } from 'client/common/Text';
 import { spacing } from 'client/shared/styles';
+import { Button } from 'client/common/Button';
 import hangout_illustration from 'client/assets/hangout_illustration.svg';
 import styled from 'styled-components';
 
@@ -31,6 +32,12 @@ const ExamplesList = styled.ul``;
 const Example = styled.li`
   list-style: outside;
   margin-bottom: 0.5rem;
+`;
+
+const ButtonsContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 const FAQContainer = styled.section``;
@@ -72,6 +79,11 @@ export const LandingPage: FC<LandingPageProps> = () => {
           </Example>
         </ExamplesList>
       </DescriptionContainer>
+      <ButtonsContainer>
+        <Button type="button">Try it without signing up</Button>
+        <Text marginBottom={2}>Or</Text>
+        <Button>Sign up</Button>
+      </ButtonsContainer>
       <FAQContainer>
         <Text fontSize={4} bold marginBottom={2}>
           FAQ
