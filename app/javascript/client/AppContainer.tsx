@@ -62,9 +62,7 @@ const InternalAppContainer: FC<AppContainerProps> = () => {
     <Wrapper>
       <NavBar dropdownItems={navMenuItems} />
       <Switch>
-        <Route path="/signup">
-          <SignupContainer />
-        </Route>
+        <Route path="/signup" component={SignupContainer}></Route>
         <Route path="/login">
           <LoginContainer />
         </Route>

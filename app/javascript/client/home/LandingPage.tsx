@@ -1,11 +1,11 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useState, useContext } from 'react';
 import { useCreateDummyUserMutation } from 'client/graphqlTypes';
 import { AuthContext } from 'client/contexts/AuthContext';
 import { Accordion } from 'client/common/accordion/Accordion';
 import { AccordionSection } from 'client/common/accordion/AccordionSection';
 import { frequentlyAskedQuestions } from './utils';
 import { Text } from 'client/common/Text';
-import { spacing } from 'client/shared/styles';
+import { spacing, text, colors } from 'client/shared/styles';
 import { Button } from 'client/common/Button';
 import hangout_illustration from 'client/assets/hangout_illustration.svg';
 import { Link } from 'react-router-dom';
@@ -59,6 +59,14 @@ const ButtonsContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+`;
+
+const StyledButton = styled(Button)`
+  font-size: ${text[3]};
+  font-variation-settings: 'wght' 700;
+  border: 3px solid ${colors.black};
+  margin-bottom: ${spacing[2]};
 `;
 
 const FAQContainer = styled.section``;
@@ -70,8 +78,10 @@ export const LandingPage: FC<LandingPageProps> = () => {
   if (userId) window.location.href = '/home';
 
   const [createDummyUser] = useCreateDummyUserMutation();
+  const [creatingDummyUser, setCreatingDummyUser] = useState<boolean>(false);
 
   const handleCreateDummyUser = async () => {
+    setCreatingDummyUser(true);
     const createDummyUserResponse = await createDummyUser();
     const errors = createDummyUserResponse.data?.createDummyUser.errors;
     if (!errors) {
@@ -111,12 +121,16 @@ export const LandingPage: FC<LandingPageProps> = () => {
         </ExamplesList>
       </DescriptionContainer>
       <ButtonsContainer>
-        <Button type="button" onClick={handleCreateDummyUser}>
+        <StyledButton
+          type="button"
+          onClick={handleCreateDummyUser}
+          disabled={creatingDummyUser}
+        >
           Try it without signing up
-        </Button>
+        </StyledButton>
         <Text marginBottom={2}>Or</Text>
         <Link to="/signup">
-          <Button>Sign up</Button>
+          <StyledButton>Sign up</StyledButton>
         </Link>
       </ButtonsContainer>
       <FAQContainer>

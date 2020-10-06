@@ -7,6 +7,8 @@ import { OnSubmit, handleFormErrors } from 'client/utils/formik';
 import { CreateUserMutation } from 'client/graphqlTypes';
 import * as yup from 'yup';
 import { Header } from 'client/login/LoginForm';
+import { Text } from 'client/common/Text';
+import { colors } from 'client/shared/styles';
 
 export interface SignupFormData {
   email: string;
@@ -22,6 +24,7 @@ export interface CreateUserData {
 export interface SignupFormProps {
   onSubmit: OnSubmit<CreateUserData, CreateUserMutation>;
   initialValues: SignupFormData;
+  reachedTrialLimit?: boolean;
 }
 
 const ValidationSchema = yup.object().shape({
@@ -36,6 +39,7 @@ const ValidationSchema = yup.object().shape({
 export const SignupForm: FC<SignupFormProps> = ({
   onSubmit,
   initialValues,
+  reachedTrialLimit,
 }) => {
   const handleSubmit = async (
     data: SignupFormData,
@@ -58,6 +62,11 @@ export const SignupForm: FC<SignupFormProps> = ({
 
   return (
     <BelowNavContainer>
+      {reachedTrialLimit && (
+        <Text fontSize={3} marginBottom={3} bold center color={colors.red}>
+          Please create an account to continue using Fambly!
+        </Text>
+      )}
       <Header>Sign up</Header>
       <Formik
         initialValues={initialValues}

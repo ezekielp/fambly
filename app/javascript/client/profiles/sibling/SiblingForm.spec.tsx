@@ -161,6 +161,7 @@ describe('<SiblingForm />', () => {
         const userDataMock = {
           user: {
             id: 'andre-weil-uuid',
+            email: 'andre@weil.com',
             people: [
               {
                 id: 'alexander-grothendieck-uuid',

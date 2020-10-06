@@ -8,6 +8,7 @@ import { StyledLink } from 'client/common/StyledLink';
 import { SectionDivider } from 'client/profiles/PersonContainer';
 import { text, spacing } from 'client/shared/styles';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 gql`
   mutation Logout {
@@ -54,6 +55,10 @@ const HomeContentContainer = styled.div`
   padding: 2rem;
 `;
 
+const SignUpButton = styled(Button)`
+  font-size: ${text[3]};
+`;
+
 const PeopleHeader = styled.h1`
   font-size: ${text[4]};
   font-variation-settings: 'wght' 700;
@@ -76,7 +81,10 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
   // To do (eventually): Use a loading spinner for loading state
   if (!userData) return null;
 
-  const profileLinks = userData.user?.people?.map((person) => (
+  const people = userData.user?.people ? userData.user?.people : [];
+  const dummyEmail = userData.user?.dummyEmail;
+
+  const profileLinks = people.map((person) => (
     <ProfileLinkContainer key={person.id}>
       <StyledLink to={`/profiles/${person.id}`}>
         {person.firstName}
@@ -85,13 +93,26 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
     </ProfileLinkContainer>
   ));
 
+  const addPersonButton =
+    dummyEmail && people.length > 4 ? (
+      <Link
+        to={{
+          pathname: '/signup',
+          state: { reachedTrialLimit: true },
+        }}
+      >
+        <Button>Add a new person profile</Button>
+      </Link>
+    ) : (
+      <Button onClick={() => toggleNewPersonFieldVisible(true)}>
+        Add a new person profile
+      </Button>
+    );
+
   return (
     <HomeContentContainer>
-      {!newPersonFieldVisible && (
-        <Button onClick={() => toggleNewPersonFieldVisible(true)}>
-          Add a new person profile
-        </Button>
-      )}
+      {dummyEmail && <SignUpButton>Sign up</SignUpButton>}
+      {!newPersonFieldVisible && addPersonButton}
       {newPersonFieldVisible && (
         <AddPersonForm
           refetchUserData={refetchUserData}

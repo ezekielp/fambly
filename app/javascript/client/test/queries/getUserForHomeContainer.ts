@@ -7,6 +7,7 @@ import { MockedResponse } from '@apollo/client/testing';
 export const getUserForHomeContainerData: GetUserForHomeContainerQuery = {
   user: {
     id: 'ada-lovelace-uuid',
+    email: 'ada@lovelace.com',
     people: [
       {
         id: 'lord-byron-uuid',
@@ -15,6 +16,7 @@ export const getUserForHomeContainerData: GetUserForHomeContainerQuery = {
         showOnDashboard: true,
       },
     ],
+    dummyEmail: null,
   },
 };
 
