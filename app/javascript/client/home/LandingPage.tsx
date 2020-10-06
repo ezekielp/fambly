@@ -1,4 +1,5 @@
 import React, { FC, useContext } from 'react';
+import { useCreateDummyUserMutation } from 'client/graphqlTypes';
 import { AuthContext } from 'client/contexts/AuthContext';
 import { Accordion } from 'client/common/accordion/Accordion';
 import { AccordionSection } from 'client/common/accordion/AccordionSection';
@@ -7,7 +8,27 @@ import { Text } from 'client/common/Text';
 import { spacing } from 'client/shared/styles';
 import { Button } from 'client/common/Button';
 import hangout_illustration from 'client/assets/hangout_illustration.svg';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { gql } from '@apollo/client';
+
+gql`
+  mutation CreateDummyUser {
+    createDummyUser {
+      dummyEmail {
+        id
+        email
+        user {
+          id
+        }
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`;
 
 const LandingPageContainer = styled.div`
   margin-bottom: ${spacing[2]};
@@ -48,6 +69,16 @@ export const LandingPage: FC<LandingPageProps> = () => {
   const { userId } = useContext(AuthContext);
   if (userId) window.location.href = '/home';
 
+  const [createDummyUser] = useCreateDummyUserMutation();
+
+  const handleCreateDummyUser = async () => {
+    const createDummyUserResponse = await createDummyUser();
+    const errors = createDummyUserResponse.data?.createDummyUser.errors;
+    if (!errors) {
+      window.location.href = '/home';
+    }
+  };
+
   return (
     <LandingPageContainer>
       <HeaderContainer>
@@ -80,9 +111,13 @@ export const LandingPage: FC<LandingPageProps> = () => {
         </ExamplesList>
       </DescriptionContainer>
       <ButtonsContainer>
-        <Button type="button">Try it without signing up</Button>
+        <Button type="button" onClick={handleCreateDummyUser}>
+          Try it without signing up
+        </Button>
         <Text marginBottom={2}>Or</Text>
-        <Button>Sign up</Button>
+        <Link to="/signup">
+          <Button>Sign up</Button>
+        </Link>
       </ButtonsContainer>
       <FAQContainer>
         <Text fontSize={4} bold marginBottom={2}>

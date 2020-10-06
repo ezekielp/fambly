@@ -19,11 +19,16 @@ gql`
   query GetUserForHomeContainer {
     user {
       id
+      email
       people {
         id
         firstName
         lastName
         showOnDashboard
+      }
+      dummyEmail {
+        id
+        email
       }
     }
   }

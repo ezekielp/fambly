@@ -7,18 +7,24 @@ gql`
     user {
       id
       email
+      dummyEmail {
+        id
+        email
+      }
     }
   }
 `;
 
 interface AuthContextState {
   userId?: string | null;
+  dummyEmailFlag?: boolean;
 }
 
 export const AuthContext = createContext<AuthContextState>({});
 
 export const AuthContextProvider: FC = (props) => {
   const [userId, setUserId] = useState<string | null>(null);
+  const [dummyEmailFlag, setDummyEmailFlag] = useState<boolean>(false);
   const [dataFetched, setDataFetched] = useState<boolean>(false);
 
   const { data, loading } = useGetUserQuery();
@@ -27,6 +33,10 @@ export const AuthContextProvider: FC = (props) => {
     const user = data?.user;
     if (user?.id) {
       setUserId(user.id);
+
+      if (user.dummyEmail) {
+        setDummyEmailFlag(true);
+      }
     }
 
     if (!loading) {
@@ -37,7 +47,7 @@ export const AuthContextProvider: FC = (props) => {
   if (!dataFetched) return null;
 
   return (
-    <AuthContext.Provider value={{ userId }}>
+    <AuthContext.Provider value={{ userId, dummyEmailFlag }}>
       {props.children}
     </AuthContext.Provider>
   );
