@@ -25,6 +25,7 @@ class User < ApplicationRecord
 
     has_many :people, dependent: :destroy
     has_many :tags
+    has_one :dummy_email
 
     def self.find_by_credentials(email, password)
         user = User.find_by(email: email)
