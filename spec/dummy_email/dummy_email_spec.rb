@@ -19,5 +19,13 @@
 require 'rails_helper'
 
 RSpec.describe DummyEmail, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:user) { create(:user) }
+  let(:email) { 'some-uuid@fakeemail.com' }
+
+  describe 'ActiveModel validations' do
+    it 'is valid with valid attributes' do
+      expect(DummyEmail.create(email: email, user_id: user.id)).to be_valid
+    end
+  end
+
 end
