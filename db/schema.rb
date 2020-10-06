@@ -10,11 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_21_201728) do
+ActiveRecord::Schema.define(version: 2020_10_06_192723) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "dummy_emails", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "email", null: false
+    t.uuid "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_dummy_emails_on_user_id"
+  end
 
   create_table "notes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "content", null: false
@@ -115,6 +123,7 @@ ActiveRecord::Schema.define(version: 2020_09_21_201728) do
     t.index ["session_token"], name: "index_users_on_session_token", unique: true
   end
 
+  add_foreign_key "dummy_emails", "users"
   add_foreign_key "parent_children", "people", column: "child_id"
   add_foreign_key "parent_children", "people", column: "parent_id"
   add_foreign_key "people", "users"

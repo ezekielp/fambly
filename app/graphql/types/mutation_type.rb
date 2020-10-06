@@ -5,6 +5,9 @@ module Types
     field :login, mutation: Mutations::Login
     field :logout, mutation: Mutations::Logout
 
+    # Dummy users
+    field :create_dummy_user, mutation: Mutations::CreateDummyUser
+
     # Person + person fields
     field :create_person, mutation: Mutations::CreatePerson
     field :create_person_note, mutation: Mutations::CreatePersonNote
