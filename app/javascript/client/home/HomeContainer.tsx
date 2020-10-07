@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { useGetUserForHomeContainerQuery } from 'client/graphqlTypes';
 import { AddPersonForm } from 'client/profiles/AddPersonForm';
 import { Button } from 'client/common/Button';
@@ -81,6 +81,10 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
     data: userData,
     refetch: refetchUserData,
   } = useGetUserForHomeContainerQuery();
+
+  useEffect(() => {
+    refetchUserData();
+  }, []);
 
   // To do (eventually): Use a loading spinner for loading state
   if (!userData) return null;
