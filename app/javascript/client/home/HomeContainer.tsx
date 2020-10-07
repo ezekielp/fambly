@@ -107,6 +107,7 @@ interface HomeContainerProps {}
 
 const InternalHomeContainer: FC<HomeContainerProps> = () => {
   const [newPersonFieldVisible, toggleNewPersonFieldVisible] = useState(false);
+  const [tagFilter, setTagFilter] = useState<string | null>(null);
   const {
     data: userData,
     refetch: refetchUserData,
@@ -123,10 +124,26 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
   const dummyEmail = userData.user?.dummyEmail;
 
   const profileLinks = people
-    .filter((person) => person.showOnDashboard)
+    .filter((person) => {
+      if (person.showOnDashboard) {
+        if (tagFilter !== null) {
+          if (person?.tags?.map((tag) => tag.name).includes(tagFilter)) {
+            return true;
+          }
+          return false;
+        }
+        return true;
+      }
+      return false;
+    })
     .map((person) => {
       const tagItems = person?.tags?.map((tag: Tag) => (
-        <StyledSwatch key={tag.id} swatchColor={tag.color} cursorPointer={true}>
+        <StyledSwatch
+          key={tag.id}
+          swatchColor={tag.color}
+          cursorPointer={true}
+          onClick={() => setTagFilter(tag.name)}
+        >
           {tag.name}
         </StyledSwatch>
       ));
