@@ -24,7 +24,7 @@ interface ProtectedRouteProps extends RouteProps {
 
 const ProtectedRoute: FC<ProtectedRouteProps> = ({
   accessAllowed,
-  redirect = '/login',
+  redirect = '/landing',
   ...rest
 }) => {
   if (accessAllowed) {
@@ -37,13 +37,13 @@ const ProtectedRoute: FC<ProtectedRouteProps> = ({
 interface AppContainerProps {}
 
 const InternalAppContainer: FC<AppContainerProps> = () => {
-  const { userId } = useContext(AuthContext);
+  const { userId, dummyEmailFlag } = useContext(AuthContext);
   const loggedIn = !!userId;
   const [logoutMutation] = useLogoutMutation();
 
   const handleLogout = async () => {
     await logoutMutation();
-    window.location.href = '/login';
+    window.location.href = '/landing';
   };
 
   const navMenuItems = [];
@@ -51,7 +51,7 @@ const InternalAppContainer: FC<AppContainerProps> = () => {
   const signupItem = { label: 'Sign up', href: '/signup' };
   const loginItem = { label: 'Log in', href: '/login' };
 
-  if (loggedIn) {
+  if (loggedIn && !dummyEmailFlag) {
     navMenuItems.push(logoutItem);
   } else {
     navMenuItems.push(signupItem);
@@ -62,9 +62,7 @@ const InternalAppContainer: FC<AppContainerProps> = () => {
     <Wrapper>
       <NavBar dropdownItems={navMenuItems} />
       <Switch>
-        <Route path="/signup">
-          <SignupContainer />
-        </Route>
+        <Route path="/signup" component={SignupContainer}></Route>
         <Route path="/login">
           <LoginContainer />
         </Route>
