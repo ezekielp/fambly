@@ -37,12 +37,15 @@ const InternalSignupContainer: FC<RouteComponentProps<
   const handleSubmit = (data: CreateUserData) =>
     createUserMutation({ variables: { input: data } });
 
+  const reachedTrialLimit =
+    location.state && location.state.reachedTrialLimit ? true : false;
+
   return (
     <>
       <SignupForm
         initialValues={{ email: '', password: '', confirmedPassword: '' }}
         onSubmit={handleSubmit}
-        reachedTrialLimit={location.state.reachedTrialLimit}
+        reachedTrialLimit={reachedTrialLimit}
       />
     </>
   );

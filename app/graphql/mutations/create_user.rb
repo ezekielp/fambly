@@ -18,6 +18,10 @@ module Mutations
             )
 
             if user.save
+                if current_user
+                    user.people = current_user.people
+                end
+
                 login_user(user)
                 return { user: current_user }
             end

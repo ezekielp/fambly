@@ -6,7 +6,7 @@ import { gql } from '@apollo/client';
 import { withRouter } from 'react-router-dom';
 import { StyledLink } from 'client/common/StyledLink';
 import { SectionDivider } from 'client/profiles/PersonContainer';
-import { text, spacing } from 'client/shared/styles';
+import { text, spacing, colors } from 'client/shared/styles';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -55,8 +55,17 @@ const HomeContentContainer = styled.div`
   padding: 2rem;
 `;
 
+const SignUpButtonContainer = styled.div`
+  display: flex;
+  margin-bottom: ${spacing[6]};
+  justify-content: center;
+`;
+
 const SignUpButton = styled(Button)`
   font-size: ${text[3]};
+  font-variation-settings: 'wght' 700;
+  border: 3px solid ${colors.black};
+  display: block;
 `;
 
 const PeopleHeader = styled.h1`
@@ -111,7 +120,13 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
 
   return (
     <HomeContentContainer>
-      {dummyEmail && <SignUpButton>Sign up</SignUpButton>}
+      {dummyEmail && (
+        <SignUpButtonContainer>
+          <Link to="/signup">
+            <SignUpButton>Sign up</SignUpButton>
+          </Link>
+        </SignUpButtonContainer>
+      )}
       {!newPersonFieldVisible && addPersonButton}
       {newPersonFieldVisible && (
         <AddPersonForm
@@ -121,6 +136,7 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
       )}
       <SectionDivider />
       <PeopleHeader>People</PeopleHeader>
+      {people.length === 0 && <div>No profiles yet!</div>}
       {profileLinks}
     </HomeContentContainer>
   );

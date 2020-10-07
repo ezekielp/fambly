@@ -19,4 +19,8 @@ export const Button = styled.button`
     color: ${colors.white};
     border: 1px solid ${colors.white};
   }
+
+  &:disabled {
+    opacity: 35%;
+  }
 `;

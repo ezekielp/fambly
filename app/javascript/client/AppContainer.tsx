@@ -37,7 +37,7 @@ const ProtectedRoute: FC<ProtectedRouteProps> = ({
 interface AppContainerProps {}
 
 const InternalAppContainer: FC<AppContainerProps> = () => {
-  const { userId } = useContext(AuthContext);
+  const { userId, dummyEmailFlag } = useContext(AuthContext);
   const loggedIn = !!userId;
   const [logoutMutation] = useLogoutMutation();
 
@@ -51,7 +51,7 @@ const InternalAppContainer: FC<AppContainerProps> = () => {
   const signupItem = { label: 'Sign up', href: '/signup' };
   const loginItem = { label: 'Log in', href: '/login' };
 
-  if (loggedIn) {
+  if (loggedIn && !dummyEmailFlag) {
     navMenuItems.push(logoutItem);
   } else {
     navMenuItems.push(signupItem);
