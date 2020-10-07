@@ -623,12 +623,21 @@ export type GetUserForHomeContainerQuery = (
     & Pick<User, 'id' | 'email'>
     & { people?: Maybe<Array<(
       { __typename?: 'Person' }
-      & Pick<Person, 'id' | 'firstName' | 'lastName' | 'showOnDashboard'>
+      & HomeContainerPersonInfoFragment
     )>>, dummyEmail?: Maybe<(
       { __typename?: 'DummyEmail' }
       & Pick<DummyEmail, 'id' | 'email'>
     )> }
   )> }
+);
+
+export type HomeContainerPersonInfoFragment = (
+  { __typename?: 'Person' }
+  & Pick<Person, 'id' | 'firstName' | 'lastName' | 'showOnDashboard'>
+  & { tags?: Maybe<Array<(
+    { __typename?: 'Tag' }
+    & Pick<Tag, 'id' | 'name' | 'color'>
+  )>> }
 );
 
 export type CreatePersonMutationVariables = Exact<{
@@ -1190,6 +1199,19 @@ export type DeletePersonTagMutation = (
   & Pick<Mutation, 'deletePersonTag'>
 );
 
+export const HomeContainerPersonInfoFragmentDoc = gql`
+    fragment HomeContainerPersonInfo on Person {
+  id
+  firstName
+  lastName
+  showOnDashboard
+  tags {
+    id
+    name
+    color
+  }
+}
+    `;
 export const SubContactInfoFragmentDoc = gql`
     fragment SubContactInfo on Person {
   id
@@ -1334,10 +1356,7 @@ export const GetUserForHomeContainerDocument = gql`
     id
     email
     people {
-      id
-      firstName
-      lastName
-      showOnDashboard
+      ...HomeContainerPersonInfo
     }
     dummyEmail {
       id
@@ -1345,7 +1364,7 @@ export const GetUserForHomeContainerDocument = gql`
     }
   }
 }
-    `;
+    ${HomeContainerPersonInfoFragmentDoc}`;
 
 /**
  * __useGetUserForHomeContainerQuery__

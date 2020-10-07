@@ -1,5 +1,5 @@
 import { Option } from 'client/form/SelectInput';
-import { Person } from 'client/graphqlTypes';
+import { HomeContainerPersonInfoFragment } from 'client/graphqlTypes';
 
 export const NEW_OR_CURRENT_CONTACT_OPTIONS = [
   { label: 'Create a new person', value: 'new_person' },
@@ -10,7 +10,7 @@ export const NEW_OR_CURRENT_CONTACT_OPTIONS = [
 ];
 
 export const buildPeopleOptions = (
-  people: Person[],
+  people: HomeContainerPersonInfoFragment[],
   personIdToExclude: string | undefined,
 ): Option[] => {
   if (!personIdToExclude) return [];
