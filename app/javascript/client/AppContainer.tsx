@@ -24,7 +24,7 @@ interface ProtectedRouteProps extends RouteProps {
 
 const ProtectedRoute: FC<ProtectedRouteProps> = ({
   accessAllowed,
-  redirect = '/login',
+  redirect = '/landing',
   ...rest
 }) => {
   if (accessAllowed) {
@@ -43,7 +43,7 @@ const InternalAppContainer: FC<AppContainerProps> = () => {
 
   const handleLogout = async () => {
     await logoutMutation();
-    window.location.href = '/login';
+    window.location.href = '/landing';
   };
 
   const navMenuItems = [];

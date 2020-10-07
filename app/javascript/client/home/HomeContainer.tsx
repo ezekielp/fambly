@@ -9,6 +9,7 @@ import { SectionDivider } from 'client/profiles/PersonContainer';
 import { text, spacing, colors } from 'client/shared/styles';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { Text } from 'client/common/Text';
 
 gql`
   mutation Logout {
@@ -68,12 +69,6 @@ const SignUpButton = styled(Button)`
   display: block;
 `;
 
-const PeopleHeader = styled.h1`
-  font-size: ${text[4]};
-  font-variation-settings: 'wght' 700;
-  margin-bottom: ${spacing[2]};
-`;
-
 const ProfileLinkContainer = styled.div`
   margin-bottom: ${spacing[1]};
 `;
@@ -127,6 +122,9 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
           </Link>
         </SignUpButtonContainer>
       )}
+      <Text fontSize={4} bold marginBottom={5}>
+        Dashboard
+      </Text>
       {!newPersonFieldVisible && addPersonButton}
       {newPersonFieldVisible && (
         <AddPersonForm
@@ -135,7 +133,9 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
         />
       )}
       <SectionDivider />
-      <PeopleHeader>People</PeopleHeader>
+      <Text fontSize={4} bold marginBottom={2}>
+        People
+      </Text>
       {people.length === 0 && <div>No profiles yet!</div>}
       {profileLinks}
     </HomeContentContainer>

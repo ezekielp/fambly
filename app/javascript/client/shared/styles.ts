@@ -42,5 +42,5 @@ export const spacing = {
   3: '1.375rem', // 22px
   4: '1.75rem', // 28px
   5: '2rem', // 32px
-  6: '3rem',
+  6: '3rem', // 48px
 };

@@ -23,8 +23,8 @@ gql`
 interface LoginContainerProps {}
 
 const InternalLoginContainer: FC<LoginContainerProps> = () => {
-  const { userId } = useContext(AuthContext);
-  if (userId) window.location.href = '/home';
+  const { userId, dummyEmailFlag } = useContext(AuthContext);
+  if (userId && !dummyEmailFlag) window.location.href = '/home';
 
   const [loginMutation] = useLoginMutation();
 

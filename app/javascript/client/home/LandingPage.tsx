@@ -96,8 +96,7 @@ export const LandingPage: FC<LandingPageProps> = () => {
           fambly (n.)
         </Text>
         <Text fontSize={3} marginBottom={2} semiBold>
-          A group of unrelated people who are full of platonic love for each
-          other.
+          A group of unrelated people full of platonic love for each other.
         </Text>
         <Text fontSize={0}>Source: Urban Dictionary</Text>
       </HeaderContainer>
@@ -111,8 +110,8 @@ export const LandingPage: FC<LandingPageProps> = () => {
         <ExamplesList>
           <Example>Names, birthdays and ages of your friends&#39; kids</Example>
           <Example>
-            Personal histories, e.g., when and where your parents lived, worked,
-            and went to college
+            Personal histories, e.g., where your parents lived, worked, and went
+            to college
           </Example>
           <Example>
             Addresses and other contact information of colleagues and community
