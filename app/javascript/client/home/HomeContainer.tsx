@@ -30,6 +30,11 @@ gql`
       people {
         ...HomeContainerPersonInfo
       }
+      tags {
+        id
+        name
+        color
+      }
       dummyEmail {
         id
         email
