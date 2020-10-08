@@ -27,6 +27,7 @@ import { useDetectOutsideClick } from 'client/common/useDetectOutsideClick';
 import styled from 'styled-components';
 import { colors, text } from 'client/shared/styles';
 import { Tag } from './TagsContainer';
+import { escapeRegexCharacters } from 'client/profiles/utils';
 
 gql`
   query GetUserTags($userId: String!) {
@@ -192,10 +193,6 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
   const cancel = () => {
     setFieldToAdd('');
     setModalOpen && setModalOpen(false);
-  };
-
-  const escapeRegexCharacters = (str: string) => {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   };
 
   const getSuggestions = (inputValue: string): Tag[] => {

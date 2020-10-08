@@ -27,3 +27,7 @@ export const buildPeopleOptions = (
   peopleOptions.unshift({ label: '', value: '' });
   return peopleOptions;
 };
+
+export const escapeRegexCharacters = (str: string) => {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
