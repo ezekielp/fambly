@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import { Text } from 'client/common/Text';
 import { Swatch } from 'client/profiles/tags/PersonTagForm';
 import { Tag } from 'client/profiles/tags/TagsContainer';
+import { SearchBox } from 'client/form/search_box/SearchBox';
 
 gql`
   mutation Logout {
@@ -132,6 +133,7 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
   if (!userData) return null;
 
   const people = userData.user?.people ? userData.user?.people : [];
+  const tags = userData.user?.tags ? userData.user?.tags : [];
   const dummyEmail = userData.user?.dummyEmail;
 
   const profileLinks = people
@@ -208,6 +210,12 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
         />
       )}
       <SectionDivider />
+      <SearchBox
+        people={people}
+        tags={tags}
+        setTagFilter={setTagFilter}
+        setSelectedTagColor={setSelectedTagColor}
+      />
       <Text fontSize={4} bold marginBottom={2}>
         People
       </Text>
