@@ -103,11 +103,17 @@ const StyledSwatch = styled(Swatch)`
   padding: 3px 9px;
 `;
 
+const SelectedTagContainer = styled.div`
+  margin-bottom: ${spacing[2]};
+  width: fit-content;
+`;
+
 interface HomeContainerProps {}
 
 const InternalHomeContainer: FC<HomeContainerProps> = () => {
   const [newPersonFieldVisible, toggleNewPersonFieldVisible] = useState(false);
   const [tagFilter, setTagFilter] = useState<string | null>(null);
+  const [selectedTagColor, setSelectedTagColor] = useState<string | null>(null);
   const {
     data: userData,
     refetch: refetchUserData,
@@ -142,7 +148,10 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
           key={tag.id}
           swatchColor={tag.color}
           cursorPointer={true}
-          onClick={() => setTagFilter(tag.name)}
+          onClick={() => {
+            setTagFilter(tag.name);
+            setSelectedTagColor(tag.color ? tag.color : null);
+          }}
         >
           {tag.name}
         </StyledSwatch>
@@ -197,6 +206,20 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
       <Text fontSize={4} bold marginBottom={2}>
         People
       </Text>
+      {tagFilter !== null && (
+        <SelectedTagContainer>
+          <StyledSwatch
+            swatchColor={selectedTagColor}
+            cursorPointer={true}
+            onClick={() => {
+              setTagFilter(null);
+              setSelectedTagColor(null);
+            }}
+          >
+            x {tagFilter}
+          </StyledSwatch>
+        </SelectedTagContainer>
+      )}
       {people.length === 0 && <div>No profiles yet!</div>}
       {profileLinks}
     </HomeContentContainer>
