@@ -456,6 +456,7 @@ export type Query = {
   personById?: Maybe<Person>;
   siblingRelationshipBySiblingIds?: Maybe<SiblingRelationship>;
   user?: Maybe<User>;
+  userTagsByUserId?: Maybe<Array<Tag>>;
 };
 
 
@@ -471,6 +472,11 @@ export type QueryPersonByIdArgs = {
 
 export type QuerySiblingRelationshipBySiblingIdsArgs = {
   input: SiblingRelationshipInput;
+};
+
+
+export type QueryUserTagsByUserIdArgs = {
+  userId: Scalars['String'];
 };
 
 export type SiblingRelationship = {
@@ -588,6 +594,7 @@ export type User = {
   email: Scalars['String'];
   id: Scalars['ID'];
   people?: Maybe<Array<Person>>;
+  tags?: Maybe<Array<Tag>>;
 };
 
 export type GetUserQueryVariables = Exact<{ [key: string]: never; }>;
@@ -623,12 +630,21 @@ export type GetUserForHomeContainerQuery = (
     & Pick<User, 'id' | 'email'>
     & { people?: Maybe<Array<(
       { __typename?: 'Person' }
-      & Pick<Person, 'id' | 'firstName' | 'lastName' | 'showOnDashboard'>
+      & HomeContainerPersonInfoFragment
     )>>, dummyEmail?: Maybe<(
       { __typename?: 'DummyEmail' }
       & Pick<DummyEmail, 'id' | 'email'>
     )> }
   )> }
+);
+
+export type HomeContainerPersonInfoFragment = (
+  { __typename?: 'Person' }
+  & Pick<Person, 'id' | 'firstName' | 'lastName' | 'showOnDashboard'>
+  & { tags?: Maybe<Array<(
+    { __typename?: 'Tag' }
+    & Pick<Tag, 'id' | 'name' | 'color'>
+  )>> }
 );
 
 export type CreatePersonMutationVariables = Exact<{
@@ -1150,6 +1166,19 @@ export type DeleteSiblingRelationshipMutation = (
   & Pick<Mutation, 'deleteSiblingRelationship'>
 );
 
+export type GetUserTagsQueryVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type GetUserTagsQuery = (
+  { __typename?: 'Query' }
+  & { userTagsByUserId?: Maybe<Array<(
+    { __typename?: 'Tag' }
+    & Pick<Tag, 'id' | 'name' | 'color'>
+  )>> }
+);
+
 export type CreatePersonTagMutationVariables = Exact<{
   input: CreatePersonTagInput;
 }>;
@@ -1190,6 +1219,19 @@ export type DeletePersonTagMutation = (
   & Pick<Mutation, 'deletePersonTag'>
 );
 
+export const HomeContainerPersonInfoFragmentDoc = gql`
+    fragment HomeContainerPersonInfo on Person {
+  id
+  firstName
+  lastName
+  showOnDashboard
+  tags {
+    id
+    name
+    color
+  }
+}
+    `;
 export const SubContactInfoFragmentDoc = gql`
     fragment SubContactInfo on Person {
   id
@@ -1334,10 +1376,7 @@ export const GetUserForHomeContainerDocument = gql`
     id
     email
     people {
-      id
-      firstName
-      lastName
-      showOnDashboard
+      ...HomeContainerPersonInfo
     }
     dummyEmail {
       id
@@ -1345,7 +1384,7 @@ export const GetUserForHomeContainerDocument = gql`
     }
   }
 }
-    `;
+    ${HomeContainerPersonInfoFragmentDoc}`;
 
 /**
  * __useGetUserForHomeContainerQuery__
@@ -2413,6 +2452,41 @@ export function useDeleteSiblingRelationshipMutation(baseOptions?: Apollo.Mutati
 export type DeleteSiblingRelationshipMutationHookResult = ReturnType<typeof useDeleteSiblingRelationshipMutation>;
 export type DeleteSiblingRelationshipMutationResult = Apollo.MutationResult<DeleteSiblingRelationshipMutation>;
 export type DeleteSiblingRelationshipMutationOptions = Apollo.BaseMutationOptions<DeleteSiblingRelationshipMutation, DeleteSiblingRelationshipMutationVariables>;
+export const GetUserTagsDocument = gql`
+    query GetUserTags($userId: String!) {
+  userTagsByUserId(userId: $userId) {
+    id
+    name
+    color
+  }
+}
+    `;
+
+/**
+ * __useGetUserTagsQuery__
+ *
+ * To run a query within a React component, call `useGetUserTagsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserTagsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserTagsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetUserTagsQuery(baseOptions?: Apollo.QueryHookOptions<GetUserTagsQuery, GetUserTagsQueryVariables>) {
+        return Apollo.useQuery<GetUserTagsQuery, GetUserTagsQueryVariables>(GetUserTagsDocument, baseOptions);
+      }
+export function useGetUserTagsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserTagsQuery, GetUserTagsQueryVariables>) {
+          return Apollo.useLazyQuery<GetUserTagsQuery, GetUserTagsQueryVariables>(GetUserTagsDocument, baseOptions);
+        }
+export type GetUserTagsQueryHookResult = ReturnType<typeof useGetUserTagsQuery>;
+export type GetUserTagsLazyQueryHookResult = ReturnType<typeof useGetUserTagsLazyQuery>;
+export type GetUserTagsQueryResult = Apollo.QueryResult<GetUserTagsQuery, GetUserTagsQueryVariables>;
 export const CreatePersonTagDocument = gql`
     mutation CreatePersonTag($input: CreatePersonTagInput!) {
   createPersonTag(input: $input) {

@@ -4,9 +4,14 @@ import React, {
   useState,
   useRef,
   useEffect,
+  useContext,
   HTMLProps,
 } from 'react';
-import { useCreatePersonTagMutation } from 'client/graphqlTypes';
+import {
+  useCreatePersonTagMutation,
+  useGetUserTagsQuery,
+} from 'client/graphqlTypes';
+import { AuthContext } from 'client/contexts/AuthContext';
 import { Field, Form, Formik, FormikHelpers, FieldProps } from 'formik';
 import { Button, ButtonProps } from 'client/common/Button';
 import { Text } from 'client/common/Text';
@@ -22,6 +27,16 @@ import { useDetectOutsideClick } from 'client/common/useDetectOutsideClick';
 import styled from 'styled-components';
 import { colors, text } from 'client/shared/styles';
 import { Tag } from './TagsContainer';
+
+gql`
+  query GetUserTags($userId: String!) {
+    userTagsByUserId(userId: $userId) {
+      id
+      name
+      color
+    }
+  }
+`;
 
 gql`
   mutation CreatePersonTag($input: CreatePersonTagInput!) {
@@ -129,7 +144,6 @@ export interface PersonTagFormProps {
   setModalOpen?: (bool: boolean) => void;
   personId: string;
   initialValues?: PersonTagFormData;
-  tags: Tag[];
 }
 
 export const blankInitialValues: PersonTagFormData = {
@@ -139,12 +153,17 @@ export const blankInitialValues: PersonTagFormData = {
 
 export const PersonTagForm: FC<PersonTagFormProps> = ({
   personId,
-  tags,
   initialValues = blankInitialValues,
   setModalOpen,
   setFieldToAdd,
 }) => {
+  const { userId } = useContext(AuthContext);
   const [createPersonTagMutation] = useCreatePersonTagMutation();
+  const { data: tagsData } = useGetUserTagsQuery({
+    variables: { userId: userId ? userId : '' },
+  });
+  const tags =
+    tagsData && tagsData.userTagsByUserId ? tagsData.userTagsByUserId : [];
   const colorPickerRef = useRef(null);
   const formikRef: React.RefObject<any> = useRef();
   const [filteredSuggestions, setFilteredSuggestions] = useState(tags);

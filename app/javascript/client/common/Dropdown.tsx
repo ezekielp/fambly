@@ -1,4 +1,4 @@
-import React, { FC, useRef } from 'react';
+import React, { FC, useRef, MouseEvent } from 'react';
 import { useDetectOutsideClick } from './useDetectOutsideClick';
 import { colors } from 'client/shared/styles';
 import { Sandwich } from 'client/assets/Sandwich';
@@ -74,7 +74,7 @@ export const Dropdown: FC<DropdownProps> = ({
 }) => {
   const dropdownRef = useRef(null);
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
-  const onClick = () => setIsActive(!isActive);
+  const handleClick = () => setIsActive(!isActive);
 
   const icon = isActive ? (
     <StyledXMark fill={color} width={xMarkSize} />
@@ -84,15 +84,22 @@ export const Dropdown: FC<DropdownProps> = ({
 
   const items = menuItems.map((item) => {
     const { label, onClick: onItemClick, href } = item;
+    const handleClick = (event: MouseEvent) => {
+      setIsActive(!isActive);
+      if (onItemClick) {
+        onItemClick(event);
+      }
+    };
+
     if (onItemClick)
       return (
-        <MenuItem key={label} onClick={onItemClick}>
+        <MenuItem key={label} onClick={handleClick}>
           {label}
         </MenuItem>
       );
     if (href)
       return (
-        <MenuItem key={label}>
+        <MenuItem key={label} onClick={handleClick}>
           <Link to={href}>{label}</Link>
         </MenuItem>
       );
@@ -100,7 +107,7 @@ export const Dropdown: FC<DropdownProps> = ({
 
   return (
     <DropdownContainer>
-      <IconContainer onClick={onClick}>{icon}</IconContainer>
+      <IconContainer onClick={handleClick}>{icon}</IconContainer>
       {isActive && (
         <MenuContainer topSpacing={topSpacing} ref={dropdownRef}>
           <MenuList>{items}</MenuList>

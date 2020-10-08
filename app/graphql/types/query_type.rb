@@ -4,6 +4,9 @@ module Types
     field :person_by_id, Types::PersonType, null: true do
       argument :person_id, String, required: true
     end
+    field :user_tags_by_user_id, [Types::TagType], null: true do
+      argument :user_id, String, required: true
+    end
     field :parent_child_relationship_by_parent_id_and_child_id, Types::ParentChildType, null: true do
       argument :input, Types::ParentChildInputType, required: true
     end
@@ -31,6 +34,15 @@ module Types
       return nil unless args
 
       Person.find(args[:person_id])
+    end
+
+    def user_tags_by_user_id(args)
+      return nil unless args
+
+      user = User.find_by(id: args[:user_id])
+      return nil unless user
+
+      user.tags
     end
 
     def parent_child_relationship_by_parent_id_and_child_id(args)

@@ -22,7 +22,7 @@ interface AuthContextState {
 
 export const AuthContext = createContext<AuthContextState>({});
 
-export const AuthContextProvider: FC = (props) => {
+export const AuthContextProvider: FC = ({ children }) => {
   const [userId, setUserId] = useState<string | null>(null);
   const [dummyEmailFlag, setDummyEmailFlag] = useState<boolean>(false);
   const [dataFetched, setDataFetched] = useState<boolean>(false);
@@ -48,7 +48,7 @@ export const AuthContextProvider: FC = (props) => {
 
   return (
     <AuthContext.Provider value={{ userId, dummyEmailFlag }}>
-      {props.children}
+      {children}
     </AuthContext.Provider>
   );
 };

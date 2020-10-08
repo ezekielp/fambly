@@ -320,6 +320,7 @@ type Query {
   personById(personId: String!): Person
   siblingRelationshipBySiblingIds(input: SiblingRelationshipInput!): SiblingRelationship
   user: User
+  userTagsByUserId(userId: String!): [Tag!]
 }
 
 type SiblingRelationship {
@@ -440,4 +441,5 @@ type User {
   email: String!
   id: ID!
   people: [Person!]
+  tags: [Tag!]
 }

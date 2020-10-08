@@ -192,7 +192,7 @@ export const PersonContainer: FC = () => {
   return (
     <BelowNavContainer>
       <BackToPeopleLinkContainer>
-        <StyledLink to="/home">Back to people</StyledLink>
+        <StyledLink to="/home">Back to dashboard</StyledLink>
       </BackToPeopleLinkContainer>
       <ProfileHeader>
         {firstName} {lastName && ` ${lastName}`}
