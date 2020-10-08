@@ -57,11 +57,7 @@ export const TagsContainer: FC<TagsContainerProps> = ({
       </StyledTagsContainer>
       {fieldToAdd === 'person_tag' && (
         <Modal onClose={() => setFieldToAdd('')}>
-          <PersonTagForm
-            setFieldToAdd={setFieldToAdd}
-            personId={personId}
-            tags={tags}
-          />
+          <PersonTagForm setFieldToAdd={setFieldToAdd} personId={personId} />
         </Modal>
       )}
     </>

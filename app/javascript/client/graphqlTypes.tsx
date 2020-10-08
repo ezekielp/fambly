@@ -456,6 +456,7 @@ export type Query = {
   personById?: Maybe<Person>;
   siblingRelationshipBySiblingIds?: Maybe<SiblingRelationship>;
   user?: Maybe<User>;
+  userTagsByUserId?: Maybe<Array<Tag>>;
 };
 
 
@@ -471,6 +472,11 @@ export type QueryPersonByIdArgs = {
 
 export type QuerySiblingRelationshipBySiblingIdsArgs = {
   input: SiblingRelationshipInput;
+};
+
+
+export type QueryUserTagsByUserIdArgs = {
+  userId: Scalars['String'];
 };
 
 export type SiblingRelationship = {
@@ -588,6 +594,7 @@ export type User = {
   email: Scalars['String'];
   id: Scalars['ID'];
   people?: Maybe<Array<Person>>;
+  tags?: Maybe<Array<Tag>>;
 };
 
 export type GetUserQueryVariables = Exact<{ [key: string]: never; }>;
@@ -1157,6 +1164,19 @@ export type DeleteSiblingRelationshipMutationVariables = Exact<{
 export type DeleteSiblingRelationshipMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'deleteSiblingRelationship'>
+);
+
+export type GetUserTagsQueryVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type GetUserTagsQuery = (
+  { __typename?: 'Query' }
+  & { userTagsByUserId?: Maybe<Array<(
+    { __typename?: 'Tag' }
+    & Pick<Tag, 'id' | 'name' | 'color'>
+  )>> }
 );
 
 export type CreatePersonTagMutationVariables = Exact<{
@@ -2432,6 +2452,41 @@ export function useDeleteSiblingRelationshipMutation(baseOptions?: Apollo.Mutati
 export type DeleteSiblingRelationshipMutationHookResult = ReturnType<typeof useDeleteSiblingRelationshipMutation>;
 export type DeleteSiblingRelationshipMutationResult = Apollo.MutationResult<DeleteSiblingRelationshipMutation>;
 export type DeleteSiblingRelationshipMutationOptions = Apollo.BaseMutationOptions<DeleteSiblingRelationshipMutation, DeleteSiblingRelationshipMutationVariables>;
+export const GetUserTagsDocument = gql`
+    query GetUserTags($userId: String!) {
+  userTagsByUserId(userId: $userId) {
+    id
+    name
+    color
+  }
+}
+    `;
+
+/**
+ * __useGetUserTagsQuery__
+ *
+ * To run a query within a React component, call `useGetUserTagsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserTagsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserTagsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetUserTagsQuery(baseOptions?: Apollo.QueryHookOptions<GetUserTagsQuery, GetUserTagsQueryVariables>) {
+        return Apollo.useQuery<GetUserTagsQuery, GetUserTagsQueryVariables>(GetUserTagsDocument, baseOptions);
+      }
+export function useGetUserTagsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserTagsQuery, GetUserTagsQueryVariables>) {
+          return Apollo.useLazyQuery<GetUserTagsQuery, GetUserTagsQueryVariables>(GetUserTagsDocument, baseOptions);
+        }
+export type GetUserTagsQueryHookResult = ReturnType<typeof useGetUserTagsQuery>;
+export type GetUserTagsLazyQueryHookResult = ReturnType<typeof useGetUserTagsLazyQuery>;
+export type GetUserTagsQueryResult = Apollo.QueryResult<GetUserTagsQuery, GetUserTagsQueryVariables>;
 export const CreatePersonTagDocument = gql`
     mutation CreatePersonTag($input: CreatePersonTagInput!) {
   createPersonTag(input: $input) {
