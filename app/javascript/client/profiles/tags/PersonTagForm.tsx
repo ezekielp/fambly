@@ -12,7 +12,6 @@ import {
   useGetUserTagsQuery,
 } from 'client/graphqlTypes';
 import { AuthContext } from 'client/contexts/AuthContext';
-// import { PeopleContext } from 'client/contexts/PeopleContext';
 import { Field, Form, Formik, FormikHelpers, FieldProps } from 'formik';
 import { Button, ButtonProps } from 'client/common/Button';
 import { Text } from 'client/common/Text';
