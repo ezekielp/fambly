@@ -94,10 +94,14 @@ const InternalSearchBox: FC<SearchBoxProps & RouteComponentProps> = ({
     props: SuggestionsFetchRequestedParams,
   ) => {
     if (queryType === 'search') {
-      setFilteredPeople(getSuggestions(props.value));
+      const suggestedPeople = getSuggestions(props.value);
+      setSelectedItem(suggestedPeople[0]);
+      setFilteredPeople(suggestedPeople);
     } else {
       // queryType === 'filter'
-      setFilteredTags(getSuggestions(props.value));
+      const suggestedTags = getSuggestions(props.value);
+      setSelectedItem(suggestedTags[0]);
+      setFilteredTags(suggestedTags);
     }
   };
 

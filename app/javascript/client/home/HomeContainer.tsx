@@ -149,6 +149,24 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
       }
       return false;
     })
+    .sort((p1, p2) => {
+      const firstName1 = p1.firstName.toUpperCase();
+      const firstName2 = p2.firstName.toUpperCase();
+      if (firstName1 < firstName2) {
+        return -1;
+      } else if (firstName1 > firstName2) {
+        return 1;
+      } else {
+        const lastName1 = p1.lastName ? p1.lastName.toUpperCase() : '';
+        const lastName2 = p2.lastName ? p2.lastName.toUpperCase() : '';
+        if (lastName1 < lastName2) {
+          return -1;
+        } else if (lastName1 > lastName2) {
+          return 1;
+        }
+        return 0;
+      }
+    })
     .map((person) => {
       const tagItems = person?.tags?.map((tag: Tag) => (
         <StyledSwatch

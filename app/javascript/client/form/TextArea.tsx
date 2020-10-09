@@ -6,7 +6,7 @@ interface TextAreaProps
   extends Omit<HTMLProps<HTMLTextAreaElement>, 'as' | 'ref' | 'autoComplete'> {}
 
 const StyledTextArea = styled.textarea`
-  width: 100%;
+  width: 95%;
   border: 1px solid ${colors.lightGray};
   border-radius: 8px;
   height: 100px;
