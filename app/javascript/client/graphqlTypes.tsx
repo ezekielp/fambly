@@ -631,6 +631,9 @@ export type GetUserForHomeContainerQuery = (
     & { people?: Maybe<Array<(
       { __typename?: 'Person' }
       & HomeContainerPersonInfoFragment
+    )>>, tags?: Maybe<Array<(
+      { __typename?: 'Tag' }
+      & Pick<Tag, 'id' | 'name' | 'color'>
     )>>, dummyEmail?: Maybe<(
       { __typename?: 'DummyEmail' }
       & Pick<DummyEmail, 'id' | 'email'>
@@ -1377,6 +1380,11 @@ export const GetUserForHomeContainerDocument = gql`
     email
     people {
       ...HomeContainerPersonInfo
+    }
+    tags {
+      id
+      name
+      color
     }
     dummyEmail {
       id

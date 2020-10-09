@@ -15,11 +15,12 @@ const ModalBackground = styled.div`
   overflow-y: auto;
 `;
 
+// width: 90%;
 const ModalContainer = styled.div`
   background: ${colors.white};
   border-radius: 5px;
-  width: 90%;
-  margin: 100px auto;
+  width: 400px;
+  margin: 50px auto;
   padding: 2rem;
   z-index: 11;
   position: relative;

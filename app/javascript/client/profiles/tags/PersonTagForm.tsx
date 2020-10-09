@@ -27,6 +27,7 @@ import { useDetectOutsideClick } from 'client/common/useDetectOutsideClick';
 import styled from 'styled-components';
 import { colors, text } from 'client/shared/styles';
 import { Tag } from './TagsContainer';
+import { escapeRegexCharacters } from 'client/profiles/utils';
 
 gql`
   query GetUserTags($userId: String!) {
@@ -85,12 +86,13 @@ const ColorPickerButton = styled(Button)`
   }
 `;
 
+// width: 75%;
+// justify-content: space-between;
 const ColorPickerOuterContainer = styled.div`
   position: relative;
   margin-bottom: 50px;
   display: flex;
-  width: 50%;
-  justify-content: space-between;
+  width: 100%;
 `;
 
 const ColorPickerInnerContainer = styled.div`
@@ -186,16 +188,14 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
   useEffect(() => {
     if (tagName in tagsToColorsHash && formikRef.current) {
       formikRef.current.setFieldValue('color', tagsToColorsHash[tagName]);
+    } else if (tagName === '') {
+      formikRef.current.setFieldValue('color', '');
     }
   }, [tagName]);
 
   const cancel = () => {
     setFieldToAdd('');
     setModalOpen && setModalOpen(false);
-  };
-
-  const escapeRegexCharacters = (str: string) => {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   };
 
   const getSuggestions = (inputValue: string): Tag[] => {
@@ -302,6 +302,7 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
                 onClick={handleChooseColorClick}
                 buttonActive={colorPickerActive}
                 type="button"
+                marginRight="2rem"
               >
                 Choose color
               </ColorPickerButton>
