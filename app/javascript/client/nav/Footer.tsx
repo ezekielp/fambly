@@ -26,7 +26,7 @@ interface FooterProps {}
 export const Footer: FC<FooterProps> = () => {
   return (
     <FooterContainer>
-      <EmailText>Questions? Contact Zeke at ezekielp@gmail.com</EmailText>
+      <EmailText>Questions? Contact Zeke at zeke@fambly.io</EmailText>
       <CopyrightText>© 2020 Fambly</CopyrightText>
     </FooterContainer>
   );
