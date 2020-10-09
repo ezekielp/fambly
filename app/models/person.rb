@@ -93,7 +93,7 @@ class Person < ApplicationRecord
     Time.now.utc.to_date
   end
 
-  def extra_year_for_ages(month, year)
+  def extra_year_for_ages(month, day)
     if now.month > month || (now.month == month && now.day >= day)
       return 1
     end
