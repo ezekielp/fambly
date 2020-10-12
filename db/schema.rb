@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_06_192723) do
+ActiveRecord::Schema.define(version: 2020_10_12_190727) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 2020_10_06_192723) do
     t.integer "birth_month"
     t.boolean "show_on_dashboard", default: true
     t.string "gender"
+    t.string "middle_name"
     t.index ["user_id"], name: "index_people_on_user_id"
   end
 
