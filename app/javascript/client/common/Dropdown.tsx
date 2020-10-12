@@ -51,6 +51,10 @@ const MenuItem = styled.li`
   }
 `;
 
+const StyledLink = styled(Link)`
+  display: block;
+`;
+
 export interface DropdownMenuItem {
   label: string;
   onClick?: (event: React.MouseEvent) => void;
@@ -91,18 +95,20 @@ export const Dropdown: FC<DropdownProps> = ({
       }
     };
 
-    if (onItemClick)
+    if (onItemClick) {
       return (
         <MenuItem key={label} onClick={handleClick}>
           {label}
         </MenuItem>
       );
-    if (href)
+    }
+    if (href) {
       return (
         <MenuItem key={label} onClick={handleClick}>
-          <Link to={href}>{label}</Link>
+          <StyledLink to={href}>{label}</StyledLink>
         </MenuItem>
       );
+    }
   });
 
   return (

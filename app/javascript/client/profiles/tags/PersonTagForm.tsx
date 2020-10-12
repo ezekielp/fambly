@@ -98,6 +98,7 @@ const ColorPickerOuterContainer = styled.div`
 const ColorPickerInnerContainer = styled.div`
   position: absolute;
   top: 60px;
+  left: -20px;
   border-radius: 5px;
   border: 1px solid ${colors.black};
   padding: 15px;
