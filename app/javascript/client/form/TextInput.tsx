@@ -3,9 +3,15 @@ import { colors } from 'client/shared/styles';
 import styled from 'styled-components';
 
 interface TextInputProps
-  extends Omit<HTMLProps<HTMLInputElement>, 'as' | 'ref' | 'autoComplete'> {}
+  extends Omit<
+    HTMLProps<HTMLInputElement>,
+    'as' | 'ref' | 'autoComplete' | 'autoCorrect'
+  > {}
 
-const StyledTextInput = styled.input.attrs({ autoComplete: 'off' })`
+const StyledTextInput = styled.input.attrs({
+  autoComplete: 'off',
+  autoCorrect: 'off',
+})`
   border: 1px solid ${colors.lightGray};
   border-radius: 8px;
   height: 50px;

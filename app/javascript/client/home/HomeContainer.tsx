@@ -3,7 +3,7 @@ import {
   useGetUserForHomeContainerQuery,
   HomeContainerPersonInfoFragmentDoc,
 } from 'client/graphqlTypes';
-import { AddPersonForm } from 'client/profiles/AddPersonForm';
+import { PersonForm } from 'client/profiles/PersonForm';
 import { Button } from 'client/common/Button';
 import { gql } from '@apollo/client';
 import { withRouter } from 'react-router-dom';
@@ -229,7 +229,7 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
       {!newPersonFieldVisible && addPersonButton}
       {newPersonFieldVisible && (
         <Modal onClose={() => toggleNewPersonFieldVisible(false)}>
-          <AddPersonForm
+          <PersonForm
             refetchUserData={refetchUserData}
             toggleNewPersonFieldVisible={toggleNewPersonFieldVisible}
           />

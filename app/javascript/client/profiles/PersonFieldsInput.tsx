@@ -21,6 +21,7 @@ export const PersonFieldsInput: FC<PersonFieldsInputProps> = ({
 }) => {
   const {
     firstName,
+    middleName,
     lastName,
     age,
     monthsOld,
@@ -34,7 +35,8 @@ export const PersonFieldsInput: FC<PersonFieldsInputProps> = ({
     !(age || monthsOld) ||
     !(birthYear || birthMonth) ||
     !gender ||
-    !lastName
+    !lastName ||
+    !middleName
   );
 
   return (
@@ -50,6 +52,7 @@ export const PersonFieldsInput: FC<PersonFieldsInputProps> = ({
                 <option value="birthdate">Birthdate</option>
               )}
               {!gender && <option value="gender">Gender</option>}
+              {!middleName && <option value="middleName">Middle name</option>}
               {!lastName && <option value="lastName">Last name</option>}
             </optgroup>
           )}

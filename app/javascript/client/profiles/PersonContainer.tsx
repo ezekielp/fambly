@@ -45,6 +45,7 @@ gql`
   fragment PersonInfo on Person {
     id
     firstName
+    middleName
     lastName
     gender
     age
