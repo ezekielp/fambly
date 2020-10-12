@@ -17,6 +17,7 @@ import { Swatch } from 'client/profiles/tags/PersonTagForm';
 import { Tag } from 'client/profiles/tags/TagsContainer';
 import { SearchBox } from 'client/form/search_box/SearchBox';
 import { getAgeContent } from 'client/profiles/utils';
+import { Modal } from 'client/common/Modal';
 
 gql`
   mutation Logout {
@@ -103,7 +104,6 @@ const ProfileLinkContainer = styled.div`
   margin-bottom: ${spacing[1]};
 `;
 
-// margin-right: 1rem;
 const ProfileLink = styled(StyledLink)`
   min-width: fit-content;
 `;
@@ -228,10 +228,12 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
       </Text>
       {!newPersonFieldVisible && addPersonButton}
       {newPersonFieldVisible && (
-        <AddPersonForm
-          refetchUserData={refetchUserData}
-          toggleNewPersonFieldVisible={toggleNewPersonFieldVisible}
-        />
+        <Modal onClose={() => toggleNewPersonFieldVisible(false)}>
+          <AddPersonForm
+            refetchUserData={refetchUserData}
+            toggleNewPersonFieldVisible={toggleNewPersonFieldVisible}
+          />
+        </Modal>
       )}
       <SectionDivider />
       <SearchBox

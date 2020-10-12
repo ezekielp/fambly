@@ -6,6 +6,8 @@ import { Button } from 'client/common/Button';
 import { handleFormErrors } from 'client/utils/formik';
 import * as yup from 'yup';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { SectionDivider } from 'client/profiles/PersonContainer';
+import { Text } from 'client/common/Text';
 
 const ValidationSchema = yup.object().shape({
   firstName: yup
@@ -62,37 +64,43 @@ const InternalAddPersonForm: FC<AddPersonFormProps> = ({
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      validationSchema={ValidationSchema}
-    >
-      {({ isSubmitting }) => (
-        <Form>
-          <Field
-            name="firstName"
-            label="First name"
-            component={FormikTextInput}
-            type="text"
-          />
-          <Field
-            name="lastName"
-            label="Last name (optional)"
-            component={FormikTextInput}
-            type="text"
-          />
-          <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
-            Create profile
-          </Button>
-          <Button
-            type="button"
-            onClick={() => toggleNewPersonFieldVisible(false)}
-          >
-            Cancel
-          </Button>
-        </Form>
-      )}
-    </Formik>
+    <>
+      <Text marginBottom={3} fontSize={4} bold>
+        New person
+      </Text>
+      <SectionDivider />
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={ValidationSchema}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <Field
+              name="firstName"
+              label="First name"
+              component={FormikTextInput}
+              type="text"
+            />
+            <Field
+              name="lastName"
+              label="Last name (optional)"
+              component={FormikTextInput}
+              type="text"
+            />
+            <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
+              Create profile
+            </Button>
+            <Button
+              type="button"
+              onClick={() => toggleNewPersonFieldVisible(false)}
+            >
+              Cancel
+            </Button>
+          </Form>
+        )}
+      </Formik>
+    </>
   );
 };
 
