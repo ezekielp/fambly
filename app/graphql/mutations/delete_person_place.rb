@@ -21,4 +21,3 @@ module Mutations
     end
   end
 end
-

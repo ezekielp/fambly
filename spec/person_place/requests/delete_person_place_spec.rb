@@ -14,7 +14,7 @@ RSpec.describe 'delete_person_place mutation', type: :request do
     "
   end
 
-  it 'deletes an existing person_place relationship and returns true if the person_place entry exists' do
+  it 'if the person_place entry exists, it deletes the person_place and returns true' do
     variables =
       {
           input: {
