@@ -643,7 +643,7 @@ export type GetUserForHomeContainerQuery = (
 
 export type HomeContainerPersonInfoFragment = (
   { __typename?: 'Person' }
-  & Pick<Person, 'id' | 'firstName' | 'lastName' | 'showOnDashboard'>
+  & Pick<Person, 'id' | 'firstName' | 'lastName' | 'showOnDashboard' | 'age' | 'monthsOld'>
   & { tags?: Maybe<Array<(
     { __typename?: 'Tag' }
     & Pick<Tag, 'id' | 'name' | 'color'>
@@ -1228,6 +1228,8 @@ export const HomeContainerPersonInfoFragmentDoc = gql`
   firstName
   lastName
   showOnDashboard
+  age
+  monthsOld
   tags {
     id
     name

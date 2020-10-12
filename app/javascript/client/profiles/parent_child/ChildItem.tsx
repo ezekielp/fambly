@@ -8,16 +8,13 @@ import {
 import { StyledLink } from 'client/common/StyledLink';
 import { FieldBadge } from 'client/common/FieldBadge';
 import { getChildTypeText, parentTypeColors } from './utils';
-import {
-  StyledProfileFieldContainer,
-  FlexContainer,
-  AgeContainer,
-} from './ParentItem';
+import { StyledProfileFieldContainer, FlexContainer } from './ParentItem';
 import { Modal } from 'client/common/Modal';
 import { colors } from 'client/shared/styles';
 import { Dropdown } from 'client/common/Dropdown';
 import { Text } from 'client/common/Text';
 import { Button } from 'client/common/Button';
+import { getAgeContent } from 'client/profiles/utils';
 
 interface ChildItemProps {
   child: SubContactInfoFragment;
@@ -86,18 +83,6 @@ export const ChildItem: FC<ChildItemProps> = ({
     } else {
       return ` ${childLastName}`;
     }
-  };
-
-  const getAgeContent = (
-    age: number | null | undefined,
-    monthsOld: number | null | undefined,
-  ) => {
-    if (monthsOld) {
-      return <AgeContainer>{`(${monthsOld} months)`}</AgeContainer>;
-    } else if (age) {
-      return <AgeContainer>{`(${age})`}</AgeContainer>;
-    }
-    return '';
   };
 
   const parentType =

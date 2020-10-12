@@ -86,8 +86,6 @@ const ColorPickerButton = styled(Button)`
   }
 `;
 
-// width: 75%;
-// justify-content: space-between;
 const ColorPickerOuterContainer = styled.div`
   position: relative;
   margin-bottom: 50px;
@@ -193,6 +191,10 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
       formikRef.current.setFieldValue('color', '');
     }
   }, [tagName]);
+
+  useEffect(() => {
+    setColorPickerActive(false);
+  }, []);
 
   const cancel = () => {
     setFieldToAdd('');
@@ -314,6 +316,7 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
                       <SwatchesPicker
                         onChangeComplete={(color) => {
                           form.setFieldValue('color', color.hex);
+                          setColorPickerActive(false);
                         }}
                       />
                     )}
