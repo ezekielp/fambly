@@ -33,7 +33,7 @@ module Types
     def person_by_id(args)
       return nil unless args
 
-      Person.find(args[:person_id])
+      person = Person.find_by(id: args[:person_id])
     end
 
     def user_tags_by_user_id(args)

@@ -184,6 +184,10 @@ export type DeleteParentChildRelationshipInput = {
   parentId: Scalars['ID'];
 };
 
+export type DeletePersonInput = {
+  personId: Scalars['ID'];
+};
+
 export type DeletePersonPlaceInput = {
   personPlaceId: Scalars['ID'];
 };
@@ -241,6 +245,7 @@ export type Mutation = {
   deleteGender: Scalars['Boolean'];
   deleteNote: Scalars['Boolean'];
   deleteParentChildRelationship: Scalars['Boolean'];
+  deletePerson: Scalars['Boolean'];
   deletePersonPlace: Scalars['Boolean'];
   deletePersonTag: Scalars['Boolean'];
   deleteSiblingRelationship: Scalars['Boolean'];
@@ -328,6 +333,11 @@ export type MutationDeleteNoteArgs = {
 
 export type MutationDeleteParentChildRelationshipArgs = {
   input: DeleteParentChildRelationshipInput;
+};
+
+
+export type MutationDeletePersonArgs = {
+  input: DeletePersonInput;
 };
 
 
@@ -804,6 +814,16 @@ export type PersonPlaceInfoFragment = (
     { __typename?: 'Note' }
     & Pick<Note, 'id' | 'content'>
   )>> }
+);
+
+export type DeletePersonMutationVariables = Exact<{
+  input: DeletePersonInput;
+}>;
+
+
+export type DeletePersonMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deletePerson'>
 );
 
 export type UpdatePersonMutationVariables = Exact<{
@@ -1653,6 +1673,36 @@ export function useGetPersonForPersonContainerLazyQuery(baseOptions?: Apollo.Laz
 export type GetPersonForPersonContainerQueryHookResult = ReturnType<typeof useGetPersonForPersonContainerQuery>;
 export type GetPersonForPersonContainerLazyQueryHookResult = ReturnType<typeof useGetPersonForPersonContainerLazyQuery>;
 export type GetPersonForPersonContainerQueryResult = Apollo.QueryResult<GetPersonForPersonContainerQuery, GetPersonForPersonContainerQueryVariables>;
+export const DeletePersonDocument = gql`
+    mutation DeletePerson($input: DeletePersonInput!) {
+  deletePerson(input: $input)
+}
+    `;
+export type DeletePersonMutationFn = Apollo.MutationFunction<DeletePersonMutation, DeletePersonMutationVariables>;
+
+/**
+ * __useDeletePersonMutation__
+ *
+ * To run a mutation, you first call `useDeletePersonMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePersonMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePersonMutation, { data, loading, error }] = useDeletePersonMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeletePersonMutation(baseOptions?: Apollo.MutationHookOptions<DeletePersonMutation, DeletePersonMutationVariables>) {
+        return Apollo.useMutation<DeletePersonMutation, DeletePersonMutationVariables>(DeletePersonDocument, baseOptions);
+      }
+export type DeletePersonMutationHookResult = ReturnType<typeof useDeletePersonMutation>;
+export type DeletePersonMutationResult = Apollo.MutationResult<DeletePersonMutation>;
+export type DeletePersonMutationOptions = Apollo.BaseMutationOptions<DeletePersonMutation, DeletePersonMutationVariables>;
 export const UpdatePersonDocument = gql`
     mutation UpdatePerson($input: UpdatePersonInput!) {
   updatePerson(input: $input) {
