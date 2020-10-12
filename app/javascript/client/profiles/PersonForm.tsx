@@ -49,6 +49,8 @@ export interface PersonFormProps extends RouteComponentProps {
   setEditFlag?: (bool: boolean) => void;
   personId?: string;
   initialValues?: PersonFormData;
+  createMiddleName?: boolean;
+  setFieldToAdd?: (field: string) => void;
 }
 
 export const blankInitialValues: PersonFormData = {
@@ -62,13 +64,15 @@ const InternalPersonForm: FC<PersonFormProps> = ({
   toggleNewPersonFieldVisible,
   initialValues = blankInitialValues,
   setEditFlag,
+  setFieldToAdd,
   personId,
+  createMiddleName,
   history,
 }) => {
   const [createPersonMutation] = useCreatePersonMutation();
   const [updatePersonMutation] = useUpdatePersonMutation();
 
-  const submitButtonTest = toggleNewPersonFieldVisible
+  const submitButtonText = toggleNewPersonFieldVisible
     ? 'Create profile'
     : 'Save';
 
@@ -77,6 +81,8 @@ const InternalPersonForm: FC<PersonFormProps> = ({
       toggleNewPersonFieldVisible(false);
     } else if (setEditFlag) {
       setEditFlag(false);
+    } else if (setFieldToAdd) {
+      setFieldToAdd('');
     }
   };
 
@@ -105,7 +111,7 @@ const InternalPersonForm: FC<PersonFormProps> = ({
         refetchUserData && refetchUserData();
         history.push(`/profiles/${personId}`);
       }
-    } else if (personId && setEditFlag) {
+    } else if (personId) {
       const updateResponse = await updatePersonMutation({
         variables: {
           input: {
@@ -121,7 +127,8 @@ const InternalPersonForm: FC<PersonFormProps> = ({
       if (errors) {
         handleFormErrors<PersonFormData>(errors, setErrors, setStatus);
       } else {
-        setEditFlag(false);
+        setEditFlag && setEditFlag(false);
+        setFieldToAdd && setFieldToAdd('');
       }
     }
   };
@@ -139,28 +146,34 @@ const InternalPersonForm: FC<PersonFormProps> = ({
       >
         {({ isSubmitting }) => (
           <Form>
-            <Field
-              name="firstName"
-              label="First name"
-              component={FormikTextInput}
-              type="text"
-            />
-            {!toggleNewPersonFieldVisible && (
+            {!createMiddleName && (
               <Field
-                name="middleName"
-                label="Middle name (optional)"
+                name="firstName"
+                label="First name"
                 component={FormikTextInput}
                 type="text"
               />
             )}
-            <Field
-              name="lastName"
-              label="Last name (optional)"
-              component={FormikTextInput}
-              type="text"
-            />
+            {!toggleNewPersonFieldVisible && (
+              <Field
+                name="middleName"
+                label={
+                  createMiddleName ? 'Middle name' : 'Middle name (optional)'
+                }
+                component={FormikTextInput}
+                type="text"
+              />
+            )}
+            {!createMiddleName && (
+              <Field
+                name="lastName"
+                label="Last name (optional)"
+                component={FormikTextInput}
+                type="text"
+              />
+            )}
             <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
-              {submitButtonTest}
+              {submitButtonText}
             </Button>
             <Button type="button" onClick={() => cancel()}>
               Cancel

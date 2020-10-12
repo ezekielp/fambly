@@ -6,6 +6,8 @@ import {
   PersonPlaceInfoFragmentDoc,
 } from 'client/graphqlTypes';
 import { TagsContainer } from 'client/profiles/tags/TagsContainer';
+import { PersonForm } from './PersonForm';
+import { MiddleNameContainer } from './names/MiddleNameContainer';
 import { AgeForm } from './age/AgeForm';
 import { AgeContainer } from './age/AgeContainer';
 import { GenderForm } from './gender/GenderForm';
@@ -29,6 +31,7 @@ import { useParams } from 'react-router-dom';
 import { gql } from '@apollo/client';
 import { BelowNavContainer } from 'client/common/BelowNavContainer';
 import { text, spacing, colors } from 'client/shared/styles';
+import { Dropdown } from 'client/common/Dropdown';
 import styled from 'styled-components';
 
 gql`
@@ -166,6 +169,7 @@ export const PersonContainer: FC = () => {
   if (!personData.personById) return null;
   const {
     firstName,
+    middleName,
     lastName,
     age,
     gender,
@@ -224,6 +228,19 @@ export const PersonContainer: FC = () => {
           <GenderForm setFieldToAdd={setFieldToAdd} personId={personId} />
         </Modal>
       )}
+      {fieldToAdd === 'middleName' && (
+        <Modal onClose={() => setFieldToAdd('')}>
+          <PersonForm
+            setFieldToAdd={setFieldToAdd}
+            createMiddleName={true}
+            personId={personId}
+            initialValues={{
+              firstName,
+              lastName,
+            }}
+          />
+        </Modal>
+      )}
       {fieldToAdd === 'note' && (
         <Modal onClose={() => setFieldToAdd('')}>
           <NoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
@@ -269,6 +286,7 @@ export const PersonContainer: FC = () => {
         </>
       )}
       {hasVitals && <SectionDivider />}
+      {middleName && <MiddleNameContainer middleName={middleName} />}
       {gender && <GenderContainer gender={gender} personId={personId} />}
       {hasAge && (
         <AgeContainer
