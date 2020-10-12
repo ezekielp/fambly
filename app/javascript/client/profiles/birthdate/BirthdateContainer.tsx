@@ -29,9 +29,13 @@ interface BirthdateContainerProps {
   personId: string;
 }
 
-export const BirthdateContainer: FC<BirthdateContainerProps> = (props) => {
+export const BirthdateContainer: FC<BirthdateContainerProps> = ({
+  birthYear,
+  birthMonth,
+  birthDay,
+  personId,
+}) => {
   const [deleteBirthdateMutation] = useDeleteBirthdateMutation();
-  const { birthYear, birthMonth, birthDay, personId } = props;
   const [editFlag, setEditFlag] = useState(false);
   const [deletedFlag, setDeletedFlag] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
