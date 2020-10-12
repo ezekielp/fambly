@@ -16,6 +16,7 @@ import { Text } from 'client/common/Text';
 import { Swatch } from 'client/profiles/tags/PersonTagForm';
 import { Tag } from 'client/profiles/tags/TagsContainer';
 import { SearchBox } from 'client/form/search_box/SearchBox';
+import { getAgeContent } from 'client/profiles/utils';
 
 gql`
   mutation Logout {
@@ -52,6 +53,8 @@ gql`
     firstName
     lastName
     showOnDashboard
+    age
+    monthsOld
     tags {
       id
       name
@@ -100,13 +103,15 @@ const ProfileLinkContainer = styled.div`
   margin-bottom: ${spacing[1]};
 `;
 
+// margin-right: 1rem;
 const ProfileLink = styled(StyledLink)`
-  margin-right: 1rem;
   min-width: fit-content;
 `;
 
 const StyledSwatch = styled(Swatch)`
   padding: 3px 9px;
+  margin-left: 10px;
+  margin-right: 0;
 `;
 
 const SelectedTagContainer = styled.div`
@@ -187,6 +192,7 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
             {person.firstName}
             {person.lastName && ` ${person.lastName}`}
           </ProfileLink>
+          {getAgeContent(person.age, person.monthsOld)}
           {tagItems}
         </ProfileLinkContainer>
       );

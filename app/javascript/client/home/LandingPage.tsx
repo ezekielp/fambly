@@ -67,6 +67,7 @@ const StyledButton = styled(Button)`
   font-variation-settings: 'wght' 700;
   border: 3px solid ${colors.black};
   margin-bottom: ${spacing[2]};
+  text-align: center;
 `;
 
 const FAQContainer = styled.section``;
