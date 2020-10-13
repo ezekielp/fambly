@@ -91,6 +91,7 @@ const ColorPickerOuterContainer = styled.div`
   margin-bottom: 50px;
   display: flex;
   width: 100%;
+  align-items: center;
 `;
 
 const ColorPickerInnerContainer = styled.div`
@@ -103,6 +104,10 @@ const ColorPickerInnerContainer = styled.div`
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
   background: ${colors.white};
   z-index: 2;
+`;
+
+const OptionalTag = styled.div`
+  margin-right: 2rem;
 `;
 
 interface SwatchProps extends Omit<HTMLProps<HTMLDivElement>, 'as' | 'ref'> {
@@ -305,10 +310,11 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
                 onClick={handleChooseColorClick}
                 buttonActive={colorPickerActive}
                 type="button"
-                marginRight="2rem"
+                marginRight="0.75rem"
               >
                 Choose color
               </ColorPickerButton>
+              <OptionalTag>(optional)</OptionalTag>
               {colorPickerActive && (
                 <ColorPickerInnerContainer ref={colorPickerRef}>
                   <Field name="color">
