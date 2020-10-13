@@ -169,7 +169,19 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
     variables: { userId: userId ? userId : '' },
   });
   const tags =
-    tagsData && tagsData.userTagsByUserId ? tagsData.userTagsByUserId : [];
+    tagsData && tagsData.userTagsByUserId
+      ? tagsData.userTagsByUserId.slice().sort((t1, t2) => {
+          const tagName1 = t1.name.toUpperCase();
+          const tagName2 = t2.name.toUpperCase();
+          if (tagName1 < tagName2) {
+            return -1;
+          } else if (tagName1 > tagName2) {
+            return 1;
+          } else {
+            return 0;
+          }
+        })
+      : [];
   const colorPickerRef = useRef(null);
   const formikRef: React.RefObject<any> = useRef();
   const [filteredSuggestions, setFilteredSuggestions] = useState(tags);
