@@ -2,6 +2,7 @@ module Types
   class PersonType < Types::BaseObject
     field :id, ID, null: false
     field :first_name, String, null: false
+    field :middle_name, String, null: true
     field :last_name, String, null: true
     field :gender, String, null: true
     field :show_on_dashboard, Boolean, null: false

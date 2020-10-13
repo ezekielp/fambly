@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  AddPersonForm,
-  AddPersonFormData,
-  AddPersonFormProps,
-} from './AddPersonForm';
+import { PersonForm, PersonFormData, PersonFormProps } from './PersonForm';
 import { FormUtils, formUtils } from 'client/test/utils/formik';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
@@ -18,14 +14,15 @@ import { RouteComponentProps } from 'react-router-dom';
 import { act } from 'react-dom/test-utils';
 import wait from 'waait';
 
-describe('<AddPersonForm />', () => {
+describe('<PersonForm />', () => {
   let mountComponent: (mocks?: MockedResponse[]) => Promise<void>;
-  let component: ReactWrapper<AddPersonFormProps & RouteComponentProps>;
+  let component: ReactWrapper<PersonFormProps & RouteComponentProps>;
   let form: FormUtils;
   let history: History;
 
   beforeEach(() => {
     const refetchUserData = jest.fn();
+    const toggleNewPersonFieldVisible = jest.fn();
 
     mountComponent = async (mocks = [createPersonMutation()]) => {
       await act(async () => {
@@ -37,8 +34,9 @@ describe('<AddPersonForm />', () => {
                 render={(routerProps) => {
                   history = routerProps.history;
                   return (
-                    <AddPersonForm
+                    <PersonForm
                       refetchUserData={refetchUserData}
+                      toggleNewPersonFieldVisible={toggleNewPersonFieldVisible}
                       {...routerProps}
                     />
                   );
@@ -60,7 +58,7 @@ describe('<AddPersonForm />', () => {
 
   it('has two form fields', async () => {
     await mountComponent();
-    form = formUtils<AddPersonFormData>(component.find(Form));
+    form = formUtils<PersonFormData>(component.find(Form));
 
     expect(component.find(Form).exists()).toBe(true);
     expect(form.findInputByName('firstName').exists()).toBe(true);
@@ -70,7 +68,7 @@ describe('<AddPersonForm />', () => {
   describe('form validations', () => {
     it('requires a first name', async () => {
       await mountComponent();
-      form = formUtils<AddPersonFormData>(component.find(Form));
+      form = formUtils<PersonFormData>(component.find(Form));
 
       await form.submit();
       expect(
@@ -97,7 +95,7 @@ describe('<AddPersonForm />', () => {
       const createPerson = createPersonMutation();
 
       await mountComponent([createPerson]);
-      form = formUtils<AddPersonFormData>(component.find(Form));
+      form = formUtils<PersonFormData>(component.find(Form));
 
       await form.fill({ firstName: 'Roger', lastName: 'Mexico' });
       await form.submit();
@@ -106,7 +104,7 @@ describe('<AddPersonForm />', () => {
 
     it('redirects to the new person page if the form submission is successful', async () => {
       await mountComponent();
-      form = formUtils<AddPersonFormData>(component.find(Form));
+      form = formUtils<PersonFormData>(component.find(Form));
       await form.fill({ firstName: 'Roger', lastName: 'Mexico' });
       await form.submit();
 

@@ -11,6 +11,7 @@
 #  first_name        :string           not null
 #  gender            :string
 #  last_name         :string
+#  middle_name       :string
 #  months_old        :integer
 #  show_on_dashboard :boolean          default(TRUE)
 #  created_at        :datetime         not null

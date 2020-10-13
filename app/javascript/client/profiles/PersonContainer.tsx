@@ -4,8 +4,11 @@ import {
   PersonInfoFragmentDoc,
   SubContactInfoFragmentDoc,
   PersonPlaceInfoFragmentDoc,
+  useDeletePersonMutation,
 } from 'client/graphqlTypes';
 import { TagsContainer } from 'client/profiles/tags/TagsContainer';
+import { PersonForm } from './PersonForm';
+import { MiddleNameContainer } from './names/MiddleNameContainer';
 import { AgeForm } from './age/AgeForm';
 import { AgeContainer } from './age/AgeContainer';
 import { GenderForm } from './gender/GenderForm';
@@ -29,7 +32,11 @@ import { useParams } from 'react-router-dom';
 import { gql } from '@apollo/client';
 import { BelowNavContainer } from 'client/common/BelowNavContainer';
 import { text, spacing, colors } from 'client/shared/styles';
+import { Dropdown } from 'client/common/Dropdown';
 import styled from 'styled-components';
+import { Text } from 'client/common/Text';
+import { Button } from 'client/common/Button';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 gql`
   query GetPersonForPersonContainer($personId: String!) {
@@ -45,6 +52,7 @@ gql`
   fragment PersonInfo on Person {
     id
     firstName
+    middleName
     lastName
     gender
     age
@@ -118,14 +126,26 @@ gql`
   }
 `;
 
+gql`
+  mutation DeletePerson($input: DeletePersonInput!) {
+    deletePerson(input: $input)
+  }
+`;
+
 const BackToPeopleLinkContainer = styled.div`
   margin-bottom: ${spacing[2]};
+`;
+
+const HeaderContainer = styled.div`
+  display: flex;
+  flex-direction: row;
 `;
 
 const ProfileHeader = styled.h1`
   font-size: ${text[4]};
   font-variation-settings: 'wght' 700;
   margin-bottom: ${spacing[2]};
+  margin-right: 1rem;
 `;
 
 export const Subheading = styled.div`
@@ -140,18 +160,17 @@ export const SectionDivider = styled.hr`
   margin: ${spacing[3]} 0;
 `;
 
-interface PersonContainerProps {}
+interface PersonContainerProps extends RouteComponentProps {}
 
-export const PersonContainer: FC = () => {
-  const [fieldToAdd, setFieldToAdd] = useState('');
+const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
+  const [deletePersonMutation] = useDeletePersonMutation();
+  const [fieldToAdd, setFieldToAdd] = useState<string>('');
+  const [editNameFlag, setEditNameFlag] = useState<boolean>(false);
+  const [
+    deletePersonConfirmationFlag,
+    setDeletePersonConfirmationFlag,
+  ] = useState<boolean>(false);
   const { personId } = useParams();
-
-  const {
-    data: personData,
-    refetch: refetchPersonData,
-  } = useGetPersonForPersonContainerQuery({
-    variables: { personId },
-  });
 
   useEffect(() => {
     setFieldToAdd('');
@@ -161,10 +180,44 @@ export const PersonContainer: FC = () => {
     refetchPersonData();
   }, [fieldToAdd]);
 
+  const deletePerson = async () => {
+    await deletePersonMutation({
+      variables: {
+        input: {
+          personId,
+        },
+      },
+    });
+    history.push('/home');
+  };
+
+  const dropdownItems = [
+    {
+      label: 'Delete profile',
+      onClick: () => setDeletePersonConfirmationFlag(true),
+    },
+    {
+      label: 'Edit name',
+      onClick: () => setEditNameFlag(true),
+    },
+  ];
+
+  const {
+    data: personData,
+    refetch: refetchPersonData,
+  } = useGetPersonForPersonContainerQuery({
+    variables: { personId },
+  });
+
   if (!personData) return null;
-  if (!personData.personById) return null;
+  // if (!personData.personById) return null;
+  if (!personData.personById) {
+    history.push('/home');
+    return null;
+  }
   const {
     firstName,
+    middleName,
     lastName,
     age,
     gender,
@@ -194,9 +247,35 @@ export const PersonContainer: FC = () => {
       <BackToPeopleLinkContainer>
         <StyledLink to="/home">Back to dashboard</StyledLink>
       </BackToPeopleLinkContainer>
-      <ProfileHeader>
-        {firstName} {lastName && ` ${lastName}`}
-      </ProfileHeader>
+      <HeaderContainer>
+        <ProfileHeader>
+          {firstName} {lastName && ` ${lastName}`}
+        </ProfileHeader>
+        <Dropdown color={colors.orange} menuItems={dropdownItems} />
+      </HeaderContainer>
+      {deletePersonConfirmationFlag && (
+        <Modal onClose={() => setDeletePersonConfirmationFlag(false)}>
+          <Text marginBottom={3} fontSize={3} bold>
+            Are you sure you want to delete this profile? You can&#39;t undo
+            this!
+          </Text>
+          <Button marginRight="1rem" onClick={() => deletePerson()}>
+            Yes
+          </Button>
+          <Button onClick={() => setDeletePersonConfirmationFlag(false)}>
+            Cancel
+          </Button>
+        </Modal>
+      )}
+      {editNameFlag && (
+        <Modal onClose={() => setEditNameFlag(false)}>
+          <PersonForm
+            setEditFlag={setEditNameFlag}
+            initialValues={{ firstName, middleName, lastName }}
+            personId={personId}
+          />
+        </Modal>
+      )}
       <TagsContainer
         personId={personId}
         tags={tags ? tags : []}
@@ -221,6 +300,19 @@ export const PersonContainer: FC = () => {
       {fieldToAdd === 'gender' && (
         <Modal onClose={() => setFieldToAdd('')}>
           <GenderForm setFieldToAdd={setFieldToAdd} personId={personId} />
+        </Modal>
+      )}
+      {fieldToAdd === 'middleName' && (
+        <Modal onClose={() => setFieldToAdd('')}>
+          <PersonForm
+            setFieldToAdd={setFieldToAdd}
+            updateMiddleName={true}
+            personId={personId}
+            initialValues={{
+              firstName,
+              lastName,
+            }}
+          />
         </Modal>
       )}
       {fieldToAdd === 'note' && (
@@ -268,6 +360,14 @@ export const PersonContainer: FC = () => {
         </>
       )}
       {hasVitals && <SectionDivider />}
+      {middleName && (
+        <MiddleNameContainer
+          personId={personId}
+          firstName={firstName}
+          middleName={middleName}
+          lastName={lastName ? lastName : ''}
+        />
+      )}
       {gender && <GenderContainer gender={gender} personId={personId} />}
       {hasAge && (
         <AgeContainer
@@ -327,3 +427,5 @@ export const PersonContainer: FC = () => {
     </BelowNavContainer>
   );
 };
+
+export const PersonContainer = withRouter(InternalPersonContainer);

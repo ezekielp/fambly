@@ -10,6 +10,8 @@ module Types
 
     # Person + person fields
     field :create_person, mutation: Mutations::CreatePerson
+    field :update_person, mutation: Mutations::UpdatePerson
+    field :delete_person, mutation: Mutations::DeletePerson
     field :create_person_note, mutation: Mutations::CreatePersonNote
     field :create_or_update_gender, mutation: Mutations::CreateOrUpdateGender
     field :delete_gender, mutation: Mutations::DeleteGender
