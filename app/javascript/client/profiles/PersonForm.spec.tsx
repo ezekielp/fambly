@@ -14,7 +14,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { act } from 'react-dom/test-utils';
 import wait from 'waait';
 
-describe('<AddPersonForm />', () => {
+describe('<PersonForm />', () => {
   let mountComponent: (mocks?: MockedResponse[]) => Promise<void>;
   let component: ReactWrapper<PersonFormProps & RouteComponentProps>;
   let form: FormUtils;
@@ -22,6 +22,7 @@ describe('<AddPersonForm />', () => {
 
   beforeEach(() => {
     const refetchUserData = jest.fn();
+    const toggleNewPersonFieldVisible = jest.fn();
 
     mountComponent = async (mocks = [createPersonMutation()]) => {
       await act(async () => {
@@ -35,6 +36,7 @@ describe('<AddPersonForm />', () => {
                   return (
                     <PersonForm
                       refetchUserData={refetchUserData}
+                      toggleNewPersonFieldVisible={toggleNewPersonFieldVisible}
                       {...routerProps}
                     />
                   );
