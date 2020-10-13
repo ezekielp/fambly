@@ -196,6 +196,10 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
       label: 'Delete profile',
       onClick: () => setDeletePersonConfirmationFlag(true),
     },
+    {
+      label: 'Edit name',
+      onClick: () => setEditNameFlag(true),
+    },
   ];
 
   const {
@@ -212,6 +216,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
     return null;
   }
   const {
+    id,
     firstName,
     middleName,
     lastName,
@@ -263,6 +268,15 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
           </Button>
         </Modal>
       )}
+      {editNameFlag && (
+        <Modal onClose={() => setEditNameFlag(false)}>
+          <PersonForm
+            setEditFlag={setEditNameFlag}
+            initialValues={{ firstName, middleName, lastName }}
+            personId={id}
+          />
+        </Modal>
+      )}
       <TagsContainer
         personId={personId}
         tags={tags ? tags : []}
@@ -293,7 +307,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
         <Modal onClose={() => setFieldToAdd('')}>
           <PersonForm
             setFieldToAdd={setFieldToAdd}
-            createMiddleName={true}
+            updateMiddleName={true}
             personId={personId}
             initialValues={{
               firstName,

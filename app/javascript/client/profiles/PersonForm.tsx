@@ -49,7 +49,7 @@ export interface PersonFormProps extends RouteComponentProps {
   setEditFlag?: (bool: boolean) => void;
   personId?: string;
   initialValues?: PersonFormData;
-  createMiddleName?: boolean;
+  updateMiddleName?: boolean;
   setFieldToAdd?: (field: string) => void;
 }
 
@@ -66,7 +66,7 @@ const InternalPersonForm: FC<PersonFormProps> = ({
   setEditFlag,
   setFieldToAdd,
   personId,
-  createMiddleName,
+  updateMiddleName,
   history,
 }) => {
   const [createPersonMutation] = useCreatePersonMutation();
@@ -146,7 +146,7 @@ const InternalPersonForm: FC<PersonFormProps> = ({
       >
         {({ isSubmitting }) => (
           <Form>
-            {!createMiddleName && (
+            {!updateMiddleName && (
               <Field
                 name="firstName"
                 label="First name"
@@ -158,13 +158,13 @@ const InternalPersonForm: FC<PersonFormProps> = ({
               <Field
                 name="middleName"
                 label={
-                  createMiddleName ? 'Middle name' : 'Middle name (optional)'
+                  updateMiddleName ? 'Middle name' : 'Middle name (optional)'
                 }
                 component={FormikTextInput}
                 type="text"
               />
             )}
-            {!createMiddleName && (
+            {!updateMiddleName && (
               <Field
                 name="lastName"
                 label="Last name (optional)"
