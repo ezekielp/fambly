@@ -210,7 +210,6 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
   });
 
   if (!personData) return null;
-  // if (!personData.personById) return null;
   if (!personData.personById) {
     history.push('/home');
     return null;

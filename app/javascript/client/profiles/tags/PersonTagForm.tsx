@@ -165,7 +165,7 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
 }) => {
   const { userId } = useContext(AuthContext);
   const [createPersonTagMutation] = useCreatePersonTagMutation();
-  const { data: tagsData } = useGetUserTagsQuery({
+  const { data: tagsData, refetch: refetchTagsData } = useGetUserTagsQuery({
     variables: { userId: userId ? userId : '' },
   });
   const tags =
@@ -199,6 +199,7 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
 
   useEffect(() => {
     setColorPickerActive(false);
+    refetchTagsData();
   }, []);
 
   const cancel = () => {
