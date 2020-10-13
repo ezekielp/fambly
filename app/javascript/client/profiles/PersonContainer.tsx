@@ -216,7 +216,6 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
     return null;
   }
   const {
-    id,
     firstName,
     middleName,
     lastName,
@@ -273,7 +272,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
           <PersonForm
             setEditFlag={setEditNameFlag}
             initialValues={{ firstName, middleName, lastName }}
-            personId={id}
+            personId={personId}
           />
         </Modal>
       )}
@@ -361,7 +360,14 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
         </>
       )}
       {hasVitals && <SectionDivider />}
-      {middleName && <MiddleNameContainer middleName={middleName} />}
+      {middleName && (
+        <MiddleNameContainer
+          personId={personId}
+          firstName={firstName}
+          middleName={middleName}
+          lastName={lastName ? lastName : ''}
+        />
+      )}
       {gender && <GenderContainer gender={gender} personId={personId} />}
       {hasAge && (
         <AgeContainer

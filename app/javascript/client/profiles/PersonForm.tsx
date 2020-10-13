@@ -51,6 +51,7 @@ export interface PersonFormProps extends RouteComponentProps {
   initialValues?: PersonFormData;
   updateMiddleName?: boolean;
   setFieldToAdd?: (field: string) => void;
+  setModalOpen?: (bool: boolean) => void;
 }
 
 export const blankInitialValues: PersonFormData = {
@@ -64,6 +65,7 @@ const InternalPersonForm: FC<PersonFormProps> = ({
   toggleNewPersonFieldVisible,
   initialValues = blankInitialValues,
   setEditFlag,
+  setModalOpen,
   setFieldToAdd,
   personId,
   updateMiddleName,
@@ -81,6 +83,7 @@ const InternalPersonForm: FC<PersonFormProps> = ({
       toggleNewPersonFieldVisible(false);
     } else if (setEditFlag) {
       setEditFlag(false);
+      setModalOpen && setModalOpen(false);
     } else if (setFieldToAdd) {
       setFieldToAdd('');
     }
@@ -127,8 +130,9 @@ const InternalPersonForm: FC<PersonFormProps> = ({
       if (errors) {
         handleFormErrors<PersonFormData>(errors, setErrors, setStatus);
       } else {
-        setEditFlag && setEditFlag(false);
         setFieldToAdd && setFieldToAdd('');
+        setEditFlag && setEditFlag(false);
+        setModalOpen && setModalOpen(false);
       }
     }
   };
