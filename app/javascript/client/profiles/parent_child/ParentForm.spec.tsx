@@ -35,6 +35,7 @@ describe('<ParentChildForm />', () => {
       personFirstName: 'Ada',
       setFieldToAdd: jest.fn(),
       childId: 'ada-lovelace-uuid',
+      relations: [],
     };
     defaultMocks = [
       createParentChildRelationshipMutation(),

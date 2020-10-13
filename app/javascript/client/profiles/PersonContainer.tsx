@@ -232,6 +232,10 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
     personPlaces,
   } = personData.personById;
 
+  const relations = (parents ? parents : [])
+    .concat(children ? children : [])
+    .concat(siblings ? siblings : []);
+
   const hasAge = age || monthsOld;
   const hasBirthdate = birthYear || birthMonth;
   const hasVitals = gender || hasAge || hasBirthdate;
@@ -325,6 +329,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
             setFieldToAdd={setFieldToAdd}
             childId={personId}
             personFirstName={firstName}
+            relations={relations}
           />
         </Modal>
       )}
@@ -395,6 +400,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
           parents={parents}
           childId={personId}
           childLastName={lastName}
+          relations={relations}
         />
       )}
       {children && children.length > 0 && (

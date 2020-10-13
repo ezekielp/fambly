@@ -1,12 +1,14 @@
-import React, { FC } from 'react';
+import React, { FC, useState, ReactNode } from 'react';
 import {
   useCreatePersonMutation,
   useCreateAgeMutation,
   useCreateParentChildRelationshipMutation,
   useUpdateParentChildRelationshipMutation,
   useGetUserForHomeContainerQuery,
+  useGetUserPeopleQuery,
+  SubContactInfoFragment,
 } from 'client/graphqlTypes';
-import { Field, Form, Formik, FormikHelpers } from 'formik';
+import { Field, Form, Formik, FormikHelpers, FieldProps } from 'formik';
 import {
   FormikTextInput,
   FormikNumberInput,
@@ -19,7 +21,7 @@ import { Button } from 'client/common/Button';
 import { GlobalError } from 'client/common/GlobalError';
 import { Text } from 'client/common/Text';
 import { SectionDivider } from 'client/profiles/PersonContainer';
-import { PARENT_TYPE_OPTIONS } from './utils';
+import { PARENT_TYPE_OPTIONS, getFullNameFromPerson } from './utils';
 import {
   NEW_OR_CURRENT_CONTACT_OPTIONS,
   buildPeopleOptions,
@@ -27,6 +29,10 @@ import {
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
+import Autosuggest, {
+  SuggestionsFetchRequestedParams,
+} from 'react-autosuggest';
+import { escapeRegexCharacters } from 'client/profiles/utils';
 
 gql`
   mutation CreateParentChildRelationship(
@@ -90,6 +96,16 @@ gql`
   }
 `;
 
+gql`
+  query GetUserPeople {
+    people {
+      id
+      firstName
+      lastName
+    }
+  }
+`;
+
 const ParentFormValidationSchema = yup.object().shape({
   firstName: yup.string().when('newOrCurrentContact', {
     is: (val: string) => val === 'new_person',
@@ -137,6 +153,7 @@ export interface ParentFormProps {
   initialValues?: ParentFormData;
   setEditFlag?: (bool: boolean) => void;
   setModalOpen?: (bool: boolean) => void;
+  relations: SubContactInfoFragment[];
 }
 
 export const blankInitialValues = {
@@ -158,6 +175,7 @@ export const ParentForm: FC<ParentFormProps> = ({
   childId,
   setEditFlag,
   setModalOpen,
+  relations,
 }) => {
   const [
     createParentChildRelationshipMutation,
@@ -167,9 +185,52 @@ export const ParentForm: FC<ParentFormProps> = ({
   const [
     updateParentChildRelationship,
   ] = useUpdateParentChildRelationshipMutation();
-  const { data: userData } = useGetUserForHomeContainerQuery();
-  const people = userData?.user?.people ? userData?.user?.people : [];
-  const peopleOptions = buildPeopleOptions(people, childId);
+  // const { data: userData } = useGetUserForHomeContainerQuery();
+  const { data: userPeople } = useGetUserPeopleQuery();
+  const people = userPeople?.people ? userPeople?.people : [];
+  const personRelationIds = new Set(relations.map((person) => person.id));
+  personRelationIds.add(childId);
+  const filteredPeople = userPeople?.people
+    ? userPeople?.people
+        .filter((person) => !personRelationIds.has(person.id))
+        .slice()
+        .sort((p1, p2) => {
+          const personName1 = p1.firstName.toUpperCase();
+          const personName2 = p2.firstName.toUpperCase();
+          if (personName1 < personName2) {
+            return -1;
+          } else if (personName2 > personName1) {
+            return 1;
+          } else {
+            return 0;
+          }
+        })
+    : [];
+  const [peopleSuggestions, setPeopleSuggestions] = useState(filteredPeople);
+  const [parentInputValue, setParentInputValue] = useState('');
+
+  const getSuggestions = (inputValue: string): SubContactInfoFragment[] => {
+    const trimmedInputValue = escapeRegexCharacters(
+      inputValue.trim().toLowerCase(),
+    );
+    const regex = new RegExp('^' + trimmedInputValue, 'i');
+    return filteredPeople.filter((person) => {
+      return regex.test(getFullNameFromPerson(person));
+    });
+  };
+
+  const getSuggestionValue = (suggestion: SubContactInfoFragment): string =>
+    getFullNameFromPerson(suggestion);
+
+  const renderSuggestion = (suggestion: SubContactInfoFragment): ReactNode => (
+    <div>{getFullNameFromPerson(suggestion)}</div>
+  );
+
+  const onSuggestionsFetchRequested = (
+    props: SuggestionsFetchRequestedParams,
+  ) => setPeopleSuggestions(getSuggestions(props.value));
+
+  const onSuggestionsClearRequested = () => setPeopleSuggestions([]);
 
   const cancel = () => {
     if (setFieldToAdd) {
@@ -361,13 +422,49 @@ export const ParentForm: FC<ParentFormProps> = ({
               )}
               {values.newOrCurrentContact === 'current_person' &&
                 setFieldToAdd && (
+                  <Field name="formParentId">
+                    {({ form }: FieldProps) => (
+                      <Autosuggest
+                        suggestions={peopleSuggestions}
+                        onSuggestionsFetchRequested={
+                          onSuggestionsFetchRequested
+                        }
+                        onSuggestionsClearRequested={
+                          onSuggestionsClearRequested
+                        }
+                        getSuggestionValue={getSuggestionValue}
+                        renderSuggestion={renderSuggestion}
+                        shouldRenderSuggestions={() => true}
+                        onSuggestionSelected={(event, data) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          form.setFieldValue(
+                            'formParentId',
+                            data.suggestion.id,
+                          );
+                          setParentInputValue(
+                            getFullNameFromPerson(data.suggestion),
+                          );
+                        }}
+                        inputProps={{
+                          onChange: (event: any) => {
+                            setParentInputValue(event.target.value);
+                          },
+                          value: parentInputValue,
+                        }}
+                      />
+                    )}
+                  </Field>
+                )}
+              {/* {values.newOrCurrentContact === 'current_person' &&
+                setFieldToAdd && (
                   <Field
                     name="formParentId"
                     label="Parent"
                     component={FormikSelectInput}
                     options={peopleOptions}
                   />
-                )}
+                )} */}
               <Field
                 name="parentType"
                 label="Type of parent (optional)"

@@ -1,6 +1,7 @@
 module Types
   class QueryType < Types::BaseObject
     field :user, Types::UserType, null: true
+    field :people, [Types::PersonType], null: true
     field :person_by_id, Types::PersonType, null: true do
       argument :person_id, String, required: true
     end
@@ -28,6 +29,10 @@ module Types
 
     def user
       current_user
+    end
+
+    def people
+      current_user.people
     end
 
     def person_by_id(args)
