@@ -8,9 +8,9 @@ import { escapeRegexCharacters } from 'client/profiles/utils';
 interface FormikAutosuggestProps<SuggestionType> {
   records: SuggestionType[];
   suggestions: SuggestionType[];
-  setSuggestions: (suggestions: SuggestionType[]) => void;
+  setSuggestions: (suggestions: any[]) => void;
   getSuggestionValue: (suggestion: SuggestionType) => string;
-  suggestionValue: string;
+  inputValue: string;
   onSuggestionSelected: (
     event: FormEvent<any>,
     data: SuggestionSelectedEventData<SuggestionType>,
@@ -26,7 +26,7 @@ export const FormikAutosuggest: FC<FormikAutosuggestProps<
   suggestions,
   setSuggestions,
   getSuggestionValue,
-  suggestionValue,
+  inputValue,
   onSuggestionSelected,
   onChange,
   onBlur,
@@ -69,7 +69,7 @@ export const FormikAutosuggest: FC<FormikAutosuggestProps<
       }}
       inputProps={{
         onChange,
-        value: suggestionValue,
+        value: inputValue,
         onBlur: onBlur ? onBlur : () => null,
       }}
     />

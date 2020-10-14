@@ -1,4 +1,4 @@
-import React, { FC, useState, ReactNode } from 'react';
+import React, { FC, useState } from 'react';
 import {
   useCreatePersonMutation,
   useCreateAgeMutation,
@@ -25,10 +25,7 @@ import { NEW_OR_CURRENT_CONTACT_OPTIONS } from 'client/profiles/utils';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
-import Autosuggest, {
-  SuggestionsFetchRequestedParams,
-} from 'react-autosuggest';
-import { escapeRegexCharacters } from 'client/profiles/utils';
+import { FormikAutosuggest } from 'client/form/FormikAutosuggest';
 
 gql`
   mutation CreateParentChildRelationship(
@@ -202,29 +199,6 @@ export const ParentForm: FC<ParentFormProps> = ({
     : [];
   const [peopleSuggestions, setPeopleSuggestions] = useState(filteredPeople);
   const [parentInputValue, setParentInputValue] = useState('');
-
-  const getSuggestions = (inputValue: string): SubContactInfoFragment[] => {
-    const trimmedInputValue = escapeRegexCharacters(
-      inputValue.trim().toLowerCase(),
-    );
-    const regex = new RegExp('^' + trimmedInputValue, 'i');
-    return filteredPeople.filter((person) => {
-      return regex.test(getFullNameFromPerson(person));
-    });
-  };
-
-  const getSuggestionValue = (suggestion: SubContactInfoFragment): string =>
-    getFullNameFromPerson(suggestion);
-
-  const renderSuggestion = (suggestion: SubContactInfoFragment): ReactNode => (
-    <div>{getFullNameFromPerson(suggestion)}</div>
-  );
-
-  const onSuggestionsFetchRequested = (
-    props: SuggestionsFetchRequestedParams,
-  ) => setPeopleSuggestions(getSuggestions(props.value));
-
-  const onSuggestionsClearRequested = () => setPeopleSuggestions([]);
 
   const cancel = () => {
     if (setFieldToAdd) {
@@ -418,20 +392,13 @@ export const ParentForm: FC<ParentFormProps> = ({
                 setFieldToAdd && (
                   <Field name="formParentId">
                     {({ form }: FieldProps) => (
-                      <Autosuggest
+                      <FormikAutosuggest
+                        records={filteredPeople}
                         suggestions={peopleSuggestions}
-                        onSuggestionsFetchRequested={
-                          onSuggestionsFetchRequested
-                        }
-                        onSuggestionsClearRequested={
-                          onSuggestionsClearRequested
-                        }
-                        getSuggestionValue={getSuggestionValue}
-                        renderSuggestion={renderSuggestion}
-                        shouldRenderSuggestions={() => true}
+                        setSuggestions={setPeopleSuggestions}
+                        getSuggestionValue={getFullNameFromPerson}
+                        inputValue={parentInputValue}
                         onSuggestionSelected={(event, data) => {
-                          event.preventDefault();
-                          event.stopPropagation();
                           form.setFieldValue(
                             'formParentId',
                             data.suggestion.id,
@@ -440,11 +407,8 @@ export const ParentForm: FC<ParentFormProps> = ({
                             getFullNameFromPerson(data.suggestion),
                           );
                         }}
-                        inputProps={{
-                          onChange: (event: any) => {
-                            setParentInputValue(event.target.value);
-                          },
-                          value: parentInputValue,
+                        onChange={(event) => {
+                          setParentInputValue(event.target.value);
                         }}
                       />
                     )}
