@@ -4,7 +4,6 @@ import {
   useCreateAgeMutation,
   useCreateParentChildRelationshipMutation,
   useUpdateParentChildRelationshipMutation,
-  useGetUserForHomeContainerQuery,
   useGetUserPeopleQuery,
   SubContactInfoFragment,
 } from 'client/graphqlTypes';
@@ -22,10 +21,7 @@ import { GlobalError } from 'client/common/GlobalError';
 import { Text } from 'client/common/Text';
 import { SectionDivider } from 'client/profiles/PersonContainer';
 import { PARENT_TYPE_OPTIONS, getFullNameFromPerson } from './utils';
-import {
-  NEW_OR_CURRENT_CONTACT_OPTIONS,
-  buildPeopleOptions,
-} from 'client/profiles/utils';
+import { NEW_OR_CURRENT_CONTACT_OPTIONS } from 'client/profiles/utils';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
@@ -185,9 +181,7 @@ export const ParentForm: FC<ParentFormProps> = ({
   const [
     updateParentChildRelationship,
   ] = useUpdateParentChildRelationshipMutation();
-  // const { data: userData } = useGetUserForHomeContainerQuery();
   const { data: userPeople } = useGetUserPeopleQuery();
-  const people = userPeople?.people ? userPeople?.people : [];
   const personRelationIds = new Set(relations.map((person) => person.id));
   personRelationIds.add(childId);
   const filteredPeople = userPeople?.people
@@ -456,15 +450,6 @@ export const ParentForm: FC<ParentFormProps> = ({
                     )}
                   </Field>
                 )}
-              {/* {values.newOrCurrentContact === 'current_person' &&
-                setFieldToAdd && (
-                  <Field
-                    name="formParentId"
-                    label="Parent"
-                    component={FormikSelectInput}
-                    options={peopleOptions}
-                  />
-                )} */}
               <Field
                 name="parentType"
                 label="Type of parent (optional)"
