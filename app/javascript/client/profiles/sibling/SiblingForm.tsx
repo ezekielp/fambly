@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import {
   useCreateSiblingRelationshipMutation,
   useUpdateSiblingRelationshipMutation,
-  useGetUserForHomeContainerQuery,
+  useGetUserPeopleQuery,
+  SubContactInfoFragment,
 } from 'client/graphqlTypes';
-import { Field, Form, Formik, FormikHelpers } from 'formik';
+import { Field, Form, Formik, FormikHelpers, FieldProps } from 'formik';
 import {
   FormikTextInput,
   FormikNumberInput,
@@ -19,12 +20,14 @@ import { Text } from 'client/common/Text';
 import { SectionDivider } from 'client/profiles/PersonContainer';
 import {
   NEW_OR_CURRENT_CONTACT_OPTIONS,
-  buildPeopleOptions,
+  filterOutRelationsFromAndSortPeople,
+  getFullNameFromPerson,
 } from 'client/profiles/utils';
 import { SIBLING_TYPE_OPTIONS } from './utils';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
+import { FormikAutosuggest } from 'client/form/FormikAutosuggest';
 
 gql`
   mutation CreateSiblingRelationship($input: CreateSiblingRelationshipInput!) {
@@ -131,6 +134,7 @@ export interface SiblingFormProps {
   initialValues?: SiblingFormData;
   setEditFlag?: (bool: boolean) => void;
   setModalOpen?: (bool: boolean) => void;
+  relations: SubContactInfoFragment[];
 }
 
 export const blankInitialValues = {
@@ -152,6 +156,7 @@ export const SiblingForm: FC<SiblingFormProps> = ({
   siblingOneId,
   setEditFlag,
   setModalOpen,
+  relations,
 }) => {
   const [
     createSiblingRelationshipMutation,
@@ -159,9 +164,14 @@ export const SiblingForm: FC<SiblingFormProps> = ({
   const [
     updateSiblingRelationshipMutation,
   ] = useUpdateSiblingRelationshipMutation();
-  const { data: userData } = useGetUserForHomeContainerQuery();
-  const people = userData?.user?.people ? userData?.user?.people : [];
-  const peopleOptions = buildPeopleOptions(people, siblingOneId);
+  const { data: userPeople } = useGetUserPeopleQuery();
+  const personRelationIds = new Set(relations.map((person) => person.id));
+  personRelationIds.add(siblingOneId);
+  const filteredPeople = userPeople?.people
+    ? filterOutRelationsFromAndSortPeople(userPeople.people, personRelationIds)
+    : [];
+  const [peopleSuggestions, setPeopleSuggestions] = useState(filteredPeople);
+  const [siblingTwoInputValue, setSiblingTwoInputValue] = useState('');
 
   const cancel = () => {
     if (setFieldToAdd) {
@@ -309,12 +319,29 @@ export const SiblingForm: FC<SiblingFormProps> = ({
               )}
               {values.newOrCurrentContact === 'current_person' &&
                 setFieldToAdd && (
-                  <Field
-                    name="formSiblingId"
-                    label="Sibling"
-                    component={FormikSelectInput}
-                    options={peopleOptions}
-                  />
+                  <Field name="formSiblingId">
+                    {({ form }: FieldProps) => (
+                      <FormikAutosuggest<SubContactInfoFragment>
+                        records={filteredPeople}
+                        suggestions={peopleSuggestions}
+                        setSuggestions={setPeopleSuggestions}
+                        getSuggestionValue={getFullNameFromPerson}
+                        inputValue={siblingTwoInputValue}
+                        onSuggestionSelected={(event, data) => {
+                          form.setFieldValue(
+                            'formSiblingId',
+                            data.suggestion.id,
+                          );
+                          setSiblingTwoInputValue(
+                            getFullNameFromPerson(data.suggestion),
+                          );
+                        }}
+                        onChange={(event) => {
+                          setSiblingTwoInputValue(event.target.value);
+                        }}
+                      />
+                    )}
+                  </Field>
                 )}
               <Field
                 name="siblingType"

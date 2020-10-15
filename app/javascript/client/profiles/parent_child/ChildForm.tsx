@@ -4,7 +4,6 @@ import {
   useCreateAgeMutation,
   useCreateParentChildRelationshipMutation,
   useUpdateParentChildRelationshipMutation,
-  useGetUserForHomeContainerQuery,
   useGetUserPeopleQuery,
   SubContactInfoFragment,
 } from 'client/graphqlTypes';
@@ -21,11 +20,11 @@ import { Button } from 'client/common/Button';
 import { GlobalError } from 'client/common/GlobalError';
 import { Text } from 'client/common/Text';
 import { SectionDivider } from 'client/profiles/PersonContainer';
-import { CHILD_TYPE_OPTIONS, getFullNameFromPerson } from './utils';
+import { CHILD_TYPE_OPTIONS } from './utils';
 import {
   NEW_OR_CURRENT_CONTACT_OPTIONS,
   filterOutRelationsFromAndSortPeople,
-  buildPeopleOptions,
+  getFullNameFromPerson,
 } from 'client/profiles/utils';
 import * as yup from 'yup';
 import { handleFormErrors } from 'client/utils/formik';
@@ -118,10 +117,6 @@ export const ChildForm: FC<ChildFormProps> = ({
     : [];
   const [peopleSuggestions, setPeopleSuggestions] = useState(filteredPeople);
   const [childInputValue, setChildInputValue] = useState('');
-
-  // const { data: userData } = useGetUserForHomeContainerQuery();
-  // const people = userData?.user?.people ? userData?.user?.people : [];
-  // const peopleOptions = buildPeopleOptions(people, parentId);
 
   const cancel = () => {
     if (setFieldToAdd) {
@@ -334,15 +329,6 @@ export const ChildForm: FC<ChildFormProps> = ({
                     )}
                   </Field>
                 )}
-              {/* {values.newOrCurrentContact === 'current_person' &&
-                setFieldToAdd && (
-                  <Field
-                    name="formChildId"
-                    label="Child"
-                    component={FormikSelectInput}
-                    options={peopleOptions}
-                  />
-                )} */}
               <Field
                 name="parentType"
                 label="Type of child (optional)"

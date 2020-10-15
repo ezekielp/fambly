@@ -353,6 +353,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
             setFieldToAdd={setFieldToAdd}
             siblingOneId={personId}
             personFirstName={firstName}
+            relations={relations}
           />
         </Modal>
       )}
@@ -421,6 +422,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
           siblings={siblings}
           otherSiblingId={personId}
           otherSiblingLastName={lastName}
+          relations={relations}
         />
       )}
       {hasPersonalHistory && (

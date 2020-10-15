@@ -13,7 +13,7 @@ import { getUserPeopleQuery } from 'client/test/queries/getUserPeople';
 import { createAgeMutation } from 'client/test/mutations/createAge';
 import { createPersonMutation } from 'client/test/mutations/addPerson';
 import { ReactWrapper, mount } from 'enzyme';
-import { Form, Field } from 'formik';
+import { Form } from 'formik';
 import { act } from 'react-dom/test-utils';
 import wait from 'waait';
 import * as formikHelpers from 'client/utils/formik';

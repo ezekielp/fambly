@@ -3,6 +3,7 @@ import { Option } from 'client/form/SelectInput';
 import {
   HomeContainerPersonInfoFragment,
   UserPersonInfoFragment,
+  SubContactInfoFragment,
 } from 'client/graphqlTypes';
 import { AgeContainer } from 'client/profiles/parent_child/ParentItem';
 
@@ -68,3 +69,6 @@ export const filterOutRelationsFromAndSortPeople = (
       }
     });
 };
+
+export const getFullNameFromPerson = (person: SubContactInfoFragment): string =>
+  person.lastName ? person.firstName + ' ' + person.lastName : person.firstName;

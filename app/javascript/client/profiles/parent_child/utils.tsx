@@ -1,5 +1,4 @@
 import { colors } from 'client/shared/styles';
-import { SubContactInfoFragment } from 'client/graphqlTypes';
 
 export const PARENT_TYPE_OPTIONS = [
   { label: '', value: '' },
@@ -96,6 +95,3 @@ export const parentTypeColors: Record<
     textColor: 'lightPink',
   },
 };
-
-export const getFullNameFromPerson = (person: SubContactInfoFragment): string =>
-  person.lastName ? person.firstName + ' ' + person.lastName : person.firstName;
