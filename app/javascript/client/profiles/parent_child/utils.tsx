@@ -97,5 +97,7 @@ export const parentTypeColors: Record<
   },
 };
 
-export const getFullNameFromPerson = (person: Record<string, any>): string =>
+export const getFullNameFromPerson = (person: SubContactInfoFragment): string =>
   person.lastName ? person.firstName + ' ' + person.lastName : person.firstName;
+// export const getFullNameFromPerson = (person: Record<string, any>): string =>
+//   person.lastName ? person.firstName + ' ' + person.lastName : person.firstName;

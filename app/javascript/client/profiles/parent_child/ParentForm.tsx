@@ -199,6 +199,7 @@ export const ParentForm: FC<ParentFormProps> = ({
     : [];
   const [peopleSuggestions, setPeopleSuggestions] = useState(filteredPeople);
   const [parentInputValue, setParentInputValue] = useState('');
+  // const FormikAutosuggest = withAutosuggest(filteredPeople[0]);
 
   const cancel = () => {
     if (setFieldToAdd) {
@@ -392,7 +393,7 @@ export const ParentForm: FC<ParentFormProps> = ({
                 setFieldToAdd && (
                   <Field name="formParentId">
                     {({ form }: FieldProps) => (
-                      <FormikAutosuggest
+                      <FormikAutosuggest<SubContactInfoFragment>
                         records={filteredPeople}
                         suggestions={peopleSuggestions}
                         setSuggestions={setPeopleSuggestions}

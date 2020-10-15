@@ -1,4 +1,4 @@
-import React, { FC, FormEvent, ReactNode } from 'react';
+import React, { FormEvent, ReactNode } from 'react';
 import Autosuggest, {
   SuggestionsFetchRequestedParams,
   SuggestionSelectedEventData,
@@ -8,7 +8,7 @@ import { escapeRegexCharacters } from 'client/profiles/utils';
 interface FormikAutosuggestProps<SuggestionType> {
   records: SuggestionType[];
   suggestions: SuggestionType[];
-  setSuggestions: (suggestions: any[]) => void;
+  setSuggestions: (suggestions: SuggestionType[]) => void;
   getSuggestionValue: (suggestion: SuggestionType) => string;
   inputValue: string;
   onSuggestionSelected: (
@@ -19,9 +19,7 @@ interface FormikAutosuggestProps<SuggestionType> {
   onBlur?: () => void;
 }
 
-export const FormikAutosuggest: FC<FormikAutosuggestProps<
-  Record<string, any>
->> = ({
+export const FormikAutosuggest = <SuggestionType extends Record<string, any>>({
   records,
   suggestions,
   setSuggestions,
@@ -30,8 +28,8 @@ export const FormikAutosuggest: FC<FormikAutosuggestProps<
   onSuggestionSelected,
   onChange,
   onBlur,
-}) => {
-  const getSuggestions = (inputValue: string): Record<string, any>[] => {
+}: FormikAutosuggestProps<SuggestionType>) => {
+  const getSuggestions = (inputValue: string): SuggestionType[] => {
     const trimmedInputValue = escapeRegexCharacters(
       inputValue.trim().toLowerCase(),
     );
@@ -45,7 +43,7 @@ export const FormikAutosuggest: FC<FormikAutosuggestProps<
 
   const onSuggestionsClearRequested = () => setSuggestions([]);
 
-  const renderSuggestion = (suggestion: Record<string, any>): ReactNode => (
+  const renderSuggestion = (suggestion: SuggestionType): ReactNode => (
     <div>{getSuggestionValue(suggestion)}</div>
   );
 
@@ -54,14 +52,14 @@ export const FormikAutosuggest: FC<FormikAutosuggestProps<
       suggestions={suggestions}
       onSuggestionsFetchRequested={onSuggestionsFetchRequested}
       onSuggestionsClearRequested={onSuggestionsClearRequested}
-      getSuggestionValue={(suggestion: Record<string, any>) =>
+      getSuggestionValue={(suggestion: SuggestionType) =>
         getSuggestionValue(suggestion)
       }
       renderSuggestion={renderSuggestion}
       shouldRenderSuggestions={() => true}
       onSuggestionSelected={(
         event: FormEvent<any>,
-        data: SuggestionSelectedEventData<Record<string, any>>,
+        data: SuggestionSelectedEventData<SuggestionType>,
       ) => {
         event.preventDefault();
         event.stopPropagation();
