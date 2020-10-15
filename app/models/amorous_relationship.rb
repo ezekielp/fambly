@@ -27,7 +27,7 @@
 #  fk_rails_...  (partner_two_id => people.id)
 #
 class AmorousRelationship < ApplicationRecord
-  validates :relationship_type, inclusion: { in: %w[marriage dating sexual] }
+  validates :relationship_type, inclusion: { in: %w[marriage dating sexual], allow_nil: true }
 
   belongs_to :partner_one, class_name: 'Person', foreign_key: 'partner_one_id'
   belongs_to :partner_two, class_name: 'Person', foreign_key: 'partner_two_id'

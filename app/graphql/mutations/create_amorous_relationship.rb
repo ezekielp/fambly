@@ -37,7 +37,7 @@ module Mutations
             partner_one_id: input.partner_one_id,
             partner_two_id: new_person.id,
             relationship_type: input.relationship_type
-          )  
+          )
         else
           return { errors: [{ path: '', message: 'Oops! Something went wrong. Please refresh the page and try again.' }] }
         end
