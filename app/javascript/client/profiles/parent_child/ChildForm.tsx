@@ -1,12 +1,14 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import {
   useCreatePersonMutation,
   useCreateAgeMutation,
   useCreateParentChildRelationshipMutation,
   useUpdateParentChildRelationshipMutation,
   useGetUserForHomeContainerQuery,
+  useGetUserPeopleQuery,
+  SubContactInfoFragment,
 } from 'client/graphqlTypes';
-import { Field, Form, Formik, FormikHelpers } from 'formik';
+import { Field, Form, Formik, FormikHelpers, FieldProps } from 'formik';
 import {
   FormikTextInput,
   FormikNumberInput,
@@ -19,13 +21,15 @@ import { Button } from 'client/common/Button';
 import { GlobalError } from 'client/common/GlobalError';
 import { Text } from 'client/common/Text';
 import { SectionDivider } from 'client/profiles/PersonContainer';
-import { CHILD_TYPE_OPTIONS } from './utils';
+import { CHILD_TYPE_OPTIONS, getFullNameFromPerson } from './utils';
 import {
   NEW_OR_CURRENT_CONTACT_OPTIONS,
+  filterOutRelationsFromAndSortPeople,
   buildPeopleOptions,
 } from 'client/profiles/utils';
 import * as yup from 'yup';
 import { handleFormErrors } from 'client/utils/formik';
+import { FormikAutosuggest } from 'client/form/FormikAutosuggest';
 
 const ChildFormValidationSchema = yup.object().shape({
   firstName: yup.string().when('newOrCurrentContact', {
@@ -74,6 +78,7 @@ export interface ChildFormProps {
   initialValues?: ChildFormData;
   setEditFlag?: (bool: boolean) => void;
   setModalOpen?: (bool: boolean) => void;
+  relations: SubContactInfoFragment[];
 }
 
 export const blankInitialValues = {
@@ -95,6 +100,7 @@ export const ChildForm: FC<ChildFormProps> = ({
   parentId,
   setEditFlag,
   setModalOpen,
+  relations,
 }) => {
   const [
     createParentChildRelationshipMutation,
@@ -104,9 +110,18 @@ export const ChildForm: FC<ChildFormProps> = ({
   const [
     updateParentChildRelationship,
   ] = useUpdateParentChildRelationshipMutation();
-  const { data: userData } = useGetUserForHomeContainerQuery();
-  const people = userData?.user?.people ? userData?.user?.people : [];
-  const peopleOptions = buildPeopleOptions(people, parentId);
+  const { data: userPeople } = useGetUserPeopleQuery();
+  const personRelationIds = new Set(relations.map((person) => person.id));
+  personRelationIds.add(parentId);
+  const filteredPeople = userPeople?.people
+    ? filterOutRelationsFromAndSortPeople(userPeople.people, personRelationIds)
+    : [];
+  const [peopleSuggestions, setPeopleSuggestions] = useState(filteredPeople);
+  const [childInputValue, setChildInputValue] = useState('');
+
+  // const { data: userData } = useGetUserForHomeContainerQuery();
+  // const people = userData?.user?.people ? userData?.user?.people : [];
+  // const peopleOptions = buildPeopleOptions(people, parentId);
 
   const cancel = () => {
     if (setFieldToAdd) {
@@ -298,13 +313,36 @@ export const ChildForm: FC<ChildFormProps> = ({
               )}
               {values.newOrCurrentContact === 'current_person' &&
                 setFieldToAdd && (
+                  <Field name="formChildId">
+                    {({ form }: FieldProps) => (
+                      <FormikAutosuggest<SubContactInfoFragment>
+                        records={filteredPeople}
+                        suggestions={peopleSuggestions}
+                        setSuggestions={setPeopleSuggestions}
+                        getSuggestionValue={getFullNameFromPerson}
+                        inputValue={childInputValue}
+                        onSuggestionSelected={(event, data) => {
+                          form.setFieldValue('formChildId', data.suggestion.id);
+                          setChildInputValue(
+                            getFullNameFromPerson(data.suggestion),
+                          );
+                        }}
+                        onChange={(event) => {
+                          setChildInputValue(event.target.value);
+                        }}
+                      />
+                    )}
+                  </Field>
+                )}
+              {/* {values.newOrCurrentContact === 'current_person' &&
+                setFieldToAdd && (
                   <Field
                     name="formChildId"
                     label="Child"
                     component={FormikSelectInput}
                     options={peopleOptions}
                   />
-                )}
+                )} */}
               <Field
                 name="parentType"
                 label="Type of child (optional)"

@@ -1065,8 +1065,13 @@ export type GetUserPeopleQuery = (
   { __typename?: 'Query' }
   & { people?: Maybe<Array<(
     { __typename?: 'Person' }
-    & Pick<Person, 'id' | 'firstName' | 'lastName'>
+    & UserPersonInfoFragment
   )>> }
+);
+
+export type UserPersonInfoFragment = (
+  { __typename?: 'Person' }
+  & Pick<Person, 'id' | 'firstName' | 'lastName'>
 );
 
 export type GetParentChildRelationshipQueryVariables = Exact<{
@@ -1382,6 +1387,13 @@ export const PersonInfoFragmentDoc = gql`
 }
     ${SubContactInfoFragmentDoc}
 ${PersonPlaceInfoFragmentDoc}`;
+export const UserPersonInfoFragmentDoc = gql`
+    fragment UserPersonInfo on Person {
+  id
+  firstName
+  lastName
+}
+    `;
 export const GetUserDocument = gql`
     query GetUser {
   user {
@@ -2225,12 +2237,10 @@ export type UpdateParentChildRelationshipMutationOptions = Apollo.BaseMutationOp
 export const GetUserPeopleDocument = gql`
     query GetUserPeople {
   people {
-    id
-    firstName
-    lastName
+    ...UserPersonInfo
   }
 }
-    `;
+    ${UserPersonInfoFragmentDoc}`;
 
 /**
  * __useGetUserPeopleQuery__

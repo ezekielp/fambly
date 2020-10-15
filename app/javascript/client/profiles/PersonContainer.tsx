@@ -274,7 +274,11 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
         <Modal onClose={() => setEditNameFlag(false)}>
           <PersonForm
             setEditFlag={setEditNameFlag}
-            initialValues={{ firstName, middleName, lastName }}
+            initialValues={{
+              firstName,
+              middleName: middleName ? middleName : '',
+              lastName: lastName ? lastName : '',
+            }}
             personId={personId}
           />
         </Modal>
@@ -339,6 +343,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
             setFieldToAdd={setFieldToAdd}
             parentId={personId}
             personFirstName={firstName}
+            relations={relations}
           />
         </Modal>
       )}
@@ -408,6 +413,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
           actualChildren={children}
           parentId={personId}
           parentLastName={lastName}
+          relations={relations}
         />
       )}
       {siblings && siblings.length > 0 && (

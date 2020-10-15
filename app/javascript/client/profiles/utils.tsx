@@ -1,6 +1,9 @@
 import React, { ReactNode } from 'react';
 import { Option } from 'client/form/SelectInput';
-import { HomeContainerPersonInfoFragment } from 'client/graphqlTypes';
+import {
+  HomeContainerPersonInfoFragment,
+  UserPersonInfoFragment,
+} from 'client/graphqlTypes';
 import { AgeContainer } from 'client/profiles/parent_child/ParentItem';
 
 export const NEW_OR_CURRENT_CONTACT_OPTIONS = [
@@ -44,4 +47,24 @@ export const getAgeContent = (
     return <AgeContainer>{`(${age})`}</AgeContainer>;
   }
   return '';
+};
+
+export const filterOutRelationsFromAndSortPeople = (
+  people: UserPersonInfoFragment[],
+  relationIds: Set<string>,
+): UserPersonInfoFragment[] => {
+  return people
+    .filter((person) => !relationIds.has(person.id))
+    .slice()
+    .sort((p1, p2) => {
+      const personName1 = p1.firstName.toUpperCase();
+      const personName2 = p2.firstName.toUpperCase();
+      if (personName1 < personName2) {
+        return -1;
+      } else if (personName2 > personName1) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
 };

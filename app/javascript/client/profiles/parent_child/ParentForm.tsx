@@ -6,6 +6,7 @@ import {
   useUpdateParentChildRelationshipMutation,
   useGetUserPeopleQuery,
   SubContactInfoFragment,
+  UserPersonInfoFragmentDoc,
 } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers, FieldProps } from 'formik';
 import {
@@ -21,7 +22,10 @@ import { GlobalError } from 'client/common/GlobalError';
 import { Text } from 'client/common/Text';
 import { SectionDivider } from 'client/profiles/PersonContainer';
 import { PARENT_TYPE_OPTIONS, getFullNameFromPerson } from './utils';
-import { NEW_OR_CURRENT_CONTACT_OPTIONS } from 'client/profiles/utils';
+import {
+  NEW_OR_CURRENT_CONTACT_OPTIONS,
+  filterOutRelationsFromAndSortPeople,
+} from 'client/profiles/utils';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
@@ -92,10 +96,18 @@ gql`
 gql`
   query GetUserPeople {
     people {
-      id
-      firstName
-      lastName
+      ...UserPersonInfo
     }
+  }
+
+  ${UserPersonInfoFragmentDoc}
+`;
+
+gql`
+  fragment UserPersonInfo on Person {
+    id
+    firstName
+    lastName
   }
 `;
 
@@ -182,24 +194,10 @@ export const ParentForm: FC<ParentFormProps> = ({
   const personRelationIds = new Set(relations.map((person) => person.id));
   personRelationIds.add(childId);
   const filteredPeople = userPeople?.people
-    ? userPeople?.people
-        .filter((person) => !personRelationIds.has(person.id))
-        .slice()
-        .sort((p1, p2) => {
-          const personName1 = p1.firstName.toUpperCase();
-          const personName2 = p2.firstName.toUpperCase();
-          if (personName1 < personName2) {
-            return -1;
-          } else if (personName2 > personName1) {
-            return 1;
-          } else {
-            return 0;
-          }
-        })
+    ? filterOutRelationsFromAndSortPeople(userPeople.people, personRelationIds)
     : [];
   const [peopleSuggestions, setPeopleSuggestions] = useState(filteredPeople);
   const [parentInputValue, setParentInputValue] = useState('');
-  // const FormikAutosuggest = withAutosuggest(filteredPeople[0]);
 
   const cancel = () => {
     if (setFieldToAdd) {
