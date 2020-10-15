@@ -10,11 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_12_190727) do
+ActiveRecord::Schema.define(version: 2020_10_15_213436) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "amorous_relationships", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "partner_one_id"
+    t.uuid "partner_two_id"
+    t.boolean "current", default: true
+    t.string "relationship_type"
+    t.integer "start_year"
+    t.integer "start_month"
+    t.integer "start_day"
+    t.integer "end_year"
+    t.integer "end_month"
+    t.integer "end_day"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["partner_one_id"], name: "index_amorous_relationships_on_partner_one_id"
+    t.index ["partner_two_id"], name: "index_amorous_relationships_on_partner_two_id"
+  end
 
   create_table "dummy_emails", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", null: false
@@ -124,6 +141,8 @@ ActiveRecord::Schema.define(version: 2020_10_12_190727) do
     t.index ["session_token"], name: "index_users_on_session_token", unique: true
   end
 
+  add_foreign_key "amorous_relationships", "people", column: "partner_one_id"
+  add_foreign_key "amorous_relationships", "people", column: "partner_two_id"
   add_foreign_key "dummy_emails", "users"
   add_foreign_key "parent_children", "people", column: "child_id"
   add_foreign_key "parent_children", "people", column: "parent_id"

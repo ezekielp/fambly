@@ -41,7 +41,7 @@ RSpec.describe SiblingRelationship, type: :model do
       expect(sibling_relationship.save).to be false
     end
 
-    it 'validates that the sibling_type is in the list of valid types' do
+    it 'validates that the sibling_type is on the list of valid types' do
       sibling_relationship = SiblingRelationship.create(sibling_one_id: sibling_one.id, sibling_two_id: sibling_two.id, sibling_type: invalid_sibling_type)
 
       expect(sibling_relationship).not_to be_valid
