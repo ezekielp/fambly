@@ -20,12 +20,14 @@ interface ChildItemProps {
   child: SubContactInfoFragment;
   parentId: string;
   parentLastName?: string | null | undefined;
+  relations: SubContactInfoFragment[];
 }
 
 export const ChildItem: FC<ChildItemProps> = ({
   child,
   parentId,
   parentLastName,
+  relations,
 }) => {
   const { id, firstName, lastName, age, monthsOld, gender } = child;
   const { data: parentChildData } = useGetParentChildRelationshipQuery({
@@ -107,6 +109,7 @@ export const ChildItem: FC<ChildItemProps> = ({
             parentId={parentId}
             personFirstName=""
             setModalOpen={setModalOpen}
+            relations={relations}
           />
         </Modal>
       )}

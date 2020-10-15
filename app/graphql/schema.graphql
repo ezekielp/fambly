@@ -324,6 +324,7 @@ type Place {
 
 type Query {
   parentChildRelationshipByParentIdAndChildId(input: ParentChildInput!): ParentChild
+  people: [Person!]
   personById(personId: String!): Person
   siblingRelationshipBySiblingIds(input: SiblingRelationshipInput!): SiblingRelationship
   user: User

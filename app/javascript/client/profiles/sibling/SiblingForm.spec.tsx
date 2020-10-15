@@ -9,7 +9,7 @@ import { FormUtils, formUtils } from 'client/test/utils/formik';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { createSiblingRelationshipMutation } from 'client/test/mutations/createSibling';
-import { getUserForHomeContainerQuery } from 'client/test/queries/getUserForHomeContainer';
+import { getUserPeopleQuery } from 'client/test/queries/getUserPeople';
 import { ReactWrapper, mount } from 'enzyme';
 import { Form } from 'formik';
 import { act } from 'react-dom/test-utils';
@@ -32,11 +32,9 @@ describe('<SiblingForm />', () => {
       personFirstName: 'Andre',
       setFieldToAdd: jest.fn(),
       siblingOneId: 'andre-weil-uuid',
+      relations: [],
     };
-    defaultMocks = [
-      createSiblingRelationshipMutation(),
-      getUserForHomeContainerQuery(),
-    ];
+    defaultMocks = [createSiblingRelationshipMutation(), getUserPeopleQuery()];
     currentPersonProps = {
       ...defaultProps,
       initialValues: {
@@ -92,7 +90,7 @@ describe('<SiblingForm />', () => {
     form = formUtils<SiblingFormData>(component.find(Form));
 
     expect(form.findInputByName('newOrCurrentContact').exists()).toBe(true);
-    expect(form.findInputByName('formSiblingId', 'select').exists()).toBe(true);
+    expect(component.find("Field[name='formSiblingId']").exists()).toBe(true);
     expect(form.findInputByName('siblingType', 'select').exists()).toBe(true);
     expect(form.findInputByName('note', 'textarea').exists()).toBe(true);
   });
@@ -103,7 +101,7 @@ describe('<SiblingForm />', () => {
         const createSiblingRelationship = createSiblingRelationshipMutation();
 
         await mountComponent(
-          [createSiblingRelationship, getUserForHomeContainerQuery()],
+          [createSiblingRelationship, getUserPeopleQuery()],
           defaultProps,
         );
         form = formUtils<SiblingFormData>(component.find(Form));
@@ -159,28 +157,21 @@ describe('<SiblingForm />', () => {
           },
         };
         const userDataMock = {
-          user: {
-            id: 'andre-weil-uuid',
-            email: 'andre@weil.com',
-            people: [
-              {
-                id: 'alexander-grothendieck-uuid',
-                firstName: 'Alexander',
-                lastName: 'Grothendieck',
-                showOnDashboard: false,
-              },
-            ],
-          },
+          people: [
+            {
+              id: 'alexander-grothendieck-uuid',
+              firstName: 'Alexander',
+              lastName: 'Grothendieck',
+              showOnDashboard: false,
+            },
+          ],
         };
         const createSiblingRelationship = createSiblingRelationshipMutation(
           currentPersonMock,
         );
 
         await mountComponent(
-          [
-            createSiblingRelationship,
-            getUserForHomeContainerQuery(userDataMock),
-          ],
+          [createSiblingRelationship, getUserPeopleQuery(userDataMock)],
           currentPersonProps,
         );
         form = formUtils<SiblingFormData>(component.find(Form));

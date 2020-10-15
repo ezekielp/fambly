@@ -121,7 +121,7 @@ export const NoteForm: FC<NoteFormProps> = ({
       >
         {({ isSubmitting }) => (
           <Form>
-            <Field name="content" component={FormikTextArea} />
+            <Field name="content" component={FormikTextArea} height="250px" />
             <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
               Save
             </Button>

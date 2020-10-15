@@ -210,7 +210,6 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
   });
 
   if (!personData) return null;
-  // if (!personData.personById) return null;
   if (!personData.personById) {
     history.push('/home');
     return null;
@@ -232,6 +231,10 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
     siblings,
     personPlaces,
   } = personData.personById;
+
+  const relations = (parents ? parents : [])
+    .concat(children ? children : [])
+    .concat(siblings ? siblings : []);
 
   const hasAge = age || monthsOld;
   const hasBirthdate = birthYear || birthMonth;
@@ -271,7 +274,11 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
         <Modal onClose={() => setEditNameFlag(false)}>
           <PersonForm
             setEditFlag={setEditNameFlag}
-            initialValues={{ firstName, middleName, lastName }}
+            initialValues={{
+              firstName,
+              middleName: middleName ? middleName : '',
+              lastName: lastName ? lastName : '',
+            }}
             personId={personId}
           />
         </Modal>
@@ -326,6 +333,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
             setFieldToAdd={setFieldToAdd}
             childId={personId}
             personFirstName={firstName}
+            relations={relations}
           />
         </Modal>
       )}
@@ -335,6 +343,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
             setFieldToAdd={setFieldToAdd}
             parentId={personId}
             personFirstName={firstName}
+            relations={relations}
           />
         </Modal>
       )}
@@ -344,6 +353,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
             setFieldToAdd={setFieldToAdd}
             siblingOneId={personId}
             personFirstName={firstName}
+            relations={relations}
           />
         </Modal>
       )}
@@ -396,6 +406,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
           parents={parents}
           childId={personId}
           childLastName={lastName}
+          relations={relations}
         />
       )}
       {children && children.length > 0 && (
@@ -403,6 +414,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
           actualChildren={children}
           parentId={personId}
           parentLastName={lastName}
+          relations={relations}
         />
       )}
       {siblings && siblings.length > 0 && (
@@ -410,6 +422,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
           siblings={siblings}
           otherSiblingId={personId}
           otherSiblingLastName={lastName}
+          relations={relations}
         />
       )}
       {hasPersonalHistory && (

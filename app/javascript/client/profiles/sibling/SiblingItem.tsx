@@ -39,12 +39,14 @@ interface SiblingItemProps {
   sibling: SubContactInfoFragment;
   otherSiblingLastName?: string | null | undefined;
   otherSiblingId: string;
+  relations: SubContactInfoFragment[];
 }
 
 export const SiblingItem: FC<SiblingItemProps> = ({
   sibling,
   otherSiblingId,
   otherSiblingLastName,
+  relations,
 }) => {
   const { id, firstName, lastName, age, gender } = sibling;
   const { data: siblingRelationshipData } = useGetSiblingRelationshipQuery({
@@ -126,6 +128,7 @@ export const SiblingItem: FC<SiblingItemProps> = ({
             setEditFlag={setEditFlag}
             siblingOneId={otherSiblingId}
             setModalOpen={setModalOpen}
+            relations={relations}
           />
         </Modal>
       )}

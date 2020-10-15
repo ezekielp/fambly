@@ -40,7 +40,7 @@ export const TagItem: FC<TagProps> = ({ tag, personId }) => {
   return modalOpen ? (
     <Modal onClose={() => setModalOpen(false)}>
       <Text marginBottom={3} fontSize={3} bold>
-        Are you sure you want to delete this field?
+        Are you sure you want to remove this tag from the profile?
       </Text>
       <Button marginRight="1rem" onClick={() => deletePersonTag()}>
         Yes

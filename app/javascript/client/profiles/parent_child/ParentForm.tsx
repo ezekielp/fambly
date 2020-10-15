@@ -1,12 +1,14 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import {
   useCreatePersonMutation,
   useCreateAgeMutation,
   useCreateParentChildRelationshipMutation,
   useUpdateParentChildRelationshipMutation,
-  useGetUserForHomeContainerQuery,
+  useGetUserPeopleQuery,
+  SubContactInfoFragment,
+  UserPersonInfoFragmentDoc,
 } from 'client/graphqlTypes';
-import { Field, Form, Formik, FormikHelpers } from 'formik';
+import { Field, Form, Formik, FormikHelpers, FieldProps } from 'formik';
 import {
   FormikTextInput,
   FormikNumberInput,
@@ -22,11 +24,13 @@ import { SectionDivider } from 'client/profiles/PersonContainer';
 import { PARENT_TYPE_OPTIONS } from './utils';
 import {
   NEW_OR_CURRENT_CONTACT_OPTIONS,
-  buildPeopleOptions,
+  filterOutRelationsFromAndSortPeople,
+  getFullNameFromPerson,
 } from 'client/profiles/utils';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
+import { FormikAutosuggest } from 'client/form/FormikAutosuggest';
 
 gql`
   mutation CreateParentChildRelationship(
@@ -90,6 +94,24 @@ gql`
   }
 `;
 
+gql`
+  query GetUserPeople {
+    people {
+      ...UserPersonInfo
+    }
+  }
+
+  ${UserPersonInfoFragmentDoc}
+`;
+
+gql`
+  fragment UserPersonInfo on Person {
+    id
+    firstName
+    lastName
+  }
+`;
+
 const ParentFormValidationSchema = yup.object().shape({
   firstName: yup.string().when('newOrCurrentContact', {
     is: (val: string) => val === 'new_person',
@@ -137,6 +159,7 @@ export interface ParentFormProps {
   initialValues?: ParentFormData;
   setEditFlag?: (bool: boolean) => void;
   setModalOpen?: (bool: boolean) => void;
+  relations: SubContactInfoFragment[];
 }
 
 export const blankInitialValues = {
@@ -158,6 +181,7 @@ export const ParentForm: FC<ParentFormProps> = ({
   childId,
   setEditFlag,
   setModalOpen,
+  relations,
 }) => {
   const [
     createParentChildRelationshipMutation,
@@ -167,9 +191,14 @@ export const ParentForm: FC<ParentFormProps> = ({
   const [
     updateParentChildRelationship,
   ] = useUpdateParentChildRelationshipMutation();
-  const { data: userData } = useGetUserForHomeContainerQuery();
-  const people = userData?.user?.people ? userData?.user?.people : [];
-  const peopleOptions = buildPeopleOptions(people, childId);
+  const { data: userPeople } = useGetUserPeopleQuery();
+  const personRelationIds = new Set(relations.map((person) => person.id));
+  personRelationIds.add(childId);
+  const filteredPeople = userPeople?.people
+    ? filterOutRelationsFromAndSortPeople(userPeople.people, personRelationIds)
+    : [];
+  const [peopleSuggestions, setPeopleSuggestions] = useState(filteredPeople);
+  const [parentInputValue, setParentInputValue] = useState('');
 
   const cancel = () => {
     if (setFieldToAdd) {
@@ -361,12 +390,29 @@ export const ParentForm: FC<ParentFormProps> = ({
               )}
               {values.newOrCurrentContact === 'current_person' &&
                 setFieldToAdd && (
-                  <Field
-                    name="formParentId"
-                    label="Parent"
-                    component={FormikSelectInput}
-                    options={peopleOptions}
-                  />
+                  <Field name="formParentId">
+                    {({ form }: FieldProps) => (
+                      <FormikAutosuggest<SubContactInfoFragment>
+                        records={filteredPeople}
+                        suggestions={peopleSuggestions}
+                        setSuggestions={setPeopleSuggestions}
+                        getSuggestionValue={getFullNameFromPerson}
+                        inputValue={parentInputValue}
+                        onSuggestionSelected={(event, data) => {
+                          form.setFieldValue(
+                            'formParentId',
+                            data.suggestion.id,
+                          );
+                          setParentInputValue(
+                            getFullNameFromPerson(data.suggestion),
+                          );
+                        }}
+                        onChange={(event) => {
+                          setParentInputValue(event.target.value);
+                        }}
+                      />
+                    )}
+                  </Field>
                 )}
               <Field
                 name="parentType"

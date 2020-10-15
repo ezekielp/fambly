@@ -11,12 +11,14 @@ interface ParentsContainerProps {
   parents: SubContactInfoFragment[];
   childLastName?: string | null | undefined;
   childId: string;
+  relations: SubContactInfoFragment[];
 }
 
 export const ParentsContainer: FC<ParentsContainerProps> = ({
   parents,
   childId,
   childLastName,
+  relations,
 }) => {
   const parentItems = parents.map((parent) => {
     return (
@@ -25,6 +27,7 @@ export const ParentsContainer: FC<ParentsContainerProps> = ({
         parent={parent}
         childId={childId}
         childLastName={childLastName ? childLastName : ''}
+        relations={relations}
       />
     );
   });

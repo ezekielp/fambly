@@ -91,6 +91,7 @@ const ColorPickerOuterContainer = styled.div`
   margin-bottom: 50px;
   display: flex;
   width: 100%;
+  align-items: center;
 `;
 
 const ColorPickerInnerContainer = styled.div`
@@ -105,6 +106,10 @@ const ColorPickerInnerContainer = styled.div`
   z-index: 2;
 `;
 
+const OptionalTag = styled.div`
+  margin-right: 2rem;
+`;
+
 interface SwatchProps extends Omit<HTMLProps<HTMLDivElement>, 'as' | 'ref'> {
   swatchColor?: string | null | undefined;
   cursorPointer?: boolean;
@@ -112,7 +117,7 @@ interface SwatchProps extends Omit<HTMLProps<HTMLDivElement>, 'as' | 'ref'> {
 }
 
 export const Swatch = styled.div`
-  height: 20px;
+  height: fit-content;
   padding: 0.5rem 1rem;
   background-color: ${({ swatchColor }: SwatchProps) =>
     swatchColor ? swatchColor : `${colors.white}`};
@@ -129,6 +134,7 @@ export const Swatch = styled.div`
   margin-right: 10px;
   margin-bottom: ${({ marginBottom }: SwatchProps) =>
     marginBottom ? marginBottom : '0'};
+  text-align: center;
 `;
 
 const PersonTagFormValidationSchema = yup.object().shape({
@@ -160,11 +166,23 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
 }) => {
   const { userId } = useContext(AuthContext);
   const [createPersonTagMutation] = useCreatePersonTagMutation();
-  const { data: tagsData } = useGetUserTagsQuery({
+  const { data: tagsData, refetch: refetchTagsData } = useGetUserTagsQuery({
     variables: { userId: userId ? userId : '' },
   });
   const tags =
-    tagsData && tagsData.userTagsByUserId ? tagsData.userTagsByUserId : [];
+    tagsData && tagsData.userTagsByUserId
+      ? tagsData.userTagsByUserId.slice().sort((t1, t2) => {
+          const tagName1 = t1.name.toUpperCase();
+          const tagName2 = t2.name.toUpperCase();
+          if (tagName1 < tagName2) {
+            return -1;
+          } else if (tagName1 > tagName2) {
+            return 1;
+          } else {
+            return 0;
+          }
+        })
+      : [];
   const colorPickerRef = useRef(null);
   const formikRef: React.RefObject<any> = useRef();
   const [filteredSuggestions, setFilteredSuggestions] = useState(tags);
@@ -194,6 +212,7 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
 
   useEffect(() => {
     setColorPickerActive(false);
+    refetchTagsData();
   }, []);
 
   const cancel = () => {
@@ -305,10 +324,11 @@ export const PersonTagForm: FC<PersonTagFormProps> = ({
                 onClick={handleChooseColorClick}
                 buttonActive={colorPickerActive}
                 type="button"
-                marginRight="2rem"
+                marginRight="0.75rem"
               >
                 Choose color
               </ColorPickerButton>
+              <OptionalTag>(optional)</OptionalTag>
               {colorPickerActive && (
                 <ColorPickerInnerContainer ref={colorPickerRef}>
                   <Field name="color">

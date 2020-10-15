@@ -101,17 +101,23 @@ const ProfileLinkContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: ${spacing[1]};
+  flex-wrap: wrap;
 `;
 
 const ProfileLink = styled(StyledLink)`
   min-width: fit-content;
+  margin-bottom: ${spacing[1]};
+`;
+
+const AgeContainer = styled.div`
+  margin-bottom: ${spacing[1]};
 `;
 
 const StyledSwatch = styled(Swatch)`
   padding: 3px 9px;
   margin-left: 10px;
   margin-right: 0;
+  margin-bottom: ${spacing[1]};
 `;
 
 const SelectedTagContainer = styled.div`
@@ -192,7 +198,9 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
             {person.firstName}
             {person.lastName && ` ${person.lastName}`}
           </ProfileLink>
-          {getAgeContent(person.age, person.monthsOld)}
+          <AgeContainer>
+            {getAgeContent(person.age, person.monthsOld)}
+          </AgeContainer>
           {tagItems}
         </ProfileLinkContainer>
       );

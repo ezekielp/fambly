@@ -9,7 +9,7 @@ import { FormUtils, formUtils } from 'client/test/utils/formik';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { createParentChildRelationshipMutation } from 'client/test/mutations/createParentChild';
-import { getUserForHomeContainerQuery } from 'client/test/queries/getUserForHomeContainer';
+import { getUserPeopleQuery } from 'client/test/queries/getUserPeople';
 import { createAgeMutation } from 'client/test/mutations/createAge';
 import { createPersonMutation } from 'client/test/mutations/addPerson';
 import { ReactWrapper, mount } from 'enzyme';
@@ -18,7 +18,7 @@ import { act } from 'react-dom/test-utils';
 import wait from 'waait';
 import * as formikHelpers from 'client/utils/formik';
 
-describe('<ParentChildForm />', () => {
+describe('<ParentForm />', () => {
   let mountComponent: (
     mocks?: MockedResponse[],
     props?: ParentFormProps,
@@ -35,10 +35,11 @@ describe('<ParentChildForm />', () => {
       personFirstName: 'Ada',
       setFieldToAdd: jest.fn(),
       childId: 'ada-lovelace-uuid',
+      relations: [],
     };
     defaultMocks = [
       createParentChildRelationshipMutation(),
-      getUserForHomeContainerQuery(),
+      getUserPeopleQuery(),
       createAgeMutation(),
       createPersonMutation(),
     ];
@@ -97,7 +98,7 @@ describe('<ParentChildForm />', () => {
     form = formUtils<ParentFormData>(component.find(Form));
 
     expect(form.findInputByName('newOrCurrentContact').exists()).toBe(true);
-    expect(form.findInputByName('formParentId', 'select').exists()).toBe(true);
+    expect(component.find("Field[name='formParentId']").exists()).toBe(true);
     expect(form.findInputByName('parentType', 'select').exists()).toBe(true);
     expect(form.findInputByName('note', 'textarea').exists()).toBe(true);
   });
@@ -154,7 +155,7 @@ describe('<ParentChildForm />', () => {
         );
 
         await mountComponent(
-          [createParentChildRelationship, getUserForHomeContainerQuery()],
+          [createParentChildRelationship, getUserPeopleQuery()],
           currentPersonProps,
         );
         form = formUtils<ParentFormData>(component.find(Form));
@@ -182,7 +183,7 @@ describe('<ParentChildForm />', () => {
         const createParentChildRelationship = createParentChildRelationshipMutation();
 
         await mountComponent(
-          [createParentChildRelationship, getUserForHomeContainerQuery()],
+          [createParentChildRelationship, getUserPeopleQuery()],
           props,
         );
         form = formUtils<ParentFormData>(component.find(Form));
@@ -257,12 +258,7 @@ describe('<ParentChildForm />', () => {
         );
 
         await mountComponent(
-          [
-            createPerson,
-            createAge,
-            createParentChild,
-            getUserForHomeContainerQuery(),
-          ],
+          [createPerson, createAge, createParentChild, getUserPeopleQuery()],
           defaultProps,
         );
         form = formUtils<ParentFormData>(component.find(Form));

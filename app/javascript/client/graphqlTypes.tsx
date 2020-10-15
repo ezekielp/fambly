@@ -470,6 +470,7 @@ export type Place = {
 export type Query = {
   __typename?: 'Query';
   parentChildRelationshipByParentIdAndChildId?: Maybe<ParentChild>;
+  people?: Maybe<Array<Person>>;
   personById?: Maybe<Person>;
   siblingRelationshipBySiblingIds?: Maybe<SiblingRelationship>;
   user?: Maybe<User>;
@@ -1057,6 +1058,22 @@ export type UpdateParentChildRelationshipMutation = (
   ) }
 );
 
+export type GetUserPeopleQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserPeopleQuery = (
+  { __typename?: 'Query' }
+  & { people?: Maybe<Array<(
+    { __typename?: 'Person' }
+    & UserPersonInfoFragment
+  )>> }
+);
+
+export type UserPersonInfoFragment = (
+  { __typename?: 'Person' }
+  & Pick<Person, 'id' | 'firstName' | 'lastName'>
+);
+
 export type GetParentChildRelationshipQueryVariables = Exact<{
   input: ParentChildInput;
 }>;
@@ -1370,6 +1387,13 @@ export const PersonInfoFragmentDoc = gql`
 }
     ${SubContactInfoFragmentDoc}
 ${PersonPlaceInfoFragmentDoc}`;
+export const UserPersonInfoFragmentDoc = gql`
+    fragment UserPersonInfo on Person {
+  id
+  firstName
+  lastName
+}
+    `;
 export const GetUserDocument = gql`
     query GetUser {
   user {
@@ -2210,6 +2234,38 @@ export function useUpdateParentChildRelationshipMutation(baseOptions?: Apollo.Mu
 export type UpdateParentChildRelationshipMutationHookResult = ReturnType<typeof useUpdateParentChildRelationshipMutation>;
 export type UpdateParentChildRelationshipMutationResult = Apollo.MutationResult<UpdateParentChildRelationshipMutation>;
 export type UpdateParentChildRelationshipMutationOptions = Apollo.BaseMutationOptions<UpdateParentChildRelationshipMutation, UpdateParentChildRelationshipMutationVariables>;
+export const GetUserPeopleDocument = gql`
+    query GetUserPeople {
+  people {
+    ...UserPersonInfo
+  }
+}
+    ${UserPersonInfoFragmentDoc}`;
+
+/**
+ * __useGetUserPeopleQuery__
+ *
+ * To run a query within a React component, call `useGetUserPeopleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserPeopleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserPeopleQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserPeopleQuery(baseOptions?: Apollo.QueryHookOptions<GetUserPeopleQuery, GetUserPeopleQueryVariables>) {
+        return Apollo.useQuery<GetUserPeopleQuery, GetUserPeopleQueryVariables>(GetUserPeopleDocument, baseOptions);
+      }
+export function useGetUserPeopleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserPeopleQuery, GetUserPeopleQueryVariables>) {
+          return Apollo.useLazyQuery<GetUserPeopleQuery, GetUserPeopleQueryVariables>(GetUserPeopleDocument, baseOptions);
+        }
+export type GetUserPeopleQueryHookResult = ReturnType<typeof useGetUserPeopleQuery>;
+export type GetUserPeopleLazyQueryHookResult = ReturnType<typeof useGetUserPeopleLazyQuery>;
+export type GetUserPeopleQueryResult = Apollo.QueryResult<GetUserPeopleQuery, GetUserPeopleQueryVariables>;
 export const GetParentChildRelationshipDocument = gql`
     query GetParentChildRelationship($input: ParentChildInput!) {
   parentChildRelationshipByParentIdAndChildId(input: $input) {
