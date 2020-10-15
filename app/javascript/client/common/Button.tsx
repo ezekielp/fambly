@@ -13,6 +13,7 @@ export const Button = styled.button`
   padding: 0.5rem 1.5rem;
   margin-right: ${({ marginRight }: ButtonProps) =>
     marginRight ? marginRight : '0'};
+  text-align: center;
 
   &:active {
     background: ${colors.orange};

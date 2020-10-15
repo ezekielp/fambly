@@ -117,7 +117,7 @@ interface SwatchProps extends Omit<HTMLProps<HTMLDivElement>, 'as' | 'ref'> {
 }
 
 export const Swatch = styled.div`
-  height: 20px;
+  height: fit-content;
   padding: 0.5rem 1rem;
   background-color: ${({ swatchColor }: SwatchProps) =>
     swatchColor ? swatchColor : `${colors.white}`};
@@ -134,6 +134,7 @@ export const Swatch = styled.div`
   margin-right: 10px;
   margin-bottom: ${({ marginBottom }: SwatchProps) =>
     marginBottom ? marginBottom : '0'};
+  text-align: center;
 `;
 
 const PersonTagFormValidationSchema = yup.object().shape({
