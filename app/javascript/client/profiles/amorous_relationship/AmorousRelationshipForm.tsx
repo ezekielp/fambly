@@ -26,6 +26,14 @@ import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
 import { FormikAutosuggest } from 'client/form/FormikAutosuggest';
+import {
+  MONTH_OPTIONS,
+  determineDaysOptions,
+  FEBRUARY_DAYS_OPTIONS,
+  THIRTY_DAYS_OPTIONS,
+  THIRTY_ONE_DAYS_OPTIONS,
+} from 'client/profiles/birthdate/utils';
+import { PARTNER_TYPE_OPTIONS } from './utils';
 
 gql`
   mutation CreateAmorousRelationship($input: CreateAmorousRelationshipInput!) {
@@ -136,6 +144,7 @@ export interface AmorousRelationshipFormProps {
   setModalOpen?: (bool: boolean) => void;
   relations: SubContactInfoFragment[];
   propRelationshipType: string;
+  partnerFirstName?: string;
 }
 
 export const blankInitialValues = {
@@ -164,6 +173,7 @@ export const AmorousRelationshipForm: FC<AmorousRelationshipFormProps> = ({
   setModalOpen,
   relations,
   propRelationshipType,
+  partnerFirstName,
 }) => {
   const [
     createAmorousRelationshipMutation,
@@ -263,8 +273,41 @@ export const AmorousRelationshipForm: FC<AmorousRelationshipFormProps> = ({
         validationSchema={AmorousRelationshipFormValidationSchema}
       >
         {({ values, isSubmitting, status }) => {
+          const startDaysOptions = determineDaysOptions(
+            values.startMonth,
+            FEBRUARY_DAYS_OPTIONS,
+            THIRTY_DAYS_OPTIONS,
+            THIRTY_ONE_DAYS_OPTIONS,
+          );
+          const endDaysOptions = determineDaysOptions(
+            values.endMonth,
+            FEBRUARY_DAYS_OPTIONS,
+            THIRTY_DAYS_OPTIONS,
+            THIRTY_ONE_DAYS_OPTIONS,
+          );
           return (
             <Form>
+              {setEditFlag && partnerFirstName && (
+                <Field
+                  name="current"
+                  label=""
+                  component={FormikCheckboxGroup}
+                  options={[
+                    {
+                      label: `${personFirstName} and ${partnerFirstName} are still together?`,
+                      value: 'current',
+                    },
+                  ]}
+                />
+              )}
+              {setEditFlag && (
+                <Field
+                  name="siblingType"
+                  label="Type of sibling (optional)"
+                  component={FormikSelectInput}
+                  options={PARTNER_TYPE_OPTIONS}
+                />
+              )}
               {setFieldToAdd && (
                 <Field
                   name="newOrCurrentContact"
@@ -326,6 +369,56 @@ export const AmorousRelationshipForm: FC<AmorousRelationshipFormProps> = ({
                     )}
                   </Field>
                 )}
+              <Field
+                name="startYear"
+                label="Start year (optional)"
+                component={FormikNumberInput}
+              />
+              <Field
+                name="startMonth"
+                label="Start month (optional)"
+                component={FormikSelectInput}
+                options={MONTH_OPTIONS}
+              />
+              <Field
+                name="startDay"
+                label="Start day (optional)"
+                component={FormikSelectInput}
+                options={startDaysOptions}
+              />
+              {values.current.length === 0 && (
+                <>
+                  <Field
+                    name="endYear"
+                    label="End year (optional)"
+                    component={FormikNumberInput}
+                  />
+                  <Field
+                    name="endMonth"
+                    label="End month (optional)"
+                    component={FormikSelectInput}
+                    options={MONTH_OPTIONS}
+                  />
+                  <Field
+                    name="endDay"
+                    label="End day (optional)"
+                    component={FormikSelectInput}
+                    options={endDaysOptions}
+                  />
+                </>
+              )}
+              {setFieldToAdd && (
+                <Field
+                  name="note"
+                  label="Note (optional)"
+                  component={FormikTextArea}
+                />
+              )}
+              {status && <GlobalError>{status}</GlobalError>}
+              <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
+                Save
+              </Button>
+              <Button onClick={() => cancel()}>Cancel</Button>
             </Form>
           );
         }}
