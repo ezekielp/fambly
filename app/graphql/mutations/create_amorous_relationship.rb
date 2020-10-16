@@ -6,6 +6,13 @@ module Types
     argument :partner_one_id, ID, required: true
     argument :partner_two_id, ID, required: false
     argument :relationship_type, String, required: false
+    argument :current, Boolean, required: false
+    argument :start_year, Int, required: false
+    argument :start_month, Int, required: false
+    argument :start_day, Int, required: false
+    argument :end_year, Int, required: false
+    argument :end_month, Int, required: false
+    argument :end_day, Int, required: false
     argument :note, String, required: false
   end
 end
@@ -17,14 +24,20 @@ module Mutations
     field :amorous_relationship, Types::AmorousRelationshipType, null: true
 
     def resolve(input:)
-      amorous_relationship = nil
+      amorous_relationship = AmorousRelationship.new(
+        partner_one_id: input.partner_one_id,
+        relationship_type: input.relationship_type,
+        current: input.current ? input.current : true,
+        start_year: input.start_year,
+        start_month: input.start_month,
+        start_day: input.start_day,
+        end_year: input.end_year,
+        end_month: input.end_month,
+        end_day: input.end_day
+      )
 
       if input.partner_two_id
-        amorous_relationship = AmorousRelationship.new(
-          partner_one_id: input.partner_one_id,
-          partner_two_id: input.partner_two_id,
-          relationship_type: input.relationship_type
-        )
+        amorous_relationship.partner_two_id = input.partner_two_id
       else
         new_person = Person.new(
           user_id: current_user.id,
@@ -33,17 +46,13 @@ module Mutations
           show_on_dashboard: input.show_on_dashboard
         )
         if new_person.save
-          amorous_relationship = AmorousRelationship.new(
-            partner_one_id: input.partner_one_id,
-            partner_two_id: new_person.id,
-            relationship_type: input.relationship_type
-          )
+          amorous_relationship.partner_two_id = new_person.id
         else
           return { errors: [{ path: '', message: 'Oops! Something went wrong. Please refresh the page and try again.' }] }
         end
       end
 
-      if amorous_relationship && amorous_relationship.save
+      if amorous_relationship.save
         if input.note
           amorous_relationship_note = Note.new(
             content: input.note,

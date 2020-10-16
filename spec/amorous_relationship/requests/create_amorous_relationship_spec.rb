@@ -7,6 +7,12 @@ RSpec.describe 'create_amorous_relationship mutation', type: :request do
   let(:partner_one) { Person.create(user_id: user.id, first_name: 'Marie', last_name: 'Curie') }
   let(:partner_two) { Person.create(user_id: user.id, first_name: 'Pierre', last_name: 'Curie') }
   let(:relationship_type) { 'marriage' }
+  let(:start_year) { 1895 }
+  let(:start_month) { 7 }
+  let(:start_day) { 26 }
+  let(:end_year) { 1906 }
+  let(:end_month) { 4 }
+  let(:end_day) { 19 }
   let(:query_string) do
     "
         mutation CreateAmorousRelationship($input: CreateAmorousRelationshipInput!) {
@@ -24,6 +30,13 @@ RSpec.describe 'create_amorous_relationship mutation', type: :request do
                       lastName
                     }
                     relationshipType
+                    current
+                    startYear
+                    startMonth
+                    startDay
+                    endYear
+                    endMonth
+                    endDay
                 }
                 errors {
                     path
@@ -42,12 +55,19 @@ RSpec.describe 'create_amorous_relationship mutation', type: :request do
               partnerOneId: partner_one.id,
               partnerTwoId: partner_two.id,
               relationshipType: relationship_type,
+              current: false,
+              startYear: start_year,
+              startMonth: start_month,
+              startDay: start_day,
+              endYear: end_year,
+              endMonth: end_month,
+              endDay: end_day,
           }
       }
 
       post(
         endpoint,
-        params: { query: query_string, variables: variables }
+        params: { query: query_string, variables: variables.to_json }
       )
 
       amorous_relationship = JSON.parse(response.body).dig('data', 'createAmorousRelationship', 'amorousRelationship')
@@ -74,7 +94,7 @@ RSpec.describe 'create_amorous_relationship mutation', type: :request do
 
       post(
         endpoint,
-        params: { query: query_string, variables: variables }
+        params: { query: query_string, variables: variables.to_json }
       )
             
       amorous_relationship = JSON.parse(response.body).dig('data', 'createAmorousRelationship', 'amorousRelationship')
