@@ -168,6 +168,16 @@ export const AmorousRelationshipForm: FC<AmorousRelationshipFormProps> = ({
   const [
     createAmorousRelationshipMutation,
   ] = useCreateAmorousRelationshipMutation();
+  const { data: userPeople } = useGetUserPeopleQuery();
+  const personRelationIds = new Set(relations.map((person) => person.id));
+  personRelationIds.add(partnerOneId);
+  const filteredPeople = userPeople?.people
+    ? filterOutRelationsFromAndSortPeople(userPeople.people, personRelationIds)
+    : [];
+  const [peopleSuggestions, setPeopleSuggestions] = useState(filteredPeople);
+  const [partnerTwoInputValue, setPartnerTwoInputValue] = useState('');
+
+  const formHeader = propRelationshipType === 'marriage' ? 'Spouse' : 'Partner';
 
   const cancel = () => {
     if (setFieldToAdd) {
@@ -186,7 +196,6 @@ export const AmorousRelationshipForm: FC<AmorousRelationshipFormProps> = ({
       firstName,
       lastName,
       formPartnerId,
-      newOrCurrentContact,
       showOnDashboard,
       current,
       formRelationshipType,
@@ -208,6 +217,7 @@ export const AmorousRelationshipForm: FC<AmorousRelationshipFormProps> = ({
               firstName: firstName ? firstName : null,
               lastName: lastName ? lastName : null,
               showOnDashboard: showOnDashboard.length > 0 ? true : false,
+              current: current.length > 0 ? true : false,
               partnerOneId,
               partnerTwoId: formPartnerId ? formPartnerId : null,
               relationshipType: formRelationshipType
@@ -219,6 +229,7 @@ export const AmorousRelationshipForm: FC<AmorousRelationshipFormProps> = ({
               endYear,
               endMonth: endMonth ? parseInt(endMonth) : null,
               endDay: endDay ? parseInt(endDay) : null,
+              note: note ? note : null,
             },
           },
         },
@@ -239,4 +250,86 @@ export const AmorousRelationshipForm: FC<AmorousRelationshipFormProps> = ({
       }
     }
   };
+
+  return (
+    <>
+      <Text marginBottom={3} fontSize={4} bold>
+        {formHeader}
+      </Text>
+      <SectionDivider />
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={AmorousRelationshipFormValidationSchema}
+      >
+        {({ values, isSubmitting, status }) => {
+          return (
+            <Form>
+              {setFieldToAdd && (
+                <Field
+                  name="newOrCurrentContact"
+                  label=""
+                  component={FormikRadioGroup}
+                  options={NEW_OR_CURRENT_CONTACT_OPTIONS}
+                />
+              )}
+              {values.newOrCurrentContact === 'new_person' && (
+                <>
+                  <Field
+                    name="showOnDashboard"
+                    label=""
+                    component={FormikCheckboxGroup}
+                    options={[
+                      {
+                        label: `Add this person to your dashboard of contacts? (Even if you don't add them to your dashboard, you will always be able to access and add to their profile from ${personFirstName}'s page.)`,
+                        value: 'showOnDashboard',
+                      },
+                    ]}
+                  />
+                  <Field
+                    name="firstName"
+                    label="First name"
+                    component={FormikTextInput}
+                    type="test"
+                  />
+                  <Field
+                    name="lastName"
+                    label="Last name (optional)"
+                    component={FormikTextInput}
+                    type="test"
+                  />
+                </>
+              )}
+              {values.newOrCurrentContact === 'current_person' &&
+                setFieldToAdd && (
+                  <Field name="formPartnerId">
+                    {({ form }: FieldProps) => (
+                      <FormikAutosuggest<SubContactInfoFragment>
+                        records={filteredPeople}
+                        suggestions={peopleSuggestions}
+                        setSuggestions={setPeopleSuggestions}
+                        getSuggestionValue={getFullNameFromPerson}
+                        inputValue={partnerTwoInputValue}
+                        onSuggestionSelected={(event, data) => {
+                          form.setFieldValue(
+                            'formPartnerId',
+                            data.suggestion.id,
+                          );
+                          setPartnerTwoInputValue(
+                            getFullNameFromPerson(data.suggestion),
+                          );
+                        }}
+                        onChange={(event) => {
+                          setPartnerTwoInputValue(event.target.value);
+                        }}
+                      />
+                    )}
+                  </Field>
+                )}
+            </Form>
+          );
+        }}
+      </Formik>
+    </>
+  );
 };
