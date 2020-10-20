@@ -33,11 +33,7 @@ export const getPartnerTypeText = (
   if (current) {
     return typeText;
   } else {
-    if (typeText !== '') {
-      return 'ex-' + typeText;
-    } else {
-      return 'ex';
-    }
+    return 'ex-' + typeText;
   }
 };
 

@@ -30,7 +30,7 @@ module Mutations
       amorous_relationship = AmorousRelationship.new(
         partner_one_id: input.partner_one_id,
         relationship_type: input.relationship_type,
-        current: input.current ? input.current : true,
+        current: input.current != nil ? input.current : true,
         start_year: input.start_year,
         start_month: input.start_month,
         start_day: input.start_day,

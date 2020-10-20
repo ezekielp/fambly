@@ -324,6 +324,15 @@ export const AmorousPartnerForm: FC<AmorousPartnerFormProps> = ({
             THIRTY_DAYS_OPTIONS,
             THIRTY_ONE_DAYS_OPTIONS,
           );
+          const showEndDatesFlag = (): boolean => {
+            if (
+              (setFieldToAdd && propCurrent === false) ||
+              (setEditFlag && values.current.length === 0)
+            ) {
+              return true;
+            }
+            return false;
+          };
           return (
             <Form>
               {setEditFlag && partnerFirstName && (
@@ -446,7 +455,7 @@ export const AmorousPartnerForm: FC<AmorousPartnerFormProps> = ({
                   />
                 </>
               )}
-              {values.current.length === 0 && (
+              {showEndDatesFlag && (
                 <>
                   <Field
                     name="endYear"
