@@ -10,6 +10,9 @@ module Types
     argument :start_year, Int, required: false
     argument :start_month, Int, required: false
     argument :start_day, Int, required: false
+    argument :wedding_year, Int, required: false
+    argument :wedding_month, Int, required: false
+    argument :wedding_day, Int, required: false
     argument :end_year, Int, required: false
     argument :end_month, Int, required: false
     argument :end_day, Int, required: false
@@ -31,6 +34,9 @@ module Mutations
         start_year: input.start_year,
         start_month: input.start_month,
         start_day: input.start_day,
+        wedding_year: input.wedding_year,
+        wedding_month: input.wedding_month,
+        wedding_day: input.wedding_day,
         end_year: input.end_year,
         end_month: input.end_month,
         end_day: input.end_day

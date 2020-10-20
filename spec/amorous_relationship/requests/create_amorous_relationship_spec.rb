@@ -7,9 +7,10 @@ RSpec.describe 'create_amorous_relationship mutation', type: :request do
   let(:partner_one) { Person.create(user_id: user.id, first_name: 'Marie', last_name: 'Curie') }
   let(:partner_two) { Person.create(user_id: user.id, first_name: 'Pierre', last_name: 'Curie') }
   let(:relationship_type) { 'marriage' }
-  let(:start_year) { 1895 }
-  let(:start_month) { 7 }
-  let(:start_day) { 26 }
+  let(:start_year) { 1894 }
+  let(:wedding_year) { 1895 }
+  let(:wedding_month) { 7 }
+  let(:wedding_day) { 26 }
   let(:end_year) { 1906 }
   let(:end_month) { 4 }
   let(:end_day) { 19 }
@@ -34,6 +35,9 @@ RSpec.describe 'create_amorous_relationship mutation', type: :request do
                     startYear
                     startMonth
                     startDay
+                    weddingYear
+                    weddingMonth
+                    weddingDay
                     endYear
                     endMonth
                     endDay
@@ -57,8 +61,9 @@ RSpec.describe 'create_amorous_relationship mutation', type: :request do
               relationshipType: relationship_type,
               current: false,
               startYear: start_year,
-              startMonth: start_month,
-              startDay: start_day,
+              weddingYear: wedding_year,
+              weddingMonth: wedding_month,
+              weddingDay: wedding_day,
               endYear: end_year,
               endMonth: end_month,
               endDay: end_day,
@@ -71,6 +76,7 @@ RSpec.describe 'create_amorous_relationship mutation', type: :request do
       )
 
       amorous_relationship = JSON.parse(response.body).dig('data', 'createAmorousRelationship', 'amorousRelationship')
+      # debugger
       expect(amorous_relationship['partnerOne']['firstName']).to eq(partner_one.first_name)
       expect(amorous_relationship['partnerTwo']['firstName']).to eq(partner_two.first_name)
       expect(partner_one.partners[0].first_name).to eq(partner_two.first_name)

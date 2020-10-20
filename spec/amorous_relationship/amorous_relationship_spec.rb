@@ -38,11 +38,14 @@ RSpec.describe AmorousRelationship, type: :model do
   let(:invalid_month) { 50 }
   let(:valid_day) { 8 }
   let(:invalid_day) { 88 }
-  let(:valid_year) { 1937 }
+  let(:valid_year) { 1894 }
   let(:invalid_year) { 2937 }
-  let(:end_year) { 1974 }
+  let(:wedding_year) { 1895 }
+  let(:wedding_month) { 7 }
+  let(:wedding_day) { 26 }
+  let(:end_year) { 1906 }
   let(:end_month) { 4 }
-  let(:end_day) { 27 }
+  let(:end_day) { 19 }
   let(:amorous_relationship) { AmorousRelationship.new(partner_one_id: partner_one.id, partner_two_id: partner_two.id) }
 
   describe 'ActiveModel validations' do
@@ -55,6 +58,9 @@ RSpec.describe AmorousRelationship, type: :model do
         start_year: valid_year,
         start_month: valid_month,
         start_day: valid_day,
+        wedding_year: wedding_year,
+        wedding_month: wedding_month,
+        wedding_day: wedding_day,
         end_year: end_year,
         end_month: end_month,
         end_day: end_day

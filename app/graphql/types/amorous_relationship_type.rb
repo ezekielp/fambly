@@ -8,6 +8,9 @@ module Types
     field :start_day, Int, null: true
     field :start_month, Int, null: true
     field :start_year, Int, null: true
+    field :wedding_day, Int, null: true
+    field :wedding_month, Int, null: true
+    field :wedding_year, Int, null: true
     field :end_day, Int, null: true
     field :end_month, Int, null: true
     field :end_year, Int, null: true

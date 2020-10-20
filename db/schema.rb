@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_15_213436) do
+ActiveRecord::Schema.define(version: 2020_10_20_185650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -29,6 +29,9 @@ ActiveRecord::Schema.define(version: 2020_10_15_213436) do
     t.integer "end_day"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "wedding_year"
+    t.integer "wedding_month"
+    t.integer "wedding_day"
     t.index ["partner_one_id"], name: "index_amorous_relationships_on_partner_one_id"
     t.index ["partner_two_id"], name: "index_amorous_relationships_on_partner_two_id"
   end
