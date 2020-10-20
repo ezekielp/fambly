@@ -72,3 +72,17 @@ export const filterOutRelationsFromAndSortPeople = (
 
 export const getFullNameFromPerson = (person: SubContactInfoFragment): string =>
   person.lastName ? person.firstName + ' ' + person.lastName : person.firstName;
+
+export const getLastNameContent = (
+  personOneLastName: string | null | undefined,
+  personTwoLastName: string | null | undefined,
+): string => {
+  if (
+    !personOneLastName ||
+    (personTwoLastName && personTwoLastName === personOneLastName)
+  ) {
+    return '';
+  } else {
+    return ` ${personOneLastName}`;
+  }
+};

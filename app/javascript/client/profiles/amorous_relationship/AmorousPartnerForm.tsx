@@ -55,6 +55,9 @@ gql`
         startYear
         startMonth
         startDay
+        weddingYear
+        weddingMonth
+        weddingDay
         endYear
         endMonth
         endDay
@@ -71,7 +74,7 @@ gql`
   }
 `;
 
-const AmorousRelationshipFormValidationSchema = yup.object().shape({
+const AmorousPartnerFormValidationSchema = yup.object().shape({
   firstName: yup.string().when('newOrCurrentContact', {
     is: (val: string) => val === 'new_person',
     then: yup
@@ -98,6 +101,22 @@ const AmorousRelationshipFormValidationSchema = yup.object().shape({
         .nullable(),
     }),
   startDay: yup.number().integer().positive().nullable(),
+  weddingYear: yup.number().integer().positive().nullable(),
+  weddingMonth: yup
+    .number()
+    .integer()
+    .positive()
+    .nullable()
+    .when('weddingDay', {
+      is: (val) => val !== undefined && val !== null,
+      then: yup
+        .number()
+        .integer()
+        .positive()
+        .required('Month is required if you specify a day')
+        .nullable(),
+    }),
+  weddingDay: yup.number().integer().positive().nullable(),
   endYear: yup.number().integer().positive().nullable(),
   endMonth: yup
     .number()
@@ -118,7 +137,7 @@ const AmorousRelationshipFormValidationSchema = yup.object().shape({
   note: yup.string(),
 });
 
-export interface AmorousRelationshipFormData {
+export interface AmorousPartnerFormData {
   firstName?: string;
   lastName?: string;
   formPartnerId: string;
@@ -129,17 +148,20 @@ export interface AmorousRelationshipFormData {
   startYear?: number | null;
   startMonth?: string;
   startDay?: string;
+  weddingYear?: number | null;
+  weddingMonth?: string;
+  weddingDay?: string;
   endYear?: number | null;
   endMonth?: string;
   endDay?: string;
   note?: string;
 }
 
-export interface AmorousRelationshipFormProps {
+export interface AmorousPartnerFormProps {
   setFieldToAdd?: (field: string) => void;
   personFirstName?: string;
   partnerOneId: string;
-  initialValues?: AmorousRelationshipFormData;
+  initialValues?: AmorousPartnerFormData;
   setEditFlag?: (bool: boolean) => void;
   setModalOpen?: (bool: boolean) => void;
   relations: SubContactInfoFragment[];
@@ -158,13 +180,16 @@ export const blankInitialValues = {
   startYear: null,
   startMonth: '',
   startDay: '',
+  weddingYear: null,
+  weddingMonth: '',
+  weddingDay: '',
   endYear: null,
   endMonth: '',
   endDay: '',
   note: '',
 };
 
-export const AmorousRelationshipForm: FC<AmorousRelationshipFormProps> = ({
+export const AmorousPartnerForm: FC<AmorousPartnerFormProps> = ({
   setFieldToAdd,
   personFirstName,
   partnerOneId,
@@ -199,8 +224,8 @@ export const AmorousRelationshipForm: FC<AmorousRelationshipFormProps> = ({
   };
 
   const handleSubmit = async (
-    data: AmorousRelationshipFormData,
-    formikHelpers: FormikHelpers<AmorousRelationshipFormData>,
+    data: AmorousPartnerFormData,
+    formikHelpers: FormikHelpers<AmorousPartnerFormData>,
   ) => {
     const {
       firstName,
@@ -212,6 +237,9 @@ export const AmorousRelationshipForm: FC<AmorousRelationshipFormProps> = ({
       startYear,
       startMonth,
       startDay,
+      weddingYear,
+      weddingMonth,
+      weddingDay,
       endYear,
       endMonth,
       endDay,
@@ -236,6 +264,9 @@ export const AmorousRelationshipForm: FC<AmorousRelationshipFormProps> = ({
               startYear,
               startMonth: startMonth ? parseInt(startMonth) : null,
               startDay: startDay ? parseInt(startDay) : null,
+              weddingYear,
+              weddingMonth: weddingMonth ? parseInt(weddingMonth) : null,
+              weddingDay: weddingDay ? parseInt(weddingDay) : null,
               endYear,
               endMonth: endMonth ? parseInt(endMonth) : null,
               endDay: endDay ? parseInt(endDay) : null,
@@ -250,7 +281,7 @@ export const AmorousRelationshipForm: FC<AmorousRelationshipFormProps> = ({
           ?.createAmorousRelationship.errors;
 
       if (createAmorousRelationshipErrors) {
-        handleFormErrors<AmorousRelationshipFormData>(
+        handleFormErrors<AmorousPartnerFormData>(
           createAmorousRelationshipErrors,
           setErrors,
           setStatus,
@@ -270,11 +301,17 @@ export const AmorousRelationshipForm: FC<AmorousRelationshipFormProps> = ({
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}
-        validationSchema={AmorousRelationshipFormValidationSchema}
+        validationSchema={AmorousPartnerFormValidationSchema}
       >
         {({ values, isSubmitting, status }) => {
           const startDaysOptions = determineDaysOptions(
             values.startMonth,
+            FEBRUARY_DAYS_OPTIONS,
+            THIRTY_DAYS_OPTIONS,
+            THIRTY_ONE_DAYS_OPTIONS,
+          );
+          const weddingDaysOptions = determineDaysOptions(
+            values.weddingMonth,
             FEBRUARY_DAYS_OPTIONS,
             THIRTY_DAYS_OPTIONS,
             THIRTY_ONE_DAYS_OPTIONS,
@@ -386,6 +423,27 @@ export const AmorousRelationshipForm: FC<AmorousRelationshipFormProps> = ({
                 component={FormikSelectInput}
                 options={startDaysOptions}
               />
+              {propRelationshipType === 'marriage' && (
+                <>
+                  <Field
+                    name="weddingYear"
+                    label="Wedding year (optional)"
+                    component={FormikNumberInput}
+                  />
+                  <Field
+                    name="weddingMonth"
+                    label="Wedding month (optional)"
+                    component={FormikSelectInput}
+                    options={MONTH_OPTIONS}
+                  />
+                  <Field
+                    name="weddingDay"
+                    label="Wedding day (optional)"
+                    component={FormikSelectInput}
+                    options={weddingDaysOptions}
+                  />
+                </>
+              )}
               {values.current.length === 0 && (
                 <>
                   <Field
