@@ -63,7 +63,6 @@ export const PersonFieldsInput: FC<PersonFieldsInputProps> = ({
             <option value="exPartner">
               Former partner (ex-boyfriend / ex-girlfriend)
             </option>
-            <option></option>
           </optgroup>
           <optgroup label="Family">
             <option value="child">Child</option>

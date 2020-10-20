@@ -23,13 +23,6 @@ import {
   partnerTypeColors,
   relationshipDatesColors,
 } from './utils';
-import styled from 'styled-components';
-
-const AmorousPartnerItemContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
 
 gql`
   query GetAmorousRelationship($input: AmorousRelationshipInput!) {
@@ -177,7 +170,9 @@ export const AmorousPartnerItem: FC<AmorousPartnerItemProps> = ({
                     partnerTypeColors[relationshipType]['backgroundColor']
                   }
                   textColor={partnerTypeColors[relationshipType]['textColor']}
-                  marginBottom="5px"
+                  marginBottom={
+                    anniversaryDateText || startAndEndDatesText ? '5px' : '0'
+                  }
                 >
                   {getPartnerTypeText(relationshipType, gender, current)}
                 </FieldBadge>
@@ -190,7 +185,7 @@ export const AmorousPartnerItem: FC<AmorousPartnerItemProps> = ({
                   textColor={
                     relationshipDatesColors['anniversary']['textColor']
                   }
-                  marginBottom="5px"
+                  marginBottom={startAndEndDatesText ? '5px' : '0'}
                 >
                   anniversary: {anniversaryDateText}
                 </FieldBadge>
