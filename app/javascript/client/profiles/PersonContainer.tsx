@@ -23,6 +23,8 @@ import { SiblingForm } from './sibling/SiblingForm';
 import { ParentsContainer } from './parent_child/ParentsContainer';
 import { ChildrenContainer } from './parent_child/ChildrenContainer';
 import { SiblingsContainer } from './sibling/SiblingsContainer';
+import { AmorousPartnerForm } from './amorous_relationship/AmorousPartnerForm';
+import { AmorousPartnersContainer } from './amorous_relationship/AmorousPartnersContainer';
 import { PersonPlaceForm } from './person_place/PersonPlaceForm';
 import { PersonPlacesContainer } from './person_place/PersonPlacesContainer';
 import { PersonFieldsInput } from './PersonFieldsInput';
@@ -76,6 +78,9 @@ gql`
       ...SubContactInfo
     }
     siblings {
+      ...SubContactInfo
+    }
+    partners {
       ...SubContactInfo
     }
     personPlaces {
@@ -229,12 +234,14 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
     parents,
     children,
     siblings,
+    partners,
     personPlaces,
   } = personData.personById;
 
   const relations = (parents ? parents : [])
     .concat(children ? children : [])
-    .concat(siblings ? siblings : []);
+    .concat(siblings ? siblings : [])
+    .concat(partners ? partners : []);
 
   const hasAge = age || monthsOld;
   const hasBirthdate = birthYear || birthMonth;
@@ -327,6 +334,54 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
           <NoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
         </Modal>
       )}
+      {fieldToAdd === 'spouse' && (
+        <Modal onClose={() => setFieldToAdd('')}>
+          <AmorousPartnerForm
+            setFieldToAdd={setFieldToAdd}
+            partnerOneId={personId}
+            personFirstName={firstName}
+            relations={relations}
+            propRelationshipType="marriage"
+            propCurrent={true}
+          />
+        </Modal>
+      )}
+      {fieldToAdd === 'exSpouse' && (
+        <Modal onClose={() => setFieldToAdd('')}>
+          <AmorousPartnerForm
+            setFieldToAdd={setFieldToAdd}
+            partnerOneId={personId}
+            personFirstName={firstName}
+            relations={relations}
+            propRelationshipType="marriage"
+            propCurrent={false}
+          />
+        </Modal>
+      )}
+      {fieldToAdd === 'partner' && (
+        <Modal onClose={() => setFieldToAdd('')}>
+          <AmorousPartnerForm
+            setFieldToAdd={setFieldToAdd}
+            partnerOneId={personId}
+            personFirstName={firstName}
+            relations={relations}
+            propRelationshipType="dating"
+            propCurrent={true}
+          />
+        </Modal>
+      )}
+      {fieldToAdd === 'exPartner' && (
+        <Modal onClose={() => setFieldToAdd('')}>
+          <AmorousPartnerForm
+            setFieldToAdd={setFieldToAdd}
+            partnerOneId={personId}
+            personFirstName={firstName}
+            relations={relations}
+            propRelationshipType="dating"
+            propCurrent={false}
+          />
+        </Modal>
+      )}
       {fieldToAdd === 'parent' && (
         <Modal onClose={() => setFieldToAdd('')}>
           <ParentForm
@@ -394,6 +449,18 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
           birthDay={birthDay}
           personId={personId}
         />
+      )}
+      {partners && partners.length > 0 && (
+        <>
+          <SectionDivider />
+          <Subheading>Relationships</Subheading>
+          <AmorousPartnersContainer
+            amorousPartners={partners}
+            otherPartnerLastName={lastName}
+            otherPartnerId={personId}
+            relations={relations}
+          />
+        </>
       )}
       {hasFamily && (
         <>

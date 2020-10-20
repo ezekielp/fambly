@@ -69,7 +69,7 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = ({
 
   const birthdateLabel = birthMonth && birthDay ? 'birthdate' : 'birth year';
 
-  const birthdateText = (
+  const getBirthdateText = (
     year: number | null | undefined,
     month: string,
     day: string,
@@ -124,7 +124,7 @@ export const BirthdateContainer: FC<BirthdateContainerProps> = ({
         <ProfileFieldContainer>
           <ProfileLabel>{birthdateLabel}</ProfileLabel>
           <BirthdateTextContainer>
-            {birthdateText(birthYear, month, day)}
+            {getBirthdateText(birthYear, month, day)}
           </BirthdateTextContainer>
           <Dropdown
             menuItems={dropdownItems}

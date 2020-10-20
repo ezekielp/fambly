@@ -14,6 +14,9 @@ module Types
     field :sibling_relationship_by_sibling_ids, Types::SiblingRelationshipType, null: true do
       argument :input, Types::SiblingRelationshipInputType, required: true
     end
+    field :amorous_relationship_by_partner_ids, Types::AmorousRelationshipType, null: true do
+      argument :input, Types::AmorousRelationshipInputType, required: true
+    end
 
     delegate :logged_in?,
              :current_user,
@@ -61,6 +64,13 @@ module Types
 
       SiblingRelationship.find_by(sibling_one_id: args[:input][:sibling_one_id], sibling_two_id: args[:input][:sibling_two_id]) ||
       SiblingRelationship.find_by(sibling_one_id: args[:input][:sibling_two_id], sibling_two_id: args[:input][:sibling_one_id])
+    end
+
+    def amorous_relationship_by_partner_ids(args)
+      return nil unless args
+
+      AmorousRelationship.find_by(partner_one_id: args[:input][:partner_one_id], partner_two_id: args[:input][:partner_two_id]) || 
+      AmorousRelationship.find_by(partner_one_id: args[:input][:partner_two_id], partner_two_id: args[:input][:partner_one_id])
     end
   end
 end

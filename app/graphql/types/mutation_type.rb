@@ -33,6 +33,9 @@ module Types
     field :update_sibling_relationship, mutation: Mutations::UpdateSiblingRelationship
     field :delete_sibling_relationship, mutation: Mutations::DeleteSiblingRelationship
 
+    # Amorous relationship
+    field :create_amorous_relationship, mutation: Mutations::CreateAmorousRelationship
+
     # Person-places
     field :create_person_place, mutation: Mutations::CreatePersonPlace
     field :update_person_place, mutation: Mutations::UpdatePersonPlace

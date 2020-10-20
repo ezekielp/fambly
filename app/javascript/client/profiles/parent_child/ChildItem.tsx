@@ -14,7 +14,7 @@ import { colors } from 'client/shared/styles';
 import { Dropdown } from 'client/common/Dropdown';
 import { Text } from 'client/common/Text';
 import { Button } from 'client/common/Button';
-import { getAgeContent } from 'client/profiles/utils';
+import { getAgeContent, getLastNameContent } from 'client/profiles/utils';
 
 interface ChildItemProps {
   child: SubContactInfoFragment;
@@ -73,19 +73,19 @@ export const ChildItem: FC<ChildItemProps> = ({
     { label: 'Delete', onClick: () => setModalOpen(true) },
   ];
 
-  const getLastNameContent = (
-    childLastName: string | null | undefined,
-    parentLastName: string | null | undefined,
-  ) => {
-    if (
-      !childLastName ||
-      (parentLastName && parentLastName === childLastName)
-    ) {
-      return '';
-    } else {
-      return ` ${childLastName}`;
-    }
-  };
+  // const getLastNameContent = (
+  //   childLastName: string | null | undefined,
+  //   parentLastName: string | null | undefined,
+  // ) => {
+  //   if (
+  //     !childLastName ||
+  //     (parentLastName && parentLastName === childLastName)
+  //   ) {
+  //     return '';
+  //   } else {
+  //     return ` ${childLastName}`;
+  //   }
+  // };
 
   const parentType =
     parentChildData?.parentChildRelationshipByParentIdAndChildId?.parentType;

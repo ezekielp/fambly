@@ -16,6 +16,7 @@ import { Text } from 'client/common/Text';
 import { Button } from 'client/common/Button';
 import { gql } from '@apollo/client';
 import styled from 'styled-components';
+import { getLastNameContent } from 'client/profiles/utils';
 
 export const StyledProfileFieldContainer = styled(ProfileFieldContainer)`
   margin-bottom: ${spacing[0]};
@@ -105,19 +106,19 @@ export const ParentItem: FC<ParentItemProps> = ({
     { label: 'Delete', onClick: () => setModalOpen(true) },
   ];
 
-  const getLastNameContent = (
-    parentLastName: string | null | undefined,
-    childLastName: string | null | undefined,
-  ) => {
-    if (
-      !parentLastName ||
-      (childLastName && childLastName === parentLastName)
-    ) {
-      return '';
-    } else {
-      return ` ${parentLastName}`;
-    }
-  };
+  // const getLastNameContent = (
+  //   parentLastName: string | null | undefined,
+  //   childLastName: string | null | undefined,
+  // ) => {
+  //   if (
+  //     !parentLastName ||
+  //     (childLastName && childLastName === parentLastName)
+  //   ) {
+  //     return '';
+  //   } else {
+  //     return ` ${parentLastName}`;
+  //   }
+  // };
 
   const ageContent = age ? <AgeContainer>{`(${age})`}</AgeContainer> : '';
   const parentType =

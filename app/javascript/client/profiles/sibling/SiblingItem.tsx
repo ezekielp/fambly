@@ -19,6 +19,7 @@ import {
   FlexContainer,
   AgeContainer,
 } from 'client/profiles/parent_child/ParentItem';
+import { getLastNameContent } from 'client/profiles/utils';
 
 gql`
   query GetSiblingRelationship($input: SiblingRelationshipInput!) {
@@ -92,19 +93,19 @@ export const SiblingItem: FC<SiblingItemProps> = ({
     { label: 'Delete', onClick: () => setModalOpen(true) },
   ];
 
-  const getLastNameContent = (
-    siblingOneLastName: string | null | undefined,
-    siblingTwoLastName: string | null | undefined,
-  ) => {
-    if (
-      !siblingOneLastName ||
-      (siblingTwoLastName && siblingTwoLastName === siblingOneLastName)
-    ) {
-      return '';
-    } else {
-      return ` ${siblingOneLastName}`;
-    }
-  };
+  // const getLastNameContent = (
+  //   siblingOneLastName: string | null | undefined,
+  //   siblingTwoLastName: string | null | undefined,
+  // ) => {
+  //   if (
+  //     !siblingOneLastName ||
+  //     (siblingTwoLastName && siblingTwoLastName === siblingOneLastName)
+  //   ) {
+  //     return '';
+  //   } else {
+  //     return ` ${siblingOneLastName}`;
+  //   }
+  // };
 
   const ageContent = age ? <AgeContainer>{`(${age})`}</AgeContainer> : '';
   const siblingType =

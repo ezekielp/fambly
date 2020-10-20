@@ -52,6 +52,7 @@ export const FEBRUARY_DAYS_OPTIONS = [
   { label: '17', value: '17' },
   { label: '18', value: '18' },
   { label: '19', value: '19' },
+  { label: '20', value: '20' },
   { label: '21', value: '21' },
   { label: '22', value: '22' },
   { label: '23', value: '23' },
