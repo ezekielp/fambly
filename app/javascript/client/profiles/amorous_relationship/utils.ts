@@ -61,7 +61,7 @@ export const relationshipDatesColors: Record<
 > = {
   anniversary: {
     backgroundColor: 'mediumBlue',
-    textColor: 'lightBlue',
+    textColor: 'veryLightBlue',
   },
   startAndEndDates: {
     backgroundColor: 'white',

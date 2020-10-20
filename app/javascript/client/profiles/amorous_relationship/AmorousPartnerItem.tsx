@@ -23,6 +23,13 @@ import {
   partnerTypeColors,
   relationshipDatesColors,
 } from './utils';
+import styled from 'styled-components';
+
+const AmorousPartnerItemContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 gql`
   query GetAmorousRelationship($input: AmorousRelationshipInput!) {
@@ -54,18 +61,22 @@ interface AmorousPartnerItemProps {
   relations: SubContactInfoFragment[];
 }
 
-export const PartnerItem: FC<PartnerItemProps> = ({
+export const AmorousPartnerItem: FC<AmorousPartnerItemProps> = ({
   partner,
   otherPartnerLastName,
   otherPartnerId,
   relations,
 }) => {
-  const { id, firstName, lastName, age, gender } = partner;
+  const [editFlag, setEditFlag] = useState(false);
+  const [deletedFlag, setDeletedFlag] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const { id: amorousPartnerId, firstName, lastName, age, gender } = partner;
   const { data: amorousRelationshipData } = useGetAmorousRelationshipQuery({
     variables: {
       input: {
         partnerOneId: otherPartnerId,
-        partnerTwoId: id,
+        partnerTwoId: amorousPartnerId,
       },
     },
   });
@@ -85,16 +96,12 @@ export const PartnerItem: FC<PartnerItemProps> = ({
     endDay,
   } = amorousRelationshipData.amorousRelationshipByPartnerIds;
 
-  const [editFlag, setEditFlag] = useState(false);
-  const [deletedFlag, setDeletedFlag] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-
   const ageContent = age ? <AgeContainer>{`(${age})`}</AgeContainer> : '';
 
   const getDateText = (
     year: number | null | undefined,
-    month: string,
-    day: string,
+    month: number | null | undefined,
+    day: number | null | undefined,
   ): string => {
     if (year && month && !day) {
       return `${MONTH_ABBREVIATIONS[month]} ${year}`;
@@ -109,8 +116,47 @@ export const PartnerItem: FC<PartnerItemProps> = ({
     }
   };
 
-  // const month = birthMonth ? birthMonth.toString() : '';
-  // const day = birthDay ? birthDay.toString() : '';
+  const anniversaryDateText = getDateText(
+    weddingYear,
+    weddingMonth,
+    weddingDay,
+  );
+
+  const getStartAndEndDatesText = (
+    startYear: number | null | undefined,
+    startMonth: number | null | undefined,
+    startDay: number | null | undefined,
+    endYear: number | null | undefined,
+    endMonth: number | null | undefined,
+    endDay: number | null | undefined,
+    current: boolean,
+  ): string => {
+    const startDateText = getDateText(startYear, startMonth, startDay);
+    const endDateText = getDateText(endYear, endMonth, endDay);
+    if (startDateText && endDateText) {
+      return `${startDateText} - ${endDateText}`;
+    } else if (startDateText) {
+      if (current) {
+        return `${startDateText} - present`;
+      } else {
+        return `${startDateText} - ?`;
+      }
+    } else if (endDateText) {
+      return `? - ${endDateText}`;
+    } else {
+      return '';
+    }
+  };
+
+  const startAndEndDatesText = getStartAndEndDatesText(
+    startYear,
+    startMonth,
+    startDay,
+    endYear,
+    endMonth,
+    endDay,
+    current,
+  );
 
   return (
     <>
@@ -118,24 +164,52 @@ export const PartnerItem: FC<PartnerItemProps> = ({
         <>
           <StyledProfileFieldContainer>
             <FlexContainer>
-              <StyledLink to={`/profiles/${id}`}>
+              <StyledLink to={`/profiles/${amorousPartnerId}`}>
                 {firstName}
                 {getLastNameContent(lastName, otherPartnerLastName)}
               </StyledLink>
               {ageContent}
             </FlexContainer>
-            {relationshipType && (
-              <FieldBadge
-                backgroundColor={
-                  partnerTypeColors[relationshipType]['backgroundColor']
-                }
-                textColor={
-                  partnerTypeColors[relationshipType]['backgroundColor']
-                }
-              >
-                {getPartnerTypeText(relationshipType, gender, current)}
-              </FieldBadge>
-            )}
+            <div>
+              {relationshipType && (
+                <FieldBadge
+                  backgroundColor={
+                    partnerTypeColors[relationshipType]['backgroundColor']
+                  }
+                  textColor={partnerTypeColors[relationshipType]['textColor']}
+                  marginBottom="5px"
+                >
+                  {getPartnerTypeText(relationshipType, gender, current)}
+                </FieldBadge>
+              )}
+              {anniversaryDateText && (
+                <FieldBadge
+                  backgroundColor={
+                    relationshipDatesColors['anniversary']['backgroundColor']
+                  }
+                  textColor={
+                    relationshipDatesColors['anniversary']['textColor']
+                  }
+                  marginBottom="5px"
+                >
+                  anniversary: {anniversaryDateText}
+                </FieldBadge>
+              )}
+              {startAndEndDatesText && (
+                <FieldBadge
+                  backgroundColor={
+                    relationshipDatesColors['startAndEndDates'][
+                      'backgroundColor'
+                    ]
+                  }
+                  textColor={
+                    relationshipDatesColors['startAndEndDates']['textColor']
+                  }
+                >
+                  {startAndEndDatesText}
+                </FieldBadge>
+              )}
+            </div>
           </StyledProfileFieldContainer>
         </>
       )}

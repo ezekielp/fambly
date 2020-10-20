@@ -487,6 +487,7 @@ export type Person = {
   monthsOld?: Maybe<Scalars['Int']>;
   notes?: Maybe<Array<Note>>;
   parents?: Maybe<Array<Person>>;
+  partners?: Maybe<Array<Person>>;
   personPlaces?: Maybe<Array<PersonPlace>>;
   showOnDashboard: Scalars['Boolean'];
   siblings?: Maybe<Array<Person>>;
@@ -852,6 +853,9 @@ export type PersonInfoFragment = (
     { __typename?: 'Person' }
     & SubContactInfoFragment
   )>>, siblings?: Maybe<Array<(
+    { __typename?: 'Person' }
+    & SubContactInfoFragment
+  )>>, partners?: Maybe<Array<(
     { __typename?: 'Person' }
     & SubContactInfoFragment
   )>>, personPlaces?: Maybe<Array<(
@@ -1488,6 +1492,9 @@ export const PersonInfoFragmentDoc = gql`
     ...SubContactInfo
   }
   siblings {
+    ...SubContactInfo
+  }
+  partners {
     ...SubContactInfo
   }
   personPlaces {

@@ -167,6 +167,7 @@ export interface AmorousPartnerFormProps {
   relations: SubContactInfoFragment[];
   propRelationshipType: string;
   partnerFirstName?: string;
+  propCurrent?: boolean;
 }
 
 export const blankInitialValues = {
@@ -199,6 +200,7 @@ export const AmorousPartnerForm: FC<AmorousPartnerFormProps> = ({
   relations,
   propRelationshipType,
   partnerFirstName,
+  propCurrent,
 }) => {
   const [
     createAmorousRelationshipMutation,
@@ -255,7 +257,7 @@ export const AmorousPartnerForm: FC<AmorousPartnerFormProps> = ({
               firstName: firstName ? firstName : null,
               lastName: lastName ? lastName : null,
               showOnDashboard: showOnDashboard.length > 0 ? true : false,
-              current: current.length > 0 ? true : false,
+              current: propCurrent,
               partnerOneId,
               partnerTwoId: formPartnerId ? formPartnerId : null,
               relationshipType: formRelationshipType
@@ -339,8 +341,8 @@ export const AmorousPartnerForm: FC<AmorousPartnerFormProps> = ({
               )}
               {setEditFlag && (
                 <Field
-                  name="siblingType"
-                  label="Type of sibling (optional)"
+                  name="relationshipType"
+                  label="Type of partner (optional)"
                   component={FormikSelectInput}
                   options={PARTNER_TYPE_OPTIONS}
                 />

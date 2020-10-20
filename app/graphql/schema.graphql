@@ -340,6 +340,7 @@ type Person {
   monthsOld: Int
   notes: [Note!]
   parents: [Person!]
+  partners: [Person!]
   personPlaces: [PersonPlace!]
   showOnDashboard: Boolean!
   siblings: [Person!]
