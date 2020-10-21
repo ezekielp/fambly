@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 import {
   useCreateAmorousRelationshipMutation,
+  useUpdateAmorousRelationshipMutation,
   useGetUserPeopleQuery,
   SubContactInfoFragment,
 } from 'client/graphqlTypes';
@@ -244,6 +245,9 @@ export const AmorousPartnerForm: FC<AmorousPartnerFormProps> = ({
   const [
     createAmorousRelationshipMutation,
   ] = useCreateAmorousRelationshipMutation();
+  const [
+    updateAmorousRelationshipMutation,
+  ] = useUpdateAmorousRelationshipMutation();
   const { data: userPeople } = useGetUserPeopleQuery();
   const personRelationIds = new Set(relations.map((person) => person.id));
   personRelationIds.add(partnerOneId);
@@ -287,30 +291,31 @@ export const AmorousPartnerForm: FC<AmorousPartnerFormProps> = ({
       note,
     } = data;
     const { setErrors, setStatus } = formikHelpers;
+    const input = {
+      partnerOneId,
+      startYear,
+      startMonth: startMonth ? parseInt(startMonth) : null,
+      startDay: startDay ? parseInt(startDay) : null,
+      weddingYear,
+      weddingMonth: weddingMonth ? parseInt(weddingMonth) : null,
+      weddingDay: weddingDay ? parseInt(weddingDay) : null,
+      endYear,
+      endMonth: endMonth ? parseInt(endMonth) : null,
+      endDay: endDay ? parseInt(endDay) : null,
+    };
 
     if (setFieldToAdd) {
       const createAmorousRelationshipMutationResponse = await createAmorousRelationshipMutation(
         {
           variables: {
             input: {
+              ...input,
               firstName: firstName ? firstName : null,
               lastName: lastName ? lastName : null,
               showOnDashboard: showOnDashboard.length > 0 ? true : false,
+              relationshipType: propRelationshipType,
               current: propCurrent,
-              partnerOneId,
               partnerTwoId: formPartnerId ? formPartnerId : null,
-              relationshipType: formRelationshipType
-                ? formRelationshipType
-                : propRelationshipType,
-              startYear,
-              startMonth: startMonth ? parseInt(startMonth) : null,
-              startDay: startDay ? parseInt(startDay) : null,
-              weddingYear,
-              weddingMonth: weddingMonth ? parseInt(weddingMonth) : null,
-              weddingDay: weddingDay ? parseInt(weddingDay) : null,
-              endYear,
-              endMonth: endMonth ? parseInt(endMonth) : null,
-              endDay: endDay ? parseInt(endDay) : null,
               note: note ? note : null,
             },
           },
@@ -329,6 +334,30 @@ export const AmorousPartnerForm: FC<AmorousPartnerFormProps> = ({
         );
       } else {
         setFieldToAdd('');
+      }
+    } else if (setEditFlag) {
+      const updateResponse = await updateAmorousRelationshipMutation({
+        variables: {
+          input: {
+            ...input,
+            partnerTwoId: formPartnerId,
+            current: current.length > 0 ? true : false,
+            relationshipType: formRelationshipType,
+          },
+        },
+      });
+
+      const updateAmorousRelationshipErrors =
+        updateResponse.data?.updateAmorousRelationship.errors;
+      if (updateAmorousRelationshipErrors) {
+        handleFormErrors<AmorousPartnerFormData>(
+          updateAmorousRelationshipErrors,
+          setErrors,
+          setStatus,
+        );
+      } else {
+        setEditFlag(false);
+        setModalOpen && setModalOpen(false);
       }
     }
   };
@@ -381,7 +410,7 @@ export const AmorousPartnerForm: FC<AmorousPartnerFormProps> = ({
                   component={FormikCheckboxGroup}
                   options={[
                     {
-                      label: `${personFirstName} and ${partnerFirstName} are still together?`,
+                      label: `Are ${personFirstName} and ${partnerFirstName} still together?`,
                       value: 'current',
                     },
                   ]}
@@ -389,7 +418,7 @@ export const AmorousPartnerForm: FC<AmorousPartnerFormProps> = ({
               )}
               {setEditFlag && (
                 <Field
-                  name="relationshipType"
+                  name="formRelationshipType"
                   label="Type of partner (optional)"
                   component={FormikSelectInput}
                   options={PARTNER_TYPE_OPTIONS}

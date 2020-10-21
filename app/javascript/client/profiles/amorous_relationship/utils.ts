@@ -2,8 +2,8 @@ import { colors } from 'client/shared/styles';
 
 export const PARTNER_TYPE_OPTIONS = [
   { label: '', value: '' },
-  { label: 'Marriage', value: 'marriage' },
-  { label: 'Dating / partners', value: 'dating' },
+  { label: 'Spouse', value: 'marriage' },
+  { label: 'Partner (boyfriend / girlfriend)', value: 'dating' },
 ];
 
 export const getPartnerTypeText = (

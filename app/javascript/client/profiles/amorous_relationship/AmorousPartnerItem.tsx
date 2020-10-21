@@ -56,6 +56,7 @@ gql`
 
 interface AmorousPartnerItemProps {
   partner: SubContactInfoFragment;
+  otherPartnerFirstName: string;
   otherPartnerLastName?: string | null | undefined;
   otherPartnerId: string;
   relations: SubContactInfoFragment[];
@@ -63,6 +64,7 @@ interface AmorousPartnerItemProps {
 
 export const AmorousPartnerItem: FC<AmorousPartnerItemProps> = ({
   partner,
+  otherPartnerFirstName,
   otherPartnerLastName,
   otherPartnerId,
   relations,
@@ -218,6 +220,8 @@ export const AmorousPartnerItem: FC<AmorousPartnerItemProps> = ({
             setModalOpen={setModalOpen}
             relations={relations}
             propRelationshipType={relationshipType ? relationshipType : ''}
+            personFirstName={otherPartnerFirstName}
+            partnerFirstName={firstName}
           />
         </Modal>
       )}

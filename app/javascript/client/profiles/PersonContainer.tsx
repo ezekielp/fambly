@@ -456,6 +456,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
           <Subheading>Relationships</Subheading>
           <AmorousPartnersContainer
             amorousPartners={partners}
+            otherPartnerFirstName={firstName}
             otherPartnerLastName={lastName}
             otherPartnerId={personId}
             relations={relations}
