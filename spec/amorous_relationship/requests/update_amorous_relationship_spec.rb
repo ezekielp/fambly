@@ -66,7 +66,6 @@ RSpec.describe 'update amorous_relationship mutation', type: :request do
     amorous_relationship.reload
 
     updated_amorous_relationship = JSON.parse(response.body).dig('data', 'updateAmorousRelationship', 'amorousRelationship')
-    # debugger
     expect(updated_amorous_relationship['relationshipType']).to eq(new_relationship_type)
     expect(updated_amorous_relationship['weddingYear']).to eq(wedding_year)
     expect(amorous_relationship.relationship_type).to eq(new_relationship_type)
