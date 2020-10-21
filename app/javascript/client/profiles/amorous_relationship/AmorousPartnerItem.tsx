@@ -14,7 +14,6 @@ import { Text } from 'client/common/Text';
 import { Button } from 'client/common/Button';
 import { gql } from '@apollo/client';
 import {
-  StyledProfileFieldContainer,
   FlexContainer,
   AgeContainer,
 } from 'client/profiles/parent_child/ParentItem';
@@ -24,6 +23,17 @@ import {
   partnerTypeColors,
   relationshipDatesColors,
 } from './utils';
+import styled from 'styled-components';
+
+const AmorousPartnerItemContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &:not(:last-child) {
+    margin-bottom: 1.5rem;
+  }
+`;
 
 gql`
   query GetAmorousRelationship($input: AmorousRelationshipInput!) {
@@ -228,7 +238,7 @@ export const AmorousPartnerItem: FC<AmorousPartnerItemProps> = ({
       {!editFlag && (
         <Modal onClose={() => setModalOpen(false)}>
           <Text marginBottom={3} fontSize={3} bold>
-            Are you sure you want to delete this field?
+            Are you sure you want to delete this relationship?
           </Text>
           <Button
             marginRight="1rem"
@@ -244,7 +254,7 @@ export const AmorousPartnerItem: FC<AmorousPartnerItemProps> = ({
     <>
       {!deletedFlag && (
         <>
-          <StyledProfileFieldContainer>
+          <AmorousPartnerItemContainer>
             <FlexContainer>
               <StyledLink to={`/profiles/${amorousPartnerId}`}>
                 {firstName}
@@ -301,7 +311,7 @@ export const AmorousPartnerItem: FC<AmorousPartnerItemProps> = ({
               color={colors.orange}
               topSpacing="30px"
             />
-          </StyledProfileFieldContainer>
+          </AmorousPartnerItemContainer>
         </>
       )}
     </>

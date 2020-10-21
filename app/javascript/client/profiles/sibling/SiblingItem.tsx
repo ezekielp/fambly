@@ -15,7 +15,7 @@ import { Button } from 'client/common/Button';
 import { gql } from '@apollo/client';
 import { getSiblingTypeText, siblingTypeColors } from './utils';
 import {
-  StyledProfileFieldContainer,
+  RelativeItemContainer,
   FlexContainer,
   AgeContainer,
 } from 'client/profiles/parent_child/ParentItem';
@@ -137,7 +137,7 @@ export const SiblingItem: FC<SiblingItemProps> = ({
   ) : (
     <>
       {!deletedFlag && (
-        <StyledProfileFieldContainer>
+        <RelativeItemContainer>
           <FlexContainer>
             <StyledLink to={`/profiles/${id}`}>
               {firstName}
@@ -162,7 +162,7 @@ export const SiblingItem: FC<SiblingItemProps> = ({
             color={colors.orange}
             topSpacing="30px"
           />
-        </StyledProfileFieldContainer>
+        </RelativeItemContainer>
       )}
     </>
   );
