@@ -74,6 +74,45 @@ gql`
   }
 `;
 
+gql`
+  mutation UpdateAmorousRelationship($input: UpdateAmorousRelationshipInput!) {
+    updateAmorousRelationship(input: $input) {
+      amorousRelationship {
+        id
+        partnerOne {
+          id
+          firstName
+          lastName
+        }
+        partnerTwo {
+          id
+          firstName
+          lastName
+        }
+        relationshipType
+        current
+        startYear
+        startMonth
+        startDay
+        weddingYear
+        weddingMonth
+        weddingDay
+        endYear
+        endMonth
+        endDay
+        notes {
+          id
+          content
+        }
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`;
+
 const AmorousPartnerFormValidationSchema = yup.object().shape({
   firstName: yup.string().when('newOrCurrentContact', {
     is: (val: string) => val === 'new_person',

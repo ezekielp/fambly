@@ -3,6 +3,7 @@ import { AmorousPartnerForm } from './AmorousPartnerForm';
 import {
   SubContactInfoFragment,
   useGetAmorousRelationshipQuery,
+  useDeleteAmorousRelationshipMutation,
 } from 'client/graphqlTypes';
 import { FieldBadge } from 'client/common/FieldBadge';
 import { StyledLink } from 'client/common/StyledLink';
@@ -47,6 +48,12 @@ gql`
   }
 `;
 
+gql`
+  mutation DeleteAmorousRelationship($input: DeleteAmorousRelationshipInput!) {
+    deleteAmorousRelationship(input: $input)
+  }
+`;
+
 interface AmorousPartnerItemProps {
   partner: SubContactInfoFragment;
   otherPartnerLastName?: string | null | undefined;
@@ -73,6 +80,10 @@ export const AmorousPartnerItem: FC<AmorousPartnerItemProps> = ({
       },
     },
   });
+  const [
+    deleteAmorousRelationshipMutation,
+  ] = useDeleteAmorousRelationshipMutation();
+
   if (!amorousRelationshipData?.amorousRelationshipByPartnerIds) return null;
   const {
     id,
@@ -88,6 +99,34 @@ export const AmorousPartnerItem: FC<AmorousPartnerItemProps> = ({
     endMonth,
     endDay,
   } = amorousRelationshipData.amorousRelationshipByPartnerIds;
+
+  const deleteAmorousRelationship = async () => {
+    await deleteAmorousRelationshipMutation({
+      variables: {
+        input: {
+          partnerOneId: otherPartnerId,
+          partnerTwoId: amorousPartnerId,
+        },
+      },
+    });
+    setDeletedFlag(true);
+    setModalOpen(false);
+  };
+
+  const handleEdit = () => {
+    setEditFlag(true);
+    setModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setEditFlag(false);
+    setModalOpen(false);
+  };
+
+  const dropdownItems = [
+    { label: 'Edit', onClick: handleEdit },
+    { label: 'Delete', onClick: () => setModalOpen(true) },
+  ];
 
   const ageContent = age ? <AgeContainer>{`(${age})`}</AgeContainer> : '';
 
@@ -151,7 +190,53 @@ export const AmorousPartnerItem: FC<AmorousPartnerItemProps> = ({
     current,
   );
 
-  return (
+  const editFormInitialValues = {
+    formPartnerId: amorousPartnerId,
+    newOrCurrentContact: 'current_person',
+    formRelationshipType: relationshipType ? relationshipType : '',
+    current: current ? ['current'] : [],
+    showOnDashboard: [],
+    startYear,
+    startMonth: startMonth ? startMonth.toString() : '',
+    startDay: startDay ? startDay.toString() : '',
+    weddingYear,
+    weddingMonth: weddingMonth ? weddingMonth.toString() : '',
+    weddingDay: weddingDay ? weddingDay.toString() : '',
+    endYear,
+    endMonth: endMonth ? endMonth.toString() : '',
+    endDay: endDay ? endDay.toString() : '',
+  };
+
+  return modalOpen ? (
+    <>
+      {editFlag && (
+        <Modal onClose={handleEditModalClose}>
+          <AmorousPartnerForm
+            initialValues={editFormInitialValues}
+            partnerOneId={otherPartnerId}
+            setEditFlag={setEditFlag}
+            setModalOpen={setModalOpen}
+            relations={relations}
+            propRelationshipType={relationshipType ? relationshipType : ''}
+          />
+        </Modal>
+      )}
+      {!editFlag && (
+        <Modal onClose={() => setModalOpen(false)}>
+          <Text marginBottom={3} fontSize={3} bold>
+            Are you sure you want to delete this field?
+          </Text>
+          <Button
+            marginRight="1rem"
+            onClick={() => deleteAmorousRelationship()}
+          >
+            Yes
+          </Button>
+          <Button onClick={() => setModalOpen(false)}>Cancel</Button>
+        </Modal>
+      )}
+    </>
+  ) : (
     <>
       {!deletedFlag && (
         <>
@@ -205,6 +290,13 @@ export const AmorousPartnerItem: FC<AmorousPartnerItemProps> = ({
                 </FieldBadge>
               )}
             </div>
+            <Dropdown
+              menuItems={dropdownItems}
+              xMarkSize="15"
+              sandwichSize="20"
+              color={colors.orange}
+              topSpacing="30px"
+            />
           </StyledProfileFieldContainer>
         </>
       )}
