@@ -11,6 +11,7 @@ import { Field, Form, Formik, FormikHelpers, FieldProps } from 'formik';
 import {
   FormikRadioGroup,
   FormikSelectInput,
+  FormikTextInput,
   FormikTextArea,
   FormikCheckboxGroup,
 } from 'client/form/inputs';
@@ -334,21 +335,11 @@ export const ParentForm: FC<ParentFormProps> = ({
                   <NameRowWrapper>
                     <LeftHalfWrapper>
                       <FirstNameLabel>First name</FirstNameLabel>
-                      <Field
-                        name="firstName"
-                        component={TextInput}
-                        type="test"
-                      />
-                      <StyledErrorMessage name="firstName" component="div" />
+                      <Field name="firstName" component={FormikTextInput} />
                     </LeftHalfWrapper>
                     <RightHalfWrapper>
                       <LastNameLabel>Last name (optional)</LastNameLabel>
-                      <Field
-                        name="lastName"
-                        component={TextInput}
-                        type="test"
-                      />
-                      <StyledErrorMessage name="lastName" component="div" />
+                      <Field name="lastName" component={FormikTextInput} />
                     </RightHalfWrapper>
                   </NameRowWrapper>
                 </>

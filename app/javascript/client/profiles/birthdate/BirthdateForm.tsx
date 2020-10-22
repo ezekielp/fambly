@@ -44,7 +44,7 @@ gql`
   }
 `;
 
-const MonthLabel = styled.div`
+export const MonthLabel = styled.div`
   margin-bottom: 15px;
   width: 50%;
 `;
@@ -152,7 +152,7 @@ export const BirthdateForm: FC<BirthdateFormProps> = ({
         onSubmit={handleSubmit}
         validationSchema={ValidationSchema}
       >
-        {({ values, isSubmitting, setFieldValue, setFieldTouched }) => {
+        {({ values, isSubmitting }) => {
           const daysOptions = determineDaysOptions(
             values.birthMonth,
             FEBRUARY_DAYS_OPTIONS,
@@ -166,14 +166,9 @@ export const BirthdateForm: FC<BirthdateFormProps> = ({
                   <MonthLabel>Month (optional)</MonthLabel>
                   <Field
                     name="birthMonth"
-                    component={SelectInput}
+                    component={FormikSelectInput}
                     options={MONTH_OPTIONS}
-                    onChange={(event: any) => {
-                      setFieldValue('birthMonth', event.target.value);
-                    }}
-                    onBlur={() => setFieldTouched('birthMonth', true)}
                   />
-                  <StyledErrorMessage name="birthMonth" component="div" />
                 </LeftHalfWrapper>
                 <MiddleQuarterWrapper>
                   <Field
