@@ -10,8 +10,6 @@ export const createSiblingRelationshipInput: CreateSiblingRelationshipInput = {
   siblingTwoId: null,
   firstName: 'Simone',
   lastName: 'Weil',
-  age: null,
-  monthsOld: null,
   siblingType: 'biological',
   showOnDashboard: true,
   note: null,

@@ -10,7 +10,6 @@ import { MemoryRouter, Route } from 'react-router-dom';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { createParentChildRelationshipMutation } from 'client/test/mutations/createParentChild';
 import { getUserPeopleQuery } from 'client/test/queries/getUserPeople';
-import { createAgeMutation } from 'client/test/mutations/createAge';
 import { createPersonMutation } from 'client/test/mutations/addPerson';
 import { ReactWrapper, mount } from 'enzyme';
 import { Form } from 'formik';
@@ -40,7 +39,6 @@ describe('<ParentForm />', () => {
     defaultMocks = [
       createParentChildRelationshipMutation(),
       getUserPeopleQuery(),
-      createAgeMutation(),
       createPersonMutation(),
     ];
     currentPersonProps = {
@@ -77,7 +75,7 @@ describe('<ParentForm />', () => {
     expect(component.exists()).toBe(true);
   });
 
-  it('has eight form fields when the parent to be added is a new_contact', async () => {
+  it('has six form fields when the parent to be added is a new_contact', async () => {
     await mountComponent();
     form = formUtils<ParentFormData>(component.find(Form));
 
@@ -87,8 +85,6 @@ describe('<ParentForm />', () => {
     expect(form.findInputByName('showOnDashboard').exists()).toBe(true);
     expect(form.findInputByName('firstName').exists()).toBe(true);
     expect(form.findInputByName('lastName').exists()).toBe(true);
-    expect(form.findInputByName('age').exists()).toBe(true);
-    expect(form.findInputByName('monthsOld').exists()).toBe(true);
     expect(form.findInputByName('parentType', 'select').exists()).toBe(true);
     expect(form.findInputByName('note', 'textarea').exists()).toBe(true);
   });
@@ -210,21 +206,6 @@ describe('<ParentForm />', () => {
             },
           },
         };
-        const createAgeMock = {
-          input: {
-            personId: 'lady-byron-uuid',
-            age: 37,
-            monthsOld: null,
-          },
-          result: {
-            errors: null,
-            person: {
-              id: 'lady-byron-uuid',
-              age: 37,
-              monthsOld: null,
-            },
-          },
-        };
         const createParentChildMock = {
           input: {
             parentId: 'lady-byron-uuid',
@@ -252,25 +233,23 @@ describe('<ParentForm />', () => {
           },
         };
         const createPerson = createPersonMutation(createPersonMock);
-        const createAge = createAgeMutation(createAgeMock);
         const createParentChild = createParentChildRelationshipMutation(
           createParentChildMock,
         );
 
         await mountComponent(
-          [createPerson, createAge, createParentChild, getUserPeopleQuery()],
+          [createPerson, createParentChild, getUserPeopleQuery()],
           defaultProps,
         );
         form = formUtils<ParentFormData>(component.find(Form));
 
-        await form.fill({ firstName: 'Lady', lastName: 'Byron', age: 37 });
+        await form.fill({ firstName: 'Lady', lastName: 'Byron' });
         await form.fill({ parentType: 'biological' }, 'select');
         await form.submit();
         await act(async () => {
           await wait(1000);
         });
         expect(createPerson.newData).toHaveBeenCalled();
-        expect(createAge.newData).toHaveBeenCalled();
         expect(createParentChild.newData).toHaveBeenCalled();
       });
     });

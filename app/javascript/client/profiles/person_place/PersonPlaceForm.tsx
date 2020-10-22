@@ -293,7 +293,7 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
         onSubmit={handleSubmit}
         validationSchema={PersonPlaceFormValidationSchema}
       >
-        {({ values, isSubmitting, status, setFieldValue, setFieldTouched }) => {
+        {({ values, isSubmitting, status }) => {
           return (
             <Form>
               <Field
@@ -304,15 +304,7 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
               <RowWrapper>
                 <LeftThreeQuarterWrapper>
                   <StreetLabel>Street address (optional)</StreetLabel>
-                  <Field
-                    name="street"
-                    component={TextInput}
-                    onChange={(event: any) => {
-                      setFieldValue('street', event.target.value);
-                    }}
-                    onBlur={() => setFieldTouched('street', true)}
-                  />
-                  <StyledErrorMessage name="street" component="div" />
+                  <Field name="street" component={FormikTextInput} />
                 </LeftThreeQuarterWrapper>
                 <RightQuarterWrapper>
                   <Field
