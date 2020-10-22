@@ -55,5 +55,4 @@ export const STATE_OPTIONS = [
   { label: 'Guam', value: 'GU' },
   { label: 'Samoa', value: 'WS' },
   { label: 'Northern Mariana Islands', value: 'MP' },
-  { label: 'Other (please specify)', value: 'custom' },
 ];

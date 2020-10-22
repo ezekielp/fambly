@@ -38,12 +38,12 @@ gql`
   }
 `;
 
-const DateWrapper = styled.div`
+export const DateWrapper = styled.div`
   display: flex;
   flex-direction: row;
 `;
 
-const MonthWrapper = styled.div`
+export const MonthWrapper = styled.div`
   width: 50%;
   padding-right: 1rem;
 `;

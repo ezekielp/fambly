@@ -8,10 +8,16 @@ import {
   FormikTextInput,
   FormikNumberInput,
   FormikTextArea,
-  FormikCheckboxGroup,
+  // FormikCheckboxGroup,
   FormikSelectInput,
 } from 'client/form/inputs';
+import { StyledErrorMessage } from 'client/form/withFormik';
+import { TextInput } from 'client/form/TextInput';
 import { Button } from 'client/common/Button';
+import {
+  DateWrapper,
+  MonthWrapper,
+} from 'client/profiles/birthdate/BirthdateForm';
 import { MONTH_OPTIONS } from 'client/profiles/birthdate/utils';
 import { STATE_OPTIONS } from './utils';
 import { GlobalError } from 'client/common/GlobalError';
@@ -20,6 +26,7 @@ import { SectionDivider } from 'client/profiles/PersonContainer';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
 import * as yup from 'yup';
+import styled from 'styled-components';
 
 gql`
   mutation CreatePersonPlace($input: CreatePersonPlaceInput!) {
@@ -91,6 +98,38 @@ gql`
       }
     }
   }
+`;
+
+const YearWrapper = styled.div`
+  width: 50%;
+`;
+
+const FlexWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const StreetWrapper = styled.div`
+  width: 75%;
+  padding-right: 1rem;
+`;
+
+const StreetLabel = styled.div`
+  margin-top: 19px;
+  margin-bottom: 15px;
+`;
+
+const CityWrapper = styled.div`
+  width: 50%;
+  padding-right: 1rem;
+`;
+
+const StateWrapper = styled.div`
+  width: 50%;
+`;
+
+const ZipWrapper = styled.div`
+  width: 25%;
 `;
 
 const PersonPlaceFormValidationSchema = yup.object().shape({
@@ -278,7 +317,7 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
         onSubmit={handleSubmit}
         validationSchema={PersonPlaceFormValidationSchema}
       >
-        {({ values, isSubmitting, status }) => {
+        {({ values, isSubmitting, status, setFieldValue, setFieldTouched }) => {
           return (
             <Form>
               <Field
@@ -286,64 +325,93 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
                 label="Country"
                 component={FormikTextInput}
               />
-              {values.country === 'USA' && (
-                <Field
-                  name="stateOrRegion"
-                  label="State (optional)"
-                  component={FormikSelectInput}
-                  options={STATE_OPTIONS}
-                />
-              )}
-              {values.country !== 'USA' && (
-                <Field
-                  name="stateOrRegion"
-                  label="State or region (optional)"
-                  component={FormikTextInput}
-                />
-              )}
-              <Field
-                name="town"
-                label="City or town (optional)"
-                component={FormikTextInput}
-              />
-              <Field
-                name="street"
-                label="Street address (optional)"
-                component={FormikTextInput}
-              />
-              <Field
-                name="zipCode"
-                label="Zip code (optional)"
-                component={FormikTextInput}
-              />
-              <Field
+              <FlexWrapper>
+                <StreetWrapper>
+                  <StreetLabel>Street address (optional)</StreetLabel>
+                  <Field
+                    name="street"
+                    component={TextInput}
+                    onChange={(event: any) => {
+                      setFieldValue('street', event.target.value);
+                    }}
+                    onBlur={() => setFieldTouched('street', true)}
+                  />
+                  <StyledErrorMessage name="street" component="div" />
+                </StreetWrapper>
+                <ZipWrapper>
+                  <Field
+                    name="zipCode"
+                    label="Zip code (optional)"
+                    component={FormikTextInput}
+                  />
+                </ZipWrapper>
+              </FlexWrapper>
+              <FlexWrapper>
+                <CityWrapper>
+                  <Field
+                    name="town"
+                    label="City or town (optional)"
+                    component={FormikTextInput}
+                  />
+                </CityWrapper>
+                <StateWrapper>
+                  {values.country === 'USA' && (
+                    <Field
+                      name="stateOrRegion"
+                      label="State (optional)"
+                      component={FormikSelectInput}
+                      options={STATE_OPTIONS}
+                    />
+                  )}
+                  {values.country !== 'USA' && (
+                    <Field
+                      name="stateOrRegion"
+                      label="State or region (optional)"
+                      component={FormikTextInput}
+                    />
+                  )}
+                </StateWrapper>
+              </FlexWrapper>
+              {/* <Field
                 name="birthPlace"
                 label=""
                 component={FormikCheckboxGroup}
                 options={[{ label: 'Birth place?', value: 'birthPlace' }]}
-              />
-              <Field
-                name="startYear"
-                label="Start year (optional)"
-                component={FormikNumberInput}
-              />
-              <Field
-                name="startMonth"
-                label="Start month (optional)"
-                component={FormikSelectInput}
-                options={MONTH_OPTIONS}
-              />
-              <Field
-                name="endYear"
-                label="End year (optional)"
-                component={FormikNumberInput}
-              />
-              <Field
-                name="endMonth"
-                label="End month (optional)"
-                component={FormikSelectInput}
-                options={MONTH_OPTIONS}
-              />
+              /> */}
+              <DateWrapper>
+                <MonthWrapper>
+                  <Field
+                    name="startMonth"
+                    label="Start month (optional)"
+                    component={FormikSelectInput}
+                    options={MONTH_OPTIONS}
+                  />
+                </MonthWrapper>
+                <YearWrapper>
+                  <Field
+                    name="startYear"
+                    label="Start year (optional)"
+                    component={FormikNumberInput}
+                  />
+                </YearWrapper>
+              </DateWrapper>
+              <DateWrapper>
+                <MonthWrapper>
+                  <Field
+                    name="endMonth"
+                    label="End month (optional)"
+                    component={FormikSelectInput}
+                    options={MONTH_OPTIONS}
+                  />
+                </MonthWrapper>
+                <YearWrapper>
+                  <Field
+                    name="endYear"
+                    label="End year (optional)"
+                    component={FormikNumberInput}
+                  />
+                </YearWrapper>
+              </DateWrapper>
               {setFieldToAdd && (
                 <Field
                   name="note"
