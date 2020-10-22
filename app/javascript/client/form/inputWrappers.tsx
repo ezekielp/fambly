@@ -27,3 +27,22 @@ export const MiddleQuarterWrapper = styled.div`
 export const RightQuarterWrapper = styled.div`
   width: 25%;
 `;
+
+export const OrContainer = styled.div`
+  padding: 1.25rem;
+  font-variation-settings: 'wght' 700;
+`;
+
+export const NameRowWrapper = styled(RowWrapper)`
+  margin-bottom: 30px;
+`;
+
+export const FirstNameLabel = styled.div`
+  margin-top: 19px;
+  margin-bottom: 15px;
+`;
+
+export const LastNameLabel = styled.div`
+  margin-bottom: 15px;
+  width: 55%;
+`;

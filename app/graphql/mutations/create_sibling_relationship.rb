@@ -2,8 +2,6 @@ module Types
   class CreateSiblingRelationshipInputType < Types::BaseInputObject
     argument :first_name, String, required: false
     argument :last_name, String, required: false
-    argument :age, Int, required: false
-    argument :months_old, Int, required: false
     argument :show_on_dashboard, Boolean, required: false
     argument :sibling_one_id, ID, required: true
     argument :sibling_two_id, ID, required: false
@@ -32,8 +30,6 @@ module Mutations
           user_id: current_user.id,
           first_name: input.first_name,
           last_name: input.last_name,
-          age: input.age,
-          months_old: input.months_old,
           show_on_dashboard: input.show_on_dashboard
         )
         if new_person.save

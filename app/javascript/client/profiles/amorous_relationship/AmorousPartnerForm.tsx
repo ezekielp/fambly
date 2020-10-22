@@ -14,6 +14,13 @@ import {
   FormikTextArea,
   FormikCheckboxGroup,
 } from 'client/form/inputs';
+import {
+  RowWrapper,
+  LeftHalfWrapper,
+  RightHalfWrapper,
+  MiddleQuarterWrapper,
+  RightQuarterWrapper,
+} from 'client/form/inputWrappers';
 import { Button } from 'client/common/Button';
 import { GlobalError } from 'client/common/GlobalError';
 import { Text } from 'client/common/Text';
