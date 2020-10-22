@@ -6,7 +6,6 @@ import {
   useDeleteParentChildRelationshipMutation,
 } from 'client/graphqlTypes';
 import { getParentTypeText, parentTypeColors } from './utils';
-import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
 import { FieldBadge } from 'client/common/FieldBadge';
 import { StyledLink } from 'client/common/StyledLink';
 import { Modal } from 'client/common/Modal';
@@ -18,8 +17,14 @@ import { gql } from '@apollo/client';
 import styled from 'styled-components';
 import { getLastNameContent } from 'client/profiles/utils';
 
-export const StyledProfileFieldContainer = styled(ProfileFieldContainer)`
-  margin-bottom: ${spacing[0]};
+export const RelativeItemContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &:not(:last-child) {
+    margin-bottom: ${spacing[0]};
+  }
 `;
 
 export const FlexContainer = styled.div`
@@ -165,7 +170,7 @@ export const ParentItem: FC<ParentItemProps> = ({
   ) : (
     <>
       {!deletedFlag && (
-        <StyledProfileFieldContainer>
+        <RelativeItemContainer>
           <FlexContainer>
             <StyledLink to={`/profiles/${id}`}>
               {firstName}
@@ -188,7 +193,7 @@ export const ParentItem: FC<ParentItemProps> = ({
             color={colors.orange}
             topSpacing="30px"
           />
-        </StyledProfileFieldContainer>
+        </RelativeItemContainer>
       )}
     </>
   );

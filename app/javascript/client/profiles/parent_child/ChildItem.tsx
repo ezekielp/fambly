@@ -8,7 +8,7 @@ import {
 import { StyledLink } from 'client/common/StyledLink';
 import { FieldBadge } from 'client/common/FieldBadge';
 import { getChildTypeText, parentTypeColors } from './utils';
-import { StyledProfileFieldContainer, FlexContainer } from './ParentItem';
+import { RelativeItemContainer, FlexContainer } from './ParentItem';
 import { Modal } from 'client/common/Modal';
 import { colors } from 'client/shared/styles';
 import { Dropdown } from 'client/common/Dropdown';
@@ -131,7 +131,7 @@ export const ChildItem: FC<ChildItemProps> = ({
   ) : (
     <>
       {!deletedFlag && (
-        <StyledProfileFieldContainer>
+        <RelativeItemContainer>
           <FlexContainer>
             <StyledLink to={`/profiles/${id}`}>
               {firstName}
@@ -154,7 +154,7 @@ export const ChildItem: FC<ChildItemProps> = ({
             color={colors.orange}
             topSpacing="30px"
           />
-        </StyledProfileFieldContainer>
+        </RelativeItemContainer>
       )}
     </>
   );

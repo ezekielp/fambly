@@ -6,6 +6,7 @@ import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
 
 interface AmorousPartnersContainerProps {
   amorousPartners: SubContactInfoFragment[];
+  otherPartnerFirstName: string;
   otherPartnerLastName?: string | null | undefined;
   otherPartnerId: string;
   relations: SubContactInfoFragment[];
@@ -13,6 +14,7 @@ interface AmorousPartnersContainerProps {
 
 export const AmorousPartnersContainer: FC<AmorousPartnersContainerProps> = ({
   amorousPartners,
+  otherPartnerFirstName,
   otherPartnerLastName,
   otherPartnerId,
   relations,
@@ -22,6 +24,7 @@ export const AmorousPartnersContainer: FC<AmorousPartnersContainerProps> = ({
       <AmorousPartnerItem
         key={partner.id}
         partner={partner}
+        otherPartnerFirstName={otherPartnerFirstName}
         otherPartnerLastName={otherPartnerLastName}
         otherPartnerId={otherPartnerId}
         relations={relations}

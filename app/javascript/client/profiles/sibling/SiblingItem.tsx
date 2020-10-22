@@ -15,7 +15,7 @@ import { Button } from 'client/common/Button';
 import { gql } from '@apollo/client';
 import { getSiblingTypeText, siblingTypeColors } from './utils';
 import {
-  StyledProfileFieldContainer,
+  RelativeItemContainer,
   FlexContainer,
   AgeContainer,
 } from 'client/profiles/parent_child/ParentItem';
@@ -93,20 +93,6 @@ export const SiblingItem: FC<SiblingItemProps> = ({
     { label: 'Delete', onClick: () => setModalOpen(true) },
   ];
 
-  // const getLastNameContent = (
-  //   siblingOneLastName: string | null | undefined,
-  //   siblingTwoLastName: string | null | undefined,
-  // ) => {
-  //   if (
-  //     !siblingOneLastName ||
-  //     (siblingTwoLastName && siblingTwoLastName === siblingOneLastName)
-  //   ) {
-  //     return '';
-  //   } else {
-  //     return ` ${siblingOneLastName}`;
-  //   }
-  // };
-
   const ageContent = age ? <AgeContainer>{`(${age})`}</AgeContainer> : '';
   const siblingType =
     siblingRelationshipData?.siblingRelationshipBySiblingIds?.siblingType;
@@ -151,7 +137,7 @@ export const SiblingItem: FC<SiblingItemProps> = ({
   ) : (
     <>
       {!deletedFlag && (
-        <StyledProfileFieldContainer>
+        <RelativeItemContainer>
           <FlexContainer>
             <StyledLink to={`/profiles/${id}`}>
               {firstName}
@@ -176,7 +162,7 @@ export const SiblingItem: FC<SiblingItemProps> = ({
             color={colors.orange}
             topSpacing="30px"
           />
-        </StyledProfileFieldContainer>
+        </RelativeItemContainer>
       )}
     </>
   );
