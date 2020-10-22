@@ -3,6 +3,12 @@ import { useCreateOrUpdateBirthdateMutation } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikNumberInput, FormikSelectInput } from 'client/form/inputs';
 import { SelectInput } from 'client/form/SelectInput';
+import {
+  RowWrapper,
+  LeftHalfWrapper,
+  MiddleQuarterWrapper,
+  RightQuarterWrapper,
+} from 'client/form/inputWrappers';
 import { StyledErrorMessage } from 'client/form/withFormik';
 import { Button } from 'client/common/Button';
 import { Text } from 'client/common/Text';
@@ -38,28 +44,9 @@ gql`
   }
 `;
 
-export const DateWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-export const MonthWrapper = styled.div`
-  width: 50%;
-  padding-right: 1rem;
-`;
-
 const MonthLabel = styled.div`
   margin-bottom: 15px;
   width: 50%;
-`;
-
-const DayWrapper = styled.div`
-  width: 25%;
-  padding-right: 1rem;
-`;
-
-const YearWrapper = styled.div`
-  width: 25%;
 `;
 
 const today = new Date();
@@ -174,8 +161,8 @@ export const BirthdateForm: FC<BirthdateFormProps> = ({
           );
           return (
             <Form>
-              <DateWrapper>
-                <MonthWrapper>
+              <RowWrapper>
+                <LeftHalfWrapper>
                   <MonthLabel>Month (optional)</MonthLabel>
                   <Field
                     name="birthMonth"
@@ -187,23 +174,23 @@ export const BirthdateForm: FC<BirthdateFormProps> = ({
                     onBlur={() => setFieldTouched('birthMonth', true)}
                   />
                   <StyledErrorMessage name="birthMonth" component="div" />
-                </MonthWrapper>
-                <DayWrapper>
+                </LeftHalfWrapper>
+                <MiddleQuarterWrapper>
                   <Field
                     name="birthDay"
                     label="Day (optional)"
                     component={FormikSelectInput}
                     options={daysOptions}
                   />
-                </DayWrapper>
-                <YearWrapper>
+                </MiddleQuarterWrapper>
+                <RightQuarterWrapper>
                   <Field
                     name="birthYear"
                     label="Year (optional)"
                     component={FormikNumberInput}
                   />
-                </YearWrapper>
-              </DateWrapper>
+                </RightQuarterWrapper>
+              </RowWrapper>
               <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
                 Save
               </Button>
