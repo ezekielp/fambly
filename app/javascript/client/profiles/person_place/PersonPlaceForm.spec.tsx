@@ -68,7 +68,6 @@ describe('<PersonPlaceForm />', () => {
     expect(form.findInputByName('town').exists()).toBe(true);
     expect(form.findInputByName('street').exists()).toBe(true);
     expect(form.findInputByName('zipCode').exists()).toBe(true);
-    // expect(form.findInputByName('birthPlace').exists()).toBe(true);
     expect(form.findInputByName('startYear').exists()).toBe(true);
     expect(form.findInputByName('startMonth', 'select').exists()).toBe(true);
     expect(form.findInputByName('endYear').exists()).toBe(true);
@@ -157,7 +156,6 @@ describe('<PersonPlaceForm />', () => {
         town: 'Washington',
         startYear: 1924,
       });
-      // await form.check(['birthPlace']);
 
       await form.submit();
       expect(createPersonPlace.newData).toHaveBeenCalled();
