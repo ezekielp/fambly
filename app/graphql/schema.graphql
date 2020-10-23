@@ -142,13 +142,13 @@ type CreatePersonPayload {
 }
 
 input CreatePersonPlaceInput {
-  birthPlace: Boolean
   country: String!
   current: Boolean
   endMonth: Int
   endYear: Int
   note: String
   personId: ID!
+  placeType: String
   startMonth: Int
   startYear: Int
   stateOrRegion: String
@@ -180,10 +180,8 @@ type CreatePersonTagPayload {
 }
 
 input CreateSiblingRelationshipInput {
-  age: Int
   firstName: String
   lastName: String
-  monthsOld: Int
   note: String
   showOnDashboard: Boolean
   siblingOneId: ID!
@@ -355,7 +353,6 @@ type Person {
 }
 
 type PersonPlace {
-  birthPlace: Boolean
   current: Boolean
   endMonth: Int
   endYear: Int
@@ -363,6 +360,7 @@ type PersonPlace {
   notes: [Note!]
   person: Person!
   place: Place!
+  placeType: String
   startMonth: Int
   startYear: Int
 }
@@ -494,12 +492,12 @@ type UpdatePersonPayload {
 }
 
 input UpdatePersonPlaceInput {
-  birthPlace: Boolean
   country: String!
   current: Boolean
   endMonth: Int
   endYear: Int
   personPlaceId: ID!
+  placeType: String
   startMonth: Int
   startYear: Int
   stateOrRegion: String

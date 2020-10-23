@@ -14,6 +14,15 @@ import {
   FormikTextArea,
   FormikCheckboxGroup,
 } from 'client/form/inputs';
+import {
+  RowWrapper,
+  LeftHalfWrapper,
+  RightHalfWrapper,
+  MiddleQuarterWrapper,
+  RightQuarterWrapper,
+  FirstNameLabel,
+  LastNameLabel,
+} from 'client/form/inputWrappers';
 import { Button } from 'client/common/Button';
 import { GlobalError } from 'client/common/GlobalError';
 import { Text } from 'client/common/Text';
@@ -35,6 +44,7 @@ import {
   THIRTY_ONE_DAYS_OPTIONS,
 } from 'client/profiles/birthdate/utils';
 import { PARTNER_TYPE_OPTIONS } from './utils';
+import styled from 'styled-components';
 
 gql`
   mutation CreateAmorousRelationship($input: CreateAmorousRelationshipInput!) {
@@ -112,6 +122,23 @@ gql`
       }
     }
   }
+`;
+
+const StartMonthLabel = styled.div`
+  width: 70%;
+  margin-bottom: 15px;
+`;
+
+const EndMonthLabel = styled(StartMonthLabel)``;
+
+const StartYearLabel = styled.div`
+  width: 103%;
+  margin-bottom: 15px;
+`;
+
+const WeddingMonthLabel = styled.div`
+  margin-top: 19px;
+  margin-bottom: 15px;
 `;
 
 const AmorousPartnerFormValidationSchema = yup.object().shape({
@@ -397,6 +424,7 @@ export const AmorousPartnerForm: FC<AmorousPartnerFormProps> = ({
               (setFieldToAdd && propCurrent === false) ||
               (setEditFlag && values.current.length === 0)
             ) {
+              console.log('hello');
               return true;
             }
             return false;
@@ -445,18 +473,16 @@ export const AmorousPartnerForm: FC<AmorousPartnerFormProps> = ({
                       },
                     ]}
                   />
-                  <Field
-                    name="firstName"
-                    label="First name"
-                    component={FormikTextInput}
-                    type="test"
-                  />
-                  <Field
-                    name="lastName"
-                    label="Last name (optional)"
-                    component={FormikTextInput}
-                    type="test"
-                  />
+                  <RowWrapper>
+                    <LeftHalfWrapper>
+                      <FirstNameLabel>First name</FirstNameLabel>
+                      <Field name="firstName" component={FormikTextInput} />
+                    </LeftHalfWrapper>
+                    <RightHalfWrapper>
+                      <LastNameLabel>Last name (optional)</LastNameLabel>
+                      <Field name="lastName" component={FormikTextInput} />
+                    </RightHalfWrapper>
+                  </RowWrapper>
                 </>
               )}
               {values.newOrCurrentContact === 'current_person' &&
@@ -485,64 +511,83 @@ export const AmorousPartnerForm: FC<AmorousPartnerFormProps> = ({
                     )}
                   </Field>
                 )}
-              <Field
-                name="startYear"
-                label="Start year (optional)"
-                component={FormikNumberInput}
-              />
-              <Field
-                name="startMonth"
-                label="Start month (optional)"
-                component={FormikSelectInput}
-                options={MONTH_OPTIONS}
-              />
-              <Field
-                name="startDay"
-                label="Start day (optional)"
-                component={FormikSelectInput}
-                options={startDaysOptions}
-              />
+              <RowWrapper>
+                <LeftHalfWrapper>
+                  <StartMonthLabel>Start month (optional)</StartMonthLabel>
+                  <Field
+                    name="startMonth"
+                    component={FormikSelectInput}
+                    options={MONTH_OPTIONS}
+                  />
+                </LeftHalfWrapper>
+                <MiddleQuarterWrapper>
+                  <Field
+                    name="startDay"
+                    label="Start day (optional)"
+                    component={FormikSelectInput}
+                    options={startDaysOptions}
+                  />
+                </MiddleQuarterWrapper>
+                <RightQuarterWrapper>
+                  <StartYearLabel>Start year (optional)</StartYearLabel>
+                  <Field name="startYear" component={FormikNumberInput} />
+                </RightQuarterWrapper>
+              </RowWrapper>
               {propRelationshipType === 'marriage' && (
-                <>
-                  <Field
-                    name="weddingYear"
-                    label="Wedding year (optional)"
-                    component={FormikNumberInput}
-                  />
-                  <Field
-                    name="weddingMonth"
-                    label="Wedding month (optional)"
-                    component={FormikSelectInput}
-                    options={MONTH_OPTIONS}
-                  />
-                  <Field
-                    name="weddingDay"
-                    label="Wedding day (optional)"
-                    component={FormikSelectInput}
-                    options={weddingDaysOptions}
-                  />
-                </>
+                <RowWrapper>
+                  <LeftHalfWrapper>
+                    <WeddingMonthLabel>
+                      Wedding month (optional)
+                    </WeddingMonthLabel>
+                    <Field
+                      name="weddingMonth"
+                      component={FormikSelectInput}
+                      options={MONTH_OPTIONS}
+                    />
+                  </LeftHalfWrapper>
+                  <MiddleQuarterWrapper>
+                    <Field
+                      name="weddingDay"
+                      label="Wedding day (optional)"
+                      component={FormikSelectInput}
+                      options={weddingDaysOptions}
+                    />
+                  </MiddleQuarterWrapper>
+                  <RightQuarterWrapper>
+                    <Field
+                      name="weddingYear"
+                      label="Wedding year (optional)"
+                      component={FormikNumberInput}
+                    />
+                  </RightQuarterWrapper>
+                </RowWrapper>
               )}
-              {showEndDatesFlag && (
-                <>
-                  <Field
-                    name="endYear"
-                    label="End year (optional)"
-                    component={FormikNumberInput}
-                  />
-                  <Field
-                    name="endMonth"
-                    label="End month (optional)"
-                    component={FormikSelectInput}
-                    options={MONTH_OPTIONS}
-                  />
-                  <Field
-                    name="endDay"
-                    label="End day (optional)"
-                    component={FormikSelectInput}
-                    options={endDaysOptions}
-                  />
-                </>
+              {showEndDatesFlag() && (
+                <RowWrapper>
+                  <LeftHalfWrapper>
+                    <EndMonthLabel>End month (optional)</EndMonthLabel>
+                    <Field
+                      name="endMonth"
+                      component={FormikSelectInput}
+                      options={MONTH_OPTIONS}
+                    />
+                  </LeftHalfWrapper>
+                  <MiddleQuarterWrapper>
+                    <Field
+                      name="endDay"
+                      label="End day (optional)"
+                      component={FormikSelectInput}
+                      options={endDaysOptions}
+                    />
+                  </MiddleQuarterWrapper>
+                  <RightQuarterWrapper>
+                    <Field
+                      name="endYear"
+                      label="End year (optional)"
+                      component={FormikNumberInput}
+                    />
+                  </RightQuarterWrapper>
+                </RowWrapper>
               )}
               {setFieldToAdd && (
                 <Field

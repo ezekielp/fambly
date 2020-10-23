@@ -21,6 +21,7 @@ export const FormFieldWrapper = styled.div`
 export const StyledErrorMessage = styled(ErrorMessage)`
   color: red;
   margin-top: 15px;
+  margin-bottom: 1rem;
 `;
 
 export const withFormik = <AdditionalFieldPropsType extends object>(

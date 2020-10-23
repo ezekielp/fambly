@@ -33,7 +33,7 @@ RSpec.describe PersonPlace, type: :model do
 
   describe 'ActiveModel validations' do
     it 'is valid with valid attributes' do
-      expect(PersonPlace.create(person_id: person.id, place_id: place.id, birth_place: true)).to be_valid
+      expect(PersonPlace.create(person_id: person.id, place_id: place.id, place_type: 'birth_place')).to be_valid
     end
 
     it 'validates that the place_id and person_id are valid ids of entries in the places and people tables' do

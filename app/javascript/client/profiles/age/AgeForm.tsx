@@ -5,12 +5,18 @@ import {
 } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikNumberInput } from 'client/form/inputs';
+import { RowWrapper, OrContainer } from 'client/form/inputWrappers';
 import { Button } from 'client/common/Button';
 import { Text } from 'client/common/Text';
 import { SectionDivider } from 'client/profiles/PersonContainer';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
+import styled from 'styled-components';
+
+const AgeRowWrapper = styled(RowWrapper)`
+  align-items: center;
+`;
 
 gql`
   mutation CreateAge($input: CreateAgeInput!) {
@@ -133,15 +139,22 @@ export const AgeForm: FC<AgeFormProps> = ({
       >
         {({ isSubmitting }) => (
           <Form>
-            <Field name="age" label="Years old" component={FormikNumberInput} />
-            <Text marginBottom={5} bold>
+            <AgeRowWrapper>
+              <Field
+                name="age"
+                label="Years old"
+                component={FormikNumberInput}
+              />
+              <OrContainer>Or</OrContainer>
+              {/* <Text marginBottom={5} bold>
               Or
-            </Text>
-            <Field
-              name="monthsOld"
-              label="Months old"
-              component={FormikNumberInput}
-            />
+            </Text> */}
+              <Field
+                name="monthsOld"
+                label="Months old"
+                component={FormikNumberInput}
+              />
+            </AgeRowWrapper>
             <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
               Save
             </Button>

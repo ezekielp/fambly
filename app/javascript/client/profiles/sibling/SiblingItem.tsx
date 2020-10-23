@@ -101,8 +101,6 @@ export const SiblingItem: FC<SiblingItemProps> = ({
     formSiblingId: id,
     newOrCurrentContact: 'current_person',
     siblingType: siblingType ? siblingType : '',
-    age: null,
-    monthsOld: null,
     showOnDashboard: [],
   };
 

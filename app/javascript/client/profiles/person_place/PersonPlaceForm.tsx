@@ -8,10 +8,19 @@ import {
   FormikTextInput,
   FormikNumberInput,
   FormikTextArea,
-  FormikCheckboxGroup,
+  // FormikCheckboxGroup,
   FormikSelectInput,
 } from 'client/form/inputs';
+import { StyledErrorMessage } from 'client/form/withFormik';
+import { TextInput } from 'client/form/TextInput';
 import { Button } from 'client/common/Button';
+import {
+  RowWrapper,
+  LeftHalfWrapper,
+  LeftThreeQuarterWrapper,
+  RightHalfWrapper,
+  RightQuarterWrapper,
+} from 'client/form/inputWrappers';
 import { MONTH_OPTIONS } from 'client/profiles/birthdate/utils';
 import { STATE_OPTIONS } from './utils';
 import { GlobalError } from 'client/common/GlobalError';
@@ -20,6 +29,7 @@ import { SectionDivider } from 'client/profiles/PersonContainer';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
 import * as yup from 'yup';
+import styled from 'styled-components';
 
 gql`
   mutation CreatePersonPlace($input: CreatePersonPlaceInput!) {
@@ -38,7 +48,7 @@ gql`
           street
           zipCode
         }
-        birthPlace
+        placeType
         current
         startMonth
         startYear
@@ -74,7 +84,7 @@ gql`
           street
           zipCode
         }
-        birthPlace
+        placeType
         current
         startMonth
         startYear
@@ -91,6 +101,11 @@ gql`
       }
     }
   }
+`;
+
+const StreetLabel = styled.div`
+  margin-top: 19px;
+  margin-bottom: 15px;
 `;
 
 const PersonPlaceFormValidationSchema = yup.object().shape({
@@ -138,7 +153,6 @@ export interface PersonPlaceFormData {
   town?: string;
   street?: string;
   zipCode?: string;
-  birthPlace: string[];
   startYear?: number | null;
   startMonth?: string;
   endYear?: number | null;
@@ -161,7 +175,6 @@ export const blankInitialValues = {
   town: '',
   street: '',
   zipCode: '',
-  birthPlace: [],
   startYear: null,
   startMonth: '',
   endYear: null,
@@ -199,7 +212,6 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
       town,
       street,
       zipCode,
-      birthPlace,
       startYear,
       startMonth,
       endYear,
@@ -213,7 +225,6 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
       town: town ? town : null,
       street: street ? street : null,
       zipCode: zipCode ? zipCode : null,
-      birthPlace: birthPlace.length > 0 ? true : false,
       startYear,
       startMonth: startMonth ? parseInt(startMonth) : null,
       endYear,
@@ -286,64 +297,79 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
                 label="Country"
                 component={FormikTextInput}
               />
-              {values.country === 'USA' && (
-                <Field
-                  name="stateOrRegion"
-                  label="State (optional)"
-                  component={FormikSelectInput}
-                  options={STATE_OPTIONS}
-                />
-              )}
-              {values.country !== 'USA' && (
-                <Field
-                  name="stateOrRegion"
-                  label="State or region (optional)"
-                  component={FormikTextInput}
-                />
-              )}
-              <Field
-                name="town"
-                label="City or town (optional)"
-                component={FormikTextInput}
-              />
-              <Field
-                name="street"
-                label="Street address (optional)"
-                component={FormikTextInput}
-              />
-              <Field
-                name="zipCode"
-                label="Zip code (optional)"
-                component={FormikTextInput}
-              />
-              <Field
-                name="birthPlace"
-                label=""
-                component={FormikCheckboxGroup}
-                options={[{ label: 'Birth place?', value: 'birthPlace' }]}
-              />
-              <Field
-                name="startYear"
-                label="Start year (optional)"
-                component={FormikNumberInput}
-              />
-              <Field
-                name="startMonth"
-                label="Start month (optional)"
-                component={FormikSelectInput}
-                options={MONTH_OPTIONS}
-              />
-              <Field
-                name="endYear"
-                label="End year (optional)"
-                component={FormikNumberInput}
-              />
-              <Field
-                name="endMonth"
-                label="End month (optional)"
-                component={FormikSelectInput}
-                options={MONTH_OPTIONS}
-              />
+              <RowWrapper>
+                <LeftThreeQuarterWrapper>
+                  <StreetLabel>Street address (optional)</StreetLabel>
+                  <Field name="street" component={FormikTextInput} />
+                </LeftThreeQuarterWrapper>
+                <RightQuarterWrapper>
+                  <Field
+                    name="zipCode"
+                    label="Zip code (optional)"
+                    component={FormikTextInput}
+                  />
+                </RightQuarterWrapper>
+              </RowWrapper>
+              <RowWrapper>
+                <LeftHalfWrapper>
+                  <Field
+                    name="town"
+                    label="City or town (optional)"
+                    component={FormikTextInput}
+                  />
+                </LeftHalfWrapper>
+                <RightHalfWrapper>
+                  {values.country === 'USA' && (
+                    <Field
+                      name="stateOrRegion"
+                      label="State (optional)"
+                      component={FormikSelectInput}
+                      options={STATE_OPTIONS}
+                    />
+                  )}
+                  {values.country !== 'USA' && (
+                    <Field
+                      name="stateOrRegion"
+                      label="State or region (optional)"
+                      component={FormikTextInput}
+                    />
+                  )}
+                </RightHalfWrapper>
+              </RowWrapper>
+              <RowWrapper>
+                <LeftHalfWrapper>
+                  <Field
+                    name="startMonth"
+                    label="Start month (optional)"
+                    component={FormikSelectInput}
+                    options={MONTH_OPTIONS}
+                  />
+                </LeftHalfWrapper>
+                <RightHalfWrapper>
+                  <Field
+                    name="startYear"
+                    label="Start year (optional)"
+                    component={FormikNumberInput}
+                  />
+                </RightHalfWrapper>
+              </RowWrapper>
+              <RowWrapper>
+                <LeftHalfWrapper>
+                  <Field
+                    name="endMonth"
+                    label="End month (optional)"
+                    component={FormikSelectInput}
+                    options={MONTH_OPTIONS}
+                  />
+                </LeftHalfWrapper>
+                <RightHalfWrapper>
+                  <Field
+                    name="endYear"
+                    label="End year (optional)"
+                    component={FormikNumberInput}
+                  />
+                </RightHalfWrapper>
+              </RowWrapper>
               {setFieldToAdd && (
                 <Field
                   name="note"

@@ -148,13 +148,13 @@ export type CreatePersonPayload = {
 };
 
 export type CreatePersonPlaceInput = {
-  birthPlace?: Maybe<Scalars['Boolean']>;
   country: Scalars['String'];
   current?: Maybe<Scalars['Boolean']>;
   endMonth?: Maybe<Scalars['Int']>;
   endYear?: Maybe<Scalars['Int']>;
   note?: Maybe<Scalars['String']>;
   personId: Scalars['ID'];
+  placeType?: Maybe<Scalars['String']>;
   startMonth?: Maybe<Scalars['Int']>;
   startYear?: Maybe<Scalars['Int']>;
   stateOrRegion?: Maybe<Scalars['String']>;
@@ -184,10 +184,8 @@ export type CreatePersonTagPayload = {
 };
 
 export type CreateSiblingRelationshipInput = {
-  age?: Maybe<Scalars['Int']>;
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
-  monthsOld?: Maybe<Scalars['Int']>;
   note?: Maybe<Scalars['String']>;
   showOnDashboard?: Maybe<Scalars['Boolean']>;
   siblingOneId: Scalars['ID'];
@@ -513,7 +511,6 @@ export type Person = {
 
 export type PersonPlace = {
   __typename?: 'PersonPlace';
-  birthPlace?: Maybe<Scalars['Boolean']>;
   current?: Maybe<Scalars['Boolean']>;
   endMonth?: Maybe<Scalars['Int']>;
   endYear?: Maybe<Scalars['Int']>;
@@ -521,6 +518,7 @@ export type PersonPlace = {
   notes?: Maybe<Array<Note>>;
   person: Person;
   place: Place;
+  placeType?: Maybe<Scalars['String']>;
   startMonth?: Maybe<Scalars['Int']>;
   startYear?: Maybe<Scalars['Int']>;
 };
@@ -677,12 +675,12 @@ export type UpdatePersonPayload = {
 };
 
 export type UpdatePersonPlaceInput = {
-  birthPlace?: Maybe<Scalars['Boolean']>;
   country: Scalars['String'];
   current?: Maybe<Scalars['Boolean']>;
   endMonth?: Maybe<Scalars['Int']>;
   endYear?: Maybe<Scalars['Int']>;
   personPlaceId: Scalars['ID'];
+  placeType?: Maybe<Scalars['String']>;
   startMonth?: Maybe<Scalars['Int']>;
   startYear?: Maybe<Scalars['Int']>;
   stateOrRegion?: Maybe<Scalars['String']>;
@@ -911,7 +909,7 @@ export type SubContactInfoFragment = (
 
 export type PersonPlaceInfoFragment = (
   { __typename?: 'PersonPlace' }
-  & Pick<PersonPlace, 'id' | 'birthPlace' | 'current' | 'startMonth' | 'startYear' | 'endMonth' | 'endYear'>
+  & Pick<PersonPlace, 'id' | 'placeType' | 'current' | 'startMonth' | 'startYear' | 'endMonth' | 'endYear'>
   & { place: (
     { __typename?: 'Place' }
     & Pick<Place, 'id' | 'country' | 'stateOrRegion' | 'town' | 'street' | 'zipCode'>
@@ -1300,7 +1298,7 @@ export type CreatePersonPlaceMutation = (
     { __typename?: 'CreatePersonPlacePayload' }
     & { personPlace?: Maybe<(
       { __typename?: 'PersonPlace' }
-      & Pick<PersonPlace, 'id' | 'birthPlace' | 'current' | 'startMonth' | 'startYear' | 'endMonth' | 'endYear'>
+      & Pick<PersonPlace, 'id' | 'placeType' | 'current' | 'startMonth' | 'startYear' | 'endMonth' | 'endYear'>
       & { person: (
         { __typename?: 'Person' }
         & Pick<Person, 'id' | 'firstName'>
@@ -1329,7 +1327,7 @@ export type UpdatePersonPlaceMutation = (
     { __typename?: 'UpdatePersonPlacePayload' }
     & { personPlace?: Maybe<(
       { __typename?: 'PersonPlace' }
-      & Pick<PersonPlace, 'id' | 'birthPlace' | 'current' | 'startMonth' | 'startYear' | 'endMonth' | 'endYear'>
+      & Pick<PersonPlace, 'id' | 'placeType' | 'current' | 'startMonth' | 'startYear' | 'endMonth' | 'endYear'>
       & { person: (
         { __typename?: 'Person' }
         & Pick<Person, 'id' | 'firstName'>
@@ -1531,7 +1529,7 @@ export const PersonPlaceInfoFragmentDoc = gql`
     id
     firstName
   }
-  birthPlace
+  placeType
   current
   startMonth
   startYear
@@ -2746,7 +2744,7 @@ export const CreatePersonPlaceDocument = gql`
         street
         zipCode
       }
-      birthPlace
+      placeType
       current
       startMonth
       startYear
@@ -2806,7 +2804,7 @@ export const UpdatePersonPlaceDocument = gql`
         street
         zipCode
       }
-      birthPlace
+      placeType
       current
       startMonth
       startYear

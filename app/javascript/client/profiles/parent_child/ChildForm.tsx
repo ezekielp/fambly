@@ -16,6 +16,14 @@ import {
   FormikTextArea,
   FormikCheckboxGroup,
 } from 'client/form/inputs';
+import {
+  RowWrapper,
+  RightHalfWrapper,
+  LeftHalfWrapper,
+  OrContainer,
+  FirstNameLabel,
+  LastNameLabel,
+} from 'client/form/inputWrappers';
 import { Button } from 'client/common/Button';
 import { GlobalError } from 'client/common/GlobalError';
 import { Text } from 'client/common/Text';
@@ -29,6 +37,11 @@ import {
 import * as yup from 'yup';
 import { handleFormErrors } from 'client/utils/formik';
 import { FormikAutosuggest } from 'client/form/FormikAutosuggest';
+import styled from 'styled-components';
+
+const AgeRowWrapper = styled(RowWrapper)`
+  align-items: center;
+`;
 
 const ChildFormValidationSchema = yup.object().shape({
   firstName: yup.string().when('newOrCurrentContact', {
@@ -282,28 +295,29 @@ export const ChildForm: FC<ChildFormProps> = ({
                       },
                     ]}
                   />
-                  <Field
-                    name="firstName"
-                    label="First name"
-                    component={FormikTextInput}
-                    type="test"
-                  />
-                  <Field
-                    name="lastName"
-                    label="Last name (optional)"
-                    component={FormikTextInput}
-                    type="test"
-                  />
-                  <Field
-                    name="age"
-                    label="Age (optional)"
-                    component={FormikNumberInput}
-                  />
-                  <Field
-                    name="monthsOld"
-                    label="Months old (optional)"
-                    component={FormikNumberInput}
-                  />
+                  <RowWrapper>
+                    <LeftHalfWrapper>
+                      <FirstNameLabel>First name</FirstNameLabel>
+                      <Field name="firstName" component={FormikTextInput} />
+                    </LeftHalfWrapper>
+                    <RightHalfWrapper>
+                      <LastNameLabel>Last name (optional)</LastNameLabel>
+                      <Field name="lastName" component={FormikTextInput} />
+                    </RightHalfWrapper>
+                  </RowWrapper>
+                  <AgeRowWrapper>
+                    <Field
+                      name="age"
+                      label="Years old (optional)"
+                      component={FormikNumberInput}
+                    />
+                    <OrContainer>Or</OrContainer>
+                    <Field
+                      name="monthsOld"
+                      label="Months old (optional)"
+                      component={FormikNumberInput}
+                    />
+                  </AgeRowWrapper>
                 </>
               )}
               {values.newOrCurrentContact === 'current_person' &&

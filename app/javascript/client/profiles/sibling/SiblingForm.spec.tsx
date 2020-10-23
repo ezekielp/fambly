@@ -79,8 +79,6 @@ describe('<SiblingForm />', () => {
     expect(form.findInputByName('showOnDashboard').exists()).toBe(true);
     expect(form.findInputByName('firstName').exists()).toBe(true);
     expect(form.findInputByName('lastName').exists()).toBe(true);
-    expect(form.findInputByName('age').exists()).toBe(true);
-    expect(form.findInputByName('monthsOld').exists()).toBe(true);
     expect(form.findInputByName('siblingType', 'select').exists()).toBe(true);
     expect(form.findInputByName('note', 'textarea').exists()).toBe(true);
   });
@@ -125,8 +123,6 @@ describe('<SiblingForm />', () => {
             siblingType: 'step_sibling',
             firstName: null,
             lastName: null,
-            age: null,
-            monthsOld: null,
             showOnDashboard: false,
             note: null,
           },

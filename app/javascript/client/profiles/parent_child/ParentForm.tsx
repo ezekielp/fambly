@@ -1,7 +1,6 @@
 import React, { FC, useState } from 'react';
 import {
   useCreatePersonMutation,
-  useCreateAgeMutation,
   useCreateParentChildRelationshipMutation,
   useUpdateParentChildRelationshipMutation,
   useGetUserPeopleQuery,
@@ -10,13 +9,21 @@ import {
 } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers, FieldProps } from 'formik';
 import {
-  FormikTextInput,
-  FormikNumberInput,
   FormikRadioGroup,
   FormikSelectInput,
+  FormikTextInput,
   FormikTextArea,
   FormikCheckboxGroup,
 } from 'client/form/inputs';
+import { TextInput } from 'client/form/TextInput';
+import {
+  NameRowWrapper,
+  RightHalfWrapper,
+  LeftHalfWrapper,
+  FirstNameLabel,
+  LastNameLabel,
+} from 'client/form/inputWrappers';
+import { StyledErrorMessage } from 'client/form/withFormik';
 import { Button } from 'client/common/Button';
 import { GlobalError } from 'client/common/GlobalError';
 import { Text } from 'client/common/Text';
@@ -31,6 +38,7 @@ import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
 import { FormikAutosuggest } from 'client/form/FormikAutosuggest';
+import styled from 'styled-components';
 
 gql`
   mutation CreateParentChildRelationship(
@@ -122,18 +130,6 @@ const ParentFormValidationSchema = yup.object().shape({
       ),
   }),
   lastName: yup.string(),
-  age: yup
-    .number()
-    .integer()
-    .positive()
-    .max(1000000, "Wow, that's old! Please enter a lower age")
-    .nullable(),
-  monthsOld: yup
-    .number()
-    .integer()
-    .positive()
-    .max(1000000, "Wow, that's old! Please enter a lower age")
-    .nullable(),
   newOrCurrentContact: yup.string().required(),
   formParentId: yup.string(),
   parentType: yup.string(),
@@ -144,8 +140,6 @@ export interface ParentFormData {
   firstName?: string;
   lastName?: string;
   formParentId: string;
-  age: number | null;
-  monthsOld: number | null;
   newOrCurrentContact: string;
   showOnDashboard: string[];
   parentType?: string;
@@ -166,8 +160,6 @@ export const blankInitialValues = {
   firstName: '',
   lastName: '',
   formParentId: '',
-  age: null,
-  monthsOld: null,
   newOrCurrentContact: 'new_person',
   showOnDashboard: [],
   parentType: '',
@@ -187,7 +179,6 @@ export const ParentForm: FC<ParentFormProps> = ({
     createParentChildRelationshipMutation,
   ] = useCreateParentChildRelationshipMutation();
   const [createPersonMutation] = useCreatePersonMutation();
-  const [createAgeMutation] = useCreateAgeMutation();
   const [
     updateParentChildRelationship,
   ] = useUpdateParentChildRelationshipMutation();
@@ -216,8 +207,6 @@ export const ParentForm: FC<ParentFormProps> = ({
     const {
       firstName,
       lastName,
-      age,
-      monthsOld,
       newOrCurrentContact,
       showOnDashboard,
       formParentId,
@@ -250,27 +239,6 @@ export const ParentForm: FC<ParentFormProps> = ({
           return;
         } else {
           newPersonId = createPersonResponse.data?.createPerson?.person?.id;
-
-          if ((age || monthsOld) && newPersonId) {
-            const createAgeResponse = await createAgeMutation({
-              variables: {
-                input: {
-                  age,
-                  monthsOld: monthsOld && !age ? monthsOld : null,
-                  personId: newPersonId,
-                },
-              },
-            });
-            const createAgeErrors = createAgeResponse.data?.createAge.errors;
-            if (createAgeErrors) {
-              handleFormErrors<ParentFormData>(
-                createAgeErrors,
-                setErrors,
-                setStatus,
-              );
-              return;
-            }
-          }
         }
       }
       newPersonId = createPersonResponse
@@ -364,28 +332,16 @@ export const ParentForm: FC<ParentFormProps> = ({
                       },
                     ]}
                   />
-                  <Field
-                    name="firstName"
-                    label="First name"
-                    component={FormikTextInput}
-                    type="test"
-                  />
-                  <Field
-                    name="lastName"
-                    label="Last name (optional)"
-                    component={FormikTextInput}
-                    type="test"
-                  />
-                  <Field
-                    name="age"
-                    label="Age (optional)"
-                    component={FormikNumberInput}
-                  />
-                  <Field
-                    name="monthsOld"
-                    label="Months old (optional)"
-                    component={FormikNumberInput}
-                  />
+                  <NameRowWrapper>
+                    <LeftHalfWrapper>
+                      <FirstNameLabel>First name</FirstNameLabel>
+                      <Field name="firstName" component={FormikTextInput} />
+                    </LeftHalfWrapper>
+                    <RightHalfWrapper>
+                      <LastNameLabel>Last name (optional)</LastNameLabel>
+                      <Field name="lastName" component={FormikTextInput} />
+                    </RightHalfWrapper>
+                  </NameRowWrapper>
                 </>
               )}
               {values.newOrCurrentContact === 'current_person' &&

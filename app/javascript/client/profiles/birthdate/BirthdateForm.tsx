@@ -2,6 +2,14 @@ import React, { FC } from 'react';
 import { useCreateOrUpdateBirthdateMutation } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikNumberInput, FormikSelectInput } from 'client/form/inputs';
+import { SelectInput } from 'client/form/SelectInput';
+import {
+  RowWrapper,
+  LeftHalfWrapper,
+  MiddleQuarterWrapper,
+  RightQuarterWrapper,
+} from 'client/form/inputWrappers';
+import { StyledErrorMessage } from 'client/form/withFormik';
 import { Button } from 'client/common/Button';
 import { Text } from 'client/common/Text';
 import { SectionDivider } from 'client/profiles/PersonContainer';
@@ -15,6 +23,7 @@ import {
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
+import styled from 'styled-components';
 
 gql`
   mutation CreateOrUpdateBirthdate($input: CreateOrUpdateBirthdateInput!) {
@@ -33,6 +42,11 @@ gql`
       }
     }
   }
+`;
+
+export const MonthLabel = styled.div`
+  margin-bottom: 15px;
+  width: 50%;
 `;
 
 const today = new Date();
@@ -147,23 +161,31 @@ export const BirthdateForm: FC<BirthdateFormProps> = ({
           );
           return (
             <Form>
-              <Field
-                name="birthYear"
-                label="Year (optional)"
-                component={FormikNumberInput}
-              />
-              <Field
-                name="birthMonth"
-                label="Month (optional)"
-                component={FormikSelectInput}
-                options={MONTH_OPTIONS}
-              />
-              <Field
-                name="birthDay"
-                label="Day (optional)"
-                component={FormikSelectInput}
-                options={daysOptions}
-              />
+              <RowWrapper>
+                <LeftHalfWrapper>
+                  <MonthLabel>Month (optional)</MonthLabel>
+                  <Field
+                    name="birthMonth"
+                    component={FormikSelectInput}
+                    options={MONTH_OPTIONS}
+                  />
+                </LeftHalfWrapper>
+                <MiddleQuarterWrapper>
+                  <Field
+                    name="birthDay"
+                    label="Day (optional)"
+                    component={FormikSelectInput}
+                    options={daysOptions}
+                  />
+                </MiddleQuarterWrapper>
+                <RightQuarterWrapper>
+                  <Field
+                    name="birthYear"
+                    label="Year (optional)"
+                    component={FormikNumberInput}
+                  />
+                </RightQuarterWrapper>
+              </RowWrapper>
               <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
                 Save
               </Button>

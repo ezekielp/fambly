@@ -26,7 +26,7 @@ RSpec.describe 'update_person_place mutation', type: :request do
                       street
                       zipCode
                     }
-                    birthPlace
+                    placeType
                     current
                     startMonth
                     startYear

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_20_185650) do
+ActiveRecord::Schema.define(version: 2020_10_23_200041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -85,13 +85,13 @@ ActiveRecord::Schema.define(version: 2020_10_20_185650) do
     t.uuid "person_id"
     t.uuid "place_id"
     t.boolean "current", default: false
-    t.boolean "birth_place", default: false
     t.integer "start_year"
     t.integer "start_month"
     t.integer "end_year"
     t.integer "end_month"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "place_type"
     t.index ["person_id"], name: "index_person_places_on_person_id"
     t.index ["place_id"], name: "index_person_places_on_place_id"
   end

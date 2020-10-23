@@ -8,12 +8,18 @@ import {
 import { Field, Form, Formik, FormikHelpers, FieldProps } from 'formik';
 import {
   FormikTextInput,
-  FormikNumberInput,
   FormikRadioGroup,
   FormikSelectInput,
   FormikTextArea,
   FormikCheckboxGroup,
 } from 'client/form/inputs';
+import {
+  RowWrapper,
+  RightHalfWrapper,
+  LeftHalfWrapper,
+  FirstNameLabel,
+  LastNameLabel,
+} from 'client/form/inputWrappers';
 import { Button } from 'client/common/Button';
 import { GlobalError } from 'client/common/GlobalError';
 import { Text } from 'client/common/Text';
@@ -97,18 +103,6 @@ const SiblingFormValidationSchema = yup.object().shape({
       ),
   }),
   lastName: yup.string(),
-  age: yup
-    .number()
-    .integer()
-    .positive()
-    .max(1000000, "Wow, that's old! Please enter a lower age")
-    .nullable(),
-  monthsOld: yup
-    .number()
-    .integer()
-    .positive()
-    .max(1000000, "Wow, that's old! Please enter a lower age")
-    .nullable(),
   newOrCurrentContact: yup.string().required(),
   formSiblingId: yup.string(),
   siblingType: yup.string(),
@@ -119,8 +113,6 @@ export interface SiblingFormData {
   firstName?: string;
   lastName?: string;
   formSiblingId: string;
-  age: number | null;
-  monthsOld: number | null;
   newOrCurrentContact: string;
   showOnDashboard: string[];
   siblingType?: string;
@@ -141,8 +133,6 @@ export const blankInitialValues = {
   firstName: '',
   lastName: '',
   formSiblingId: '',
-  age: null,
-  monthsOld: null,
   newOrCurrentContact: 'new_person',
   showOnDashboard: [],
   siblingType: '',
@@ -189,8 +179,6 @@ export const SiblingForm: FC<SiblingFormProps> = ({
     const {
       firstName,
       lastName,
-      age,
-      monthsOld,
       showOnDashboard,
       formSiblingId,
       siblingType,
@@ -206,8 +194,6 @@ export const SiblingForm: FC<SiblingFormProps> = ({
               firstName: firstName ? firstName : null,
               lastName: lastName ? lastName : null,
               showOnDashboard: showOnDashboard.length > 0 ? true : false,
-              age,
-              monthsOld: age ? null : monthsOld,
               siblingOneId,
               siblingTwoId: formSiblingId ? formSiblingId : null,
               siblingType: siblingType ? siblingType : null,
@@ -293,28 +279,16 @@ export const SiblingForm: FC<SiblingFormProps> = ({
                       },
                     ]}
                   />
-                  <Field
-                    name="firstName"
-                    label="First name"
-                    component={FormikTextInput}
-                    type="test"
-                  />
-                  <Field
-                    name="lastName"
-                    label="Last name (optional)"
-                    component={FormikTextInput}
-                    type="test"
-                  />
-                  <Field
-                    name="age"
-                    label="Age (optional)"
-                    component={FormikNumberInput}
-                  />
-                  <Field
-                    name="monthsOld"
-                    label="Months old (optional)"
-                    component={FormikNumberInput}
-                  />
+                  <RowWrapper>
+                    <LeftHalfWrapper>
+                      <FirstNameLabel>First name</FirstNameLabel>
+                      <Field name="firstName" component={FormikTextInput} />
+                    </LeftHalfWrapper>
+                    <RightHalfWrapper>
+                      <LastNameLabel>Last name (optional)</LastNameLabel>
+                      <Field name="lastName" component={FormikTextInput} />
+                    </RightHalfWrapper>
+                  </RowWrapper>
                 </>
               )}
               {values.newOrCurrentContact === 'current_person' &&

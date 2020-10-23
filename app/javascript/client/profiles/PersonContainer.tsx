@@ -118,7 +118,7 @@ gql`
       id
       firstName
     }
-    birthPlace
+    placeType
     current
     startMonth
     startYear
