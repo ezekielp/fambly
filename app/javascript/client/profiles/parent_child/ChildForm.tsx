@@ -16,17 +16,14 @@ import {
   FormikTextArea,
   FormikCheckboxGroup,
 } from 'client/form/inputs';
-import { TextInput } from 'client/form/TextInput';
 import {
   RowWrapper,
-  NameRowWrapper,
   RightHalfWrapper,
   LeftHalfWrapper,
   OrContainer,
   FirstNameLabel,
   LastNameLabel,
 } from 'client/form/inputWrappers';
-import { StyledErrorMessage } from 'client/form/withFormik';
 import { Button } from 'client/common/Button';
 import { GlobalError } from 'client/common/GlobalError';
 import { Text } from 'client/common/Text';
@@ -274,7 +271,7 @@ export const ChildForm: FC<ChildFormProps> = ({
         onSubmit={handleSubmit}
         validationSchema={ChildFormValidationSchema}
       >
-        {({ values, isSubmitting, status, setFieldTouched, setFieldValue }) => {
+        {({ values, isSubmitting, status }) => {
           return (
             <Form>
               {setFieldToAdd && (
