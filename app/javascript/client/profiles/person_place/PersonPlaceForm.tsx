@@ -48,7 +48,7 @@ gql`
           street
           zipCode
         }
-        birthPlace
+        placeType
         current
         startMonth
         startYear
@@ -84,7 +84,7 @@ gql`
           street
           zipCode
         }
-        birthPlace
+        placeType
         current
         startMonth
         startYear
@@ -153,7 +153,6 @@ export interface PersonPlaceFormData {
   town?: string;
   street?: string;
   zipCode?: string;
-  birthPlace: string[];
   startYear?: number | null;
   startMonth?: string;
   endYear?: number | null;
@@ -176,7 +175,6 @@ export const blankInitialValues = {
   town: '',
   street: '',
   zipCode: '',
-  birthPlace: [],
   startYear: null,
   startMonth: '',
   endYear: null,
@@ -214,7 +212,6 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
       town,
       street,
       zipCode,
-      birthPlace,
       startYear,
       startMonth,
       endYear,
@@ -228,7 +225,6 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
       town: town ? town : null,
       street: street ? street : null,
       zipCode: zipCode ? zipCode : null,
-      birthPlace: birthPlace.length > 0 ? true : false,
       startYear,
       startMonth: startMonth ? parseInt(startMonth) : null,
       endYear,
@@ -340,12 +336,6 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
                   )}
                 </RightHalfWrapper>
               </RowWrapper>
-              {/* <Field
-                name="birthPlace"
-                label=""
-                component={FormikCheckboxGroup}
-                options={[{ label: 'Birth place?', value: 'birthPlace' }]}
-              /> */}
               <RowWrapper>
                 <LeftHalfWrapper>
                   <Field

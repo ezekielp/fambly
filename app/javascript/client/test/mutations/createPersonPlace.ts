@@ -12,7 +12,7 @@ export const createPersonPlaceInput: CreatePersonPlaceInput = {
   town: 'Washington',
   street: null,
   zipCode: null,
-  // birthPlace: true,
+  // placeType: null,
   startMonth: 5,
   startYear: 1924,
   endMonth: null,

@@ -6,7 +6,7 @@ module Types
     argument :town, String, required: false
     argument :street, String, required: false
     argument :zip_code, String, required: false
-    argument :birth_place, Boolean, required: false
+    argument :place_type, String, required: false
     argument :current, Boolean, required: false
     argument :start_month, Int, required: false
     argument :start_year, Int, required: false
@@ -35,8 +35,8 @@ module Mutations
 
         person_place.update(
           place_id: place.id,
-          birth_place: input.birth_place,
           current: input.current,
+          place_type: input.place_type,
           start_month: input.start_month,
           start_year: input.start_year,
           end_month: input.end_month,

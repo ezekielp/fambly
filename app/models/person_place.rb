@@ -3,10 +3,10 @@
 # Table name: person_places
 #
 #  id          :uuid             not null, primary key
-#  birth_place :boolean          default(FALSE)
 #  current     :boolean          default(FALSE)
 #  end_month   :integer
 #  end_year    :integer
+#  place_type  :string
 #  start_month :integer
 #  start_year  :integer
 #  created_at  :datetime         not null
@@ -25,6 +25,7 @@
 #  fk_rails_...  (place_id => places.id)
 #
 class PersonPlace < ApplicationRecord
+  validates :place_type, inclusion: { in: %w[home work vacation birth_place], allow_nil: true }
   validates :start_month, :end_month, inclusion: { in: 1..12, allow_nil: true }
 
   belongs_to :place

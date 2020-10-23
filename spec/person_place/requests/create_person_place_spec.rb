@@ -22,7 +22,7 @@ RSpec.describe 'create_person_place mutation', type: :request do
                       street
                       zipCode
                     }
-                    birthPlace
+                    placeType
                     current
                     startMonth
                     startYear
@@ -47,7 +47,7 @@ RSpec.describe 'create_person_place mutation', type: :request do
           personId: person.id,
           country: 'Switzerland',
           town: 'Basel',
-          birthPlace: true,
+          placeType: 'birth_place',
           startMonth: 4,
           startYear: 1707
         }
