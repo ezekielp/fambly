@@ -85,6 +85,8 @@ GEM
     concurrent-ruby (1.1.7)
     connection_pool (2.2.3)
     crass (1.0.6)
+    ddtrace (0.42.0)
+      msgpack
     diff-lcs (1.4.4)
     dotenv (2.7.6)
     dotenv-rails (2.7.6)
@@ -285,6 +287,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.2)
   byebug
   capybara (>= 2.15)
+  ddtrace
   dotenv-rails
   factory_bot_rails
   graphiql-rails
