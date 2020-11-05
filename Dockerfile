@@ -83,6 +83,7 @@ COPY . /my_app
 # Bundle the JS files
 RUN bin/webpack
 
+# LABEL "com.datadoghq.ad.logs"="/etc/datadog-agent/conf.d/"
 # Copy over the bundled JS files from earlier
 # COPY --from=build /usr/src/node_app/app/javascript/bundle.js ./app/javascript/
 # COPY --from=build /usr/src/node_app/app/javascript/bundle.js.map ./app/javascript/
