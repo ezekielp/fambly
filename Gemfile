@@ -43,6 +43,10 @@ gem 'webdack-uuid_migration'
 # Datadog gem for APM
 gem 'ddtrace'
 
+# Logging gems, for transforming logs to JSON and other features
+gem 'lograge'
+gem 'lograge-sql'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
