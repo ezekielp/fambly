@@ -6,7 +6,7 @@ Rails.application.configure do
     config.lograge.formatter = Lograge::Formatters::Json.new
     config.colorize_logging = false
 
-    # config.lograge.logger = ActiveSupport::Logger.new(File.join(Rails.root, 'log', "#{Rails.env}.log"))
+    config.lograge.logger = ActiveSupport::Logger.new(File.join(Rails.root, 'log', "#{Rails.env}.log"))
 
     config.lograge.custom_options = lambda do |event|
       # Retrieves trace information for current thread
@@ -25,7 +25,8 @@ Rails.application.configure do
         :ddsource => ["ruby"],
         # :params => event.payload[:params].reject { |k| %w(controller action).include? k },
         :params => event.payload[:params],
-        :level => event.payload[:level]        
+        :level => event.payload[:level],
+        :time => Time.now
       }
     end
 end
