@@ -51,8 +51,8 @@ Rails.application.configure do
   config.log_level = :debug
 
   # Prepend all log lines with the following tags.
-  # config.log_tags = [ :request_id ]
-  config.log_tags = [proc { Datadog.tracer.active_correlation.to_s }]
+  config.log_tags = [ :request_id ]
+  # config.log_tags = [proc { Datadog.tracer.active_correlation.to_s }]
 
   # config.lograge.custom_options = lambda do |event|
   #   # Retrieves trace information for current thread
