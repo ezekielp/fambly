@@ -56,3 +56,11 @@ export const STATE_OPTIONS = [
   { label: 'Samoa', value: 'WS' },
   { label: 'Northern Mariana Islands', value: 'MP' },
 ];
+
+export const PLACE_TYPE_OPTIONS = [
+  { label: '', value: '' },
+  { label: 'Home', value: 'home' },
+  { label: 'Work', value: 'work' },
+  { label: 'Vacation', value: 'vacation' },
+  { label: 'Birth place', value: 'birth_place' },
+];

@@ -8,11 +8,8 @@ import {
   FormikTextInput,
   FormikNumberInput,
   FormikTextArea,
-  // FormikCheckboxGroup,
   FormikSelectInput,
 } from 'client/form/inputs';
-import { StyledErrorMessage } from 'client/form/withFormik';
-import { TextInput } from 'client/form/TextInput';
 import { Button } from 'client/common/Button';
 import {
   RowWrapper,
@@ -22,7 +19,7 @@ import {
   RightQuarterWrapper,
 } from 'client/form/inputWrappers';
 import { MONTH_OPTIONS } from 'client/profiles/birthdate/utils';
-import { STATE_OPTIONS } from './utils';
+import { STATE_OPTIONS, PLACE_TYPE_OPTIONS } from './utils';
 import { GlobalError } from 'client/common/GlobalError';
 import { Text } from 'client/common/Text';
 import { SectionDivider } from 'client/profiles/PersonContainer';
@@ -110,6 +107,7 @@ const StreetLabel = styled.div`
 
 const PersonPlaceFormValidationSchema = yup.object().shape({
   country: yup.string().required('You must provide at least a country!'),
+  placeType: yup.string(),
   stateOrRegion: yup.string(),
   town: yup.string(),
   street: yup.string(),
@@ -149,6 +147,7 @@ const PersonPlaceFormValidationSchema = yup.object().shape({
 
 export interface PersonPlaceFormData {
   country: string;
+  placeType?: string;
   stateOrRegion?: string;
   town?: string;
   street?: string;
@@ -167,10 +166,12 @@ export interface PersonPlaceFormProps {
   setEditFlag?: (bool: boolean) => void;
   setModalOpen?: (bool: boolean) => void;
   personPlaceId?: string;
+  propCurrent?: boolean;
 }
 
 export const blankInitialValues = {
   country: 'USA',
+  placeType: '',
   stateOrRegion: '',
   town: '',
   street: '',
@@ -189,6 +190,7 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
   setEditFlag,
   personPlaceId,
   setModalOpen,
+  propCurrent,
 }) => {
   const [createPersonPlace] = useCreatePersonPlaceMutation();
   const [updatePersonPlace] = useUpdatePersonPlaceMutation();
@@ -208,6 +210,7 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
   ) => {
     const {
       country,
+      placeType,
       stateOrRegion,
       town,
       street,
@@ -221,6 +224,7 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
     const { setErrors, setStatus } = formikHelpers;
     const input = {
       country,
+      placeType: placeType ? placeType : null,
       stateOrRegion: stateOrRegion ? stateOrRegion : null,
       town: town ? town : null,
       street: street ? street : null,
@@ -229,6 +233,7 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
       startMonth: startMonth ? parseInt(startMonth) : null,
       endYear,
       endMonth: endMonth ? parseInt(endMonth) : null,
+      current: propCurrent ? true : false,
     };
 
     if (setFieldToAdd) {
@@ -296,6 +301,12 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
                 name="country"
                 label="Country"
                 component={FormikTextInput}
+              />
+              <Field
+                name="placeType"
+                label="Place type (optional)"
+                component={FormikSelectInput}
+                options={PLACE_TYPE_OPTIONS}
               />
               <RowWrapper>
                 <LeftThreeQuarterWrapper>
