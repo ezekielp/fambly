@@ -12,19 +12,23 @@ const PersonPlaceItemsContainer = styled.div`
 interface PersonPlacesContainerProps {
   personPlaces: PersonPlaceInfoFragment[];
   firstName: string;
+  current: boolean;
 }
 
 export const PersonPlacesContainer: FC<PersonPlacesContainerProps> = ({
   personPlaces,
   firstName,
+  current,
 }) => {
   const personPlaceItems = personPlaces.map((personPlace) => {
     return <PersonPlaceItem personPlace={personPlace} key={personPlace.id} />;
   });
 
+  const labelText = current ? 'addresses' : `places ${firstName} has lived`;
+
   return (
     <ProfileFieldContainer>
-      <ProfileLabel>places {firstName} has lived</ProfileLabel>
+      <ProfileLabel>{labelText}</ProfileLabel>
       <PersonPlaceItemsContainer>{personPlaceItems}</PersonPlaceItemsContainer>
     </ProfileFieldContainer>
   );

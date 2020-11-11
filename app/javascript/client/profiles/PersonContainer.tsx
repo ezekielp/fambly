@@ -39,6 +39,7 @@ import styled from 'styled-components';
 import { Text } from 'client/common/Text';
 import { Button } from 'client/common/Button';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { getCurrentAndPreviousPlaces } from './utils';
 
 gql`
   query GetPersonForPersonContainer($personId: String!) {
@@ -242,6 +243,10 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
     .concat(children ? children : [])
     .concat(siblings ? siblings : [])
     .concat(partners ? partners : []);
+
+  const { currentPlaces, previousPlaces } = getCurrentAndPreviousPlaces(
+    personPlaces ? personPlaces : [],
+  );
 
   const hasAge = age || monthsOld;
   const hasBirthdate = birthYear || birthMonth;
@@ -499,10 +504,11 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
           <Subheading>Personal history</Subheading>
         </>
       )}
-      {personPlaces && personPlaces.length > 0 && (
+      {previousPlaces.length > 0 && (
         <PersonPlacesContainer
-          personPlaces={personPlaces}
+          personPlaces={previousPlaces}
           firstName={firstName}
+          current={false}
         />
       )}
     </BelowNavContainer>
