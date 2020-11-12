@@ -24,6 +24,9 @@ gql`
 const PersonPlaceTextContainer = styled.div`
   text-align: center;
   margin-right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 interface PersonPlaceItemProps {
@@ -118,8 +121,9 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({
     { label: 'Delete', onClick: () => setModalOpen(true) },
   ];
 
-  const initialValues = {
+  const editFormInitialValues = {
     country,
+    placeType: placeType ? placeType : '',
     stateOrRegion: stateOrRegion ? stateOrRegion : '',
     town: town ? town : '',
     street: street ? street : '',
@@ -139,13 +143,10 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({
         <FieldBadge
           backgroundColor={placeTypeColors[placeType]['backgroundColor']}
           textColor={placeTypeColors[placeType]['textColor']}
+          marginBottom="5px"
+          marginRight="0"
         >
           {getPlaceTypeLabel(placeType)}
-        </FieldBadge>
-      )}
-      {startAndEndDates && (
-        <FieldBadge backgroundColor="white" textColor="black">
-          {startAndEndDates}
         </FieldBadge>
       )}
       <div>{street && street}</div>
@@ -154,6 +155,11 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({
         {stateOrRegion && `, ${stateOrRegion}`} {zipCode && zipCode}
       </div>
       <div>{country}</div>
+      {startAndEndDates && (
+        <FieldBadge backgroundColor="white" textColor="black" marginRight="0">
+          {startAndEndDates}
+        </FieldBadge>
+      )}
     </PersonPlaceTextContainer>
   );
 
@@ -162,7 +168,7 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({
       {editFlag && (
         <Modal onClose={handleEditModalClose}>
           <PersonPlaceForm
-            initialValues={initialValues}
+            initialValues={editFormInitialValues}
             setEditFlag={setEditFlag}
             personId={person.id}
             setModalOpen={setModalOpen}

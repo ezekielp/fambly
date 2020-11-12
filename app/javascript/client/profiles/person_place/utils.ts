@@ -1,6 +1,7 @@
 import { colors } from 'client/shared/styles';
 
 export const STATE_OPTIONS = [
+  { label: '', value: '' },
   { label: 'Alaska', value: 'AK' },
   { label: 'Alabama', value: 'AL' },
   { label: 'Arizona', value: 'AZ' },

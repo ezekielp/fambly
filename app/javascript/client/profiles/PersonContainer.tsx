@@ -422,6 +422,15 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
           <PersonPlaceForm setFieldToAdd={setFieldToAdd} personId={personId} />
         </Modal>
       )}
+      {fieldToAdd === 'address' && (
+        <Modal onClose={() => setFieldToAdd('')}>
+          <PersonPlaceForm
+            setFieldToAdd={setFieldToAdd}
+            personId={personId}
+            propCurrent={true}
+          />
+        </Modal>
+      )}
       {notes && notes.length > 0 && (
         <>
           <SectionDivider />
