@@ -6,7 +6,10 @@ import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
 import styled from 'styled-components';
 
 const PersonPlaceItemsContainer = styled.div`
-  margin: 0 auto;
+  margin-left: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 interface PersonPlacesContainerProps {
@@ -26,6 +29,7 @@ export const PersonPlacesContainer: FC<PersonPlacesContainerProps> = ({
         personPlace={personPlace}
         current={current}
         key={personPlace.id}
+        personFirstName={firstName}
       />
     );
   });

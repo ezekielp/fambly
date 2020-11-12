@@ -8,6 +8,7 @@ import {
   FormikTextInput,
   FormikNumberInput,
   FormikTextArea,
+  FormikCheckboxGroup,
   FormikSelectInput,
 } from 'client/form/inputs';
 import { Button } from 'client/common/Button';
@@ -157,6 +158,7 @@ export interface PersonPlaceFormData {
   endYear?: number | null;
   endMonth?: string;
   note?: string;
+  current?: string[];
 }
 
 export interface PersonPlaceFormProps {
@@ -167,6 +169,7 @@ export interface PersonPlaceFormProps {
   setModalOpen?: (bool: boolean) => void;
   personPlaceId?: string;
   propCurrent?: boolean;
+  personFirstName?: string;
 }
 
 export const blankInitialValues = {
@@ -191,6 +194,7 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
   personPlaceId,
   setModalOpen,
   propCurrent,
+  personFirstName,
 }) => {
   const [createPersonPlace] = useCreatePersonPlaceMutation();
   const [updatePersonPlace] = useUpdatePersonPlaceMutation();
@@ -220,6 +224,7 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
       endYear,
       endMonth,
       note,
+      current,
     } = data;
     const { setErrors, setStatus } = formikHelpers;
     const input = {
@@ -233,7 +238,7 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
       startMonth: startMonth ? parseInt(startMonth) : null,
       endYear,
       endMonth: endMonth ? parseInt(endMonth) : null,
-      current: propCurrent ? true : false,
+      current: propCurrent ? true : !!(current && current.length > 0),
     };
 
     if (setFieldToAdd) {
@@ -297,6 +302,19 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
         {({ values, isSubmitting, status }) => {
           return (
             <Form>
+              {setEditFlag && personFirstName && (
+                <Field
+                  name="current"
+                  label=""
+                  component={FormikCheckboxGroup}
+                  options={[
+                    {
+                      label: `Is this a current address for ${personFirstName}?`,
+                      value: 'current',
+                    },
+                  ]}
+                />
+              )}
               <Field
                 name="country"
                 label="Country"
