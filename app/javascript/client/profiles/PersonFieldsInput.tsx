@@ -31,31 +31,22 @@ export const PersonFieldsInput: FC<PersonFieldsInputProps> = ({
     birthDay,
   } = personData;
 
-  const lacksEssentialData = !!(
-    !(age || monthsOld) ||
-    !(birthYear || birthMonth) ||
-    !gender ||
-    !lastName ||
-    !middleName
-  );
-
   return (
     <Container>
       <SelectWrapper>
         <StyledSelect value={fieldToAdd} onChange={onChange}>
           <option value="">Select a field to add</option>
           <option value="note">Note</option>
-          {lacksEssentialData && (
-            <optgroup label="Essential info">
-              {!age && !monthsOld && <option value="age">Age</option>}
-              {!birthYear && !birthMonth && !birthDay && (
-                <option value="birthdate">Birthdate</option>
-              )}
-              {!gender && <option value="gender">Gender</option>}
-              {!middleName && <option value="middleName">Middle name</option>}
-              {!lastName && <option value="lastName">Last name</option>}
-            </optgroup>
-          )}
+          <optgroup label="Essential info">
+            {!age && !monthsOld && <option value="age">Age</option>}
+            {!birthYear && !birthMonth && !birthDay && (
+              <option value="birthdate">Birthdate</option>
+            )}
+            {!gender && <option value="gender">Gender</option>}
+            {!middleName && <option value="middleName">Middle name</option>}
+            {!lastName && <option value="lastName">Last name</option>}
+            <option value="address">Address</option>
+          </optgroup>
           <optgroup label="Relationships">
             <option value="spouse">Spouse</option>
             <option value="partner">Partner (boyfriend / girlfriend)</option>

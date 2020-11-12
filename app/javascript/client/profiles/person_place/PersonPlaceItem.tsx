@@ -6,11 +6,14 @@ import { PersonPlaceInfoFragment } from 'client/graphqlTypes';
 import { PersonPlaceForm } from './PersonPlaceForm';
 import { NoteItem } from 'client/profiles/notes/NoteItem';
 import { gql } from '@apollo/client';
-import { colors } from 'client/shared/styles';
+import { colors, spacing } from 'client/shared/styles';
 import { Modal } from 'client/common/Modal';
 import { Text } from 'client/common/Text';
 import { Button } from 'client/common/Button';
 import styled from 'styled-components';
+import { MONTH_ABBREVIATIONS } from 'client/profiles/utils';
+import { FieldBadge } from 'client/common/FieldBadge';
+import { placeTypeColors, getPlaceTypeLabel } from './utils';
 
 gql`
   mutation DeletePersonPlace($input: DeletePersonPlaceInput!) {
@@ -18,16 +21,39 @@ gql`
   }
 `;
 
+const PersonPlaceItemContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &:not(:last-child) {
+    margin-bottom: ${spacing[2]};
+  }
+`;
+
 const PersonPlaceTextContainer = styled.div`
   text-align: center;
   margin-right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const CountryContainer = styled.div`
+  margin-bottom: 5px;
 `;
 
 interface PersonPlaceItemProps {
   personPlace: PersonPlaceInfoFragment;
+  current: boolean;
+  personFirstName: string;
 }
 
-export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
+export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({
+  personPlace,
+  current,
+  personFirstName,
+}) => {
   const {
     id,
     place,
@@ -36,6 +62,7 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
     startYear,
     endMonth,
     endYear,
+    placeType,
     notes,
   } = personPlace;
   const { country, stateOrRegion, town, street, zipCode } = place;
@@ -67,31 +94,52 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
     setEditFlag(false);
   };
 
-  const getTimingText = () => {
-    const startMonthText = startMonth ? startMonth : '';
-    const endMonthText = endMonth ? endMonth + ' ' : ' ';
+  const getStartAndEndDatesText = (
+    startYear: number | null | undefined,
+    startMonth: number | null | undefined,
+    endYear: number | null | undefined,
+    endMonth: number | null | undefined,
+    current: boolean,
+  ) => {
+    const startMonthText = startMonth
+      ? MONTH_ABBREVIATIONS[startMonth] + ' '
+      : '';
+    const endMonthText = endMonth ? MONTH_ABBREVIATIONS[endMonth] + ' ' : ' ';
     if (startYear && endYear) {
-      return (
-        <div>
-          ({startMonthText} {startYear}-{endMonthText}
-          {endYear})
-        </div>
-      );
+      return `${startMonthText} ${startYear}-${endMonthText}
+          ${endYear}`;
     } else if (startYear) {
-      return <div>({startYear}-)</div>;
+      if (current) {
+        return `${startMonthText}${startYear} - present`;
+      } else {
+        return `${startMonthText}${startYear} - unknown`;
+      }
     } else if (endYear) {
-      return <div>(until {endYear})</div>;
+      if (current) {
+        return `until ${endMonthText}${endYear}`;
+      } else {
+        return `? - ${endMonthText}${endYear}`;
+      }
     }
-    return <></>;
+    return '';
   };
+
+  const startAndEndDates = getStartAndEndDatesText(
+    startYear,
+    startMonth,
+    endYear,
+    endMonth,
+    current,
+  );
 
   const dropdownItems = [
     { label: 'Edit', onClick: handleEdit },
     { label: 'Delete', onClick: () => setModalOpen(true) },
   ];
 
-  const initialValues = {
+  const editFormInitialValues = {
     country,
+    placeType: placeType ? placeType : '',
     stateOrRegion: stateOrRegion ? stateOrRegion : '',
     town: town ? town : '',
     street: street ? street : '',
@@ -100,6 +148,7 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
     startMonth: startMonth ? startMonth.toString() : '',
     endYear,
     endMonth: endMonth ? endMonth.toString() : '',
+    current: current ? ['current'] : [],
   };
 
   const noteItems =
@@ -107,13 +156,27 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
 
   const personPlaceContent = (
     <PersonPlaceTextContainer>
-      {getTimingText()}
+      {placeType && (
+        <FieldBadge
+          backgroundColor={placeTypeColors[placeType]['backgroundColor']}
+          textColor={placeTypeColors[placeType]['textColor']}
+          marginBottom="5px"
+          marginRight="0"
+        >
+          {getPlaceTypeLabel(placeType)}
+        </FieldBadge>
+      )}
       <div>{street && street}</div>
       <div>
         {town && town}
         {stateOrRegion && `, ${stateOrRegion}`} {zipCode && zipCode}
       </div>
-      <div>{country}</div>
+      <CountryContainer>{country}</CountryContainer>
+      {startAndEndDates && (
+        <FieldBadge backgroundColor="white" textColor="black" marginRight="0">
+          {startAndEndDates}
+        </FieldBadge>
+      )}
     </PersonPlaceTextContainer>
   );
 
@@ -122,11 +185,12 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
       {editFlag && (
         <Modal onClose={handleEditModalClose}>
           <PersonPlaceForm
-            initialValues={initialValues}
+            initialValues={editFormInitialValues}
             setEditFlag={setEditFlag}
             personId={person.id}
             setModalOpen={setModalOpen}
             personPlaceId={id}
+            personFirstName={personFirstName}
           />
         </Modal>
       )}
@@ -146,7 +210,7 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
     <>
       {!deletedFlag && (
         <>
-          <ProfileFieldContainer>
+          <PersonPlaceItemContainer>
             {personPlaceContent}
             <Dropdown
               menuItems={dropdownItems}
@@ -155,7 +219,7 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
               color={colors.orange}
               topSpacing="30px"
             />
-          </ProfileFieldContainer>
+          </PersonPlaceItemContainer>
           {!deletedFlag && noteItems}
         </>
       )}

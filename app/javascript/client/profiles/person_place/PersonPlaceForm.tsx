@@ -8,11 +8,9 @@ import {
   FormikTextInput,
   FormikNumberInput,
   FormikTextArea,
-  // FormikCheckboxGroup,
+  FormikCheckboxGroup,
   FormikSelectInput,
 } from 'client/form/inputs';
-import { StyledErrorMessage } from 'client/form/withFormik';
-import { TextInput } from 'client/form/TextInput';
 import { Button } from 'client/common/Button';
 import {
   RowWrapper,
@@ -22,7 +20,7 @@ import {
   RightQuarterWrapper,
 } from 'client/form/inputWrappers';
 import { MONTH_OPTIONS } from 'client/profiles/birthdate/utils';
-import { STATE_OPTIONS } from './utils';
+import { STATE_OPTIONS, PLACE_TYPE_OPTIONS } from './utils';
 import { GlobalError } from 'client/common/GlobalError';
 import { Text } from 'client/common/Text';
 import { SectionDivider } from 'client/profiles/PersonContainer';
@@ -110,6 +108,7 @@ const StreetLabel = styled.div`
 
 const PersonPlaceFormValidationSchema = yup.object().shape({
   country: yup.string().required('You must provide at least a country!'),
+  placeType: yup.string(),
   stateOrRegion: yup.string(),
   town: yup.string(),
   street: yup.string(),
@@ -149,6 +148,7 @@ const PersonPlaceFormValidationSchema = yup.object().shape({
 
 export interface PersonPlaceFormData {
   country: string;
+  placeType?: string;
   stateOrRegion?: string;
   town?: string;
   street?: string;
@@ -158,6 +158,7 @@ export interface PersonPlaceFormData {
   endYear?: number | null;
   endMonth?: string;
   note?: string;
+  current?: string[];
 }
 
 export interface PersonPlaceFormProps {
@@ -167,10 +168,13 @@ export interface PersonPlaceFormProps {
   setEditFlag?: (bool: boolean) => void;
   setModalOpen?: (bool: boolean) => void;
   personPlaceId?: string;
+  propCurrent?: boolean;
+  personFirstName?: string;
 }
 
 export const blankInitialValues = {
   country: 'USA',
+  placeType: '',
   stateOrRegion: '',
   town: '',
   street: '',
@@ -189,6 +193,8 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
   setEditFlag,
   personPlaceId,
   setModalOpen,
+  propCurrent,
+  personFirstName,
 }) => {
   const [createPersonPlace] = useCreatePersonPlaceMutation();
   const [updatePersonPlace] = useUpdatePersonPlaceMutation();
@@ -208,6 +214,7 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
   ) => {
     const {
       country,
+      placeType,
       stateOrRegion,
       town,
       street,
@@ -217,10 +224,12 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
       endYear,
       endMonth,
       note,
+      current,
     } = data;
     const { setErrors, setStatus } = formikHelpers;
     const input = {
       country,
+      placeType: placeType ? placeType : null,
       stateOrRegion: stateOrRegion ? stateOrRegion : null,
       town: town ? town : null,
       street: street ? street : null,
@@ -229,6 +238,7 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
       startMonth: startMonth ? parseInt(startMonth) : null,
       endYear,
       endMonth: endMonth ? parseInt(endMonth) : null,
+      current: propCurrent ? true : !!(current && current.length > 0),
     };
 
     if (setFieldToAdd) {
@@ -292,10 +302,29 @@ export const PersonPlaceForm: FC<PersonPlaceFormProps> = ({
         {({ values, isSubmitting, status }) => {
           return (
             <Form>
+              {setEditFlag && personFirstName && (
+                <Field
+                  name="current"
+                  label=""
+                  component={FormikCheckboxGroup}
+                  options={[
+                    {
+                      label: `Is this a current address for ${personFirstName}?`,
+                      value: 'current',
+                    },
+                  ]}
+                />
+              )}
               <Field
                 name="country"
                 label="Country"
                 component={FormikTextInput}
+              />
+              <Field
+                name="placeType"
+                label="Place type (optional)"
+                component={FormikSelectInput}
+                options={PLACE_TYPE_OPTIONS}
               />
               <RowWrapper>
                 <LeftThreeQuarterWrapper>

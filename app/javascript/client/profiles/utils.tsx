@@ -4,6 +4,7 @@ import {
   HomeContainerPersonInfoFragment,
   UserPersonInfoFragment,
   SubContactInfoFragment,
+  PersonPlaceInfoFragment,
 } from 'client/graphqlTypes';
 import { AgeContainer } from 'client/profiles/parent_child/ParentItem';
 
@@ -14,6 +15,20 @@ export const NEW_OR_CURRENT_CONTACT_OPTIONS = [
     value: 'current_person',
   },
 ];
+
+interface CurrentAndPreviousPlaces {
+  currentPlaces: PersonPlaceInfoFragment[];
+  previousPlaces: PersonPlaceInfoFragment[];
+}
+
+export const getCurrentAndPreviousPlaces = (
+  personPlaces: PersonPlaceInfoFragment[],
+): CurrentAndPreviousPlaces => {
+  return {
+    currentPlaces: personPlaces.filter((personPlace) => personPlace.current),
+    previousPlaces: personPlaces.filter((personPlace) => !personPlace.current),
+  };
+};
 
 export const buildPeopleOptions = (
   people: HomeContainerPersonInfoFragment[],
