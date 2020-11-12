@@ -11,6 +11,9 @@ import { Modal } from 'client/common/Modal';
 import { Text } from 'client/common/Text';
 import { Button } from 'client/common/Button';
 import styled from 'styled-components';
+import { MONTH_ABBREVIATIONS } from 'client/profiles/utils';
+import { FieldBadge } from 'client/common/FieldBadge';
+import { placeTypeColors, getPlaceTypeLabel } from './utils';
 
 gql`
   mutation DeletePersonPlace($input: DeletePersonPlaceInput!) {
@@ -25,9 +28,13 @@ const PersonPlaceTextContainer = styled.div`
 
 interface PersonPlaceItemProps {
   personPlace: PersonPlaceInfoFragment;
+  current: boolean;
 }
 
-export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
+export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({
+  personPlace,
+  current,
+}) => {
   const {
     id,
     place,
@@ -36,6 +43,7 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
     startYear,
     endMonth,
     endYear,
+    placeType,
     notes,
   } = personPlace;
   const { country, stateOrRegion, town, street, zipCode } = place;
@@ -67,23 +75,43 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
     setEditFlag(false);
   };
 
-  const getTimingText = () => {
-    const startMonthText = startMonth ? startMonth : '';
-    const endMonthText = endMonth ? endMonth + ' ' : ' ';
+  const getStartAndEndDatesText = (
+    startYear: number | null | undefined,
+    startMonth: number | null | undefined,
+    endYear: number | null | undefined,
+    endMonth: number | null | undefined,
+    current: boolean,
+  ) => {
+    const startMonthText = startMonth
+      ? MONTH_ABBREVIATIONS[startMonth] + ' '
+      : '';
+    const endMonthText = endMonth ? MONTH_ABBREVIATIONS[endMonth] + ' ' : ' ';
     if (startYear && endYear) {
-      return (
-        <div>
-          ({startMonthText} {startYear}-{endMonthText}
-          {endYear})
-        </div>
-      );
+      return `${startMonthText} ${startYear}-${endMonthText}
+          ${endYear}`;
     } else if (startYear) {
-      return <div>({startYear}-)</div>;
+      if (current) {
+        return `${startMonthText}${startYear} - present`;
+      } else {
+        return `${startMonthText}${startYear} - unknown`;
+      }
     } else if (endYear) {
-      return <div>(until {endYear})</div>;
+      if (current) {
+        return `until ${endMonthText}${endYear}`;
+      } else {
+        return `? - ${endMonthText}${endYear}`;
+      }
     }
-    return <></>;
+    return '';
   };
+
+  const startAndEndDates = getStartAndEndDatesText(
+    startYear,
+    startMonth,
+    endYear,
+    endMonth,
+    current,
+  );
 
   const dropdownItems = [
     { label: 'Edit', onClick: handleEdit },
@@ -107,7 +135,19 @@ export const PersonPlaceItem: FC<PersonPlaceItemProps> = ({ personPlace }) => {
 
   const personPlaceContent = (
     <PersonPlaceTextContainer>
-      {getTimingText()}
+      {placeType && (
+        <FieldBadge
+          backgroundColor={placeTypeColors[placeType]['backgroundColor']}
+          textColor={placeTypeColors[placeType]['textColor']}
+        >
+          {getPlaceTypeLabel(placeType)}
+        </FieldBadge>
+      )}
+      {startAndEndDates && (
+        <FieldBadge backgroundColor="white" textColor="black">
+          {startAndEndDates}
+        </FieldBadge>
+      )}
       <div>{street && street}</div>
       <div>
         {town && town}

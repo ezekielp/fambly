@@ -1,3 +1,5 @@
+import { colors } from 'client/shared/styles';
+
 export const STATE_OPTIONS = [
   { label: 'Alaska', value: 'AK' },
   { label: 'Alabama', value: 'AL' },
@@ -64,3 +66,30 @@ export const PLACE_TYPE_OPTIONS = [
   { label: 'Vacation', value: 'vacation' },
   { label: 'Birth place', value: 'birth_place' },
 ];
+
+export const placeTypeColors: Record<
+  string,
+  Record<string, keyof typeof colors>
+> = {
+  home: {
+    backgroundColor: 'orange',
+    textColor: 'white',
+  },
+  work: {
+    backgroundColor: 'darkBlue',
+    textColor: 'white',
+  },
+  vacation: {
+    backgroundColor: 'palmGreen',
+    textColor: 'white',
+  },
+  birth_place: {
+    backgroundColor: 'mediumBlue',
+    textColor: 'white',
+  },
+};
+
+export const getPlaceTypeLabel = (placeType: string): string | null => {
+  if (!placeType) return null;
+  return placeType.split('_').join(' ');
+};

@@ -255,7 +255,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
     (parents && parents.length > 0) ||
     (children && children.length > 0) ||
     (siblings && siblings.length > 0);
-  const hasPersonalHistory = personPlaces && personPlaces.length > 0;
+  const hasPersonalHistory = previousPlaces.length > 0;
 
   return (
     <BelowNavContainer>
@@ -453,6 +453,13 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
           birthMonth={birthMonth}
           birthDay={birthDay}
           personId={personId}
+        />
+      )}
+      {currentPlaces.length > 0 && (
+        <PersonPlacesContainer
+          personPlaces={currentPlaces}
+          firstName={firstName}
+          current={true}
         />
       )}
       {partners && partners.length > 0 && (

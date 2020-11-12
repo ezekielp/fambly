@@ -21,7 +21,13 @@ export const PersonPlacesContainer: FC<PersonPlacesContainerProps> = ({
   current,
 }) => {
   const personPlaceItems = personPlaces.map((personPlace) => {
-    return <PersonPlaceItem personPlace={personPlace} key={personPlace.id} />;
+    return (
+      <PersonPlaceItem
+        personPlace={personPlace}
+        current={current}
+        key={personPlace.id}
+      />
+    );
   });
 
   const labelText = current ? 'addresses' : `places ${firstName} has lived`;
