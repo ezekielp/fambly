@@ -17,6 +17,7 @@ module Types
     field :children, [Types::PersonType], null: true
     field :siblings, [Types::PersonType], null: true
     field :partners, [Types::PersonType], null: true
+    field :anniversary, Types::AnniversaryType, null: true
     field :person_places, [Types::PersonPlaceType], null: true
 
     def age

@@ -53,6 +53,16 @@ gql`
     id
     firstName
     lastName
+    birthYear
+    birthMonth
+    birthDay
+    anniversary {
+      partnerOneName
+      partnerTwoName
+      weddingYear
+      weddingMonth
+      weddingDay
+    }
     showOnDashboard
     age
     monthsOld

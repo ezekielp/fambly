@@ -62,6 +62,24 @@ class Person < ApplicationRecord
     partner_ones + partner_twos
   end
 
+  def anniversary
+    relationships = partner_one_relationships + partner_two_relationships
+    marriage = relationships.find do |relationship|
+      relationship.relationship_type == 'marriage' && relationship.current == true
+    end
+
+    wedding_year, wedding_month, wedding_day = marriage.wedding_year, marriage.wedding_month, marriage.wedding_day
+    return nil unless marriage && wedding_month && wedding_day
+
+    {
+      wedding_year: wedding_year,
+      wedding_month: wedding_month,
+      wedding_day: wedding_day,
+      partner_one_name: marriage.partner_one.first_name,
+      partner_two_name: marriage.partner_two.first_name,
+    }
+  end
+
   def birth_year_must_be_in_past
     if birth_year.present? && birth_year > Time.zone.now.year
       errors.add(:birth_year, "can't be in the future!")

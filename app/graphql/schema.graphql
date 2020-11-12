@@ -21,6 +21,14 @@ input AmorousRelationshipInput {
   partnerTwoId: String!
 }
 
+type Anniversary {
+  partnerOneName: String!
+  partnerTwoName: String!
+  weddingDay: Int
+  weddingMonth: Int
+  weddingYear: Int
+}
+
 input CreateAgeInput {
   age: Int
   monthsOld: Int
@@ -333,6 +341,7 @@ input ParentChildInput {
 
 type Person {
   age: Int
+  anniversary: Anniversary
   birthDay: Int
   birthMonth: Int
   birthYear: Int
