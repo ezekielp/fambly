@@ -1,3 +1,5 @@
+import { HomeContainerPersonInfoFragment } from 'client/graphqlTypes';
+
 interface FAQ {
   question: string;
   answer: string[];
@@ -51,3 +53,36 @@ export const frequentlyAskedQuestions: FAQ[] = [
     ],
   },
 ];
+
+interface DateTypesForDatesScroller {
+  birthday: string;
+  anniversary: string;
+}
+
+const dateTypesForDatesScroller: DateTypesForDatesScroller = {
+  birthday: 'birthday',
+  anniversary: 'anniversary',
+};
+
+export interface PersonForDatesScroller {
+  id: string;
+  firstName: string;
+  lastName?: string;
+}
+
+export interface PersonInfoForDatesScroller {
+  dateType: keyof typeof dateTypesForDatesScroller;
+  people: PersonForDatesScroller[];
+}
+
+export type DaysObjectForDatesScroller = {
+  [day: number]: PersonInfoForDatesScroller[];
+};
+
+export type MonthsObjectForDatesScroller = {
+  [month: number]: DaysObjectForDatesScroller;
+};
+
+export const getInfoForDatesScroller = (
+  people: HomeContainerPersonInfoFragment[],
+) => {};
