@@ -11,7 +11,7 @@ const DatesScrollerContainer = styled.div`
   overflow: scroll;
   border: 1px solid black;
   border-radius: 8px;
-  padding: 0.5rem 1rem;
+  padding: 1rem;
 `;
 
 export const DatesScrollerSectionDivider = styled.hr`
