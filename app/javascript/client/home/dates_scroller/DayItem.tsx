@@ -7,9 +7,12 @@ import styled from 'styled-components';
 const DayItemContainer = styled.div`
   display: flex;
   flex-direction: row;
+  margin-right: 5px;
 `;
 
-const DayContainer = styled.div``;
+const DayContainer = styled.div`
+  margin-right: 0.5rem;
+`;
 
 const DatesContainer = styled.div``;
 

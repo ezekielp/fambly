@@ -139,6 +139,10 @@ const SelectedTagContainer = styled.div`
   width: fit-content;
 `;
 
+const StyledButton = styled(Button)`
+  margin-bottom: 1.5rem;
+`;
+
 interface HomeContainerProps {}
 
 const InternalHomeContainer: FC<HomeContainerProps> = () => {
@@ -230,12 +234,12 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
           state: { reachedTrialLimit: true },
         }}
       >
-        <Button>Add a new person profile</Button>
+        <StyledButton>Add a new person profile</StyledButton>
       </Link>
     ) : (
-      <Button onClick={() => toggleNewPersonFieldVisible(true)}>
+      <StyledButton onClick={() => toggleNewPersonFieldVisible(true)}>
         Add a new person profile
-      </Button>
+      </StyledButton>
     );
 
   return (

@@ -28,7 +28,7 @@ export const Text = styled.div`
     return "'wght' 400";
   }};
   margin-bottom: ${({ marginBottom }: TextProps) =>
-    marginBottom ? spacing[marginBottom] : '0'};
+    marginBottom !== undefined ? spacing[marginBottom] : '0'};
   line-height: ${({ lineHeight }: TextProps) =>
     lineHeight ? lineHeight : 'normal'};
 `;

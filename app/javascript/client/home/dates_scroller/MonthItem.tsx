@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { DayItem } from './DayItem';
+import { DatesScrollerSectionDivider } from './DatesScroller';
 import { DaysObjectForDatesScroller } from 'client/home/utils';
 import { MONTHS } from 'client/profiles/birthdate/utils';
 import { Text } from 'client/common/Text';
@@ -30,10 +31,11 @@ export const MonthItem: FC<MonthItemProps> = ({ month, daysObject }) => {
 
   return (
     <MonthItemContainer>
-      <Text fontSize={3} semiBold>
+      <Text fontSize={2} semiBold marginBottom={0}>
         {monthText}
       </Text>
       {dayItems}
+      {/* <DatesScrollerSectionDivider /> */}
     </MonthItemContainer>
   );
 };
