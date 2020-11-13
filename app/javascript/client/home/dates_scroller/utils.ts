@@ -1,19 +1,6 @@
-export const MONTHS = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
+export const MONTHS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
-export const getRotatedMonths = (months: string[]): string[] => {
+export const getRotatedMonths = (months: number[]): number[] => {
   const today = new Date();
   const currentMonth = today.getMonth();
   return months.slice(currentMonth).concat(months.slice(0, currentMonth));
