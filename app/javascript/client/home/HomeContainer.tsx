@@ -18,6 +18,7 @@ import { Tag } from 'client/profiles/tags/TagsContainer';
 import { SearchBox } from 'client/form/search_box/SearchBox';
 import { getAgeContent } from 'client/profiles/utils';
 import { Modal } from 'client/common/Modal';
+import { getInfoForDatesScroller } from './utils';
 
 gql`
   mutation Logout {
@@ -58,7 +59,9 @@ gql`
     birthDay
     anniversary {
       partnerOneName
+      partnerOneId
       partnerTwoName
+      partnerTwoId
       weddingYear
       weddingMonth
       weddingDay
@@ -156,6 +159,8 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
   const people = userData.user?.people ? userData.user?.people : [];
   const tags = userData.user?.tags ? userData.user?.tags : [];
   const dummyEmail = userData.user?.dummyEmail;
+
+  const infoForDatesScroller = getInfoForDatesScroller(people);
 
   const profileLinks = people
     .filter((person) => {

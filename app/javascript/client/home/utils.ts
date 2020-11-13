@@ -54,29 +54,49 @@ export const frequentlyAskedQuestions: FAQ[] = [
   },
 ];
 
-interface DateTypesForDatesScroller {
-  birthday: string;
-  anniversary: string;
-}
+// interface DateTypesForDatesScroller {
+//   birthday: string;
+//   anniversary: string;
+// }
 
-const dateTypesForDatesScroller: DateTypesForDatesScroller = {
-  birthday: 'birthday',
-  anniversary: 'anniversary',
-};
+// const dateTypesForDatesScroller: DateTypesForDatesScroller = {
+//   birthday: 'birthday',
+//   anniversary: 'anniversary',
+// };
+
+// type DateTypes = 'birthday' | 'anniversary';
+
+export interface CoupleForDatesScroller {
+  partnerOneName: string;
+  partnerOneId: string;
+  partnerTwoName: string;
+  partnerTwoId: string;
+  weddingYear: number | null | undefined;
+  weddingMonth: number | null | undefined;
+  weddingDay: number | null | undefined;
+}
 
 export interface PersonForDatesScroller {
   id: string;
   firstName: string;
-  lastName?: string;
+  lastName?: string | null | undefined;
+  birthYear?: number | null | undefined;
+  birthMonth?: number | null | undefined;
+  birthDay?: number | null | undefined;
+  age?: number | null | undefined;
+  monthsOld?: number | null | undefined;
 }
 
-export interface PersonInfoForDatesScroller {
-  dateType: keyof typeof dateTypesForDatesScroller;
+export interface PersonOrCoupleInfoForDatesScroller {
+  // dateType: keyof typeof dateTypesForDatesScroller;
+  // dateType: DateTypes;
+  // dateType: 'birthday' | 'anniversary';
   people: PersonForDatesScroller[];
+  couples: CoupleForDatesScroller[];
 }
 
 export type DaysObjectForDatesScroller = {
-  [day: number]: PersonInfoForDatesScroller[];
+  [day: number]: PersonOrCoupleInfoForDatesScroller;
 };
 
 export type MonthsObjectForDatesScroller = {
@@ -85,4 +105,73 @@ export type MonthsObjectForDatesScroller = {
 
 export const getInfoForDatesScroller = (
   people: HomeContainerPersonInfoFragment[],
-) => {};
+) => {
+  const monthsObject: MonthsObjectForDatesScroller = {};
+  for (let i = 0; i < people.length; i++) {
+    const person = people[i];
+    const {
+      id,
+      firstName,
+      lastName,
+      birthYear,
+      birthMonth,
+      birthDay,
+      anniversary,
+      age,
+      monthsOld,
+    } = person;
+    if (birthMonth && birthDay) {
+      const personObject = {
+        id,
+        firstName,
+        lastName,
+        birthYear,
+        birthMonth,
+        birthDay,
+        age,
+        monthsOld,
+      };
+      if (
+        monthsObject[birthMonth] &&
+        monthsObject[birthMonth][birthDay] &&
+        monthsObject[birthMonth][birthDay].people &&
+        monthsObject[birthMonth][birthDay].people.length > 0
+      ) {
+        monthsObject[birthMonth][birthDay].people.push(personObject);
+      } else {
+        monthsObject[birthMonth][birthDay]['people'] = [personObject];
+      }
+    }
+    if (anniversary && anniversary.weddingMonth && anniversary.weddingDay) {
+      const {
+        partnerOneName,
+        partnerOneId,
+        partnerTwoName,
+        partnerTwoId,
+        weddingYear,
+        weddingMonth,
+        weddingDay,
+      } = anniversary;
+      const coupleObject = {
+        partnerOneName,
+        partnerOneId,
+        partnerTwoName,
+        partnerTwoId,
+        weddingYear,
+        weddingMonth,
+        weddingDay,
+      };
+      if (
+        monthsObject[weddingMonth] &&
+        monthsObject[weddingMonth][weddingDay] &&
+        monthsObject[weddingMonth][weddingDay].couples &&
+        monthsObject[weddingMonth][weddingDay].couples.length > 0
+      ) {
+        monthsObject[weddingMonth][weddingDay].couples.push(coupleObject);
+      } else {
+        monthsObject[weddingMonth][weddingDay]['couples'] = [coupleObject];
+      }
+    }
+  }
+  return monthsObject;
+};

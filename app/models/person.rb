@@ -76,7 +76,9 @@ class Person < ApplicationRecord
       wedding_month: wedding_month,
       wedding_day: wedding_day,
       partner_one_name: marriage.partner_one.first_name,
+      partner_one_id: marriage.partner_one.id,
       partner_two_name: marriage.partner_two.first_name,
+      partner_two_id: marriage.partner_two.id,
     }
   end
 

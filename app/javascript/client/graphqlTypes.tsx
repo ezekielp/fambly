@@ -37,7 +37,9 @@ export type AmorousRelationshipInput = {
 
 export type Anniversary = {
   __typename?: 'Anniversary';
+  partnerOneId: Scalars['ID'];
   partnerOneName: Scalars['String'];
+  partnerTwoId: Scalars['ID'];
   partnerTwoName: Scalars['String'];
   weddingDay?: Maybe<Scalars['Int']>;
   weddingMonth?: Maybe<Scalars['Int']>;
@@ -790,7 +792,7 @@ export type HomeContainerPersonInfoFragment = (
   & Pick<Person, 'id' | 'firstName' | 'lastName' | 'birthYear' | 'birthMonth' | 'birthDay' | 'showOnDashboard' | 'age' | 'monthsOld'>
   & { anniversary?: Maybe<(
     { __typename?: 'Anniversary' }
-    & Pick<Anniversary, 'partnerOneName' | 'partnerTwoName' | 'weddingYear' | 'weddingMonth' | 'weddingDay'>
+    & Pick<Anniversary, 'partnerOneName' | 'partnerOneId' | 'partnerTwoName' | 'partnerTwoId' | 'weddingYear' | 'weddingMonth' | 'weddingDay'>
   )>, tags?: Maybe<Array<(
     { __typename?: 'Tag' }
     & Pick<Tag, 'id' | 'name' | 'color'>
@@ -1512,7 +1514,9 @@ export const HomeContainerPersonInfoFragmentDoc = gql`
   birthDay
   anniversary {
     partnerOneName
+    partnerOneId
     partnerTwoName
+    partnerTwoId
     weddingYear
     weddingMonth
     weddingDay

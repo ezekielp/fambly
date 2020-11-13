@@ -22,7 +22,9 @@ input AmorousRelationshipInput {
 }
 
 type Anniversary {
+  partnerOneId: ID!
   partnerOneName: String!
+  partnerTwoId: ID!
   partnerTwoName: String!
   weddingDay: Int
   weddingMonth: Int
