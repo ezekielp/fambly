@@ -87,7 +87,7 @@ export interface PersonForDatesScroller {
   monthsOld?: number | null | undefined;
 }
 
-export interface PersonOrCoupleInfoForDatesScroller {
+export interface PeopleAndCouplesInfoForDatesScroller {
   // dateType: keyof typeof dateTypesForDatesScroller;
   // dateType: DateTypes;
   // dateType: 'birthday' | 'anniversary';
@@ -96,7 +96,7 @@ export interface PersonOrCoupleInfoForDatesScroller {
 }
 
 export type DaysObjectForDatesScroller = {
-  [day: number]: PersonOrCoupleInfoForDatesScroller;
+  [day: number]: PeopleAndCouplesInfoForDatesScroller;
 };
 
 export type MonthsObjectForDatesScroller = {
