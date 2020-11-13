@@ -1,12 +1,17 @@
 import React, { FC } from 'react';
 import { MonthItem } from './MonthItem';
+import { SectionDivider } from 'client/profiles/PersonContainer';
 import { MonthsObjectForDatesScroller } from 'client/home/utils';
 import { MONTHS, getRotatedMonths } from './utils';
+import { Text } from 'client/common/Text';
 import styled from 'styled-components';
 
 const DatesScrollerContainer = styled.div`
   height: 200px;
-  width: 100%;
+  overflow: scroll;
+  border: 1px solid lightgray;
+  border-radius: 8px;
+  padding: 0 1rem;
 `;
 
 /* Current thinking: Write a utility function that will put the people into month keys and nested day keys with arrays of objects containing the date type, the person/couple, and their IDs. Then, you pass that to the DatesScroller here. */
@@ -19,18 +24,20 @@ interface DatesScrollerProps {
 
 export const DatesScroller: FC<DatesScrollerProps> = ({ monthsObject }) => {
   const monthItems = getRotatedMonths(MONTHS).map((month) => {
-    const monthAsNumber = parseInt(month);
-    if (monthsObject[monthAsNumber]) {
+    if (monthsObject[month]) {
       return (
-        <MonthItem
-          key={month}
-          month={monthAsNumber}
-          daysObject={monthsObject[monthAsNumber]}
-        />
+        <MonthItem key={month} month={month} daysObject={monthsObject[month]} />
       );
     }
-    return <></>;
   });
 
-  return <DatesScrollerContainer>{monthItems}</DatesScrollerContainer>;
+  return (
+    <DatesScrollerContainer>
+      <Text fontSize={2} semiBold>
+        Birthdays and anniversaries
+      </Text>
+      {monthItems}
+      <SectionDivider />
+    </DatesScrollerContainer>
+  );
 };

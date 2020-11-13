@@ -139,6 +139,11 @@ export const getInfoForDatesScroller = (
       ) {
         monthsObject[birthMonth][birthDay].people.push(personObject);
       } else {
+        monthsObject[birthMonth] = {};
+        monthsObject[birthMonth][birthDay] = {
+          people: [],
+          couples: [],
+        };
         monthsObject[birthMonth][birthDay]['people'] = [personObject];
       }
     }
@@ -169,6 +174,11 @@ export const getInfoForDatesScroller = (
       ) {
         monthsObject[weddingMonth][weddingDay].couples.push(coupleObject);
       } else {
+        monthsObject[weddingMonth] = {};
+        monthsObject[weddingMonth][weddingDay] = {
+          people: [],
+          couples: [],
+        };
         monthsObject[weddingMonth][weddingDay]['couples'] = [coupleObject];
       }
     }

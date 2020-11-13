@@ -8,6 +8,8 @@ export const getRotatedMonths = (months: number[]): number[] => {
 
 export const addSuffixToNumber = (age: number): string => {
   const ageString = age.toString();
+  if (age > 3 && age < 19) return ageString + 'th';
+
   const lastDigit = ageString[ageString.length - 1];
   switch (lastDigit) {
     case '1':

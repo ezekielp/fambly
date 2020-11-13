@@ -68,8 +68,9 @@ class Person < ApplicationRecord
       relationship.relationship_type == 'marriage' && relationship.current == true
     end
 
+    return nil unless marriage
     wedding_year, wedding_month, wedding_day = marriage.wedding_year, marriage.wedding_month, marriage.wedding_day
-    return nil unless marriage && wedding_month && wedding_day
+    return nil unless wedding_month && wedding_day
 
     {
       wedding_year: wedding_year,

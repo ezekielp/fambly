@@ -19,6 +19,7 @@ import { SearchBox } from 'client/form/search_box/SearchBox';
 import { getAgeContent } from 'client/profiles/utils';
 import { Modal } from 'client/common/Modal';
 import { getInfoForDatesScroller } from './utils';
+import { DatesScroller } from 'client/home/dates_scroller/DatesScroller';
 
 gql`
   mutation Logout {
@@ -250,6 +251,7 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
         Dashboard
       </Text>
       {!newPersonFieldVisible && addPersonButton}
+      <DatesScroller monthsObject={infoForDatesScroller} />
       {newPersonFieldVisible && (
         <Modal onClose={() => toggleNewPersonFieldVisible(false)}>
           <PersonForm

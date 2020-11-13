@@ -38,7 +38,7 @@ export const DayItem: FC<DayItemProps> = ({ day, peopleAndCouplesInfo }) => {
     return (
       <DateContainer key={id}>
         <StyledLink to={`/profiles/${id}`}>{nameText}</StyledLink>&apos;s{' '}
-        {getUpcomingAgeText} birthday
+        {getUpcomingAgeText()} birthday
       </DateContainer>
     );
   });
