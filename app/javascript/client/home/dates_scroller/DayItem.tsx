@@ -7,16 +7,16 @@ import styled from 'styled-components';
 const DayItemContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-right: 5px;
+  margin-left: 5px;
 `;
 
-const DayContainer = styled.div`
-  margin-right: 0.5rem;
-`;
+const DayContainer = styled.div``;
 
 const DatesContainer = styled.div``;
 
-const DateContainer = styled.div``;
+const DateContainer = styled.div`
+  margin-left: 5px;
+`;
 
 interface DayItemProps {
   day: number;
