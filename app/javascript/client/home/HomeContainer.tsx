@@ -18,6 +18,8 @@ import { Tag } from 'client/profiles/tags/TagsContainer';
 import { SearchBox } from 'client/form/search_box/SearchBox';
 import { getAgeContent } from 'client/profiles/utils';
 import { Modal } from 'client/common/Modal';
+import { getInfoForDatesScroller } from './utils';
+import { DatesScroller } from 'client/home/dates_scroller/DatesScroller';
 
 gql`
   mutation Logout {
@@ -53,6 +55,18 @@ gql`
     id
     firstName
     lastName
+    birthYear
+    birthMonth
+    birthDay
+    anniversary {
+      partnerOneName
+      partnerOneId
+      partnerTwoName
+      partnerTwoId
+      weddingYear
+      weddingMonth
+      weddingDay
+    }
     showOnDashboard
     age
     monthsOld
@@ -125,6 +139,10 @@ const SelectedTagContainer = styled.div`
   width: fit-content;
 `;
 
+const StyledButton = styled(Button)`
+  margin-bottom: 1.5rem;
+`;
+
 interface HomeContainerProps {}
 
 const InternalHomeContainer: FC<HomeContainerProps> = () => {
@@ -146,6 +164,8 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
   const people = userData.user?.people ? userData.user?.people : [];
   const tags = userData.user?.tags ? userData.user?.tags : [];
   const dummyEmail = userData.user?.dummyEmail;
+
+  const infoForDatesScroller = getInfoForDatesScroller(people);
 
   const profileLinks = people
     .filter((person) => {
@@ -214,12 +234,12 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
           state: { reachedTrialLimit: true },
         }}
       >
-        <Button>Add a new person profile</Button>
+        <StyledButton>Add a new person profile</StyledButton>
       </Link>
     ) : (
-      <Button onClick={() => toggleNewPersonFieldVisible(true)}>
+      <StyledButton onClick={() => toggleNewPersonFieldVisible(true)}>
         Add a new person profile
-      </Button>
+      </StyledButton>
     );
 
   return (
@@ -235,6 +255,7 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
         Dashboard
       </Text>
       {!newPersonFieldVisible && addPersonButton}
+      <DatesScroller monthsObject={infoForDatesScroller} />
       {newPersonFieldVisible && (
         <Modal onClose={() => toggleNewPersonFieldVisible(false)}>
           <PersonForm

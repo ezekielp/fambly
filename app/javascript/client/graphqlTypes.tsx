@@ -35,6 +35,17 @@ export type AmorousRelationshipInput = {
   partnerTwoId: Scalars['String'];
 };
 
+export type Anniversary = {
+  __typename?: 'Anniversary';
+  partnerOneId: Scalars['ID'];
+  partnerOneName: Scalars['String'];
+  partnerTwoId: Scalars['ID'];
+  partnerTwoName: Scalars['String'];
+  weddingDay?: Maybe<Scalars['Int']>;
+  weddingMonth?: Maybe<Scalars['Int']>;
+  weddingYear?: Maybe<Scalars['Int']>;
+};
+
 export type CreateAgeInput = {
   age?: Maybe<Scalars['Int']>;
   monthsOld?: Maybe<Scalars['Int']>;
@@ -490,6 +501,7 @@ export type ParentChildInput = {
 export type Person = {
   __typename?: 'Person';
   age?: Maybe<Scalars['Int']>;
+  anniversary?: Maybe<Anniversary>;
   birthDay?: Maybe<Scalars['Int']>;
   birthMonth?: Maybe<Scalars['Int']>;
   birthYear?: Maybe<Scalars['Int']>;
@@ -777,8 +789,11 @@ export type GetUserForHomeContainerQuery = (
 
 export type HomeContainerPersonInfoFragment = (
   { __typename?: 'Person' }
-  & Pick<Person, 'id' | 'firstName' | 'lastName' | 'showOnDashboard' | 'age' | 'monthsOld'>
-  & { tags?: Maybe<Array<(
+  & Pick<Person, 'id' | 'firstName' | 'lastName' | 'birthYear' | 'birthMonth' | 'birthDay' | 'showOnDashboard' | 'age' | 'monthsOld'>
+  & { anniversary?: Maybe<(
+    { __typename?: 'Anniversary' }
+    & Pick<Anniversary, 'partnerOneName' | 'partnerOneId' | 'partnerTwoName' | 'partnerTwoId' | 'weddingYear' | 'weddingMonth' | 'weddingDay'>
+  )>, tags?: Maybe<Array<(
     { __typename?: 'Tag' }
     & Pick<Tag, 'id' | 'name' | 'color'>
   )>> }
@@ -1494,6 +1509,18 @@ export const HomeContainerPersonInfoFragmentDoc = gql`
   id
   firstName
   lastName
+  birthYear
+  birthMonth
+  birthDay
+  anniversary {
+    partnerOneName
+    partnerOneId
+    partnerTwoName
+    partnerTwoId
+    weddingYear
+    weddingMonth
+    weddingDay
+  }
   showOnDashboard
   age
   monthsOld
