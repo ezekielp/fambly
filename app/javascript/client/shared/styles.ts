@@ -5,8 +5,11 @@ export interface Colors {
   red: string;
   white: string;
   purple: string;
+  yellow: string;
+  darkYellow: string;
   lightPurple: string;
   darkGreen: string;
+  mediumGreen: string;
   lightGreen: string;
   palmGreen: string;
   darkMagenta: string;
@@ -24,8 +27,11 @@ export const colors: Colors = {
   red: '#FF0000',
   white: '#fff',
   purple: '#502989',
+  yellow: '#f4fa41',
+  darkYellow: '#e3f235',
   lightPurple: '#b8a6dc',
   darkGreen: '#006400',
+  mediumGreen: '#09ad14',
   lightGreen: '#90ee90',
   palmGreen: '#34B334',
   darkMagenta: '#8b008b',

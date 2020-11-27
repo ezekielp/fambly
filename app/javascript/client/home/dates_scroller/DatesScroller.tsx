@@ -32,14 +32,10 @@ export const DatesScroller: FC<DatesScrollerProps> = ({ monthsObject }) => {
   const monthItems = months.map((month, idx) => {
     if (monthsObject[month]) {
       return (
-        <>
-          <MonthItem
-            key={month}
-            month={month}
-            daysObject={monthsObject[month]}
-          />
+        <div key={month}>
+          <MonthItem month={month} daysObject={monthsObject[month]} />
           {idx < months.length - 1 && <DatesScrollerSectionDivider />}
-        </>
+        </div>
       );
     }
   });

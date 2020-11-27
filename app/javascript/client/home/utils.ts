@@ -54,18 +54,6 @@ export const frequentlyAskedQuestions: FAQ[] = [
   },
 ];
 
-// interface DateTypesForDatesScroller {
-//   birthday: string;
-//   anniversary: string;
-// }
-
-// const dateTypesForDatesScroller: DateTypesForDatesScroller = {
-//   birthday: 'birthday',
-//   anniversary: 'anniversary',
-// };
-
-// type DateTypes = 'birthday' | 'anniversary';
-
 export interface CoupleForDatesScroller {
   partnerOneName: string;
   partnerOneId: string;
@@ -88,9 +76,6 @@ export interface PersonForDatesScroller {
 }
 
 export interface PeopleAndCouplesInfoForDatesScroller {
-  // dateType: keyof typeof dateTypesForDatesScroller;
-  // dateType: DateTypes;
-  // dateType: 'birthday' | 'anniversary';
   people: PersonForDatesScroller[];
   couples: CoupleForDatesScroller[];
 }
@@ -134,8 +119,8 @@ export const getInfoForDatesScroller = (
       if (
         monthsObject[birthMonth] &&
         monthsObject[birthMonth][birthDay] &&
-        monthsObject[birthMonth][birthDay].people &&
-        monthsObject[birthMonth][birthDay].people.length > 0
+        monthsObject[birthMonth][birthDay].people
+        // monthsObject[birthMonth][birthDay].people.length > 0
       ) {
         monthsObject[birthMonth][birthDay].people.push(personObject);
       } else {
@@ -169,10 +154,23 @@ export const getInfoForDatesScroller = (
       if (
         monthsObject[weddingMonth] &&
         monthsObject[weddingMonth][weddingDay] &&
-        monthsObject[weddingMonth][weddingDay].couples &&
-        monthsObject[weddingMonth][weddingDay].couples.length > 0
+        monthsObject[weddingMonth][weddingDay].couples
+        // monthsObject[weddingMonth][weddingDay].couples.length > 0
       ) {
-        monthsObject[weddingMonth][weddingDay].couples.push(coupleObject);
+        let anniversaryAlreadyPresent = false;
+        const couples = monthsObject[weddingMonth][weddingDay].couples;
+        for (let i = 0; i < couples.length; i++) {
+          if (
+            couples[i].partnerOneId === partnerOneId ||
+            couples[i].partnerOneId === partnerTwoId
+          ) {
+            anniversaryAlreadyPresent = true;
+            i = couples.length;
+          }
+        }
+        if (!anniversaryAlreadyPresent) {
+          monthsObject[weddingMonth][weddingDay].couples.push(coupleObject);
+        }
       } else {
         monthsObject[weddingMonth] = {};
         monthsObject[weddingMonth][weddingDay] = {
