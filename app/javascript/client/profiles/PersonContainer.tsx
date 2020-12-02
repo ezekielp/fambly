@@ -334,6 +334,19 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
           />
         </Modal>
       )}
+      {fieldToAdd === 'lastName' && (
+        <Modal onClose={() => setFieldToAdd('')}>
+          <PersonForm
+            setFieldToAdd={setFieldToAdd}
+            personId={personId}
+            addLastName={true}
+            initialValues={{
+              firstName,
+              lastName: '',
+            }}
+          />
+        </Modal>
+      )}
       {fieldToAdd === 'note' && (
         <Modal onClose={() => setFieldToAdd('')}>
           <NoteForm setFieldToAdd={setFieldToAdd} personId={personId} />
