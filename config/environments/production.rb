@@ -52,26 +52,6 @@ Rails.application.configure do
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :request_id ]
-  # config.log_tags = [proc { Datadog.tracer.active_correlation.to_s }]
-
-  # config.lograge.custom_options = lambda do |event|
-  #   # Retrieves trace information for current thread
-  #   correlation = Datadog.tracer.active_correlation
-
-  #   {
-  #     # Adds IDs as tags to log output
-  #     :dd => {
-  #       # To preserve precision during JSON serialization, use strings for large numbers
-  #       :trace_id => correlation.trace_id.to_s,
-  #       :span_id => correlation.span_id.to_s,
-  #       :env => correlation.env.to_s,
-  #       :service => correlation.service.to_s,
-  #       :version => correlation.version.to_s
-  #     },
-  #     :ddsource => ["ruby"],
-  #     :params => event.payload[:params].reject { |k| %w(controller action).include? k }
-  #   }
-  # end
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store

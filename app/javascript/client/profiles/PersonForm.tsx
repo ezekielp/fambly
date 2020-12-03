@@ -50,6 +50,7 @@ export interface PersonFormProps extends RouteComponentProps {
   personId?: string;
   initialValues?: PersonFormData;
   updateMiddleName?: boolean;
+  addLastName?: boolean;
   setFieldToAdd?: (field: string) => void;
   setModalOpen?: (bool: boolean) => void;
 }
@@ -69,6 +70,7 @@ const InternalPersonForm: FC<PersonFormProps> = ({
   setFieldToAdd,
   personId,
   updateMiddleName,
+  addLastName,
   history,
 }) => {
   const [createPersonMutation] = useCreatePersonMutation();
@@ -150,30 +152,27 @@ const InternalPersonForm: FC<PersonFormProps> = ({
       >
         {({ isSubmitting }) => (
           <Form>
-            {!updateMiddleName && (
+            {!updateMiddleName && !addLastName && (
               <Field
                 name="firstName"
                 label="First name"
                 component={FormikTextInput}
-                type="text"
               />
             )}
-            {!toggleNewPersonFieldVisible && (
+            {!toggleNewPersonFieldVisible && !addLastName && (
               <Field
                 name="middleName"
                 label={
                   updateMiddleName ? 'Middle name' : 'Middle name (optional)'
                 }
                 component={FormikTextInput}
-                type="text"
               />
             )}
             {!updateMiddleName && (
               <Field
                 name="lastName"
-                label="Last name (optional)"
+                label={addLastName ? 'Last name' : 'Last name (optional)'}
                 component={FormikTextInput}
-                type="text"
               />
             )}
             <Button marginRight="1rem" type="submit" disabled={isSubmitting}>

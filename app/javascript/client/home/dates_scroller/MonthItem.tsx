@@ -39,7 +39,6 @@ export const MonthItem: FC<MonthItemProps> = ({ month, daysObject }) => {
       );
     });
 
-  console.log(month);
   const monthText = MONTHS[month] as string;
   const today = new Date();
   const currentMonth = today.getMonth() + 1;

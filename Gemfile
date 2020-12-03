@@ -40,9 +40,6 @@ gem 'bootsnap', '>= 1.4.2', require: false
 # Migrate to UUID for primary keys
 gem 'webdack-uuid_migration'
 
-# Datadog gem for APM
-gem 'ddtrace'
-
 # Logging gems, for transforming logs to JSON and other features
 gem 'lograge'
 gem 'lograge-sql'
