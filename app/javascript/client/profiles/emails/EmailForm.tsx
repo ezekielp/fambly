@@ -8,6 +8,7 @@ import { SectionDivider } from 'client/profiles/PersonContainer';
 import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
+import { FormikSelectInput, FormikTextInput } from 'client/form/inputs';
 
 gql`
   mutation CreateEmail($input: CreateEmailInput!) {
@@ -102,6 +103,32 @@ export const EmailForm: FC<EmailFormProps> = ({
       <Text marginBottom={3} fontSize={4} bold>
         Email
       </Text>
+      <SectionDivider />
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={EmailFormValidationSchema}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <Field
+              name="email"
+              label="Email address"
+              component={FormikTextInput}
+            />
+            <Field
+              name="emailType"
+              label="Type (optional)"
+              component={FormikSelectInput}
+              options={EMAIL_TYPE_OPTIONS}
+            />
+            <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
+              Save
+            </Button>
+            <Button onClick={() => cancel()}>Cancel</Button>
+          </Form>
+        )}
+      </Formik>
     </>
   );
 };
