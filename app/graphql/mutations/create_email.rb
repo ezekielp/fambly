@@ -12,7 +12,18 @@ module Mutations
 
     field :email, Types::EmailType, null: true
 
-
+    def resolve(input:)
+      email = Email.new(
+        person_id: input.person_id,
+        email: input.email,
+        email_type: input.email_type
+      )
+      if email.save
+        return { email: email }
+      else
+        return { errors: [{ path: '', message: 'Oops! Something went wrong. Please refresh the page and try again.' }] }
+      end
+    end
   end
 end
 

@@ -23,6 +23,9 @@ module Types
     field :create_or_update_birthdate, mutation: Mutations::CreateOrUpdateBirthdate
     field :delete_birthdate, mutation: Mutations::DeleteBirthdate
 
+    # Emails
+    field :create_email, mutation: Mutations::CreateEmail
+
     # Parent-child relationship
     field :create_parent_child_relationship, mutation: Mutations::CreateParentChildRelationship
     field :update_parent_child_relationship, mutation: Mutations::UpdateParentChildRelationship
