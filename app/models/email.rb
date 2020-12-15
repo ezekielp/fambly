@@ -18,4 +18,8 @@
 #  fk_rails_...  (person_id => people.id)
 #
 class Email < ApplicationRecord
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :email_type, inclusion: { in: %w[personal work school], allow_nil: true }
+
+  belongs_to :person
 end
