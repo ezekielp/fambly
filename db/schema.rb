@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_23_200041) do
+ActiveRecord::Schema.define(version: 2020_12_15_200340) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -42,6 +42,15 @@ ActiveRecord::Schema.define(version: 2020_10_23_200041) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_dummy_emails_on_user_id"
+  end
+
+  create_table "emails", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "person_id"
+    t.string "email", null: false
+    t.string "email_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["person_id"], name: "index_emails_on_person_id"
   end
 
   create_table "notes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -147,6 +156,7 @@ ActiveRecord::Schema.define(version: 2020_10_23_200041) do
   add_foreign_key "amorous_relationships", "people", column: "partner_one_id"
   add_foreign_key "amorous_relationships", "people", column: "partner_two_id"
   add_foreign_key "dummy_emails", "users"
+  add_foreign_key "emails", "people"
   add_foreign_key "parent_children", "people", column: "child_id"
   add_foreign_key "parent_children", "people", column: "parent_id"
   add_foreign_key "people", "users"
