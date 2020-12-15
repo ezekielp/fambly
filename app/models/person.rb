@@ -33,6 +33,7 @@ class Person < ApplicationRecord
 
   belongs_to :user
   has_many :notes, as: :notable, dependent: :destroy
+  has_many :emails, dependent: :destroy
   has_many :parent_child_relationships, class_name: 'ParentChild', foreign_key: 'parent_id', dependent: :destroy
   has_many :child_parent_relationships, class_name: 'ParentChild', foreign_key: 'child_id', dependent: :destroy
   has_many :parents, through: :child_parent_relationships

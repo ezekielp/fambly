@@ -39,8 +39,8 @@ RSpec.describe 'create_email mutation', type: :request do
     )
 
     email_response = JSON.parse(response.body).dig('data', 'createEmail', 'email')
-    expect(email_response['email'])to eq(email)
-    expect(email_response['emailType'])to eq(email_type)
+    expect(email_response['email']).to eq(email)
+    expect(email_response['emailType']).to eq(email_type)
     expect(person.emails.first.email).to eq(email)
   end
 end
