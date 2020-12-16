@@ -25,6 +25,7 @@ module Types
 
     # Emails
     field :create_email, mutation: Mutations::CreateEmail
+    field :update_email, mutation: Mutations::UpdateEmail
 
     # Parent-child relationship
     field :create_parent_child_relationship, mutation: Mutations::CreateParentChildRelationship
