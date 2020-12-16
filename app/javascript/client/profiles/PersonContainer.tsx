@@ -17,6 +17,8 @@ import { NoteForm } from './notes/NoteForm';
 import { NotesContainer } from './notes/NotesContainer';
 import { BirthdateForm } from './birthdate/BirthdateForm';
 import { BirthdateContainer } from './birthdate/BirthdateContainer';
+import { EmailForm } from './emails/EmailForm';
+import { EmailsContainer } from './emails/EmailsContainer';
 import { ParentForm } from './parent_child/ParentForm';
 import { ChildForm } from './parent_child/ChildForm';
 import { SiblingForm } from './sibling/SiblingForm';
@@ -71,6 +73,11 @@ gql`
     notes {
       id
       content
+    }
+    emails {
+      id
+      emailAddress
+      emailType
     }
     parents {
       ...SubContactInfo
@@ -232,6 +239,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
     birthDay,
     tags,
     notes,
+    emails,
     parents,
     children,
     siblings,
@@ -250,7 +258,10 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
 
   const hasAge = age || monthsOld;
   const hasBirthdate = birthYear || birthMonth;
-  const hasVitals = gender || hasAge || hasBirthdate;
+  const hasEmails = emails && emails.length > 0;
+  const hasCurrentPlaces = currentPlaces.length > 0;
+  const hasVitals =
+    gender || hasAge || hasBirthdate || hasEmails || hasCurrentPlaces;
   const hasFamily =
     (parents && parents.length > 0) ||
     (children && children.length > 0) ||
@@ -345,6 +356,11 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
               lastName: '',
             }}
           />
+        </Modal>
+      )}
+      {fieldToAdd === 'email' && (
+        <Modal onClose={() => setFieldToAdd('')}>
+          <EmailForm setFieldToAdd={setFieldToAdd} personId={personId} />
         </Modal>
       )}
       {fieldToAdd === 'note' && (
@@ -477,7 +493,8 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
           personId={personId}
         />
       )}
-      {currentPlaces.length > 0 && (
+      {hasEmails && <EmailsContainer emails={emails} />}
+      {hasCurrentPlaces && (
         <PersonPlacesContainer
           personPlaces={currentPlaces}
           firstName={firstName}

@@ -956,6 +956,9 @@ export type PersonInfoFragment = (
   )>>, notes?: Maybe<Array<(
     { __typename?: 'Note' }
     & Pick<Note, 'id' | 'content'>
+  )>>, emails?: Maybe<Array<(
+    { __typename?: 'Email' }
+    & Pick<Email, 'id' | 'emailAddress' | 'emailType'>
   )>>, parents?: Maybe<Array<(
     { __typename?: 'Person' }
     & SubContactInfoFragment
@@ -1693,6 +1696,11 @@ export const PersonInfoFragmentDoc = gql`
   notes {
     id
     content
+  }
+  emails {
+    id
+    emailAddress
+    emailType
   }
   parents {
     ...SubContactInfo

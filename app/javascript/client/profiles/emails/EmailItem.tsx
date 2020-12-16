@@ -2,10 +2,11 @@ import React, { FC, useState } from 'react';
 import { useDeleteEmailMutation } from 'client/graphqlTypes';
 import { Email } from './EmailsContainer';
 import { EmailForm } from './EmailForm';
-import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
+// import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
+import { emailTypeColors } from './utils';
 import { Dropdown } from 'client/common/Dropdown';
 import { gql } from '@apollo/client';
-import { colors } from 'client/shared/styles';
+import { colors, spacing } from 'client/shared/styles';
 import { Modal } from 'client/common/Modal';
 import { Text } from 'client/common/Text';
 import { Button } from 'client/common/Button';
@@ -31,6 +32,16 @@ gql`
 gql`
   mutation DeleteEmail($input: DeleteEmailInput!) {
     deleteEmail(input: $input)
+  }
+`;
+
+const EmailItemContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &:not(:last-child) {
+    margin-bottom: ${spacing[0]};
   }
 `;
 
@@ -104,7 +115,16 @@ export const EmailItem: FC<EmailProps> = ({ email }) => {
   ) : (
     <>
       {!deletedFlag && (
-        <ProfileFieldContainer>
+        <EmailItemContainer>
+          {emailAddress}
+          {emailType && (
+            <FieldBadge
+              backgroundColor={emailTypeColors[emailType]}
+              textColor="white"
+            >
+              {emailType}
+            </FieldBadge>
+          )}
           <Dropdown
             menuItems={dropdownItems}
             xMarkSize="20"
@@ -112,7 +132,7 @@ export const EmailItem: FC<EmailProps> = ({ email }) => {
             color={colors.orange}
             topSpacing="30px"
           />
-        </ProfileFieldContainer>
+        </EmailItemContainer>
       )}
     </>
   );

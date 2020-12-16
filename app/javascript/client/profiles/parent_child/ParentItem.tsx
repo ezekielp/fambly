@@ -111,20 +111,6 @@ export const ParentItem: FC<ParentItemProps> = ({
     { label: 'Delete', onClick: () => setModalOpen(true) },
   ];
 
-  // const getLastNameContent = (
-  //   parentLastName: string | null | undefined,
-  //   childLastName: string | null | undefined,
-  // ) => {
-  //   if (
-  //     !parentLastName ||
-  //     (childLastName && childLastName === parentLastName)
-  //   ) {
-  //     return '';
-  //   } else {
-  //     return ` ${parentLastName}`;
-  //   }
-  // };
-
   const ageContent = age ? <AgeContainer>{`(${age})`}</AgeContainer> : '';
   const parentType =
     parentChildData?.parentChildRelationshipByParentIdAndChildId?.parentType;
