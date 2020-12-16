@@ -1,7 +1,7 @@
 module Types
   class UpdateEmailInputType < Types::BaseInputObject
     argument :email_id, ID, required: true
-    argument :email, String, required: false
+    argument :email_address, String, required: false
     argument :email_type, String, required: false
   end
 end
@@ -16,7 +16,7 @@ module Mutations
       email = Email.find_by(id: input.email_id)
 
       if email
-        email.update(email: input.email, email_type: input.email_type)
+        email.update(email_address: input.email_address, email_type: input.email_type)
         return { email: email }
       end
 

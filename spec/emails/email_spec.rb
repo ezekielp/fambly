@@ -25,16 +25,16 @@ RSpec.describe Email, type: :model do
 
   describe 'ActiveModel validations' do
     it 'is valid with valid attributes' do
-      expect(Email.create(person_id: person.id, email: 'dick.feynman@mit.edu', email_type: 'school')).to be_valid
+      expect(Email.create(person_id: person.id, email_address: 'dick.feynman@mit.edu', email_type: 'school')).to be_valid
     end
 
     it 'validates that the email is a valid email address' do
-      invalid_email = Email.new(person_id: person.id, email: 'invalid_email_address')
+      invalid_email = Email.new(person_id: person.id, email_address: 'invalid_email_address')
       expect(invalid_email.save).to be false
     end
 
     it 'validates that the email_type is a valid email type' do
-      invalid_email = Email.new(person_id: person.id, email: 'great_email@example.com', email_type: 'the_best_email_type')
+      invalid_email = Email.new(person_id: person.id, email_address: 'great_email@example.com', email_type: 'the_best_email_type')
       expect(invalid_email.save).to be false
     end
   end

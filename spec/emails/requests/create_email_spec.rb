@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'create_email mutation', type: :request do
   let(:endpoint) { '/graphql' }
   let(:person) { create(:person) }
-  let(:email) { 'dick.feynman@mit.edu' }
+  let(:email_address) { 'dick.feynman@mit.edu' }
   let(:email_type) { 'school' }
   let(:query_string) do
     "
@@ -11,7 +11,7 @@ RSpec.describe 'create_email mutation', type: :request do
             createEmail(input: $input) {
                 email {
                     id
-                    email
+                    emailAddress
                     emailType
                 }
                 errors {
@@ -26,7 +26,7 @@ RSpec.describe 'create_email mutation', type: :request do
     {
         input: {
             personId: person.id,
-            email: email,
+            emailAddress: email_address,
             emailType: email_type,
         }
     }
@@ -39,9 +39,9 @@ RSpec.describe 'create_email mutation', type: :request do
     )
 
     email_response = JSON.parse(response.body).dig('data', 'createEmail', 'email')
-    expect(email_response['email']).to eq(email)
+    expect(email_response['emailAddress']).to eq(email_address)
     expect(email_response['emailType']).to eq(email_type)
-    expect(person.emails.first.email).to eq(email)
+    expect(person.emails.first.email_address).to eq(email_address)
   end
 end
 

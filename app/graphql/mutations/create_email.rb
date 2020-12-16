@@ -1,7 +1,7 @@
 module Types
   class CreateEmailInputType < Types::BaseInputObject
     argument :person_id, ID, required: true
-    argument :email, String, required: true
+    argument :email_address, String, required: true
     argument :email_type, String, required: false
   end
 end
@@ -15,7 +15,7 @@ module Mutations
     def resolve(input:)
       email = Email.new(
         person_id: input.person_id,
-        email: input.email,
+        email_address: input.email_address,
         email_type: input.email_type
       )
       if email.save

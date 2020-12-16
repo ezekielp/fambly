@@ -12,7 +12,7 @@ RSpec.describe 'update_email mutation', type: :request do
             updateEmail(input: $input) {
                 email {
                     id
-                    email
+                    emailAddress
                     emailType
                 }
                 errors {
@@ -25,12 +25,12 @@ RSpec.describe 'update_email mutation', type: :request do
   end
 
   it 'updates an existing email associated with a particular person' do
-    original_email = Email.create(person_id: person.id, email: old_email, email_type: email_type)
+    original_email = Email.create(person_id: person.id, email_address: old_email, email_type: email_type)
     variables =
       {
         input: {
             emailId: original_email.id,
-            email: new_email,
+            emailAddress: new_email,
         }
       }
 
@@ -40,7 +40,7 @@ RSpec.describe 'update_email mutation', type: :request do
     )
 
     email = JSON.parse(response.body).dig('data', 'updateEmail', 'email')
-    expect(email['email']).to eq(new_email)
-    expect(person.emails.first.email).to eq(new_email)
+    expect(email['emailAddress']).to eq(new_email)
+    expect(person.emails.first.email_address).to eq(new_email)
   end
 end

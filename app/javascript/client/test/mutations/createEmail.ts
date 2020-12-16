@@ -7,7 +7,7 @@ import { MockedResponse } from '@apollo/client/testing';
 
 export const createEmailInput: CreateEmailInput = {
   personId: 'richard-feynman-uuid',
-  email: 'dick.feynman@mit.edu',
+  emailAddress: 'dick.feynman@mit.edu',
   emailType: 'school',
 };
 
@@ -15,7 +15,7 @@ export const createEmailResult: CreateEmailMutation['createEmail'] = {
   errors: null,
   email: {
     id: 'feynman-email-id',
-    email: 'dick.feynman@mit.edu',
+    emailAddress: 'dick.feynman@mit.edu',
     emailType: 'school',
   },
 };

@@ -15,7 +15,7 @@ gql`
     createEmail(input: $input) {
       email {
         id
-        email
+        emailAddress
         emailType
       }
       errors {
@@ -27,12 +27,12 @@ gql`
 `;
 
 export const EmailFormValidationSchema = yup.object().shape({
-  email: yup.string().required().email().label('Email'),
+  emailAddress: yup.string().required().email().label('Email'),
   emailType: yup.string(),
 });
 
 export interface EmailFormData {
-  email: string;
+  emailAddress: string;
   emailType?: string;
 }
 
@@ -71,15 +71,15 @@ export const EmailForm: FC<EmailFormProps> = ({
     data: EmailFormData,
     formikHelpers: FormikHelpers<EmailFormData>,
   ) => {
-    const { email, emailType } = data;
-    if (!email) return;
+    const { emailAddress, emailType } = data;
+    if (!emailAddress) return;
     const { setErrors, setStatus } = formikHelpers;
 
     const response = await createEmailMutation({
       variables: {
         input: {
           personId,
-          email,
+          emailAddress,
           emailType: emailType ? emailType : null,
         },
       },
@@ -112,7 +112,7 @@ export const EmailForm: FC<EmailFormProps> = ({
         {({ isSubmitting }) => (
           <Form>
             <Field
-              name="email"
+              name="emailAddress"
               label="Email address"
               component={FormikTextInput}
             />

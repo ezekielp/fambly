@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'delete_email mutation', type: :request do
   let(:endpoint) { '/graphql' }
   let(:person) { create(:person) }
-  let(:email) { 'dick.feynman@mit.edu' }
+  let(:email_address) { 'dick.feynman@mit.edu' }
   let(:email_type) { 'school' }
   let(:query_string) do
     "
@@ -14,11 +14,11 @@ RSpec.describe 'delete_email mutation', type: :request do
   end
 
   it 'deletes an existing email and returns true if the email existed' do
-    email_entry = Email.create(person_id: person.id, email: email, email_type: email_type)
+    email = Email.create(person_id: person.id, email_address: email_address, email_type: email_type)
     variables =
       {
           input: {
-              emailId: email_entry.id,
+              emailId: email.id,
           }
       }
   
