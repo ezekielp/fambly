@@ -1,7 +1,6 @@
 import React, { FC, useState } from 'react';
 import { useDeletePersonPlaceMutation } from 'client/graphqlTypes';
 import { Dropdown } from 'client/common/Dropdown';
-import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
 import { PersonPlaceInfoFragment } from 'client/graphqlTypes';
 import { PersonPlaceForm } from './PersonPlaceForm';
 import { NoteItem } from 'client/profiles/notes/NoteItem';

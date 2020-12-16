@@ -1,5 +1,8 @@
 import React, { FC } from 'react';
-import { useCreateEmailMutation } from 'client/graphqlTypes';
+import {
+  useCreateEmailMutation,
+  useUpdateEmailMutation,
+} from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { EMAIL_TYPE_OPTIONS } from './utils';
 import { Button } from 'client/common/Button';
@@ -38,14 +41,15 @@ export interface EmailFormData {
 
 export interface EmailFormProps {
   setFieldToAdd?: (field: string) => void;
-  personId: string;
+  personId?: string;
   initialValues?: EmailFormData;
+  emailId?: string;
   setEditFlag?: (bool: boolean) => void;
   setModalOpen?: (bool: boolean) => void;
 }
 
 export const blankInitialValues: EmailFormData = {
-  email: '',
+  emailAddress: '',
   emailType: '',
 };
 
@@ -53,10 +57,12 @@ export const EmailForm: FC<EmailFormProps> = ({
   setFieldToAdd,
   personId,
   initialValues = blankInitialValues,
+  emailId,
   setEditFlag,
   setModalOpen,
 }) => {
   const [createEmailMutation] = useCreateEmailMutation();
+  const [updateEmailMutation] = useUpdateEmailMutation();
 
   const cancel = () => {
     if (setFieldToAdd) {
@@ -75,23 +81,36 @@ export const EmailForm: FC<EmailFormProps> = ({
     if (!emailAddress) return;
     const { setErrors, setStatus } = formikHelpers;
 
-    const response = await createEmailMutation({
-      variables: {
-        input: {
-          personId,
-          emailAddress,
-          emailType: emailType ? emailType : null,
+    if (personId && setFieldToAdd) {
+      const createResponse = await createEmailMutation({
+        variables: {
+          input: {
+            personId,
+            emailAddress,
+            emailType: emailType ? emailType : null,
+          },
         },
-      },
-    });
-    const errors = response.data?.createEmail.errors;
-
-    if (errors) {
-      handleFormErrors<EmailFormData>(errors, setErrors, setStatus);
-    } else {
-      if (setFieldToAdd) {
+      });
+      const createErrors = createResponse.data?.createEmail.errors;
+      if (createErrors) {
+        handleFormErrors<EmailFormData>(createErrors, setErrors, setStatus);
+      } else {
         setFieldToAdd('');
-      } else if (setEditFlag) {
+      }
+    } else if (emailId && setEditFlag) {
+      const updateResponse = await updateEmailMutation({
+        variables: {
+          input: {
+            emailId,
+            emailAddress,
+            emailType: emailType ? emailType : null,
+          },
+        },
+      });
+      const updateErrors = updateResponse.data?.updateEmail.errors;
+      if (updateErrors) {
+        handleFormErrors<EmailFormData>(updateErrors, setErrors, setStatus);
+      } else {
         setEditFlag(false);
         setModalOpen && setModalOpen(false);
       }

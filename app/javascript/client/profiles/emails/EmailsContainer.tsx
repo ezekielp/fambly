@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { EmailItem } from './EmailItem';
 
 export interface Email {
   id: string;
@@ -11,5 +12,8 @@ interface EmailsContainerProps {
 }
 
 export const EmailsContainer: FC<EmailsContainerProps> = ({ emails }) => {
-  // const emailComponents = emails
+  const emailComponents = emails.map((email) => (
+    <EmailItem email={email} key={email.id} />
+  ));
+  return <>{emailComponents}</>;
 };
