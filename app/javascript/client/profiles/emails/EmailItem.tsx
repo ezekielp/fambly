@@ -2,7 +2,6 @@ import React, { FC, useState } from 'react';
 import { useDeleteEmailMutation } from 'client/graphqlTypes';
 import { Email } from './EmailsContainer';
 import { EmailForm } from './EmailForm';
-// import { ProfileFieldContainer } from 'client/common/ProfileFieldContainer';
 import { emailTypeColors } from './utils';
 import { Dropdown } from 'client/common/Dropdown';
 import { gql } from '@apollo/client';
@@ -43,6 +42,10 @@ const EmailItemContainer = styled.div`
   &:not(:last-child) {
     margin-bottom: ${spacing[0]};
   }
+`;
+
+const EmailAddressContainer = styled.div`
+  margin-right: 10px;
 `;
 
 interface EmailProps {
@@ -116,7 +119,7 @@ export const EmailItem: FC<EmailProps> = ({ email }) => {
     <>
       {!deletedFlag && (
         <EmailItemContainer>
-          {emailAddress}
+          <EmailAddressContainer>{emailAddress}</EmailAddressContainer>
           {emailType && (
             <FieldBadge
               backgroundColor={emailTypeColors[emailType]}
