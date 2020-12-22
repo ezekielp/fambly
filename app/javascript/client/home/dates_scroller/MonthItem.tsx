@@ -14,7 +14,7 @@ interface MonthTextProps {
 }
 
 const MonthText = styled(Text)`
-  padding: 3px 4px;
+  padding: 3px 7px;
   border-radius: 8px;
   background: ${({ backgroundColor }: MonthTextProps) =>
     colors[backgroundColor]};
@@ -26,25 +26,27 @@ interface MonthItemProps {
 }
 
 export const MonthItem: FC<MonthItemProps> = ({ month, daysObject }) => {
-  const dayItems = Object.keys(daysObject)
-    .sort()
-    .map((day) => {
-      const dayAsNumber = parseInt(day);
-      return (
-        <DayItem
-          key={day}
-          day={dayAsNumber}
-          peopleAndCouplesInfo={daysObject[dayAsNumber]}
-        />
-      );
-    });
-
-  const monthText = MONTHS[month] as string;
   const today = new Date();
   const currentMonth = today.getMonth() + 1;
   const currentYear = today.getFullYear();
   const nextYear = currentYear + 1;
   const year = month >= currentMonth ? currentYear : nextYear;
+
+  const sortedDays = Object.keys(daysObject)
+    .map((day) => parseInt(day))
+    .sort((a, b) => a - b);
+  const dayItems = sortedDays.map((day) => {
+    return (
+      <DayItem
+        key={day}
+        day={day}
+        peopleAndCouplesInfo={daysObject[day]}
+        year={year}
+      />
+    );
+  });
+
+  const monthText = MONTHS[month] as string;
 
   return (
     <MonthItemContainer>

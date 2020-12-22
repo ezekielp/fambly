@@ -46,6 +46,7 @@ export const PersonFieldsInput: FC<PersonFieldsInputProps> = ({
             {!middleName && <option value="middleName">Middle name</option>}
             {!lastName && <option value="lastName">Last name</option>}
             <option value="address">Address</option>
+            <option value="email">Email address</option>
           </optgroup>
           <optgroup label="Relationships">
             <option value="spouse">Spouse</option>
