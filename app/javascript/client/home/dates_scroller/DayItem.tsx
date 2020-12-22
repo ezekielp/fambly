@@ -21,9 +21,14 @@ const DateContainer = styled.div`
 interface DayItemProps {
   day: number;
   peopleAndCouplesInfo: PeopleAndCouplesInfoForDatesScroller;
+  year: number;
 }
 
-export const DayItem: FC<DayItemProps> = ({ day, peopleAndCouplesInfo }) => {
+export const DayItem: FC<DayItemProps> = ({
+  day,
+  peopleAndCouplesInfo,
+  year,
+}) => {
   const birthdays = peopleAndCouplesInfo.people?.map((person) => {
     const { id, firstName, lastName, age, monthsOld } = person;
 
@@ -55,9 +60,8 @@ export const DayItem: FC<DayItemProps> = ({ day, peopleAndCouplesInfo }) => {
       weddingYear,
     } = couple;
 
-    const today = new Date();
     const anniversaryYear = weddingYear
-      ? `${addSuffixToNumber(today.getFullYear() - weddingYear)} `
+      ? `${addSuffixToNumber(year - weddingYear)} `
       : '';
 
     return (

@@ -26,21 +26,27 @@ interface MonthItemProps {
 }
 
 export const MonthItem: FC<MonthItemProps> = ({ month, daysObject }) => {
-  const sortedDays = Object.keys(daysObject)
-    .map((day) => parseInt(day))
-    .sort((a, b) => a - b);
-  const dayItems = sortedDays.map((day) => {
-    return (
-      <DayItem key={day} day={day} peopleAndCouplesInfo={daysObject[day]} />
-    );
-  });
-
-  const monthText = MONTHS[month] as string;
   const today = new Date();
   const currentMonth = today.getMonth() + 1;
   const currentYear = today.getFullYear();
   const nextYear = currentYear + 1;
   const year = month >= currentMonth ? currentYear : nextYear;
+
+  const sortedDays = Object.keys(daysObject)
+    .map((day) => parseInt(day))
+    .sort((a, b) => a - b);
+  const dayItems = sortedDays.map((day) => {
+    return (
+      <DayItem
+        key={day}
+        day={day}
+        peopleAndCouplesInfo={daysObject[day]}
+        year={year}
+      />
+    );
+  });
+
+  const monthText = MONTHS[month] as string;
 
   return (
     <MonthItemContainer>
