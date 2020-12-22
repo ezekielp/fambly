@@ -60,7 +60,7 @@ describe('<EmailForm />', () => {
   it('has two form fields', async () => {
     await mountComponent();
     form = formUtils<EmailFormData>(component.find(Form));
-    expect(form.findInputByName('email').exists()).toBe(true);
+    expect(form.findInputByName('emailAddress').exists()).toBe(true);
     expect(form.findInputByName('emailType', 'select').exists()).toBe(true);
   });
 
@@ -69,7 +69,25 @@ describe('<EmailForm />', () => {
       await mountComponent();
       form = formUtils<EmailFormData>(component.find(Form));
       await form.submit();
-      expect(component.text().includes(''));
+      expect(component.text().includes('Email is a required field')).toBe(true);
+      await form.fill({ emailAddress: 'dick.feynman@mit.edu' });
+      await form.fill({ emailType: 'school' }, 'select');
+      await form.submit();
+      expect(component.text().includes('Email is a required field')).toBe(
+        false,
+      );
+    });
+  });
+
+  describe('form submission', () => {
+    it('submits the form and calls the createEmail mutation when the data is valid', async () => {
+      const createEmail = createEmailMutation();
+      await mountComponent([createEmail], defaultProps);
+      form = formUtils<EmailFormData>(component.find(Form));
+      await form.fill({ emailAddress: 'dick.feynman@mit.edu' });
+      await form.fill({ emailType: 'school' }, 'select');
+      await form.submit();
+      expect(createEmail.newData).toHaveBeenCalled();
     });
   });
 });
