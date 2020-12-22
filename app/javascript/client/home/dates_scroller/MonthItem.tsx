@@ -14,7 +14,7 @@ interface MonthTextProps {
 }
 
 const MonthText = styled(Text)`
-  padding: 3px 4px;
+  padding: 3px 7px;
   border-radius: 8px;
   background: ${({ backgroundColor }: MonthTextProps) =>
     colors[backgroundColor]};

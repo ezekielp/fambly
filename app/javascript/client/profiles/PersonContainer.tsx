@@ -258,7 +258,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
 
   const hasAge = age || monthsOld;
   const hasBirthdate = birthYear || birthMonth;
-  const hasEmails = emails && emails.length > 0;
+  const hasEmails = !!(emails && emails.length > 0);
   const hasCurrentPlaces = currentPlaces.length > 0;
   const hasVitals =
     gender || hasAge || hasBirthdate || hasEmails || hasCurrentPlaces;
@@ -493,7 +493,7 @@ const InternalPersonContainer: FC<PersonContainerProps> = ({ history }) => {
           personId={personId}
         />
       )}
-      {hasEmails && <EmailsContainer emails={emails} />}
+      {hasEmails && <EmailsContainer emails={emails ? emails : []} />}
       {hasCurrentPlaces && (
         <PersonPlacesContainer
           personPlaces={currentPlaces}
