@@ -52,5 +52,8 @@ module Types
     field :create_person_tag, mutation: Mutations::CreatePersonTag
     field :update_tag, mutation: Mutations::UpdateTag
     field :delete_person_tag, mutation: Mutations::DeletePersonTag
+
+    # Trips
+    field :create_trip, mutation: Mutations::CreateTrip
   end
 end
