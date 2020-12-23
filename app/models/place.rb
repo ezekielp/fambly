@@ -4,6 +4,7 @@
 #
 #  id              :uuid             not null, primary key
 #  country         :string           not null
+#  name            :string
 #  state_or_region :string
 #  street          :string
 #  town            :string
