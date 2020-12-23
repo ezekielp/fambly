@@ -24,7 +24,8 @@ class User < ApplicationRecord
     after_initialize :ensure_session_token
 
     has_many :people, dependent: :destroy
-    has_many :tags
+    has_many :trips, dependent: :destroy
+    has_many :tags, dependent: :destroy
     has_one :dummy_email
 
     def self.find_by_credentials(email, password)

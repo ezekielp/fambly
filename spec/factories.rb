@@ -46,4 +46,15 @@ FactoryBot.define do
         name { 'gophers' }
         color { '#02a4d3' }
     end
+
+    factory :trip do
+        user
+        departure_year { 1271 }
+        end_year { 1295 }
+    end
+
+    factory :trip_stage do
+        trip
+        place
+    end
 end
