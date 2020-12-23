@@ -23,6 +23,10 @@
 #  fk_rails_...  (trip_stage_id => trip_stages.id)
 #
 class TripPlace < ApplicationRecord
+  validates :visit_day, inclusion: { in: 1..31, allow_nil: true }
+  validates :visit_month, inclusion: { in: 1..12, allow_nil: true }
+
   belongs_to :place
   belongs_to :trip_stage
+  has_many :notes, as: :notable, dependent: :destroy
 end
