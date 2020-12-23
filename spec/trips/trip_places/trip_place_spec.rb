@@ -25,5 +25,20 @@
 require 'rails_helper'
 
 RSpec.describe TripPlace, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:trip_stage) { create(:trip_stage) }
+  let(:visited_place) { Place.create(country: 'Vanuatu', street: '111 Taro Root Drive') }
+
+  describe 'ActiveModel validations' do
+    it 'is valid with valid attributes' do
+      expect(TripPlace.create(
+        trip_stage_id: trip_stage.id,
+        place_id: visited_place.id,
+        visit_day: 1,
+        visit_month: 1,
+        visit_year: 1111,
+        place_type: 'restaurant'
+        )
+      )
+    end
+  end
 end
