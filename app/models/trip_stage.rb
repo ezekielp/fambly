@@ -28,4 +28,10 @@
 #  fk_rails_...  (trip_id => trips.id)
 #
 class TripStage < ApplicationRecord
+  belongs_to :trip
+  belongs_to :place
+  belongs_to :accommodation, class_name: 'Place', foreign_key: 'accommodation_id'
+  has_many :person_trip_stages
+  has_many :people, through: :person_trip_stages
+  has_many :trip_places
 end

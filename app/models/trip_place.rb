@@ -23,4 +23,6 @@
 #  fk_rails_...  (trip_stage_id => trip_stages.id)
 #
 class TripPlace < ApplicationRecord
+  belongs_to :place
+  belongs_to :trip_stage
 end
