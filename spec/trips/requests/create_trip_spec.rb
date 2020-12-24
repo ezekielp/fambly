@@ -9,8 +9,8 @@ RSpec.describe 'create_trip mutation', type: :request do
   let(:departure_day) { 27 }
   let(:departure_month) { 12 }
   let(:departure_year) { 1831 }
-  let(:end_month) { 9 }
-  let(:end_year) { 1835 }
+  let(:end_month) { 10 }
+  let(:end_year) { 1836 }
   let(:note) { 'Considering the small size of these islands, we feel the more astonished at the number of their aboriginal beings, and at their confined range... within a period geologically recent the unbroken ocean was here spread out. Hence, both in space and time, we seem to be brought somewhat near to that great fact – that mystery of mysteries – the first appearance of new beings on this earth.' }
   let(:query_string) do
     "
