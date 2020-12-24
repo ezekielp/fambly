@@ -49,9 +49,9 @@ RSpec.describe 'create_trip_place mutation', type: :request do
     {
         input: {
           tripStageId: trip_stage.id,
-          name: place_name,
-          country: country,
-          region: region,
+          placeName: place_name,
+          placeCountry: country,
+          placeStateOrRegion: region,
           visitDay: visit_day,
           visitMonth: visit_month,
           visitYear: visit_year,
@@ -69,7 +69,7 @@ RSpec.describe 'create_trip_place mutation', type: :request do
 
     trip_place = JSON.parse(response.body).dig('data', 'createTripPlace', 'tripPlace')
     expect(trip_place['place']['name']).to eq(place_name)
-    expect(trip_place['place']['visitMonth']).to eq(visit_month)
+    expect(trip_place['visitMonth']).to eq(visit_month)
     expect(trip_stage.trip_places.first.visit_day).to eq(visit_day)
     expect(trip_stage.trip_places.first.place_type).to eq(place_type)
   end
