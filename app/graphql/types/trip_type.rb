@@ -9,5 +9,7 @@ module Types
     field :end_day, Int, null: true
     field :end_month, Int, null: true
     field :end_year, Int, null: true
+    field :notes, [Types::NoteType], null: true
+    field :trip_stages, [Types::TripStageType], null: true
   end
 end

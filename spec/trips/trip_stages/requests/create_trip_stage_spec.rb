@@ -4,13 +4,14 @@ RSpec.describe 'create_trip_stage mutation', type: :request do
   let(:endpoint) { '/graphql' }
   let(:trip) { create(:trip) }
   let(:place_name) { 'Galapagos Islands' }
+  let(:place_country) { 'Ecuador' }
   let(:accommodation_name) { 'HMS Beagle' }
   let(:start_day) { 15 }
   let(:start_month) { 9 }
   let(:start_year) { 1835 }
-  let(:start_day) { 19 }
-  let(:start_month) { 10 }
-  let(:start_year) { 1835 }
+  let(:end_day) { 19 }
+  let(:end_month) { 10 }
+  let(:end_year) { 1835 }
   let(:note) { '... very remarkable: it seems to be a little world within itself; the greater number of its inhabitants, both vegetable and animal, being found nowhere else.' }
   let(:query_string) do
     "
@@ -63,6 +64,7 @@ RSpec.describe 'create_trip_stage mutation', type: :request do
         input: {
           tripId: trip.id,
           placeName: place_name,
+          placeCountry: place_country,
           accommodationName: accommodation_name,
           startDay: start_day,
           startMonth: start_month,
