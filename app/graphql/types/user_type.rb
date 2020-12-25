@@ -10,5 +10,9 @@ module Types
         def tags
             AssociationLoader.for(User, :tags).load(object)
         end
+
+        def trips
+            AssociationLoader.for(User, :trips).load(object)
+        end
     end
 end

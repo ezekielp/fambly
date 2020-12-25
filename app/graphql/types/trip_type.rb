@@ -11,5 +11,10 @@ module Types
     field :end_year, Int, null: true
     field :notes, [Types::NoteType], null: true
     field :trip_stages, [Types::TripStageType], null: true
+    field :people, [Types::PersonType], null: true
+
+    def people
+      AssociationLoader.for(Trip, :people).load(object)
+    end
   end
 end
