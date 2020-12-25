@@ -55,7 +55,7 @@ module Types
 
     # Trips
     field :create_trip, mutation: Mutations::CreateTrip
-    field :create_person_trip, mutation: Mutations::CreatePersonTrip
+    field :create_trip_person, mutation: Mutations::CreateTripPerson
     field :create_trip_stage, mutation: Mutations::CreateTripStage
     field :create_trip_place, mutation: Mutations::CreateTripPlace
   end

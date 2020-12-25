@@ -50,7 +50,7 @@ class Person < ApplicationRecord
   has_many :places, through: :person_places
   has_many :person_tags, dependent: :destroy
   has_many :tags, through: :person_tags
-  has_many :person_trips
+  has_many :trip_people
   has_many :person_trip_stages
 
   def siblings

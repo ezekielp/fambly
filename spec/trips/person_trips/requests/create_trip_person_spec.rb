@@ -1,15 +1,15 @@
 require 'rails_helper'
 
-RSpec.describe 'create_person_trip mutation', type: :request do
+RSpec.describe 'create_trip_person mutation', type: :request do
   let(:endpoint) { '/graphql' }
   let(:user) { create(:user) }
   let(:person) { Person.create(user_id: user.id, first_name: 'Captain', last_name: 'Fitzroy') }
   let(:trip) { Trip.create(user_id: user.id) }
   let(:query_string) do
     "
-        mutation CreatePersonTrip($input: CreatePersonTripInput!) {
-            createPersonTrip(input: $input) {
-                personTrip {
+        mutation CreateTripPerson($input: CreateTripPersonInput!) {
+            createTripPerson(input: $input) {
+                tripPerson {
                     id
                     person {
                       id
@@ -37,15 +37,15 @@ RSpec.describe 'create_person_trip mutation', type: :request do
     }
   end
 
-  it 'creates a person_trip relationship between a person and a user trip' do
+  it 'creates a trip_person relationship between a person and a user trip' do
     post(
       endpoint,
       params: { query: query_string, variables: variables }
     )
 
-    person_trip = JSON.parse(response.body).dig('data', 'createPersonTrip', 'personTrip')
-    expect(person_trip['person']['firstName']).to eq(person.first_name)
-    expect(person_trip['trip']['id']).to eq(trip.id)
+    trip_person = JSON.parse(response.body).dig('data', 'createTripPerson', 'tripPerson')
+    expect(trip_person['person']['firstName']).to eq(person.first_name)
+    expect(trip_person['trip']['id']).to eq(trip.id)
     expect(user.trips.first.departure_year).to eq(trip.departure_year)
     expect(trip.people.first.last_name).to eq(person.last_name)
   end
