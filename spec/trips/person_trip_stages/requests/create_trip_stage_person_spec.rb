@@ -33,12 +33,23 @@ RSpec.describe 'create trip_stage_person mutation', type: :request do
   let(:variables) do
     {
         input: {
-            tripStageId: trip.id,
+            tripStageId: trip_stage.id,
             personId: person.id,
         }
     }
   end
 
+  it 'creates a trip_stage_person relationship between a trip_stage and a person' do
+    post(
+      endpoint,
+      params: { query: query_string, variables: variables }
+    )
 
-
+    trip_stage_person = JSON.parse(response.body).dig('data', 'createTripStagePerson', 'tripStagePerson')
+    # debugger
+    expect(trip_stage_person['person']['firstName']).to eq(person.first_name)
+    expect(trip_stage_person['tripStage']['id']).to eq(trip_stage.id)
+    expect(person.trip_stages.first.id).to eq(trip_stage.id)
+    expect(trip_stage.people.first.last_name).to eq(person.last_name)
+  end
 end
