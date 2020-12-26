@@ -9,6 +9,7 @@
 #  end_day            :integer
 #  end_month          :integer
 #  end_year           :integer
+#  name               :string           not null
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  departure_point_id :uuid

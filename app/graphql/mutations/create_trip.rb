@@ -1,5 +1,6 @@
 module Types
   class CreateTripInputType < Types::BaseInputObject
+    argument :name, String, required: true
     argument :departure_country, String, required: false
     argument :departure_town, String, required: false
     argument :departure_region, String, required: false
@@ -47,6 +48,7 @@ module Mutations
 
       new_trip = Trip.new(
         user_id: current_user.id,
+        name: input.name,
         departure_point_id: departure_point ? departure_point.id : nil,
         end_point_id: end_point ? end_point.id : nil,
         departure_day: input.departure_day,
