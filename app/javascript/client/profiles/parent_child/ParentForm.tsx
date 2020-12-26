@@ -15,7 +15,6 @@ import {
   FormikTextArea,
   FormikCheckboxGroup,
 } from 'client/form/inputs';
-import { TextInput } from 'client/form/TextInput';
 import {
   NameRowWrapper,
   RightHalfWrapper,
@@ -23,7 +22,6 @@ import {
   FirstNameLabel,
   LastNameLabel,
 } from 'client/form/inputWrappers';
-import { StyledErrorMessage } from 'client/form/withFormik';
 import { Button } from 'client/common/Button';
 import { GlobalError } from 'client/common/GlobalError';
 import { Text } from 'client/common/Text';
@@ -38,7 +36,6 @@ import * as yup from 'yup';
 import { gql } from '@apollo/client';
 import { handleFormErrors } from 'client/utils/formik';
 import { FormikAutosuggest } from 'client/form/FormikAutosuggest';
-import styled from 'styled-components';
 
 gql`
   mutation CreateParentChildRelationship(

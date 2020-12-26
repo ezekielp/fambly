@@ -2,14 +2,12 @@ import React, { FC } from 'react';
 import { useCreateOrUpdateBirthdateMutation } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { FormikNumberInput, FormikSelectInput } from 'client/form/inputs';
-import { SelectInput } from 'client/form/SelectInput';
 import {
   RowWrapper,
   LeftHalfWrapper,
   MiddleQuarterWrapper,
   RightQuarterWrapper,
 } from 'client/form/inputWrappers';
-import { StyledErrorMessage } from 'client/form/withFormik';
 import { Button } from 'client/common/Button';
 import { Text } from 'client/common/Text';
 import { SectionDivider } from 'client/profiles/PersonContainer';
