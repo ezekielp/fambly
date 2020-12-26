@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-const TripFormValidationSchema = yup.object().shape({
+export const TripFormValidationSchema = yup.object().shape({
   name: yup.string().required('Please give a name to this trip!'),
   departureYear: yup
     .number()
