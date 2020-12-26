@@ -35,7 +35,7 @@ class Trip < ApplicationRecord
   belongs_to :departure_point, class_name: 'Place', foreign_key: 'departure_point_id', optional: true
   belongs_to :end_point, class_name: 'Place', foreign_key: 'end_point_id', optional: true
   has_many :trip_stages
-  has_many :person_trips
-  has_many :people, through: :person_trips
+  has_many :trip_people
+  has_many :people, through: :trip_people
   has_many :notes, as: :notable, dependent: :destroy
 end

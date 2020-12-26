@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_23_191800) do
+ActiveRecord::Schema.define(version: 2020_12_25_175607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -114,24 +114,6 @@ ActiveRecord::Schema.define(version: 2020_12_23_191800) do
     t.index ["tag_id"], name: "index_person_tags_on_tag_id"
   end
 
-  create_table "person_trip_stages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "person_id"
-    t.uuid "trip_stage_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["person_id"], name: "index_person_trip_stages_on_person_id"
-    t.index ["trip_stage_id"], name: "index_person_trip_stages_on_trip_stage_id"
-  end
-
-  create_table "person_trips", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "person_id"
-    t.uuid "trip_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["person_id"], name: "index_person_trips_on_person_id"
-    t.index ["trip_id"], name: "index_person_trips_on_trip_id"
-  end
-
   create_table "places", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "country", null: false
     t.string "state_or_region"
@@ -162,6 +144,15 @@ ActiveRecord::Schema.define(version: 2020_12_23_191800) do
     t.index ["user_id"], name: "index_tags_on_user_id"
   end
 
+  create_table "trip_people", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "person_id"
+    t.uuid "trip_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["person_id"], name: "index_trip_people_on_person_id"
+    t.index ["trip_id"], name: "index_trip_people_on_trip_id"
+  end
+
   create_table "trip_places", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "trip_stage_id"
     t.uuid "place_id"
@@ -173,6 +164,15 @@ ActiveRecord::Schema.define(version: 2020_12_23_191800) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["place_id"], name: "index_trip_places_on_place_id"
     t.index ["trip_stage_id"], name: "index_trip_places_on_trip_stage_id"
+  end
+
+  create_table "trip_stage_people", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "person_id"
+    t.uuid "trip_stage_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["person_id"], name: "index_trip_stage_people_on_person_id"
+    t.index ["trip_stage_id"], name: "index_trip_stage_people_on_trip_stage_id"
   end
 
   create_table "trip_stages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -230,15 +230,15 @@ ActiveRecord::Schema.define(version: 2020_12_23_191800) do
   add_foreign_key "person_places", "places"
   add_foreign_key "person_tags", "people"
   add_foreign_key "person_tags", "tags"
-  add_foreign_key "person_trip_stages", "people"
-  add_foreign_key "person_trip_stages", "trip_stages"
-  add_foreign_key "person_trips", "people"
-  add_foreign_key "person_trips", "trips"
   add_foreign_key "sibling_relationships", "people", column: "sibling_one_id"
   add_foreign_key "sibling_relationships", "people", column: "sibling_two_id"
   add_foreign_key "tags", "users"
+  add_foreign_key "trip_people", "people"
+  add_foreign_key "trip_people", "trips"
   add_foreign_key "trip_places", "places"
   add_foreign_key "trip_places", "trip_stages"
+  add_foreign_key "trip_stage_people", "people"
+  add_foreign_key "trip_stage_people", "trip_stages"
   add_foreign_key "trip_stages", "places"
   add_foreign_key "trip_stages", "places", column: "accommodation_id"
   add_foreign_key "trip_stages", "trips"
