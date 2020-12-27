@@ -130,10 +130,13 @@ export const TripForm: FC<TripFormProps> = ({
   const [createTripMutation] = useCreateTripMutation();
   const [createTripPersonMutatation] = useCreateTripPersonMutation();
   const { data: userPeople } = useGetUserPeopleQuery();
-  const sortedPeople = userPeople?.people ? sortPeople(userPeople.people) : [];
+  const sortedPeople: UserPersonInfoFragment[] = userPeople?.people
+    ? sortPeople(userPeople.people)
+    : [];
   const [showSlide1, setShowSlide1] = useState(true);
   const [peopleSuggestions, setPeopleSuggestions] = useState(sortedPeople);
   const [tripPersonInputValue, setTripPersonInputValue] = useState('');
+  const [tripPeople, setTripPeople] = useState<UserPersonInfoFragment[]>([]);
 
   const cancel = () => {
     setFieldToAdd('');
@@ -309,6 +312,11 @@ export const TripForm: FC<TripFormProps> = ({
                   )}
                 </Field>
               )}
+              <Button>
+                {values.newOrCurrentContact === 'new_contact'
+                  ? 'Create person and add to trip'
+                  : 'Add person to trip'}
+              </Button>
               <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
                 Save
               </Button>
