@@ -33,7 +33,10 @@ import {
   THIRTY_ONE_DAYS_OPTIONS,
 } from 'client/profiles/birthdate/utils';
 import { MonthLabel } from 'client/profiles/birthdate/BirthdateForm';
-import { NEW_OR_CURRENT_CONTACT_OPTIONS } from 'client/profiles/utils';
+import {
+  NEW_OR_CURRENT_CONTACT_OPTIONS,
+  getFullNameFromPerson,
+} from 'client/profiles/utils';
 import { Button } from 'client/common/Button';
 import { Text } from 'client/common/Text';
 import { FormikAutosuggest } from 'client/form/FormikAutosuggest';
@@ -129,6 +132,8 @@ export const TripForm: FC<TripFormProps> = ({
   const { data: userPeople } = useGetUserPeopleQuery();
   const sortedPeople = userPeople?.people ? sortPeople(userPeople.people) : [];
   const [showSlide1, setShowSlide1] = useState(true);
+  const [peopleSuggestions, setPeopleSuggestions] = useState(sortedPeople);
+  const [tripPersonInputValue, setTripPersonInputValue] = useState('');
 
   const cancel = () => {
     setFieldToAdd('');
@@ -287,12 +292,19 @@ export const TripForm: FC<TripFormProps> = ({
                   {({ form }: FieldProps) => (
                     <FormikAutosuggest<SubContactInfoFragment>
                       records={sortedPeople}
-                      suggestions={}
-                      setSuggestions={}
-                      getSuggestionValue={}
-                      inputValue={}
-                      onSuggestionSelected={(event, data) => {}}
-                      onChange={(event) => {}}
+                      suggestions={peopleSuggestions}
+                      setSuggestions={setPeopleSuggestions}
+                      getSuggestionValue={getFullNameFromPerson}
+                      inputValue={tripPersonInputValue}
+                      onSuggestionSelected={(event, data) => {
+                        form.setFieldValue('tripPersonId', data.suggestion.id);
+                        setTripPersonInputValue(
+                          getFullNameFromPerson(data.suggestion),
+                        );
+                      }}
+                      onChange={(event) => {
+                        setTripPersonInputValue(event.target.value);
+                      }}
                     />
                   )}
                 </Field>
