@@ -2,22 +2,29 @@ import React, { FC, useState } from 'react';
 import {
   useCreateTripMutation,
   useCreateTripPersonMutation,
+  useGetUserPeopleQuery,
+  SubContactInfoFragment,
+  UserPersonInfoFragment,
 } from 'client/graphqlTypes';
-import { AuthContext } from 'client/contexts/AuthContext';
 import { Field, Form, Formik, FormikHelpers, FieldProps } from 'formik';
 import { Label } from 'client/form/withFormik';
 import {
   FormikTextInput,
   FormikSelectInput,
   FormikNumberInput,
+  FormikRadioGroup,
 } from 'client/form/inputs';
 import {
   RowWrapper,
   LeftHalfWrapper,
   MiddleQuarterWrapper,
   RightQuarterWrapper,
+  NameRowWrapper,
+  RightHalfWrapper,
+  FirstNameLabel,
+  LastNameLabel,
 } from 'client/form/inputWrappers';
-import { TripFormValidationSchema } from './utils';
+import { TripFormValidationSchema, sortPeople } from './utils';
 import {
   MONTH_OPTIONS,
   determineDaysOptions,
@@ -26,6 +33,7 @@ import {
   THIRTY_ONE_DAYS_OPTIONS,
 } from 'client/profiles/birthdate/utils';
 import { MonthLabel } from 'client/profiles/birthdate/BirthdateForm';
+import { NEW_OR_CURRENT_CONTACT_OPTIONS } from 'client/profiles/utils';
 import { Button } from 'client/common/Button';
 import { Text } from 'client/common/Text';
 import { FormikAutosuggest } from 'client/form/FormikAutosuggest';
@@ -83,7 +91,10 @@ export interface TripFormData {
   endYear?: number | null;
   endMonth?: string;
   endDay?: string;
-  tripPerson?: string;
+  tripPersonId?: string;
+  newOrCurrentContact: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 // To add people to the trip: I guess stick in an Autosuggest with all the current people, create a stage variable array to put them in, call however many CreateTripPerson mutations necessary — ooo, get to use a Promise.all or something maybe ... or maybe just a forEach loop? Hmmm — after you `await` creating the trip
@@ -102,7 +113,10 @@ export const blankInitialValues: TripFormData = {
   endYear: null,
   endMonth: 'string',
   endDay: 'string',
-  tripPerson: 'string',
+  tripPersonId: 'string',
+  newOrCurrentContact: 'current_person',
+  firstName: '',
+  lastName: '',
 };
 
 export const TripForm: FC<TripFormProps> = ({
@@ -110,9 +124,11 @@ export const TripForm: FC<TripFormProps> = ({
   setModalOpen,
   initialValues = blankInitialValues,
 }) => {
-  const { userId } = useContext(AuthContext);
   const [createTripMutation] = useCreateTripMutation();
   const [createTripPersonMutatation] = useCreateTripPersonMutation();
+  const { data: userPeople } = useGetUserPeopleQuery();
+  const sortedPeople = userPeople?.people ? sortPeople(userPeople.people) : [];
+  const [showSlide1, setShowSlide1] = useState(true);
 
   const cancel = () => {
     setFieldToAdd('');
@@ -241,6 +257,46 @@ export const TripForm: FC<TripFormProps> = ({
                   />
                 </RightQuarterWrapper>
               </RowWrapper>
+              <Label as="label">
+                Who traveled with you? (Select people who went on the entire
+                trip with you here. You can enter additional people you met or
+                stayed with at individual stages of the trip later.)
+              </Label>
+              <Field
+                name="newOrCurrentContact"
+                label=""
+                component={FormikRadioGroup}
+                options={NEW_OR_CURRENT_CONTACT_OPTIONS}
+              />
+              {values.newOrCurrentContact === 'new_person' && (
+                <>
+                  <NameRowWrapper>
+                    <LeftHalfWrapper>
+                      <FirstNameLabel>First name</FirstNameLabel>
+                      <Field name="firstName" component={FormikTextInput} />
+                    </LeftHalfWrapper>
+                    <RightHalfWrapper>
+                      <LastNameLabel>Last name (optional)</LastNameLabel>
+                      <Field name="lastName" component={FormikTextInput} />
+                    </RightHalfWrapper>
+                  </NameRowWrapper>
+                </>
+              )}
+              {values.newOrCurrentContact === 'current_person' && (
+                <Field name="tripPersonId">
+                  {({ form }: FieldProps) => (
+                    <FormikAutosuggest<SubContactInfoFragment>
+                      records={sortedPeople}
+                      suggestions={}
+                      setSuggestions={}
+                      getSuggestionValue={}
+                      inputValue={}
+                      onSuggestionSelected={(event, data) => {}}
+                      onChange={(event) => {}}
+                    />
+                  )}
+                </Field>
+              )}
               <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
                 Save
               </Button>

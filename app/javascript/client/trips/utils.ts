@@ -1,3 +1,4 @@
+import { UserPersonInfoFragment } from 'client/graphqlTypes';
 import * as yup from 'yup';
 
 export const TripFormValidationSchema = yup.object().shape({
@@ -49,3 +50,26 @@ export const TripFormValidationSchema = yup.object().shape({
     }),
   endDay: yup.string().nullable(),
 });
+
+export const sortPeople = (
+  people: UserPersonInfoFragment[],
+): UserPersonInfoFragment[] => {
+  return people.sort((p1, p2) => {
+    const firstName1 = p1.firstName.toUpperCase();
+    const firstName2 = p2.firstName.toUpperCase();
+    if (firstName1 < firstName2) {
+      return -1;
+    } else if (firstName1 > firstName2) {
+      return 1;
+    } else {
+      const lastName1 = p1.lastName ? p1.lastName.toUpperCase() : '';
+      const lastName2 = p2.lastName ? p2.lastName.toUpperCase() : '';
+      if (lastName1 < lastName2) {
+        return -1;
+      } else if (lastName1 > lastName2) {
+        return 1;
+      }
+      return 0;
+    }
+  });
+};
