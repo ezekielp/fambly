@@ -539,6 +539,7 @@ type Query {
   people: [Person!]
   personById(personId: String!): Person
   siblingRelationshipBySiblingIds(input: SiblingRelationshipInput!): SiblingRelationship
+  tripById(tripId: String!): Trip
   user: User
   userTagsByUserId(userId: String!): [Tag!]
 }
@@ -604,13 +605,13 @@ type TripStage {
   endYear: Int
   id: ID!
   notes: [Note!]
+  people: [Person!]
   place: Place!
   startDay: Int
   startMonth: Int
   startYear: Int
   trip: Trip!
   tripPlaces: [TripPlace!]
-  tripStagePeople: [TripStagePerson!]
 }
 
 type TripStagePerson {

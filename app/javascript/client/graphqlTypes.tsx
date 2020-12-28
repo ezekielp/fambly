@@ -736,6 +736,7 @@ export type Query = {
   people?: Maybe<Array<Person>>;
   personById?: Maybe<Person>;
   siblingRelationshipBySiblingIds?: Maybe<SiblingRelationship>;
+  tripById?: Maybe<Trip>;
   user?: Maybe<User>;
   userTagsByUserId?: Maybe<Array<Tag>>;
 };
@@ -758,6 +759,11 @@ export type QueryPersonByIdArgs = {
 
 export type QuerySiblingRelationshipBySiblingIdsArgs = {
   input: SiblingRelationshipInput;
+};
+
+
+export type QueryTripByIdArgs = {
+  tripId: Scalars['String'];
 };
 
 
@@ -832,13 +838,13 @@ export type TripStage = {
   endYear?: Maybe<Scalars['Int']>;
   id: Scalars['ID'];
   notes?: Maybe<Array<Note>>;
+  people?: Maybe<Array<Person>>;
   place: Place;
   startDay?: Maybe<Scalars['Int']>;
   startMonth?: Maybe<Scalars['Int']>;
   startYear?: Maybe<Scalars['Int']>;
   trip: Trip;
   tripPlaces?: Maybe<Array<TripPlace>>;
-  tripStagePeople?: Maybe<Array<TripStagePerson>>;
 };
 
 export type TripStagePerson = {
@@ -1806,6 +1812,69 @@ export type DeletePersonTagMutation = (
   & Pick<Mutation, 'deletePersonTag'>
 );
 
+export type GetTripForTripContainerQueryVariables = Exact<{
+  tripId: Scalars['String'];
+}>;
+
+
+export type GetTripForTripContainerQuery = (
+  { __typename?: 'Query' }
+  & { tripById?: Maybe<(
+    { __typename?: 'Trip' }
+    & TripInfoFragment
+  )> }
+);
+
+export type TripInfoFragment = (
+  { __typename?: 'Trip' }
+  & Pick<Trip, 'id' | 'name' | 'departureDay' | 'departureMonth' | 'departureYear' | 'endDay' | 'endMonth' | 'endYear'>
+  & { notes?: Maybe<Array<(
+    { __typename?: 'Note' }
+    & Pick<Note, 'id' | 'content'>
+  )>>, tripStages?: Maybe<Array<(
+    { __typename?: 'TripStage' }
+    & TripStageInfoFragment
+  )>>, people?: Maybe<Array<(
+    { __typename?: 'Person' }
+    & Pick<Person, 'id' | 'firstName' | 'lastName'>
+  )>> }
+);
+
+export type TripStageInfoFragment = (
+  { __typename?: 'TripStage' }
+  & Pick<TripStage, 'id' | 'startDay' | 'startMonth' | 'startYear' | 'endDay' | 'endMonth' | 'endYear'>
+  & { place: (
+    { __typename?: 'Place' }
+    & PlaceInfoFragment
+  ), accommodation?: Maybe<(
+    { __typename?: 'Place' }
+    & PlaceInfoFragment
+  )>, tripPlaces?: Maybe<Array<(
+    { __typename?: 'TripPlace' }
+    & TripPlaceInfoFragment
+  )>>, people?: Maybe<Array<(
+    { __typename?: 'Person' }
+    & Pick<Person, 'id' | 'firstName' | 'lastName'>
+  )>> }
+);
+
+export type TripPlaceInfoFragment = (
+  { __typename?: 'TripPlace' }
+  & Pick<TripPlace, 'id' | 'placeType' | 'visitDay' | 'visitMonth' | 'visitYear'>
+  & { place: (
+    { __typename?: 'Place' }
+    & PlaceInfoFragment
+  ), notes?: Maybe<Array<(
+    { __typename?: 'Note' }
+    & Pick<Note, 'id' | 'content'>
+  )>> }
+);
+
+export type PlaceInfoFragment = (
+  { __typename?: 'Place' }
+  & Pick<Place, 'id' | 'country' | 'name' | 'stateOrRegion' | 'town' | 'street' | 'zipCode'>
+);
+
 export type CreateTripMutationVariables = Exact<{
   input: CreateTripInput;
 }>;
@@ -1966,6 +2035,83 @@ export const UserPersonInfoFragmentDoc = gql`
   lastName
 }
     `;
+export const PlaceInfoFragmentDoc = gql`
+    fragment PlaceInfo on Place {
+  id
+  country
+  name
+  stateOrRegion
+  town
+  street
+  zipCode
+}
+    `;
+export const TripPlaceInfoFragmentDoc = gql`
+    fragment TripPlaceInfo on TripPlace {
+  id
+  place {
+    ...PlaceInfo
+  }
+  placeType
+  visitDay
+  visitMonth
+  visitYear
+  notes {
+    id
+    content
+  }
+}
+    ${PlaceInfoFragmentDoc}`;
+export const TripStageInfoFragmentDoc = gql`
+    fragment TripStageInfo on TripStage {
+  id
+  place {
+    ...PlaceInfo
+  }
+  accommodation {
+    ...PlaceInfo
+  }
+  startDay
+  startMonth
+  startYear
+  endDay
+  endMonth
+  endYear
+  tripPlaces {
+    ...TripPlaceInfo
+  }
+  people {
+    id
+    firstName
+    lastName
+  }
+}
+    ${PlaceInfoFragmentDoc}
+${TripPlaceInfoFragmentDoc}`;
+export const TripInfoFragmentDoc = gql`
+    fragment TripInfo on Trip {
+  id
+  name
+  departureDay
+  departureMonth
+  departureYear
+  endDay
+  endMonth
+  endYear
+  notes {
+    id
+    content
+  }
+  tripStages {
+    ...TripStageInfo
+  }
+  people {
+    id
+    firstName
+    lastName
+  }
+}
+    ${TripStageInfoFragmentDoc}`;
 export const GetUserDocument = gql`
     query GetUser {
   user {
@@ -3652,6 +3798,39 @@ export function useDeletePersonTagMutation(baseOptions?: Apollo.MutationHookOpti
 export type DeletePersonTagMutationHookResult = ReturnType<typeof useDeletePersonTagMutation>;
 export type DeletePersonTagMutationResult = Apollo.MutationResult<DeletePersonTagMutation>;
 export type DeletePersonTagMutationOptions = Apollo.BaseMutationOptions<DeletePersonTagMutation, DeletePersonTagMutationVariables>;
+export const GetTripForTripContainerDocument = gql`
+    query GetTripForTripContainer($tripId: String!) {
+  tripById(tripId: $tripId) {
+    ...TripInfo
+  }
+}
+    ${TripInfoFragmentDoc}`;
+
+/**
+ * __useGetTripForTripContainerQuery__
+ *
+ * To run a query within a React component, call `useGetTripForTripContainerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTripForTripContainerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTripForTripContainerQuery({
+ *   variables: {
+ *      tripId: // value for 'tripId'
+ *   },
+ * });
+ */
+export function useGetTripForTripContainerQuery(baseOptions?: Apollo.QueryHookOptions<GetTripForTripContainerQuery, GetTripForTripContainerQueryVariables>) {
+        return Apollo.useQuery<GetTripForTripContainerQuery, GetTripForTripContainerQueryVariables>(GetTripForTripContainerDocument, baseOptions);
+      }
+export function useGetTripForTripContainerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTripForTripContainerQuery, GetTripForTripContainerQueryVariables>) {
+          return Apollo.useLazyQuery<GetTripForTripContainerQuery, GetTripForTripContainerQueryVariables>(GetTripForTripContainerDocument, baseOptions);
+        }
+export type GetTripForTripContainerQueryHookResult = ReturnType<typeof useGetTripForTripContainerQuery>;
+export type GetTripForTripContainerLazyQueryHookResult = ReturnType<typeof useGetTripForTripContainerLazyQuery>;
+export type GetTripForTripContainerQueryResult = Apollo.QueryResult<GetTripForTripContainerQuery, GetTripForTripContainerQueryVariables>;
 export const CreateTripDocument = gql`
     mutation CreateTrip($input: CreateTripInput!) {
   createTrip(input: $input) {
