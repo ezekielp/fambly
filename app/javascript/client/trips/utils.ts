@@ -1,5 +1,6 @@
 import { UserPersonInfoFragment } from 'client/graphqlTypes';
 import * as yup from 'yup';
+import { gql } from '@apollo/client';
 
 export const TripFormValidationSchema = yup.object().shape({
   name: yup.string().required('Please give a name to this trip!'),
@@ -82,3 +83,96 @@ export const sortPeople = (
     }
   });
 };
+
+// gql`
+//   query GetTripForTripContainer($tripId: String!) {
+//     tripById(tripId: $tripId) {
+//       ...TripInfo
+//     }
+//   }
+
+//   ${TripInfoFragmentDoc}
+// `;
+
+// gql`
+//   fragment TripInfo on Trip {
+//     id
+//     name
+//     departureDay
+//     departureMonth
+//     departureYear
+//     endDay
+//     endMonth
+//     endYear
+//     notes {
+//       id
+//       content
+//     }
+//     tripStages {
+
+//     }
+//     people {
+//       id
+//       firstName
+//       lastName
+//     }
+//   }
+// `;
+
+// gql`
+//   fragment TripStageInfo on TripStage {
+//     id
+//     place {
+//       ...PlaceInfo
+//     }
+//     accommodation {
+//       ...PlaceInfo
+//     }
+//     startDay
+//     startMonth
+//     startYear
+//     endDay
+//     endMonth
+//     endYear
+//     tripPlaces {
+//       ...TripPlaceInfo
+//     }
+//     people {
+//       id
+//       firstName
+//       lastName
+//     }
+//   }
+
+//   ${PlaceInfoFragmentDoc}
+//   ${TripPlaceInfoFragmentDoc}
+// `;
+
+// gql`
+//   fragment TripPlaceInfo on TripPlace {
+//     id
+//     place {
+//       ...PlaceInfo
+//     }
+//     placeType
+//     visitDay
+//     visitMonth
+//     visitYear
+//     notes {
+//       id
+//       content
+//     }
+//   }
+// `;
+
+gql`
+  fragment PlaceInfo on Place {
+    id
+    country
+    name
+    stateOrRegion
+    town
+    street
+    zipCode
+  }
+`;
