@@ -5,8 +5,10 @@ import {
   TripPlaceInfoFragmentDoc,
   TripStageInfoFragmentDoc,
   TripInfoFragmentDoc,
+  useGetTripForTripContainerQuery,
 } from 'client/graphqlTypes';
 import { gql } from '@apollo/client';
+import { RouteComponentProps, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 gql`
@@ -105,3 +107,48 @@ gql`
     zipCode
   }
 `;
+
+interface TripContainerProps extends RouteComponentProps {}
+
+export const TripForm: FC<TripContainerProps> = ({ history }) => {
+  const { tripId } = useParams();
+  const {
+    data: tripData,
+    refetch: refetchTripData,
+  } = useGetTripForTripContainerQuery({
+    variables: { tripId },
+  });
+
+  if (!tripData) return null;
+  if (!tripData.tripById) {
+    history.push('/home');
+    return null;
+  }
+  const {
+    id,
+    name,
+    departureDay,
+    departureMonth,
+    departureYear,
+    endDay,
+    endMonth,
+    endYear,
+    notes,
+    tripStages,
+    people,
+  } = tripData.tripById;
+
+  console.log(people);
+  console.log(departureDay);
+  console.log(departureMonth);
+  console.log(departureYear);
+  console.log(endDay);
+  console.log(endMonth);
+  console.log(endYear);
+
+  return (
+    <>
+      <div>{name}</div>
+    </>
+  );
+};
