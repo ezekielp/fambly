@@ -49,6 +49,15 @@ export const TripFormValidationSchema = yup.object().shape({
         .nullable(),
     }),
   endDay: yup.string().nullable(),
+  newOrCurrentContact: yup.string().required(),
+  firstName: yup.string().when('newOrCurrentContact', {
+    is: (val: string) => val === 'new_person',
+    then: yup
+      .string()
+      .required(
+        "To create a new contact, you need to provide at least the person's first name",
+      ),
+  }),
 });
 
 export const sortPeople = (

@@ -118,7 +118,7 @@ const ProfileLinkContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-const ProfileLink = styled(StyledLink)`
+export const ProfileLink = styled(StyledLink)`
   min-width: fit-content;
   margin-bottom: ${spacing[1]};
 `;

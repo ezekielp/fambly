@@ -1,8 +1,9 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect, ReactNode } from 'react';
 import {
   useCreateTripMutation,
   useCreateTripPersonMutation,
   useGetUserPeopleQuery,
+  useCreatePersonMutation,
   SubContactInfoFragment,
   UserPersonInfoFragment,
 } from 'client/graphqlTypes';
@@ -14,6 +15,8 @@ import {
   FormikNumberInput,
   FormikRadioGroup,
 } from 'client/form/inputs';
+// import { StyledLink } from 'client/common/StyledLink';
+import { ProfileLink } from 'client/home/HomeContainer';
 import {
   RowWrapper,
   LeftHalfWrapper,
@@ -42,6 +45,11 @@ import { Text } from 'client/common/Text';
 import { FormikAutosuggest } from 'client/form/FormikAutosuggest';
 import { handleFormErrors } from 'client/utils/formik';
 import { gql } from '@apollo/client';
+import styled from 'styled-components';
+
+const TripPeopleContainer = styled.div``;
+
+// const TripPersonContainer = styled.div``;
 
 gql`
   mutation CreateTrip($input: CreateTripInput!) {
@@ -129,6 +137,7 @@ export const TripForm: FC<TripFormProps> = ({
 }) => {
   const [createTripMutation] = useCreateTripMutation();
   const [createTripPersonMutatation] = useCreateTripPersonMutation();
+  const [createPersonMutation] = useCreatePersonMutation();
   const { data: userPeople } = useGetUserPeopleQuery();
   const sortedPeople: UserPersonInfoFragment[] = userPeople?.people
     ? sortPeople(userPeople.people)
@@ -137,6 +146,19 @@ export const TripForm: FC<TripFormProps> = ({
   const [peopleSuggestions, setPeopleSuggestions] = useState(sortedPeople);
   const [tripPersonInputValue, setTripPersonInputValue] = useState('');
   const [tripPeople, setTripPeople] = useState<UserPersonInfoFragment[]>([]);
+  let tripPeopleItems: ReactNode[];
+
+  useEffect(() => {
+    tripPeopleItems = tripPeople.map((tripPerson) => {
+      const { id, firstName, lastName } = tripPerson;
+      return (
+        <ProfileLink key={id} to={`/profiles/${id}`}>
+          {firstName}
+          {lastName && `${lastName}`}
+        </ProfileLink>
+      );
+    });
+  }, [tripPeople]);
 
   const cancel = () => {
     setFieldToAdd('');
@@ -193,7 +215,7 @@ export const TripForm: FC<TripFormProps> = ({
         validationSchema={TripFormValidationSchema}
         onSubmit={handleSubmit}
       >
-        {({ values, isSubmitting }) => {
+        {({ values, isSubmitting, setFieldValue }) => {
           const departureDaysOptions = determineDaysOptions(
             values.departureMonth,
             FEBRUARY_DAYS_OPTIONS,
@@ -312,11 +334,52 @@ export const TripForm: FC<TripFormProps> = ({
                   )}
                 </Field>
               )}
-              <Button>
+              <Button
+                onClick={async () => {
+                  const {
+                    newOrCurrentContact,
+                    firstName,
+                    lastName,
+                    tripPersonId,
+                  } = values;
+                  if (newOrCurrentContact === 'new_contact') {
+                    const createPersonResponse = await createPersonMutation({
+                      variables: {
+                        input: {
+                          firstName: firstName ? firstName : '',
+                          lastName: lastName ? lastName : null,
+                        },
+                      },
+                    });
+                    const newPerson =
+                      createPersonResponse.data?.createPerson.person;
+                    if (newPerson) {
+                      setTripPeople([...tripPeople, newPerson]);
+                    }
+                  } else {
+                    const existingPerson = {
+                      id: tripPersonId ? tripPersonId : '',
+                      firstName: tripPersonInputValue,
+                      lastName: '',
+                    };
+                    // The above is a bit of a hack —
+                    // but seems like the easiest way to
+                    // get the person's name without having
+                    // to split it into first and last
+                    setTripPeople([...tripPeople, existingPerson]);
+                    setFieldValue('tripPersonId', '');
+                    setTripPersonInputValue('');
+                  }
+                  setFieldValue('newOrCurrentContact', 'current_contact');
+                }}
+              >
                 {values.newOrCurrentContact === 'new_contact'
                   ? 'Create person and add to trip'
                   : 'Add person to trip'}
               </Button>
+              {tripPeopleItems && (
+                <TripPeopleContainer>{tripPeopleItems}</TripPeopleContainer>
+              )}
               <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
                 Save
               </Button>
