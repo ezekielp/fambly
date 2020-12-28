@@ -5,6 +5,9 @@ module Types
     field :person_by_id, Types::PersonType, null: true do
       argument :person_id, String, required: true
     end
+    field :trip_by_id, Types::TripType, null: true do
+      argument :trip_id, String, required: true
+    end
     field :user_tags_by_user_id, [Types::TagType], null: true do
       argument :user_id, String, required: true
     end
@@ -42,6 +45,12 @@ module Types
       return nil unless args
 
       person = Person.find_by(id: args[:person_id])
+    end
+
+    def trip_by_id(args)
+      return nil unless args
+
+      trip = Trip.find_by(id: args[:trip_id])
     end
 
     def user_tags_by_user_id(args)

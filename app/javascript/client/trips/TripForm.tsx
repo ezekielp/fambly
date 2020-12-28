@@ -44,6 +44,7 @@ import { Button } from 'client/common/Button';
 import { Text } from 'client/common/Text';
 import { FormikAutosuggest } from 'client/form/FormikAutosuggest';
 import { handleFormErrors } from 'client/utils/formik';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { gql } from '@apollo/client';
 import styled from 'styled-components';
 
@@ -108,9 +109,9 @@ export interface TripFormData {
   lastName?: string;
 }
 
-// To add people to the trip: I guess stick in an Autosuggest with all the current people, create a stage variable array to put them in, call however many CreateTripPerson mutations necessary — ooo, get to use a Promise.all or something maybe ... or maybe just a forEach loop? Hmmm — after you `await` creating the trip
+// To add people to the trip: I guess stick in an Autosuggest with all the current people, create a state variable array to put them in, call however many CreateTripPerson mutations necessary — ooo, get to use a Promise.all or something maybe ... or maybe just a forEach loop? Hmmm — after you `await` creating the trip
 
-export interface TripFormProps {
+export interface TripFormProps extends RouteComponentProps {
   setFieldToAdd: (field: string) => void;
   setModalOpen?: (bool: boolean) => void;
   initialValues?: TripFormData;
@@ -134,6 +135,7 @@ export const TripForm: FC<TripFormProps> = ({
   setFieldToAdd,
   setModalOpen,
   initialValues = blankInitialValues,
+  history,
 }) => {
   const [createTripMutation] = useCreateTripMutation();
   const [createTripPersonMutatation] = useCreateTripPersonMutation();
@@ -199,9 +201,23 @@ export const TripForm: FC<TripFormProps> = ({
     if (errors) {
       handleFormErrors<TripFormData>(errors, setErrors, setStatus);
     } else {
-      // TO DO: Add mutation(s) for adding trip_people
-      // TO DO: Take the user to the trip page
+      const tripId = response.data?.createTrip.trip?.id;
+      if (tripPeople.length > 0) {
+        Promise.all(
+          tripPeople.map(async (person) => {
+            await createTripPersonMutatation({
+              variables: {
+                input: {
+                  tripId: tripId ? tripId : '',
+                  personId: person.id,
+                },
+              },
+            });
+          }),
+        );
+      }
       setFieldToAdd('');
+      history.push(`/trips/${tripId}`);
     }
   };
 
