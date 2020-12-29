@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe 'create_trip mutation', type: :request do
   let(:endpoint) { '/graphql' }
   let(:user) { create(:user) }
+  let(:name) { 'HMS Beagle voyage' }
   let(:password) { 'Schwarzgerat' }
   let(:country) { 'England' }
   let(:town) { 'Plymouth' }
@@ -18,6 +19,7 @@ RSpec.describe 'create_trip mutation', type: :request do
             createTrip(input: $input) {
                 trip {
                     id
+                    name
                     departurePoint {
                       id
                       country
@@ -54,6 +56,7 @@ RSpec.describe 'create_trip mutation', type: :request do
   let(:variables) do
     {
         input: {
+          name: name,
           departureCountry: country,
           departureTown: town,
           endCountry: country,

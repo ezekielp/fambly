@@ -49,6 +49,7 @@ FactoryBot.define do
 
     factory :trip do
         user
+        name { 'HMS Beagle voyage' }
         departure_year { 1271 }
         end_year { 1295 }
     end

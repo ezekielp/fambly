@@ -8,6 +8,11 @@
 #  person_id     :uuid
 #  trip_stage_id :uuid
 #
+# Indexes
+#
+#  index_trip_stage_people_on_person_id      (person_id)
+#  index_trip_stage_people_on_trip_stage_id  (trip_stage_id)
+#
 # Foreign Keys
 #
 #  fk_rails_...  (person_id => people.id)

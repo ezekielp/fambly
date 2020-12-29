@@ -13,6 +13,7 @@ import { LoginContainer } from './login/LoginContainer';
 import { HomeContainer } from './home/HomeContainer';
 import { LandingPage } from './home/LandingPage';
 import { PersonContainer } from './profiles/PersonContainer';
+import { TripContainer } from 'client/trips/TripContainer';
 import { Wrapper } from 'client/common/Wrapper';
 import { NavBar } from 'client/nav/NavBar';
 import { Footer } from 'client/nav/Footer';
@@ -78,6 +79,11 @@ const InternalAppContainer: FC<AppContainerProps> = () => {
           path="/profiles/:personId"
           accessAllowed={loggedIn}
           component={PersonContainer}
+        />
+        <ProtectedRoute
+          path="/trips/:tripId"
+          accessAllowed={loggedIn}
+          component={TripContainer}
         />
         <Route path="*">
           <Redirect to="/landing" />

@@ -1,6 +1,7 @@
 module Types
   class TripType < Types::BaseObject
     field :id, ID, null: false
+    field :name, String, null: false
     field :departure_point, Types::PlaceType, null: true
     field :end_point, Types::PlaceType, null: true
     field :departure_day, Int, null: true
