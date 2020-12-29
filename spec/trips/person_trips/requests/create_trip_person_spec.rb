@@ -4,7 +4,7 @@ RSpec.describe 'create_trip_person mutation', type: :request do
   let(:endpoint) { '/graphql' }
   let(:user) { create(:user) }
   let(:person) { Person.create(user_id: user.id, first_name: 'Captain', last_name: 'Fitzroy') }
-  let(:trip) { Trip.create(user_id: user.id) }
+  let(:trip) { Trip.create(user_id: user.id, name: 'HMS Beagle voyage') }
   let(:query_string) do
     "
         mutation CreateTripPerson($input: CreateTripPersonInput!) {

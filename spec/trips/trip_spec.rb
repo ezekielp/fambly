@@ -31,6 +31,7 @@ require 'rails_helper'
 
 RSpec.describe Trip, type: :model do
   let(:user) { create(:user) }
+  let(:trip_name) { 'Einstein travels to NYC' }
   let(:departure_point) { Place.create(country: 'USA', town: 'New York') }
   let(:end_point) { Place.create(country: 'Germany', town: 'Berlin') }
   let(:departure_day) { 2 }
@@ -43,6 +44,7 @@ RSpec.describe Trip, type: :model do
     it 'is valid with valid attributes' do
       expect(Trip.create(
         user_id: user.id,
+        name: trip_name,
         departure_point_id: departure_point.id,
         end_point_id: end_point.id,
         departure_day: departure_day,
@@ -54,6 +56,7 @@ RSpec.describe Trip, type: :model do
       ).to be_valid
       expect(Trip.create(
         user_id: user.id,
+        name: trip_name,
         departure_day: departure_day,
         departure_month: departure_month,
         departure_year: departure_year,
