@@ -324,11 +324,14 @@ export const InternalTripForm: FC<TripFormProps> = ({
               {!showSlide1 && (
                 <>
                   <TripPersonFormContainer>
+                    <Text marginBottom={1} semiBold>
+                      Who traveled with you?
+                    </Text>
+                    {/* Eventually, put the parenthetical below into one of those accordion things with a question mark */}
                     <Text marginBottom={2}>
-                      Who traveled with you? (Select people who went on the
-                      entire trip with you here. You can enter additional people
-                      you met or stayed with at individual stages of the trip
-                      later.)
+                      (Select people who went on the entire trip with you here.
+                      You can enter additional people you met or stayed with at
+                      individual stages of the trip later.)
                     </Text>
                     <Field
                       name="newOrCurrentContact"
