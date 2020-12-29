@@ -48,7 +48,10 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { gql } from '@apollo/client';
 import styled from 'styled-components';
 
-const TripPeopleContainer = styled.div``;
+const TripPeopleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 // const TripPersonContainer = styled.div``;
 
@@ -315,10 +318,12 @@ export const InternalTripForm: FC<TripFormProps> = ({
                 {tripPeople.map((tripPerson) => {
                   const { id, firstName, lastName } = tripPerson;
                   return (
-                    <ProfileLink key={id} to={`/profiles/${id}`}>
-                      {firstName}
-                      {lastName && `${lastName}`}
-                    </ProfileLink>
+                    <div key={id}>
+                      <ProfileLink to={`/profiles/${id}`}>
+                        {firstName}
+                        {lastName && ` ${lastName}`}
+                      </ProfileLink>
+                    </div>
                   );
                 })}
               </TripPeopleContainer>
@@ -389,7 +394,6 @@ export const InternalTripForm: FC<TripFormProps> = ({
                     });
                     const newPerson =
                       createPersonResponse.data?.createPerson.person;
-                    console.log(newPerson);
                     if (newPerson) {
                       setTripPeople([...tripPeople, newPerson]);
                     }

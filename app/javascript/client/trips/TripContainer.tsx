@@ -110,7 +110,7 @@ gql`
 
 interface TripContainerProps extends RouteComponentProps {}
 
-export const TripForm: FC<TripContainerProps> = ({ history }) => {
+export const TripContainer: FC<TripContainerProps> = ({ history }) => {
   const { tripId } = useParams();
   const {
     data: tripData,
@@ -137,14 +137,6 @@ export const TripForm: FC<TripContainerProps> = ({ history }) => {
     tripStages,
     people,
   } = tripData.tripById;
-
-  console.log(people);
-  console.log(departureDay);
-  console.log(departureMonth);
-  console.log(departureYear);
-  console.log(endDay);
-  console.log(endMonth);
-  console.log(endYear);
 
   return (
     <>
