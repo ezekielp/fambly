@@ -112,28 +112,30 @@ export interface TripFormData {
 // To add people to the trip: I guess stick in an Autosuggest with all the current people, create a state variable array to put them in, call however many CreateTripPerson mutations necessary — ooo, get to use a Promise.all or something maybe ... or maybe just a forEach loop? Hmmm — after you `await` creating the trip
 
 export interface TripFormProps extends RouteComponentProps {
-  setFieldToAdd: (field: string) => void;
+  setFieldToAdd?: (field: string) => void;
   setModalOpen?: (bool: boolean) => void;
   initialValues?: TripFormData;
+  toggleNewTripModalVisible?: (state: boolean) => void;
 }
 
 export const blankInitialValues: TripFormData = {
   name: '',
   departureYear: null,
-  departureMonth: 'string',
-  departureDay: 'string',
+  departureMonth: '',
+  departureDay: '',
   endYear: null,
-  endMonth: 'string',
-  endDay: 'string',
-  tripPersonId: 'string',
+  endMonth: '',
+  endDay: '',
+  tripPersonId: '',
   newOrCurrentContact: 'current_person',
   firstName: '',
   lastName: '',
 };
 
-export const TripForm: FC<TripFormProps> = ({
+export const InternalTripForm: FC<TripFormProps> = ({
   setFieldToAdd,
   setModalOpen,
+  toggleNewTripModalVisible,
   initialValues = blankInitialValues,
   history,
 }) => {
@@ -148,22 +150,27 @@ export const TripForm: FC<TripFormProps> = ({
   const [peopleSuggestions, setPeopleSuggestions] = useState(sortedPeople);
   const [tripPersonInputValue, setTripPersonInputValue] = useState('');
   const [tripPeople, setTripPeople] = useState<UserPersonInfoFragment[]>([]);
-  let tripPeopleItems: ReactNode[];
+  // let tripPeopleItems: ReactNode[] = [];
+  // console.log(tripPeopleItems);
 
-  useEffect(() => {
-    tripPeopleItems = tripPeople.map((tripPerson) => {
-      const { id, firstName, lastName } = tripPerson;
-      return (
-        <ProfileLink key={id} to={`/profiles/${id}`}>
-          {firstName}
-          {lastName && `${lastName}`}
-        </ProfileLink>
-      );
-    });
-  }, [tripPeople]);
+  // useEffect(() => {
+  //   tripPeopleItems = tripPeople.map((tripPerson) => {
+  //     const { id, firstName, lastName } = tripPerson;
+  //     return (
+  //       <ProfileLink key={id} to={`/profiles/${id}`}>
+  //         {firstName}
+  //         {lastName && `${lastName}`}
+  //       </ProfileLink>
+  //     );
+  //   });
+  // }, [tripPeople]);
 
   const cancel = () => {
-    setFieldToAdd('');
+    if (toggleNewTripModalVisible) {
+      toggleNewTripModalVisible(false);
+    } else if (setFieldToAdd) {
+      setFieldToAdd('');
+    }
     setModalOpen && setModalOpen(false);
   };
 
@@ -216,7 +223,8 @@ export const TripForm: FC<TripFormProps> = ({
           }),
         );
       }
-      setFieldToAdd('');
+      setFieldToAdd && setFieldToAdd('');
+      setModalOpen && setModalOpen(false);
       history.push(`/trips/${tripId}`);
     }
   };
@@ -303,6 +311,17 @@ export const TripForm: FC<TripFormProps> = ({
                   />
                 </RightQuarterWrapper>
               </RowWrapper>
+              <TripPeopleContainer>
+                {tripPeople.map((tripPerson) => {
+                  const { id, firstName, lastName } = tripPerson;
+                  return (
+                    <ProfileLink key={id} to={`/profiles/${id}`}>
+                      {firstName}
+                      {lastName && `${lastName}`}
+                    </ProfileLink>
+                  );
+                })}
+              </TripPeopleContainer>
               <Label as="label">
                 Who traveled with you? (Select people who went on the entire
                 trip with you here. You can enter additional people you met or
@@ -351,6 +370,7 @@ export const TripForm: FC<TripFormProps> = ({
                 </Field>
               )}
               <Button
+                type="button"
                 onClick={async () => {
                   const {
                     newOrCurrentContact,
@@ -358,7 +378,7 @@ export const TripForm: FC<TripFormProps> = ({
                     lastName,
                     tripPersonId,
                   } = values;
-                  if (newOrCurrentContact === 'new_contact') {
+                  if (newOrCurrentContact === 'new_person') {
                     const createPersonResponse = await createPersonMutation({
                       variables: {
                         input: {
@@ -369,6 +389,7 @@ export const TripForm: FC<TripFormProps> = ({
                     });
                     const newPerson =
                       createPersonResponse.data?.createPerson.person;
+                    console.log(newPerson);
                     if (newPerson) {
                       setTripPeople([...tripPeople, newPerson]);
                     }
@@ -386,16 +407,13 @@ export const TripForm: FC<TripFormProps> = ({
                     setFieldValue('tripPersonId', '');
                     setTripPersonInputValue('');
                   }
-                  setFieldValue('newOrCurrentContact', 'current_contact');
+                  setFieldValue('newOrCurrentContact', 'current_person');
                 }}
               >
                 {values.newOrCurrentContact === 'new_contact'
                   ? 'Create person and add to trip'
                   : 'Add person to trip'}
               </Button>
-              {tripPeopleItems && (
-                <TripPeopleContainer>{tripPeopleItems}</TripPeopleContainer>
-              )}
               <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
                 Save
               </Button>
@@ -407,3 +425,5 @@ export const TripForm: FC<TripFormProps> = ({
     </>
   );
 };
+
+export const TripForm = withRouter(InternalTripForm);

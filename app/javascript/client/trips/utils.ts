@@ -11,9 +11,10 @@ export const TripFormValidationSchema = yup.object().shape({
     .when('departureMonth', {
       is: (val) => val !== '' && val !== undefined && val !== null,
       then: yup
-        .string()
-        .required('Year is required if you specify a month')
-        .nullable(),
+        .number()
+        .integer()
+        .positive()
+        .required('Year is required if you specify a month'),
     }),
   departureMonth: yup
     .string()
@@ -34,9 +35,10 @@ export const TripFormValidationSchema = yup.object().shape({
     .when('endMonth', {
       is: (val) => val !== '' && val !== undefined && val !== null,
       then: yup
-        .string()
-        .required('Year is required if you specify a month')
-        .nullable(),
+        .number()
+        .integer()
+        .positive()
+        .required('Year is required if you specify a month'),
     }),
   endMonth: yup
     .string()
@@ -63,7 +65,7 @@ export const TripFormValidationSchema = yup.object().shape({
 export const sortPeople = (
   people: UserPersonInfoFragment[],
 ): UserPersonInfoFragment[] => {
-  return people.sort((p1, p2) => {
+  return people.slice().sort((p1, p2) => {
     const firstName1 = p1.firstName.toUpperCase();
     const firstName2 = p2.firstName.toUpperCase();
     if (firstName1 < firstName2) {

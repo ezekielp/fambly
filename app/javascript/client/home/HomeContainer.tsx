@@ -4,6 +4,7 @@ import {
   HomeContainerPersonInfoFragmentDoc,
 } from 'client/graphqlTypes';
 import { PersonForm } from 'client/profiles/PersonForm';
+import { TripForm } from 'client/trips/TripForm';
 import { Button } from 'client/common/Button';
 import { gql } from '@apollo/client';
 import { withRouter } from 'react-router-dom';
@@ -147,6 +148,7 @@ interface HomeContainerProps {}
 
 const InternalHomeContainer: FC<HomeContainerProps> = () => {
   const [newPersonFieldVisible, toggleNewPersonFieldVisible] = useState(false);
+  const [newTripModalVisible, toggleNewTripModalVisible] = useState(false);
   const [tagFilter, setTagFilter] = useState<string | null>(null);
   const [selectedTagColor, setSelectedTagColor] = useState<string | null>(null);
   const {
@@ -242,6 +244,12 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
       </StyledButton>
     );
 
+  const addTripButton = (
+    <StyledButton onClick={() => toggleNewTripModalVisible(true)}>
+      Add a new trip
+    </StyledButton>
+  );
+
   return (
     <HomeContentContainer>
       {dummyEmail && (
@@ -255,6 +263,7 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
         Dashboard
       </Text>
       {!newPersonFieldVisible && addPersonButton}
+      {addTripButton}
       <DatesScroller monthsObject={infoForDatesScroller} />
       {newPersonFieldVisible && (
         <Modal onClose={() => toggleNewPersonFieldVisible(false)}>
@@ -262,6 +271,11 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
             refetchUserData={refetchUserData}
             toggleNewPersonFieldVisible={toggleNewPersonFieldVisible}
           />
+        </Modal>
+      )}
+      {newTripModalVisible && (
+        <Modal onClose={() => toggleNewTripModalVisible(false)}>
+          <TripForm toggleNewTripModalVisible={toggleNewTripModalVisible} />
         </Modal>
       )}
       <SectionDivider />
