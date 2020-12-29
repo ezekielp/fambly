@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, ReactNode } from 'react';
+import React, { FC, useState } from 'react';
 import {
   useCreateTripMutation,
   useCreateTripPersonMutation,
@@ -8,15 +8,14 @@ import {
   UserPersonInfoFragment,
 } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers, FieldProps } from 'formik';
-import { Label } from 'client/form/withFormik';
 import {
   FormikTextInput,
   FormikSelectInput,
   FormikNumberInput,
   FormikRadioGroup,
 } from 'client/form/inputs';
-// import { StyledLink } from 'client/common/StyledLink';
 import { ProfileLink } from 'client/home/HomeContainer';
+import { SectionDivider } from 'client/profiles/PersonContainer';
 import {
   RowWrapper,
   LeftHalfWrapper,
@@ -48,9 +47,14 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { gql } from '@apollo/client';
 import styled from 'styled-components';
 
+const TripPersonFormContainer = styled.div`
+  margin-bottom: 1rem;
+`;
+
 const TripPeopleContainer = styled.div`
   display: flex;
   flex-direction: column;
+  margin-bottom: 1rem;
 `;
 
 // const TripPersonContainer = styled.div``;
@@ -153,20 +157,6 @@ export const InternalTripForm: FC<TripFormProps> = ({
   const [peopleSuggestions, setPeopleSuggestions] = useState(sortedPeople);
   const [tripPersonInputValue, setTripPersonInputValue] = useState('');
   const [tripPeople, setTripPeople] = useState<UserPersonInfoFragment[]>([]);
-  // let tripPeopleItems: ReactNode[] = [];
-  // console.log(tripPeopleItems);
-
-  // useEffect(() => {
-  //   tripPeopleItems = tripPeople.map((tripPerson) => {
-  //     const { id, firstName, lastName } = tripPerson;
-  //     return (
-  //       <ProfileLink key={id} to={`/profiles/${id}`}>
-  //         {firstName}
-  //         {lastName && `${lastName}`}
-  //       </ProfileLink>
-  //     );
-  //   });
-  // }, [tripPeople]);
 
   const cancel = () => {
     if (toggleNewTripModalVisible) {
@@ -257,171 +247,213 @@ export const InternalTripForm: FC<TripFormProps> = ({
           );
           return (
             <Form>
-              <Field
-                name="name"
-                label="Please provide a name for this trip."
-                component={FormikTextInput}
-              />
-              <Label as="label">When did the trip begin?</Label>
-              <RowWrapper>
-                <LeftHalfWrapper>
-                  <MonthLabel>Month (optional)</MonthLabel>
-                  <Field
-                    name="departureMonth"
-                    component={FormikSelectInput}
-                    options={MONTH_OPTIONS}
-                  />
-                </LeftHalfWrapper>
-                <MiddleQuarterWrapper>
-                  <Field
-                    name="departureDay"
-                    label="Day (optional)"
-                    component={FormikSelectInput}
-                    options={departureDaysOptions}
-                  />
-                </MiddleQuarterWrapper>
-                <RightQuarterWrapper>
-                  <Field
-                    name="departureYear"
-                    label="Year (optional)"
-                    component={FormikNumberInput}
-                  />
-                </RightQuarterWrapper>
-              </RowWrapper>
-              <Label as="label">When did the trip conclude?</Label>
-              <RowWrapper>
-                <LeftHalfWrapper>
-                  <MonthLabel>Month (optional)</MonthLabel>
-                  <Field
-                    name="endMonth"
-                    component={FormikSelectInput}
-                    options={MONTH_OPTIONS}
-                  />
-                </LeftHalfWrapper>
-                <MiddleQuarterWrapper>
-                  <Field
-                    name="endDay"
-                    label="Day (optional)"
-                    component={FormikSelectInput}
-                    options={endDaysOptions}
-                  />
-                </MiddleQuarterWrapper>
-                <RightQuarterWrapper>
-                  <Field
-                    name="endYear"
-                    label="Year (optional)"
-                    component={FormikNumberInput}
-                  />
-                </RightQuarterWrapper>
-              </RowWrapper>
-              <TripPeopleContainer>
-                {tripPeople.map((tripPerson) => {
-                  const { id, firstName, lastName } = tripPerson;
-                  return (
-                    <div key={id}>
-                      <ProfileLink to={`/profiles/${id}`}>
-                        {firstName}
-                        {lastName && ` ${lastName}`}
-                      </ProfileLink>
-                    </div>
-                  );
-                })}
-              </TripPeopleContainer>
-              <Label as="label">
-                Who traveled with you? (Select people who went on the entire
-                trip with you here. You can enter additional people you met or
-                stayed with at individual stages of the trip later.)
-              </Label>
-              <Field
-                name="newOrCurrentContact"
-                label=""
-                component={FormikRadioGroup}
-                options={NEW_OR_CURRENT_CONTACT_OPTIONS}
-              />
-              {values.newOrCurrentContact === 'new_person' && (
+              {showSlide1 && (
                 <>
-                  <NameRowWrapper>
+                  <Field
+                    name="name"
+                    label="Please provide a name for this trip."
+                    component={FormikTextInput}
+                  />
+                  <SectionDivider />
+                  <Text marginBottom={2} semiBold>
+                    When did the trip begin?
+                  </Text>
+                  <RowWrapper>
                     <LeftHalfWrapper>
-                      <FirstNameLabel>First name</FirstNameLabel>
-                      <Field name="firstName" component={FormikTextInput} />
+                      <MonthLabel>Month (optional)</MonthLabel>
+                      <Field
+                        name="departureMonth"
+                        component={FormikSelectInput}
+                        options={MONTH_OPTIONS}
+                      />
                     </LeftHalfWrapper>
-                    <RightHalfWrapper>
-                      <LastNameLabel>Last name (optional)</LastNameLabel>
-                      <Field name="lastName" component={FormikTextInput} />
-                    </RightHalfWrapper>
-                  </NameRowWrapper>
+                    <MiddleQuarterWrapper>
+                      <Field
+                        name="departureDay"
+                        label="Day (optional)"
+                        component={FormikSelectInput}
+                        options={departureDaysOptions}
+                      />
+                    </MiddleQuarterWrapper>
+                    <RightQuarterWrapper>
+                      <Field
+                        name="departureYear"
+                        label="Year (optional)"
+                        component={FormikNumberInput}
+                      />
+                    </RightQuarterWrapper>
+                  </RowWrapper>
+                  <Text marginBottom={2} semiBold>
+                    When did the trip conclude?
+                  </Text>
+                  <RowWrapper>
+                    <LeftHalfWrapper>
+                      <MonthLabel>Month (optional)</MonthLabel>
+                      <Field
+                        name="endMonth"
+                        component={FormikSelectInput}
+                        options={MONTH_OPTIONS}
+                      />
+                    </LeftHalfWrapper>
+                    <MiddleQuarterWrapper>
+                      <Field
+                        name="endDay"
+                        label="Day (optional)"
+                        component={FormikSelectInput}
+                        options={endDaysOptions}
+                      />
+                    </MiddleQuarterWrapper>
+                    <RightQuarterWrapper>
+                      <Field
+                        name="endYear"
+                        label="Year (optional)"
+                        component={FormikNumberInput}
+                      />
+                    </RightQuarterWrapper>
+                  </RowWrapper>
+                  <Button
+                    type="button"
+                    marginRight="1rem"
+                    onClick={() => setShowSlide1(false)}
+                  >
+                    Next
+                  </Button>
+                  <Button onClick={() => cancel()}>Cancel</Button>
                 </>
               )}
-              {values.newOrCurrentContact === 'current_person' && (
-                <Field name="tripPersonId">
-                  {({ form }: FieldProps) => (
-                    <FormikAutosuggest<SubContactInfoFragment>
-                      records={sortedPeople}
-                      suggestions={peopleSuggestions}
-                      setSuggestions={setPeopleSuggestions}
-                      getSuggestionValue={getFullNameFromPerson}
-                      inputValue={tripPersonInputValue}
-                      onSuggestionSelected={(event, data) => {
-                        form.setFieldValue('tripPersonId', data.suggestion.id);
-                        setTripPersonInputValue(
-                          getFullNameFromPerson(data.suggestion),
-                        );
-                      }}
-                      onChange={(event) => {
-                        setTripPersonInputValue(event.target.value);
-                      }}
+              {!showSlide1 && (
+                <>
+                  <TripPersonFormContainer>
+                    <Text marginBottom={2}>
+                      Who traveled with you? (Select people who went on the
+                      entire trip with you here. You can enter additional people
+                      you met or stayed with at individual stages of the trip
+                      later.)
+                    </Text>
+                    <Field
+                      name="newOrCurrentContact"
+                      label=""
+                      component={FormikRadioGroup}
+                      options={NEW_OR_CURRENT_CONTACT_OPTIONS}
                     />
-                  )}
-                </Field>
+                    {values.newOrCurrentContact === 'new_person' && (
+                      <>
+                        <NameRowWrapper>
+                          <LeftHalfWrapper>
+                            <FirstNameLabel>First name</FirstNameLabel>
+                            <Field
+                              name="firstName"
+                              component={FormikTextInput}
+                            />
+                          </LeftHalfWrapper>
+                          <RightHalfWrapper>
+                            <LastNameLabel>Last name (optional)</LastNameLabel>
+                            <Field
+                              name="lastName"
+                              component={FormikTextInput}
+                            />
+                          </RightHalfWrapper>
+                        </NameRowWrapper>
+                      </>
+                    )}
+                    {values.newOrCurrentContact === 'current_person' && (
+                      <Field name="tripPersonId">
+                        {({ form }: FieldProps) => (
+                          <FormikAutosuggest<SubContactInfoFragment>
+                            records={sortedPeople}
+                            suggestions={peopleSuggestions}
+                            setSuggestions={setPeopleSuggestions}
+                            getSuggestionValue={getFullNameFromPerson}
+                            inputValue={tripPersonInputValue}
+                            onSuggestionSelected={(event, data) => {
+                              form.setFieldValue(
+                                'tripPersonId',
+                                data.suggestion.id,
+                              );
+                              setTripPersonInputValue(
+                                getFullNameFromPerson(data.suggestion),
+                              );
+                            }}
+                            onChange={(event) => {
+                              setTripPersonInputValue(event.target.value);
+                            }}
+                          />
+                        )}
+                      </Field>
+                    )}
+                    <Button
+                      type="button"
+                      onClick={async () => {
+                        const {
+                          newOrCurrentContact,
+                          firstName,
+                          lastName,
+                          tripPersonId,
+                        } = values;
+                        if (newOrCurrentContact === 'new_person') {
+                          const createPersonResponse = await createPersonMutation(
+                            {
+                              variables: {
+                                input: {
+                                  firstName: firstName ? firstName : '',
+                                  lastName: lastName ? lastName : null,
+                                },
+                              },
+                            },
+                          );
+                          const newPerson =
+                            createPersonResponse.data?.createPerson.person;
+                          if (newPerson) {
+                            setTripPeople([...tripPeople, newPerson]);
+                            setFieldValue('firstName', ' ');
+                            setFieldValue('lastName', '');
+                          }
+                        } else {
+                          const existingPerson = {
+                            id: tripPersonId ? tripPersonId : '',
+                            firstName: tripPersonInputValue,
+                            lastName: '',
+                          };
+                          // The above is a bit of a hack —
+                          // but seems like the easiest way to
+                          // get the person's name without having
+                          // to split it into first and last
+                          setTripPeople([...tripPeople, existingPerson]);
+                          setFieldValue('tripPersonId', '');
+                          setTripPersonInputValue('');
+                        }
+                        setFieldValue('newOrCurrentContact', 'current_person');
+                      }}
+                    >
+                      {values.newOrCurrentContact === 'new_contact'
+                        ? 'Create person and add to trip'
+                        : 'Add person to trip'}
+                    </Button>
+                  </TripPersonFormContainer>
+                  <TripPeopleContainer>
+                    {tripPeople.map((tripPerson) => {
+                      const { id, firstName, lastName } = tripPerson;
+                      return (
+                        <div key={id}>
+                          <ProfileLink to={`/profiles/${id}`}>
+                            {firstName}
+                            {lastName && ` ${lastName}`}
+                          </ProfileLink>
+                        </div>
+                      );
+                    })}
+                  </TripPeopleContainer>
+                  <SectionDivider />
+                  <Button
+                    marginRight="1rem"
+                    type="submit"
+                    disabled={isSubmitting}
+                  >
+                    Save
+                  </Button>
+                  <Button onClick={() => cancel()}>Cancel</Button>
+                </>
               )}
-              <Button
-                type="button"
-                onClick={async () => {
-                  const {
-                    newOrCurrentContact,
-                    firstName,
-                    lastName,
-                    tripPersonId,
-                  } = values;
-                  if (newOrCurrentContact === 'new_person') {
-                    const createPersonResponse = await createPersonMutation({
-                      variables: {
-                        input: {
-                          firstName: firstName ? firstName : '',
-                          lastName: lastName ? lastName : null,
-                        },
-                      },
-                    });
-                    const newPerson =
-                      createPersonResponse.data?.createPerson.person;
-                    if (newPerson) {
-                      setTripPeople([...tripPeople, newPerson]);
-                    }
-                  } else {
-                    const existingPerson = {
-                      id: tripPersonId ? tripPersonId : '',
-                      firstName: tripPersonInputValue,
-                      lastName: '',
-                    };
-                    // The above is a bit of a hack —
-                    // but seems like the easiest way to
-                    // get the person's name without having
-                    // to split it into first and last
-                    setTripPeople([...tripPeople, existingPerson]);
-                    setFieldValue('tripPersonId', '');
-                    setTripPersonInputValue('');
-                  }
-                  setFieldValue('newOrCurrentContact', 'current_person');
-                }}
-              >
-                {values.newOrCurrentContact === 'new_contact'
-                  ? 'Create person and add to trip'
-                  : 'Add person to trip'}
-              </Button>
-              <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
-                Save
-              </Button>
-              <Button onClick={() => cancel()}>Cancel</Button>
             </Form>
           );
         }}
