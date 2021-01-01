@@ -263,7 +263,7 @@ const InternalHomeContainer: FC<HomeContainerProps> = () => {
         Dashboard
       </Text>
       {!newPersonFieldVisible && addPersonButton}
-      {addTripButton}
+      {/* {addTripButton} */}
       <DatesScroller monthsObject={infoForDatesScroller} />
       {newPersonFieldVisible && (
         <Modal onClose={() => toggleNewPersonFieldVisible(false)}>
