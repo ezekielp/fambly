@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_26_030057) do
+ActiveRecord::Schema.define(version: 2021_01_02_010410) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -220,6 +220,24 @@ ActiveRecord::Schema.define(version: 2020_12_26_030057) do
     t.index ["session_token"], name: "index_users_on_session_token", unique: true
   end
 
+  create_table "work_positions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "person_id"
+    t.uuid "place_id"
+    t.boolean "current"
+    t.string "title"
+    t.string "company_name"
+    t.text "description"
+    t.integer "start_month"
+    t.integer "start_year"
+    t.integer "end_month"
+    t.integer "end_year"
+    t.string "work_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["person_id"], name: "index_work_positions_on_person_id"
+    t.index ["place_id"], name: "index_work_positions_on_place_id"
+  end
+
   add_foreign_key "amorous_relationships", "people", column: "partner_one_id"
   add_foreign_key "amorous_relationships", "people", column: "partner_two_id"
   add_foreign_key "dummy_emails", "users"
@@ -246,4 +264,6 @@ ActiveRecord::Schema.define(version: 2020_12_26_030057) do
   add_foreign_key "trips", "places", column: "departure_point_id"
   add_foreign_key "trips", "places", column: "end_point_id"
   add_foreign_key "trips", "users"
+  add_foreign_key "work_positions", "people"
+  add_foreign_key "work_positions", "places"
 end
