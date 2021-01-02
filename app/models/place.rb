@@ -14,6 +14,7 @@
 #
 class Place < ApplicationRecord
   has_many :person_places
+  has_many :work_positions
   has_many :trips_as_departure_point, class_name: 'Trip', foreign_key: 'departure_point_id', dependent: :destroy
   has_many :trips_as_end_point, class_name: 'Trip', foreign_key: 'end_point_id', dependent: :destroy
   has_many :trip_stages

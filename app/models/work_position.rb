@@ -28,4 +28,8 @@
 #  fk_rails_...  (place_id => places.id)
 #
 class WorkPosition < ApplicationRecord
+  validates :start_month, :end_month, inclusion: { in: 1..12, allow_nil: true }
+
+  belongs_to :place, optional: true
+  belongs_to :person
 end

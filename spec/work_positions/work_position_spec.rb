@@ -30,5 +30,14 @@
 require 'rails_helper'
 
 RSpec.describe WorkPosition, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:user) { create(:user) }
+  let(:person) { Person.create(user_id: user.id, first_name: 'Ken', last_name: 'Thompson') }
+  let(:place) { Place.create(country: 'USA', town: 'Holmdel Township', state_or_region: 'NJ') }
+
+  describe 'ActiveModel validations' do
+    it 'is valid with valid attributes' do
+      expect(WorkPosition.create(person_id: person.id, place_id: place.id, title: 'Designer of Unix', company_name: 'Bell Labs', current: false, work_type: 'full_time', start_year: 1966, end_year: 2000)).to be_valid
+    end
+  end
 end
+
