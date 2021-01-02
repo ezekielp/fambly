@@ -32,4 +32,5 @@ class WorkPosition < ApplicationRecord
 
   belongs_to :place, optional: true
   belongs_to :person
+  has_many :notes, as: :notable, dependent: :destroy
 end
