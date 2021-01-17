@@ -81,7 +81,6 @@ RSpec.describe 'create_work_position mutation', type: :request do
     )
 
     work_position = JSON.parse(response.body).dig('data', 'createWorkPosition', 'workPosition')
-    # debugger
     expect(work_position['title']).to eq(title)
     expect(work_position['description']).to eq(description)
     expect(work_position['place']['town']).to eq(town)
