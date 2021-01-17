@@ -53,6 +53,9 @@ module Types
     field :update_tag, mutation: Mutations::UpdateTag
     field :delete_person_tag, mutation: Mutations::DeletePersonTag
 
+    # Work positions
+    field :create_work_position, mutation: Mutations::CreateWorkPosition
+
     # Trips
     field :create_trip, mutation: Mutations::CreateTrip
     field :create_trip_person, mutation: Mutations::CreateTripPerson

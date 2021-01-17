@@ -20,6 +20,7 @@ module Types
     field :partners, [Types::PersonType], null: true
     field :anniversary, Types::AnniversaryType, null: true
     field :person_places, [Types::PersonPlaceType], null: true
+    field :work_positions, [Types::WorkPositionType], null: true
 
     def age
       object.age_from_full_birthdate || object.approximate_age_from_birth_year || object.approximate_current_age_from_age

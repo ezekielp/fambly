@@ -8,7 +8,6 @@ RSpec.describe 'create_work_position mutation', type: :request do
   let(:country) { 'USA' }
   let(:town) { 'Holmdel Township' }
   let(:state_or_region) { 'NJ' }
-  # let(:place) { Place.create(country: 'USA', town: 'Holmdel Township', state_or_region: 'NJ') }
   let(:title) { 'Designer of Unix' }
   let(:company_name) { 'Bell Labs' }
   let(:description) { 'I did the first of two or three versions of UNIX all alone. And Dennis became an evangelist. Then there was a rewrite in a higher-level language that would come to be called C. He worked mostly on the language and on the I/O system, and I worked on all the rest of the operating system. That was for the PDP-11, which was serendipitous, because that was the computer that took over the academic community.' }
@@ -82,6 +81,7 @@ RSpec.describe 'create_work_position mutation', type: :request do
     )
 
     work_position = JSON.parse(response.body).dig('data', 'createWorkPosition', 'workPosition')
+    # debugger
     expect(work_position['title']).to eq(title)
     expect(work_position['description']).to eq(description)
     expect(work_position['place']['town']).to eq(town)
