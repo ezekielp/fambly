@@ -83,9 +83,68 @@ export const WorkPositionFormValidationSchema = yup.object().shape({
         .nullable(),
     }),
   endMonth: yup.string().nullable(),
-  // TO DO: Do the conditional validation for country -- if town OR stateOrRegion are not null, country should be required
-  country: yup.string(),
-  placeType: yup.string(),
   stateOrRegion: yup.string(),
   town: yup.string(),
+  country: yup
+    .string()
+    .when('town', {
+      is: (val) => val !== undefined && val !== null && val !== '',
+      then: yup.string().required('Country is required if you specify a town'),
+    })
+    .when('stateOrRegion', {
+      is: (val) => val !== undefined && val !== null && val !== '',
+      then: yup
+        .string()
+        .required('Country is required if you specify a state or region'),
+    }),
 });
+
+export interface WorkPositionFormData {
+  title?: string;
+  companyName?: string;
+  description?: string;
+  workType?: string;
+  startYear?: number | null;
+  startMonth?: number | null;
+  endYear?: number | null;
+  endMonth?: number | null;
+  country?: string;
+  stateOrRegion?: string;
+  town?: string;
+}
+
+export interface WorkPositionFormProps {
+  setFieldToAdd?: (field: string) => void;
+  personId?: string;
+  initialValues?: WorkPositionFormData;
+  workPositionId?: string;
+  setEditFlag?: (bool: boolean) => void;
+  setModalOpen?: (bool: boolean) => void;
+}
+
+export const blankInitialValues: WorkPositionFormData = {
+  title: '',
+  companyName: '',
+  description: '',
+  workType: '',
+  startYear: null,
+  startMonth: null,
+  endYear: null,
+  endMonth: null,
+  country: '',
+  stateOrRegion: '',
+  town: '',
+};
+
+export const WorkPositionForm: FC<WorkPositionFormProps> = ({
+  setFieldToAdd,
+  personId,
+  initialValues = blankInitialValues,
+  workPositionId,
+  setEditFlag,
+  setModalOpen,
+}) => {
+  const [createWorkPositionMutation] = useCreateWorkPositionMutation();
+
+  return <></>;
+};
