@@ -1,6 +1,13 @@
 import React, { FC } from 'react';
 import { useCreateWorkPositionMutation } from 'client/graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
+import {
+  FormikTextInput,
+  FormikNumberInput,
+  FormikTextArea,
+  FormikCheckboxGroup,
+  FormikSelectInput,
+} from 'client/form/inputs';
 import { Button } from 'client/common/Button';
 import { Text } from 'client/common/Text';
 import { SectionDivider } from 'client/profiles/PersonContainer';
@@ -111,6 +118,7 @@ export interface WorkPositionFormData {
   country?: string;
   stateOrRegion?: string;
   town?: string;
+  current: string[];
 }
 
 export interface WorkPositionFormProps {
@@ -146,5 +154,88 @@ export const WorkPositionForm: FC<WorkPositionFormProps> = ({
 }) => {
   const [createWorkPositionMutation] = useCreateWorkPositionMutation();
 
-  return <></>;
+  const cancel = () => {
+    if (setFieldToAdd) {
+      setFieldToAdd('');
+    } else if (setEditFlag && setModalOpen) {
+      setEditFlag(false);
+      setModalOpen(false);
+    }
+  };
+
+  const handleSubmit = async (
+    data: WorkPositionFormData,
+    formikHelpers: FormikHelpers<WorkPositionFormData>,
+  ) => {
+    const {
+      title,
+      companyName,
+      description,
+      workType,
+      startYear,
+      startMonth,
+      endYear,
+      endMonth,
+      country,
+      stateOrRegion,
+      town,
+      current,
+    } = data;
+    const { setErrors, setStatus } = formikHelpers;
+
+    if (personId && setFieldToAdd) {
+      const createResponse = await createWorkPositionMutation({
+        variables: {
+          input: {
+            personId,
+            title: title ? title : null,
+            companyName: companyName ? companyName : null,
+            description: description ? description : null,
+            workType: workType ? workType : null,
+            startYear,
+            startMonth: startMonth ? startMonth : null,
+            endYear,
+            endMonth: endMonth ? endMonth : null,
+            country: country ? country : null,
+            stateOrRegion: stateOrRegion ? stateOrRegion : null,
+            town: town ? town : null,
+            current: !!(current.length > 0),
+          },
+        },
+      });
+      const createErrors = createResponse.data?.createWorkPosition.errors;
+      if (createErrors) {
+        handleFormErrors<WorkPositionFormData>(
+          createErrors,
+          setErrors,
+          setStatus,
+        );
+      } else {
+        setFieldToAdd('');
+      }
+    }
+  };
+
+  return (
+    <>
+      <Text marginBottom={3} fontSize={4} bold>
+        Job
+      </Text>
+      <SectionDivider />
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={WorkPositionFormValidationSchema}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <Button marginRight="1rem" type="submit" disabled={isSubmitting}>
+              Save
+            </Button>
+            <Button onClick={() => cancel()}>Cancel</Button>
+          </Form>
+        )}
+      </Formik>
+    </>
+  );
 };
