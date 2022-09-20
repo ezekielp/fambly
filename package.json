@@ -64,5 +64,8 @@
     "codegen": "bundle exec rake graphql:dump_schema && graphql-codegen --config codegen.yml",
     "test": "jest"
   },
+  "resolutions": {
+    "node-sass": "^6.0.1"
+  },
   "repository": "https://github.com/ezekielp/fambly"
 }

@@ -2,6 +2,12 @@
 
 An app for storing and organizing information about friends, family, and other contacts. 
 
+## Updating dependencies
+
+### Ruby Gems
+
+`bundle install`
+
 ## Running the app locally
 
 Webpacking JavaScript (in its own separate terminal tab or window): `bin/webpack` or `bin/webpack-dev-server` (if you want it to auto-compile whenever you save a JavaScript or TypeScript file)
