@@ -43,7 +43,7 @@ export const FormikAutosuggest = <SuggestionType extends Record<string, any>>({
 
   const onSuggestionsClearRequested = () => setSuggestions([]);
 
-  const renderSuggestion = (suggestion: SuggestionType): ReactNode => (
+  const renderSuggestion = (suggestion: SuggestionType) => (
     <div>{getSuggestionValue(suggestion)}</div>
   );
 

@@ -5,6 +5,7 @@ import { colors, text } from 'client/shared/styles';
 
 export interface AccordionSectionProps {
   header: string;
+  children: React.ReactNode;
 }
 
 export const AccordionHeader = styled.summary`
