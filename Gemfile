@@ -11,8 +11,6 @@ gem 'pg'
 gem 'puma'
 # Use SCSS for stylesheets
 gem 'sass-rails'
-# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -21,6 +19,9 @@ gem 'jbuilder'
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
 gem 'bcrypt'
+
+# Replacement for webpacker, which has been retired: https://github.com/rails/webpacker#upgrading
+gem 'jsbundling-rails'
 
 gem 'net-smtp'
 
