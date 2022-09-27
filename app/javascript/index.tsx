@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import { ApolloProvider } from '@apollo/client';
 import { AuthContextProvider } from 'client/contexts/AuthContext';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { AppContainer } from '../client/AppContainer';
+import { AppContainer } from './client/AppContainer';
 import { client } from './client';
 import { ScrollToTop } from 'client/common/ScrollToTop';
 
