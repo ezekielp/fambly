@@ -36,6 +36,7 @@ const StyledXMark = styled(XMark)`
 interface ModalProps {
   // setFieldToAdd?: (field: string) => void;
   onClose?: () => void;
+  children: React.ReactNode;
 }
 
 export const Modal: FC<ModalProps> = ({ onClose, children }) => {

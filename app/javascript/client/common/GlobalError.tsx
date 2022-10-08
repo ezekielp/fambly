@@ -5,6 +5,10 @@ const ErrorMessage = styled.div`
   color: red;
 `;
 
-export const GlobalError: FC = ({ children }) => (
+interface GlobalErrorProps {
+  children: React.ReactNode;
+}
+
+export const GlobalError: FC<GlobalErrorProps> = ({ children }) => (
   <ErrorMessage>{children}</ErrorMessage>
 );

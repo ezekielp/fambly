@@ -121,7 +121,7 @@ const InternalSearchBox: FC<SearchBoxProps & RouteComponentProps> = ({
     return '';
   };
 
-  const renderSuggestion = (suggestion: Person | Tag): ReactNode => {
+  const renderSuggestion = (suggestion: Person | Tag) => {
     if ('firstName' in suggestion) {
       return <div>{getFullNameFromPerson(suggestion)}</div>;
     } else if ('name' in suggestion) {

@@ -54,7 +54,7 @@ export const withFormik = <AdditionalFieldPropsType extends object>(
         onBlur={onBlur}
         ref={innerRef}
       />
-      <StyledErrorMessage name={name} component="div" />
+      <ErrorMessage name={name} component="div" />
     </FormFieldWrapper>
   );
 };

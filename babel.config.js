@@ -41,7 +41,14 @@ module.exports = function(api) {
         '@babel/preset-react',
         {
           development: isDevelopmentEnv || isTestEnv,
-          useBuiltIns: true
+          useBuiltIns: true,
+          useSpread: true
+        }
+      ],
+      ['@babel/preset-typescript',
+        {
+          'allExtensions': true,
+          'isTSX': true
         }
       ]
     ].filter(Boolean),

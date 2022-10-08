@@ -15,6 +15,10 @@ gql`
   }
 `;
 
+interface AuthContextProviderProps {
+  children: React.ReactNode;
+}
+
 interface AuthContextState {
   userId?: string | null;
   dummyEmailFlag?: boolean;
@@ -22,7 +26,7 @@ interface AuthContextState {
 
 export const AuthContext = createContext<AuthContextState>({});
 
-export const AuthContextProvider: FC = ({ children }) => {
+export const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
   const [userId, setUserId] = useState<string | null>(null);
   const [dummyEmailFlag, setDummyEmailFlag] = useState<boolean>(false);
   const [dataFetched, setDataFetched] = useState<boolean>(false);
