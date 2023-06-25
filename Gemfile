@@ -8,41 +8,41 @@ gem 'rails', '~> 7.0.0'
 # Use postgresql as the database for Active Record
 gem 'pg'
 # Use Puma as the app server
-gem 'puma', '~> 4.3'
+gem 'puma', '~> 6.3'
 # Use SCSS for stylesheets
 gem 'sass-rails', '>= 6'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.7'
+gem 'jbuilder', '~> 2.11'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
-gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.19'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Successor to Webpacker for integrating Webpack into Rails + JS frontend
-gem "shakapacker", "= 6.6"
+gem 'shakapacker', '~>  7'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
 # React
-gem 'react-rails'
+gem 'react-rails', '~> 2.7'
 
 # GraphQL
-gem 'graphql'
+gem 'graphql', '~> 2.0'
 
 # For making batch queries in GraphQL
-gem 'graphql-batch'
+gem 'graphql-batch', '~> 0.5.3'
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.4.2', require: false
+gem 'bootsnap', '>= 1.16.0', require: false
 
 # Migrate to UUID for primary keys
-gem 'webdack-uuid_migration'
+gem 'webdack-uuid_migration', '~> 1.4'
 
 # Logging gems, for transforming logs to JSON and other features
 gem 'lograge'

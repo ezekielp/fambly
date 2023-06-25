@@ -76,7 +76,7 @@ GEM
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
-    bcrypt (3.1.18)
+    bcrypt (3.1.19)
     bindex (0.8.1)
     bootsnap (1.16.0)
       msgpack (~> 1.2)
@@ -173,7 +173,7 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (5.0.1)
-    puma (4.3.12)
+    puma (6.3.0)
       nio4r (~> 2.0)
     racc (1.7.1)
     rack (2.2.7)
@@ -273,7 +273,7 @@ GEM
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     semantic_range (3.0.0)
-    shakapacker (6.6.0)
+    shakapacker (7.0.0)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
@@ -322,36 +322,36 @@ PLATFORMS
 
 DEPENDENCIES
   annotate
-  bcrypt (~> 3.1.7)
-  bootsnap (>= 1.4.2)
+  bcrypt (~> 3.1.19)
+  bootsnap (>= 1.16.0)
   byebug
   capybara (>= 2.15)
   dotenv-rails
   factory_bot_rails
   graphiql-rails
-  graphql
-  graphql-batch
-  jbuilder (~> 2.7)
+  graphql (~> 2.0)
+  graphql-batch (~> 0.5.3)
+  jbuilder (~> 2.11)
   listen (~> 3.2)
   lograge
   lograge-sql
   pg
   pry-rails
-  puma (~> 4.3)
+  puma (~> 6.3)
   rails (~> 7.0.0)
-  react-rails
+  react-rails (~> 2.7)
   rspec-rails
   rubocop
   rubocop-rails
   sass-rails (>= 6)
   selenium-webdriver
-  shakapacker (= 6.6)
+  shakapacker (~> 7)
   spring
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)
   tzinfo-data
   web-console (>= 3.3.0)
-  webdack-uuid_migration
+  webdack-uuid_migration (~> 1.4)
   webdrivers
 
 RUBY VERSION
